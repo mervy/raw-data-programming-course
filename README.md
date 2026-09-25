@@ -6,8 +6,9 @@ planejada e escrita, mais os cadernos de exercícios e gabaritos gerados para
 alguns cursos.
 
 É a fonte original do conteúdo — ainda não fatiado, revisado ou convertido
-para publicação. Os artigos finais são publicados em HTML, com destaque de
-código (ex.: [theknowledgeisle.com](https://theknowledgeisle.com/)).
+para publicação. Todos os cursos listados aqui estão publicados em
+[theknowledgeisle.com](https://theknowledgeisle.com/), em HTML com destaque
+de código.
 
 ## Formato dos arquivos
 
