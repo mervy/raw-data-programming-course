@@ -1,0 +1,231 @@
+<h2>Introdu&ccedil;&atilde;o</h2>
+<p>Antes de escrever qualquer programa, voc&ecirc; precisa de um lugar onde o PHP possa rodar. Esse lugar &eacute; o seu ambiente de desenvolvimento &mdash; a combina&ccedil;&atilde;o de ferramentas instaladas na sua m&aacute;quina que permite escrever, executar e depurar c&oacute;digo PHP. Configurar esse ambiente corretamente desde o in&iacute;cio poupa horas de frustra&ccedil;&atilde;o no futuro.</p>
+<p>Neste artigo vamos instalar o PHP, conhecer o servidor embutido, escolher um editor de c&oacute;digo, entender a estrutura b&aacute;sica de um arquivo PHP e rodar nosso primeiro programa de verdade.</p>
+<h2>Instalando o PHP</h2>
+<p>A instala&ccedil;&atilde;o varia conforme o sistema operacional. Em todos os casos, o objetivo &eacute; ter o comando <code>php</code> dispon&iacute;vel no terminal.</p>
+<p><strong>Linux (Ubuntu/Debian):</strong></p>
+<pre><code class="language-bash">sudo apt update
+sudo apt install php php-cli php-mbstring php-xml php-curl
+</code></pre>
+<p><strong>macOS (com Homebrew):</strong></p>
+<pre><code class="language-bash">brew install php
+</code></pre>
+<p>Se voc&ecirc; n&atilde;o tem o Homebrew instalado, acesse <a href="https://brew.sh" target="_blank" rel="noopener">https://brew.sh</a> e siga as instru&ccedil;&otilde;es &mdash; &eacute; o gerenciador de pacotes padr&atilde;o para macOS.</p>
+<p><strong>Windows:</strong></p>
+<p>A forma mais direta &eacute; instalar o <strong>XAMPP</strong>, dispon&iacute;vel em <a href="https://www.apachefriends.org" target="_blank" rel="noopener">https://www.apachefriends.org</a>. Ele inclui PHP, Apache e MySQL em um &uacute;nico instalador com interface gr&aacute;fica. Ap&oacute;s a instala&ccedil;&atilde;o, adicione o caminho do PHP ao PATH do sistema para usar o comando <code>php</code> no terminal.</p>
+<p>Alternativamente, baixe o PHP diretamente em <a href="https://windows.php.net/download" target="_blank" rel="noopener">https://windows.php.net/download</a> e siga as instru&ccedil;&otilde;es de configura&ccedil;&atilde;o manual do PATH.</p>
+<p>Ap&oacute;s qualquer instala&ccedil;&atilde;o, abra o terminal e confirme:</p>
+<pre><code class="language-bash">php --version
+</code></pre>
+<p>A sa&iacute;da deve mostrar algo como <code>PHP 8.4.3 (cli)</code> &mdash; o n&uacute;mero exato varia conforme a instala&ccedil;&atilde;o. Se apareceu, est&aacute; funcionando. Vale conferir a vers&atilde;o: a partir de setembro de 2026, s&oacute; os ramos 8.2 e 8.3 (apenas seguran&ccedil;a) e 8.4 e 8.5 (suporte ativo) ainda recebem corre&ccedil;&atilde;o &mdash; instala&ccedil;&atilde;o mais antiga que isso n&atilde;o deve ir para um servidor.</p>
+<h2>O servidor embutido do PHP</h2>
+<p>Para desenvolvimento local, o PHP possui um servidor web embutido que elimina a necessidade de instalar Apache ou Nginx. Voc&ecirc; aponta para uma pasta e ele serve os arquivos PHP diretamente:</p>
+<pre><code class="language-bash"># Navegue at&eacute; a pasta do projeto
+cd meu-projeto
+
+# Inicie o servidor na porta 8000
+php -S localhost:8000
+</code></pre>
+<p>Abra o navegador em <code>http://localhost:8000</code>. O PHP servir&aacute; os arquivos da pasta atual. Para encerrar, pressione <code>Ctrl + C</code> no terminal.</p>
+<p>Voc&ecirc; tamb&eacute;m pode especificar um arquivo de entrada espec&iacute;fico, &uacute;til quando h&aacute; um ponto de entrada &uacute;nico:</p>
+<pre><code class="language-bash"># Usar index.php como ponto de entrada para todas as requisi&ccedil;&otilde;es
+php -S localhost:8000 index.php
+</code></pre>
+<p>Esse servidor &eacute; suficiente para os M&oacute;dulos 1 a 5 desta s&eacute;rie. Nos m&oacute;dulos avan&ccedil;ados, usaremos Docker para ambientes mais pr&oacute;ximos da produ&ccedil;&atilde;o real.</p>
+<h2>Escolhendo o editor de c&oacute;digo</h2>
+<p>Voc&ecirc; pode escrever PHP em qualquer editor de texto, mas ferramentas certas aumentam a produtividade de forma significativa.</p>
+<p><strong>VS Code</strong> &eacute; a escolha mais popular e a recomendada para esta s&eacute;rie. Gratuito, extens&iacute;vel e com excelente suporte a PHP. Baixe em <a href="https://code.visualstudio.com" target="_blank" rel="noopener">https://code.visualstudio.com</a> e instale as extens&otilde;es:</p>
+<ul>
+<li><strong>PHP Intelephense</strong> &mdash; autocomplete inteligente, navega&ccedil;&atilde;o de c&oacute;digo, detec&ccedil;&atilde;o de erros em tempo real</li>
+<li><strong>PHP Debug</strong> &mdash; integra&ccedil;&atilde;o com Xdebug para depura&ccedil;&atilde;o com breakpoints</li>
+<li><strong>PHP CS Fixer</strong> &mdash; formata o c&oacute;digo automaticamente seguindo os padr&otilde;es PSR</li>
+</ul>
+<p><strong>PhpStorm</strong> &eacute; o IDE profissional mais completo para PHP, desenvolvido pela JetBrains. Dispon&iacute;vel em <a href="https://www.jetbrains.com/phpstorm" target="_blank" rel="noopener">https://www.jetbrains.com/phpstorm</a>. &Eacute; pago, com per&iacute;odo de avalia&ccedil;&atilde;o de 30 dias. Oferece recursos avan&ccedil;ados que fazem diferen&ccedil;a em projetos grandes. Vale considerar quando voc&ecirc; estiver no M&oacute;dulo 7 em diante.</p>
+<p>Para esta s&eacute;rie, VS Code com Intelephense atende muito bem.</p>
+<h2>Estrutura de um arquivo PHP</h2>
+<p>Um arquivo PHP tem extens&atilde;o <code>.php</code>. Dentro dele, voc&ecirc; pode escrever HTML puro, PHP puro, ou misturar os dois. O c&oacute;digo PHP sempre fica dentro das tags de abertura e fechamento:</p>
+<pre><code class="language-php">&lt;?php
+// C&oacute;digo PHP aqui
+?&gt;
+</code></pre>
+<p>Quando o arquivo cont&eacute;m apenas PHP &mdash; sem HTML &mdash;, a boa pr&aacute;tica &eacute; omitir a tag de fechamento <code>?&gt;</code>. Isso evita que espa&ccedil;os em branco acidentais sejam enviados ao navegador antes dos headers HTTP, o que causa erros em redirecionamentos e cookies.</p>
+<pre><code class="language-php">&lt;?php
+// Arquivo puramente PHP: sem tag de fechamento no final
+// Isso &eacute; um padr&atilde;o da comunidade &mdash; siga sempre
+
+echo "Ol&aacute;, mundo!";
+</code></pre>
+<h2>Seu primeiro programa</h2>
+<p>Crie uma pasta chamada <code>php-curso</code> e dentro dela um arquivo <code>index.php</code> com o seguinte conte&uacute;do:</p>
+<pre><code class="language-php">&lt;?php
+
+// echo envia texto para a sa&iacute;da &mdash; navegador ou terminal
+echo "Ol&aacute;, Mundo!\n";
+
+// Express&otilde;es matem&aacute;ticas s&atilde;o avaliadas antes de serem exibidas
+echo 2 + 2;
+echo "\n";
+
+// date() &eacute; uma fun&ccedil;&atilde;o nativa que formata a data atual
+// "d/m/Y" = dia/m&ecirc;s/ano com quatro d&iacute;gitos
+echo "Hoje &eacute;: " . date("d/m/Y");
+echo "\n";
+
+// phpinfo() exibe informa&ccedil;&otilde;es completas sobre a instala&ccedil;&atilde;o do PHP
+// Extremamente &uacute;til para diagn&oacute;stico &mdash; mas nunca deixe em produ&ccedil;&atilde;o
+// phpinfo();
+</code></pre>
+<p>No terminal, dentro da pasta <code>php-curso</code>, rode:</p>
+<pre><code class="language-bash">php index.php
+</code></pre>
+<p>Sa&iacute;da esperada:</p>
+<pre><code>Ol&aacute;, Mundo!
+4
+Hoje &eacute;: 05/03/2026
+</code></pre>
+<p>Voc&ecirc; pode tamb&eacute;m iniciar o servidor embutido e acessar pelo navegador &mdash; o resultado ser&aacute; o mesmo conte&uacute;do, mas sem quebras de linha vis&iacute;veis, pois o navegador interpreta HTML, e <code>\n</code> n&atilde;o &eacute; uma quebra de linha em HTML (para isso seria necess&aacute;rio <code>&lt;br&gt;</code>).</p>
+<h2>Misturando PHP com HTML</h2>
+<p>Quando rodando no servidor web, o PHP gera HTML. Essa &eacute; a forma mais comum de usar PHP em projetos web tradicionais:</p>
+<pre><code class="language-php">&lt;?php
+// Definimos as vari&aacute;veis no in&iacute;cio do arquivo &mdash; antes de qualquer HTML
+$nome = "Ricardo";
+$data = date("d/m/Y");
+$hora = date("H:i");
+?&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="pt-BR"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Meu primeiro PHP&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Bem-vindo, &lt;?= $nome ?&gt;!&lt;/h1&gt;
+
+    &lt;!--
+        &lt;?= $variavel ?&gt; &eacute; um atalho para &lt;?php echo $variavel; ?&gt;
+        Use-o em templates HTML para manter o c&oacute;digo mais limpo
+    --&gt;
+    &lt;p&gt;Hoje &eacute; &lt;?= $data ?&gt;, s&atilde;o &lt;?= $hora ?&gt;.&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>O <code>&lt;?=</code> &eacute; chamado de <em>short echo tag</em>. &Eacute; um atalho para <code>&lt;?php echo</code>. Use-o em arquivos de template onde PHP e HTML se misturam com frequ&ecirc;ncia &mdash; o c&oacute;digo fica mais limpo e leg&iacute;vel.</p>
+<h2>Depurando com var_dump e print_r</h2>
+<p>Dois dos comandos mais &uacute;teis para inspecionar valores durante o desenvolvimento:</p>
+<pre><code class="language-php">&lt;?php
+
+$nome  = "Ana";
+$idade = 28;
+$ativo = true;
+$notas = [9.5, 8.0, 7.5];
+
+// echo exibe o valor como string &mdash; simples, mas sem informa&ccedil;&atilde;o de tipo
+echo $nome;
+echo "\n";
+
+// var_dump exibe o tipo e o valor &mdash; essencial para depura&ccedil;&atilde;o
+// Mostra: string(3) "Ana"
+var_dump($nome);
+
+// var_dump em booleano mostra true ou false com o tipo
+// Mostra: bool(true)
+var_dump($ativo);
+
+// var_dump em array mostra toda a estrutura com tipos
+var_dump($notas);
+
+// print_r exibe arrays e objetos de forma mais leg&iacute;vel para humanos
+// Menos verboso que var_dump &mdash; bom para estruturas complexas
+print_r($notas);
+</code></pre>
+<p>Sa&iacute;da de <code>var_dump($notas)</code>:</p>
+<pre><code>array(3) {
+  [0] =&gt; float(9.5)
+  [1] =&gt; float(8)
+  [2] =&gt; float(7.5)
+}
+</code></pre>
+<p>Sa&iacute;da de <code>print_r($notas)</code>:</p>
+<pre><code>Array
+(
+    [0] =&gt; 9.5
+    [1] =&gt; 8
+    [2] =&gt; 7.5
+)
+</code></pre>
+<p>Use <code>var_dump</code> quando precisar saber o tipo exato. Use <code>print_r</code> quando s&oacute; precisar ver a estrutura dos dados.</p>
+<h2>Boas pr&aacute;ticas desde o in&iacute;cio</h2>
+<p>Alguns h&aacute;bitos que far&atilde;o diferen&ccedil;a ao longo de toda a sua carreira:</p>
+<p><strong>Use UTF-8 sempre.</strong> Declare <code>charset=UTF-8</code> em seus HTMLs e salve seus arquivos em UTF-8 no editor. Isso evita problemas com acentua&ccedil;&atilde;o que s&atilde;o frustrantes de diagnosticar.</p>
+<p><strong>Omita a tag de fechamento <code>?&gt;</code> em arquivos puramente PHP.</strong> &Eacute; um padr&atilde;o do PSR-12, o guia de estilo oficial da comunidade PHP.</p>
+<p><strong>Use 4 espa&ccedil;os por n&iacute;vel de indenta&ccedil;&atilde;o.</strong> Tamb&eacute;m &eacute; definido pelo PSR-12. Configure seu editor para inserir espa&ccedil;os automaticamente ao pressionar Tab.</p>
+<p><strong>Nomeie vari&aacute;veis com clareza.</strong> <code>$nomeDoUsuario</code> &eacute; infinitamente melhor que <code>$n</code>. C&oacute;digo &eacute; lido muito mais do que escrito &mdash; clareza &eacute; respeito pelo seu eu futuro, e por quem trabalhar com voc&ecirc;.</p>
+<p><strong>Um arquivo, uma responsabilidade.</strong> Desde cedo, evite arquivos PHP gigantes que fazem tudo ao mesmo tempo. Separar responsabilidades &eacute; o fundamento de todo bom design de software.</p>
+<p>Um ambiente bem montado não se percebe: ele some, e sobra o trabalho. O que voc&ecirc; instalou aqui &mdash; interpretador na linha de comando, servidor embutido, editor com an&aacute;lise em tempo real &mdash; &eacute; suficiente para todo o come&ccedil;o da s&eacute;rie, e nada disso precisa ser trocado quando o projeto crescer; o que muda &eacute; o que se acrescenta em volta. Guarde o h&aacute;bito de conferir <code>php --version</code> e <code>php -m</code> antes de culpar o c&oacute;digo: boa parte dos erros que parecem misteriosos no in&iacute;cio &eacute; ambiente, n&atilde;o programa&ccedil;&atilde;o.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li>
+<p><strong>PHP &mdash; Instala&ccedil;&atilde;o e configura&ccedil;&atilde;o oficial</strong> <a href="https://www.php.net/manual/pt_BR/install.php" target="_blank" rel="noopener">https://www.php.net/manual/pt_BR/install.php</a> Documenta&ccedil;&atilde;o oficial cobrindo instala&ccedil;&atilde;o em todos os sistemas operacionais, com detalhes sobre extens&otilde;es e configura&ccedil;&atilde;o do <code>php.ini</code>.</p>
+</li>
+<li>
+<p><strong>Homebrew &mdash; Gerenciador de pacotes para macOS</strong> <a href="https://brew.sh" target="_blank" rel="noopener">https://brew.sh</a> Indispens&aacute;vel para desenvolvedores em macOS. Facilita a instala&ccedil;&atilde;o e atualiza&ccedil;&atilde;o do PHP e de centenas de outras ferramentas.</p>
+</li>
+<li>
+<p><strong>XAMPP &mdash; Apache Friends</strong> <a href="https://www.apachefriends.org" target="_blank" rel="noopener">https://www.apachefriends.org</a> Ambiente de desenvolvimento completo para Windows, macOS e Linux. Inclui PHP, Apache, MySQL e phpMyAdmin.</p>
+</li>
+<li>
+<p><strong>VS Code &mdash; Download oficial</strong> <a href="https://code.visualstudio.com" target="_blank" rel="noopener">https://code.visualstudio.com</a> Editor gratuito da Microsoft. Ap&oacute;s instalar, busque "PHP Intelephense" na aba de extens&otilde;es.</p>
+</li>
+<li>
+<p><strong>PHP Intelephense &mdash; Extens&atilde;o VS Code</strong> <a href="https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client" target="_blank" rel="noopener">https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client</a> A extens&atilde;o PHP mais completa para VS Code. Autocomplete preciso, detec&ccedil;&atilde;o de erros em tempo real, navega&ccedil;&atilde;o de c&oacute;digo e muito mais.</p>
+</li>
+<li>
+<p><strong>PSR-12: Extended Coding Style</strong> <a href="https://www.php-fig.org/psr/psr-12/" target="_blank" rel="noopener">https://www.php-fig.org/psr/psr-12/</a> O padr&atilde;o oficial de estilo de c&oacute;digo da comunidade PHP. Cobre indenta&ccedil;&atilde;o, espa&ccedil;amento, nomenclatura e muito mais. Vale uma leitura r&aacute;pida j&aacute; nesta semana.</p>
+</li>
+<li>
+<p><strong>PhpStorm &mdash; JetBrains</strong> <a href="https://www.jetbrains.com/phpstorm/" target="_blank" rel="noopener">https://www.jetbrains.com/phpstorm/</a> IDE profissional para PHP. Considere quando avan&ccedil;ar para os m&oacute;dulos de frameworks e projetos maiores.</p>
+</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Seu projeto ficou pronto e alguém sugere: "sobe num servidor e deixa rodando <code>php -S 0.0.0.0:80</code>, já funciona". Por que isso não serve para produção?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A própria documentação do PHP diz que o servidor embutido foi feito para auxiliar o desenvolvimento e <strong>não deve ser usado em rede pública</strong>. As razões são concretas. Ele atende <strong>uma requisição por vez</strong> por padrão: enquanto um usuário baixa uma imagem, todos os outros esperam — existe a variável <code>PHP_CLI_SERVER_WORKERS</code> para subir mais processos, mas ela é experimental e não resolve o resto. Ele não tem HTTPS, não tem limite de tamanho de requisição, não tem tempo de espera configurável, não faz balanceamento, não lida bem com conexão lenta (uma conexão deliberadamente arrastada trava o atendimento inteiro) e não trata arquivo estático com cache nem compressão. Também não há gerenciamento de processos: se o interpretador morre, ninguém o levanta de volta. Em produção o papel se divide: <strong>Nginx ou Apache</strong> na frente, cuidando de TLS, estáticos e conexões, e <strong>PHP-FPM</strong> atrás, com um pool de workers gerenciado, reinício automático e limites de memória e tempo por requisição. E há o detalhe que costuma escapar: rodar na porta 80 exige privilégio de root, e ninguém quer o interpretador que executa o código da aplicação rodando como root.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>O login funciona, mas o redirecionamento falha com <code>Cannot modify header information — headers already sent by (output started at config.php:1)</code>. O <code>config.php</code> só tem duas linhas de código. Onde está o erro?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O erro está no que você <em>não</em> vê no arquivo. A resposta HTTP tem cabeçalhos e corpo, nessa ordem, e o PHP envia os cabeçalhos na primeira vez que algo é impresso — depois disso, <code>header()</code>, <code>setcookie()</code> e <code>session_start()</code> chegam tarde demais. A mensagem entrega o culpado: <em>output started at config.php:1</em>, ou seja, alguma coisa foi impressa já na primeira linha. As duas causas clássicas são um <strong>espaço ou quebra de linha depois do <code>?&gt;</code></strong> no fim do arquivo, que é texto e vai direto para a saída, e o <strong>BOM do UTF-8</strong> — três bytes invisíveis que alguns editores gravam no início do arquivo, e que o PHP trata como conteúdo. Por isso a convenção existe: em arquivo que só tem PHP, <strong>omita o <code>?&gt;</code></strong>; sem ele não há como sobrar espaço depois. Para o BOM, salve como "UTF-8 sem BOM" (no VS Code, o rodapé mostra a codificação e permite trocar). Um jeito rápido de flagrar: <code>head -c 3 config.php | xxd</code> — se aparecer <code>efbbbf</code>, é o BOM. E quando a origem não for óbvia, ligue <code>display_errors</code> em desenvolvimento: a própria mensagem nomeia o arquivo e a linha, e ela costuma ser ignorada justamente por parecer genérica.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>No terminal, <code>php --version</code> responde 8.4. No navegador, uma página com <code>phpinfo()</code> mostra 8.2. Qual é a explicação, e qual arquivo de configuração vale para cada uma?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> São <strong>duas instalações diferentes do PHP rodando na mesma máquina</strong>, e isso é o normal, não a exceção. O comando <code>php</code> usa a SAPI de linha de comando (CLI); a página no navegador é servida por outra SAPI — <code>php-fpm</code> atrás do Nginx, ou o módulo do Apache. Cada SAPI tem seu próprio binário, sua própria versão e, o que mais confunde, <strong>seu próprio <code>php.ini</code></strong>: é comum haver <code>/etc/php/8.4/cli/php.ini</code> e <code>/etc/php/8.2/fpm/php.ini</code> lado a lado. Isso explica a queixa mais frequente de quem está começando: "instalei a extensão e continua dando erro" — instalou para a CLI, e quem precisava era o FPM. Para descobrir qual arquivo está em uso, <code>php --ini</code> mostra o da CLI, e o <code>phpinfo()</code> mostra o da web na linha <em>Loaded Configuration File</em>. Para saber quais versões existem, <code>ls /etc/php/</code> no Debian e derivados, ou <code>php -v</code> comparado com a linha do topo do <code>phpinfo()</code>. E há um detalhe que economiza muito tempo: alterar o <code>php.ini</code> do FPM <strong>só tem efeito depois de reiniciar o serviço</strong> (<code>sudo systemctl restart php8.2-fpm</code>), enquanto na CLI o novo valor vale já na próxima execução — a diferença faz parecer que a alteração "não pegou".</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Ao rodar o projeto aparece <code>Fatal error: Uncaught Error: Call to undefined function mb_strlen()</code>. Descreva o diagnóstico, do sintoma até a correção.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> "Função indefinida" com nome de função nativa quer dizer, quase sempre, <strong>extensão ausente</strong> — não erro de digitação nem de versão. O prefixo <code>mb_</code> pertence à <code>mbstring</code>, que é uma extensão separada e não vem habilitada em toda instalação. O diagnóstico tem três passos. Primeiro, confirme: <code>php -m | grep mbstring</code> lista as extensões carregadas na CLI; se não aparecer, está fora. Segundo, instale para a versão certa — <code>sudo apt install php8.4-mbstring</code> no Debian e derivados, ou descomente <code>extension=mbstring</code> no <code>php.ini</code> no Windows, onde ela vem junto mas desligada. Terceiro, e é onde a maioria tropeça: <strong>reinicie o FPM</strong> se o erro aparece pelo navegador, porque o processo já carregou a configuração antiga. Um cuidado extra: conferir <em>na mesma SAPI</em> em que o erro ocorreu. Se o erro é na web, <code>php -m</code> no terminal pode mostrar a extensão presente e ainda assim faltar no FPM — nesse caso use <code>php-fpm8.4 -m</code> ou olhe o <code>phpinfo()</code>. Para evitar a surpresa no deploy, declare as extensões no <code>composer.json</code>, em <code>require</code> (<code>"ext-mbstring": "*"</code>): aí o <code>composer install</code> falha no servidor errado antes de a aplicação falhar no ar.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p><strong>Desafio:</strong> o sistema funciona na sua máquina e quebra no servidor do cliente. Liste o que precisa estar igual nos dois lugares para que "funciona na minha máquina" deixe de ser uma frase possível — e como você verificaria cada item.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> São cinco frentes, e nenhuma delas é o código. A primeira é a <strong>versão do PHP</strong>: fixe-a no <code>composer.json</code> em <code>config.platform.php</code>, para que o Composer resolva as dependências pela versão do servidor e não pela sua, e compare com <code>php -v</code> nos dois lados. A segunda são as <strong>extensões</strong>: <code>php -m</code> em cada máquina, e a diferença declarada como <code>ext-*</code> no <code>require</code>. A terceira é o <strong>php.ini</strong>, onde moram as armadilhas silenciosas — <code>memory_limit</code>, <code>upload_max_filesize</code> e <code>post_max_size</code> (que precisam subir juntos, e o menor vence), <code>max_execution_time</code>, <code>date.timezone</code> e, acima de tudo, <code>display_errors</code>: ligado na sua máquina e desligado no servidor, o mesmo erro vira tela branca, e a impressão é de que "só lá quebra" quando na verdade só lá o erro fica invisível. Ligue <code>log_errors</code> e leia o log em vez de adivinhar. A quarta é o <strong>sistema de arquivos</strong>: Linux diferencia maiúsculas de minúsculas e Windows e macOS não, então <code>require 'Models/Usuario.php'</code> funciona na sua máquina e falha no servidor — é o defeito que mais se disfarça de mistério. A quinta são <strong>permissões e caminhos</strong>: o usuário do FPM (<code>www-data</code>) precisa poder escrever nas pastas de cache e upload, e caminho absoluto colado do seu computador não existe lá. A forma de eliminar a frase de vez, porém, não é conferir item por item: é <strong>reproduzir o ambiente</strong> — um contêiner com a mesma imagem do PHP em desenvolvimento e em produção transforma a maioria desses cinco itens em uma linha de configuração versionada junto do código.</p>
+</div>
+</details>
+

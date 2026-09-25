@@ -1,0 +1,148 @@
+<p>Se voc&ecirc; chegou at&eacute; aqui, provavelmente j&aacute; ouviu algu&eacute;m dizer que "PHP est&aacute; morto". Talvez tenha lido isso num f&oacute;rum, num coment&aacute;rio do YouTube ou num artigo sensacionalista. A realidade, por&eacute;m, conta uma hist&oacute;ria muito diferente. E &eacute; por isso que estudar PHP hoje em dia (2026) pode ser &uacute;til e prazeroso.</p>
+<p><strong>PHP alimenta mais de 76% de todos os sites com backend conhecido na web.</strong> Isso inclui o WordPress, o Facebook (que nasceu em PHP e at&eacute; hoje mant&eacute;m o Hack, um dialeto derivado dele), o Wikipedia, o Slack em suas origens, e milhares de sistemas empresariais que movimentam bilh&otilde;es de reais por dia. N&atilde;o &eacute; uma linguagem moribunda &mdash; &eacute; uma linguagem madura, battle-tested, e em constante evolu&ccedil;&atilde;o.</p>
+<p>Mas o problema real n&atilde;o &eacute; o PHP em si.</p>
+<p>O problema &eacute; a forma como ele &eacute; ensinado.</p>
+<h3>O ciclo vicioso do ensino incompleto</h3>
+<p>Voc&ecirc; provavelmente j&aacute; viveu isso: come&ccedil;a um curso ou uma s&eacute;rie de artigos animado. Aprende vari&aacute;veis, condicionais, loops. Talvez chegue at&eacute; fun&ccedil;&otilde;es. Num ponto mais avan&ccedil;ado, aparece algo sobre banco de dados com <code>mysqli_connect()</code> e uns <code>echo</code> espalhados no meio do HTML.</p>
+<p>E para por a&iacute;.</p>
+<p>Ningu&eacute;m te mostra o que vem depois. Ningu&eacute;m te mostra como um sistema PHP <strong>de verdade</strong> &eacute; estruturado. Voc&ecirc; termina o curso sabendo fazer um formul&aacute;rio de contato, mas sem a menor ideia de como construir algo que possa ser mantido, escalado ou entregue num ambiente profissional.</p>
+<p>Esse gap entre "aprender PHP" e "trabalhar com PHP" &eacute; enorme &mdash; e &eacute; exatamente ele que esta s&eacute;rie quer eliminar.</p>
+<h3>O que &eacute; PHP, afinal?</h3>
+<p>PHP (<em>Hypertext Preprocessor</em>, originalmente <em>Personal Home Page</em>) &eacute; uma linguagem de script interpretada, de tipagem din&acirc;mica, originalmente projetada para desenvolvimento web server-side. Criada por Rasmus Lerdorf em 1994, ela nasceu de uma necessidade pr&aacute;tica: rastrear visitas a um curr&iacute;culo online. O que come&ccedil;ou como um conjunto de scripts CGI em C virou uma das linguagens mais influentes da hist&oacute;ria da internet.</p>
+<p>Tecnicamente, o PHP roda no servidor, processa a requisi&ccedil;&atilde;o HTTP, interage com banco de dados, aplica l&oacute;gica de neg&oacute;cio e devolve uma resposta &mdash; normalmente HTML, JSON ou XML &mdash; ao cliente. Ele pode ser executado como m&oacute;dulo do Apache, via PHP-FPM com Nginx, como CLI para scripts de automa&ccedil;&atilde;o, ou at&eacute; como processo ass&iacute;ncrono com extens&otilde;es como Swoole e ReactPHP.</p>
+<p>Com o PHP 8.x, a linguagem ganhou recursos que a colocam no mesmo patamar de expressividade de Python e Ruby moderno: <strong>JIT compiler</strong>, <strong>union types</strong>, <strong>named arguments</strong>, <strong>fibers para concorr&ecirc;ncia</strong>, <strong>match expressions</strong>, <strong>enums</strong>, <strong>readonly properties</strong>, e muito mais. N&atilde;o &eacute; a linguagem bagun&ccedil;ada dos anos 2000 que muita gente ainda imagina.</p>
+<h3>Onde e como ele &eacute; usado hoje?</h3>
+<p><strong>E-commerce:</strong> Magento, WooCommerce e sistemas customizados em Laravel processam pagamentos, estoques e log&iacute;stica de algumas das maiores lojas virtuais do mundo.</p>
+<p><strong>CMS e portais de conte&uacute;do:</strong> WordPress, Drupal e Joomla dominam o mercado de gerenciamento de conte&uacute;do. S&oacute; o WordPress representa 43% de todos os sites da internet.</p>
+<p><strong>SaaS e sistemas empresariais:</strong> Ferramentas de gest&atilde;o, ERPs, plataformas de RH e sistemas financeiros s&atilde;o constru&iacute;dos diariamente com Laravel, Symfony e Slim Framework por equipes que valorizam produtividade e ecossistema maduro.</p>
+<p><strong>APIs e microsservi&ccedil;os:</strong> Com frameworks modernos e o padr&atilde;o PSR, PHP &eacute; uma escolha leg&iacute;tima e perform&aacute;tica para expor APIs REST e GraphQL consumidas por aplica&ccedil;&otilde;es mobile e frontend desacoplado.</p>
+<p><strong>Automa&ccedil;&atilde;o e CLI:</strong> Scripts de processamento de dados, pipelines de integra&ccedil;&atilde;o, tarefas agendadas via cron &mdash; PHP tem suporte robusto para tudo isso com sua poderosa CLI.</p>
+<h3>Por que esta s&eacute;rie &eacute; diferente</h3>
+<p>A maioria dos conte&uacute;dos sobre PHP te ensina <strong>o que</strong> &eacute; a linguagem. Esta s&eacute;rie quer te mostrar <strong>como pensar</strong> com ela.</p>
+<p>Voc&ecirc; vai acompanhar a evolu&ccedil;&atilde;o natural de um desenvolvedor PHP: partindo dos fundamentos reais da linguagem, passando pela orienta&ccedil;&atilde;o a objetos aplicada com inten&ccedil;&atilde;o, entendendo bancos de dados al&eacute;m do <code>SELECT *</code>, estruturando projetos com Composer e boas pr&aacute;ticas PSR, dominando o Laravel, construindo APIs seguras e testadas &mdash; at&eacute; chegar num projeto completo que conecta todos esses pontos.</p>
+<p>Cada m&oacute;dulo foi pensado para que voc&ecirc; n&atilde;o apenas entenda o conceito, mas veja ele se transformar em c&oacute;digo real, com decis&otilde;es arquiteturais justificadas, erros comuns apontados, e o caminho de evolu&ccedil;&atilde;o sempre claro &agrave; sua frente.</p>
+<p>Porque o objetivo n&atilde;o &eacute; apenas aprender PHP. &Eacute; aprender a construir sistemas com PHP &mdash; e entender por que cada escolha importa.</p>
+<h3>O que voc&ecirc; vai aprender</h3>
+<table>
+<thead>
+<tr>
+<th>M&oacute;dulo</th>
+<th>Tema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Fundamentos + Hist&oacute;ria do PHP</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Fun&ccedil;&otilde;es e Manipula&ccedil;&atilde;o de Dados</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Orienta&ccedil;&atilde;o a Objetos (POO)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Bancos de Dados: MySQL, PostgreSQL, SQLite, MongoDB</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Web com PHP (Forms, Sessions, Cookies)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>PHP Moderno (Composer, Namespaces, PSR, Boas Pr&aacute;ticas)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Laravel</td>
+</tr>
+<tr>
+<td>8</td>
+<td>APIs REST</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Seguran&ccedil;a</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Testes e Qualidade</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Projeto Final</td>
+</tr>
+</tbody>
+</table>
+<h3>Para quem &eacute; esta s&eacute;rie?</h3>
+<p>Para quem est&aacute; come&ccedil;ando e quer construir uma base s&oacute;lida desde o in&iacute;cio, sem os v&iacute;cios que o ensino r&aacute;pido e fragmentado costuma criar. Para quem j&aacute; sabe "um pouco de PHP" mas sente que falta o pr&oacute;ximo n&iacute;vel &mdash; aquele que separa quem faz funcionar de quem faz funcionar <strong>direito</strong>. E para quem quer ter, ao final, um projeto real no portf&oacute;lio que demonstre dom&iacute;nio t&eacute;cnico de verdade.</p>
+<p>N&atilde;o existe atalho para compet&ecirc;ncia. Mas existe um caminho bem mapeado.</p>
+<h3>Fontes e leituras recomendadas</h3>
+<p><strong>Oficiais</strong></p>
+<ul>
+<li><a href="https://www.php.net/manual/pt_BR/" target="_blank" rel="noopener">Manual do PHP</a> — A documentação oficial, boa parte traduzida para português, com os comentários da comunidade em cada função.</li>
+<li><a href="https://www.php.net/releases/" target="_blank" rel="noopener">PHP — Histórico de versões</a> — O que mudou em cada versão e, sobretudo, quais ainda recebem correções de segurança — informação que decide o que usar em produção.</li>
+</ul>
+<p><strong>Padrões e boas práticas</strong></p>
+<ul>
+<li><a href="https://phptherightway.com/" target="_blank" rel="noopener">PHP: The Right Way</a> — Guia comunitário que separa a prática atual do que ficou para trás. Antídoto direto contra tutorial desatualizado, que é o problema central deste artigo.</li>
+<li><a href="https://www.php-fig.org/psr/" target="_blank" rel="noopener">PSRs — PHP-FIG</a> — As recomendações que padronizam autoload, estilo de código, interfaces HTTP e contêiner de dependências — a base da interoperabilidade entre frameworks.</li>
+</ul>
+<p><strong>Ferramentas</strong></p>
+<ul>
+<li><a href="https://getcomposer.org/doc/" target="_blank" rel="noopener">Composer — Documentação</a> — O gerenciador de dependências que organizou o ecossistema, com o autoload PSR-4 que tornou obsoleto o include manual.</li>
+<li><a href="https://packagist.org/" target="_blank" rel="noopener">Packagist</a> — O repositório central de pacotes, onde se avalia manutenção, downloads e compatibilidade antes de adotar uma biblioteca.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Você cita em uma reunião que "PHP roda mais de 76% da web" e alguém rebate: "esse número é propaganda". O que ele mede de fato, e o que não mede?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O número vem do W3Techs e mede uma coisa específica: entre os sites cuja linguagem de servidor é <strong>detectável</strong>, qual fatia responde PHP. Já aí há três limites. Primeiro, só entra site que se deixa identificar — cabeçalho <code>X-Powered-By</code>, cookie de sessão, extensão de arquivo; quem está atrás de CDN ou removeu esses sinais fica de fora da conta. Segundo, a unidade é <strong>site</strong>, não requisição: um blog parado e um portal com milhões de acessos pesam igual, então o número não diz nada sobre volume de tráfego. Terceiro, a fatia é puxada pelo WordPress, que sozinho responde por perto de 43% de todos os sites — não é que 76% das equipes escolheram PHP, é que a maioria dos sites do mundo é WordPress. E ele não mede o que mais interessa a quem decide: <strong>quantos projetos novos</strong> estão nascendo em PHP. A leitura honesta do dado é esta: prova longevidade e um mercado gigante de manutenção, não superioridade técnica nem tendência. Usar o número como argumento de qualidade é o erro que dá razão a quem rebateu.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Você assume a manutenção de um sistema em PHP 7.4 que "funciona bem e ninguém quer mexer". Qual é o primeiro problema a apontar, e por onde se começa?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O problema não é desempenho nem estilo de código: é que o <strong>7.4 não recebe correção de segurança desde novembro de 2022</strong>. Toda falha descoberta depois disso continua aberta nesse servidor. Em setembro de 2026, quem recebe correção é só o 8.4 e o 8.5 (suporte ativo) e o 8.2 e o 8.3 (apenas segurança) — o ramo 7 inteiro e o 8.0/8.1 estão fora. "Funciona bem" descreve o comportamento observável, não o risco. E o primeiro passo não é reescrever: é <strong>subir a versão</strong>, que costuma ser menos trabalhoso do que a lenda sugere, porque as quebras do 8.x são conhecidas e catalogadas. O caminho prático é rodar <code>composer why-not php 8.4</code> para ver qual dependência trava a subida, apontar o PHPStan no nível mais baixo que passe, usar o Rector com o conjunto de regras da versão-alvo para a parte mecânica, e só então subir em homologação com as extensões conferidas uma a uma — <code>php -m</code> na máquina antiga e na nova, comparando. Reescrever um sistema que funciona é a decisão mais cara que existe; atualizar a versão é a mais barata que resolve o risco real.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Um script de importação processa 80 mil linhas e leva cerca de 40 minutos. Chamado pelo navegador, ele morre no meio, sem erro claro no log da aplicação. Onde está o problema?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O problema é o caminho escolhido, não o script. Uma requisição HTTP atravessa uma fila de limites de tempo e <strong>o menor deles vence</strong>: o <code>max_execution_time</code> do PHP (30 segundos por padrão), o <code>request_terminate_timeout</code> do pool do PHP-FPM, o <code>fastcgi_read_timeout</code> do Nginx (ou o <code>ProxyTimeout</code> do Apache), e ainda o tempo que o navegador e qualquer proxy no meio aceitam esperar. Aumentar só o primeiro não resolve — é por isso que o script "morre sem erro": quem cortou a conexão foi uma camada que nem sabe o que é PHP. Há um agravante: enquanto esse processo ocupa um worker do FPM por 40 minutos, ele sai do pool de atendimento, e <code>pm.max_children</code> é um número pequeno. Meia dúzia de importações simultâneas derrubam o site inteiro. A saída é tirar a tarefa longa da requisição: rodar pela <strong>CLI</strong>, onde o <code>max_execution_time</code> vale <code>0</code> por padrão (sem limite), acionada por cron ou por uma fila de jobs. A requisição, então, só enfileira e responde na hora — e o navegador acompanha o progresso consultando o estado, em vez de segurar a conexão aberta.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Um tutorial popular ensina a listar usuários assim. Aponte o que falta para esse código ser aceitável em produção — e qual dos problemas é o mais grave.</p>
+<pre><code class="language-php">&lt;?php
+$con = mysqli_connect("localhost", "root", "", "loja");
+$busca = $_GET['busca'];
+$sql = "SELECT * FROM usuarios WHERE nome LIKE '%$busca%'";
+$res = mysqli_query($con, $sql);
+while ($u = mysqli_fetch_assoc($res)) {
+    echo "&lt;li&gt;" . $u['nome'] . "&lt;/li&gt;";
+}</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O mais grave é a <strong>injeção de SQL</strong>: <code>$_GET['busca']</code> entra na consulta por interpolação de string, então quem controla a URL controla o SQL. Isso não se resolve com <code>addslashes</code> nem escapando à mão — resolve-se com <em>prepared statement</em>, em que o valor viaja separado do comando: <code>$stmt = $pdo-&gt;prepare('SELECT nome FROM usuarios WHERE nome LIKE ?'); $stmt-&gt;execute(["%{$busca}%"]);</code>. Em segundo lugar vem o <strong>XSS</strong>: o nome vindo do banco é impresso cru, e um cadastro com <code>&lt;script&gt;</code> vira código executando no navegador de quem lista — a saída precisa de <code>htmlspecialchars($u['nome'], ENT_QUOTES, 'UTF-8')</code>. Depois, três defeitos silenciosos: o <code>SELECT *</code> traz colunas que ninguém pediu (inclusive o hash da senha, que passa a trafegar sem necessidade); não há tratamento de erro algum, porque o <code>mysqli</code> procedural devolve <code>false</code> em silêncio em vez de lançar exceção; e credencial de banco está escrita no arquivo, com usuário <code>root</code> e senha vazia. Repare no que <strong>não</strong> está na lista: usar <code>mysqli</code> em vez de PDO não é o problema. O problema é misturar conexão, consulta e apresentação em oito linhas, sem fronteira nenhuma entre entrada do usuário, comando e saída.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p><strong>Desafio:</strong> pedem que você construa um chat com cinco mil conexões simultâneas. O PHP dá conta? Defenda sua resposta com o modelo de execução da linguagem.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Dá, mas não do jeito clássico — e entender por quê vale mais do que a resposta. O modelo tradicional do PHP é <strong>um processo por requisição, que nasce, responde e morre</strong>: o estado é descartado no fim, o que simplifica enormemente a vida do programador e é justamente o que torna o modelo inadequado para conexão persistente. Com PHP-FPM, cada conexão aberta ocupa um worker; <code>pm.max_children</code> costuma ficar na casa das dezenas, porque cada worker carrega um interpretador inteiro na memória. Cinco mil conexões simultâneas nesse modelo exigiriam cinco mil processos — não é questão de ajustar configuração, é o modelo errado para o problema. As saídas reais são três. A primeira é usar um runtime de <em>event loop</em> em PHP: <strong>Swoole</strong>, <strong>OpenSwoole</strong> ou <strong>ReactPHP</strong> mantêm o processo vivo e multiplexam milhares de conexões em poucos processos, ao custo de um modelo de memória diferente (estado que sobrevive entre requisições vaza, e vazar em processo longevo é um problema novo para quem vem do PHP clássico). A segunda é <strong>Laravel Reverb</strong>, servidor WebSocket em PHP que já embrulha isso. A terceira, e a mais comum em produção, é <strong>não fazer o WebSocket em PHP</strong>: um serviço dedicado cuida das conexões e o PHP continua sendo a API que autentica, autoriza e persiste. A resposta profissional não é "PHP não serve", nem "serve para tudo" — é saber qual parte do problema cabe a qual ferramenta.</p>
+</div>
+</details>
+

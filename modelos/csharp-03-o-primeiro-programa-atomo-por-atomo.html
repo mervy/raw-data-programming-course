@@ -1,0 +1,81 @@
+<p>Chegou o momento que dá sentido a tudo o que preparamos: escrever e executar o seu primeiro programa. Por tradição, o primeiro programa que se escreve em qualquer linguagem exibe na tela a mensagem "Olá, mundo" — um ritual de iniciação que atravessa gerações de programadores. Nós o cumpriremos, mas com uma diferença que definirá o espírito deste curso: não vamos apenas digitar e ver funcionar. Vamos <em>dissecar</em> cada pedaço do que escrevemos, entender o que faz, e por que está ali. Um iniciante que apenas copia código aprende a copiar; um iniciante que compreende cada átomo aprende a programar. Prepare-se para digitar pouco e entender muito.</p>
+<h2>Criando o projeto</h2>
+<p>Em C#, não escrevemos um programa como um arquivo de texto solto; trabalhamos com o que se chama um <em>projeto</em> — uma pasta organizada com o seu código e um arquivo que descreve como o programa deve ser construído. Não se preocupe com os detalhes disso agora; a ferramenta <code>dotnet</code> cria tudo para você. Abra o seu terminal (o PowerShell no Windows, ou o Ubuntu se você usou WSL) e digite os comandos a seguir, um de cada vez, pressionando Enter após cada um:</p>
+<pre><code class="language-bash">dotnet new console -n OlaMundo
+cd OlaMundo
+dotnet run</code></pre>
+<p>Vamos entender o que cada linha fez. O primeiro comando, <code>dotnet new console -n OlaMundo</code>, pediu ao .NET que criasse um novo projeto do tipo "console" (isto é, um programa que funciona numa janela de texto, sem botões nem imagens) com o nome "OlaMundo". Isso gerou uma pasta chamada <code>OlaMundo</code> com os arquivos iniciais. O segundo comando, <code>cd OlaMundo</code>, entrou nessa pasta (<code>cd</code> significa "mudar de diretório", ou seja, entrar numa pasta). O terceiro, <code>dotnet run</code>, compilou e executou o programa. Se tudo deu certo, você viu aparecer na tela:</p>
+<pre><code class="language-csharp">Hello, World!</code></pre>
+<p>Pare um instante e aprecie o que aconteceu: uma instrução escrita em C# foi traduzida e executada pela máquina, e produziu um efeito visível — texto na sua tela. Por mais modesto que pareça, esse é o mecanismo fundamental de <em>todo</em> programa que existe, do mais simples ao mais complexo. Agora vamos abrir o capô e entender o que produziu essa mensagem.</p>
+<h2>Abrindo o código</h2>
+<p>Abra a pasta <code>OlaMundo</code> no VS Code (você pode digitar <code>code .</code> no terminal, dentro da pasta — o ponto significa "a pasta atual" — ou abrir o editor e usar "Abrir pasta"). Dentro dela, encontre e abra o arquivo chamado <strong><code>Program.cs</code></strong>. A extensão <code>.cs</code> identifica um arquivo de código C# (o "cs" vem de "C Sharp"). Este é o arquivo que contém as instruções do seu programa. Num projeto recém-criado, o conteúdo dele é surpreendentemente curto — provavelmente uma única linha significativa:</p>
+<pre><code class="language-csharp">Console.WriteLine(&quot;Hello, World!&quot;);</code></pre>
+<p>Uma linha. É ela a responsável por toda a mágica que você viu. E, apesar de curta, ela está repleta de detalhes que valem ser compreendidos um a um. Vamos dissecá-la da esquerda para a direita.</p>
+<h2>Átomo por átomo: dissecando a linha</h2>
+<p>Considere a linha inteira: <code>Console.WriteLine(&quot;Hello, World!&quot;);</code>. Cada parte tem um papel.</p>
+<p>A palavra <strong><code>Console</code></strong> refere-se à <em>janela de texto</em> onde o programa roda — o console, ou terminal. No vocabulário do C#, <code>Console</code> é o nome de uma "caixa de ferramentas" pronta, fornecida pela linguagem, que reúne tudo o que diz respeito a interagir com essa janela de texto: escrever nela, ler o que o usuário digita nela, e assim por diante. Quando você escreve <code>Console</code>, está dizendo "quero usar algo da caixa de ferramentas do console".</p>
+<p>O <strong>ponto</strong> (<code>.</code>) que vem depois é um conector fundamental em C#, que você verá o tempo todo. Ele significa, aproximadamente, "de dentro de" ou "acesse, deste, o seguinte". Em <code>Console.WriteLine</code>, o ponto diz: "de dentro da caixa de ferramentas <code>Console</code>, use a ferramenta <code>WriteLine</code>". É como pedir, numa loja, "da seção de ferramentas, o martelo": o ponto separa o <em>onde</em> (<code>Console</code>) do <em>o quê</em> (<code>WriteLine</code>).</p>
+<p>A palavra <strong><code>WriteLine</code></strong> é o nome de uma <em>ação</em> — no vocabulário da programação, uma <em>ação</em> como essa se chama <strong>método</strong> (estudaremos métodos a fundo mais adiante; por ora, entenda-o como uma ferramenta que faz algo). O que <code>WriteLine</code> faz é exatamente o que o nome sugere em inglês: "escreva uma linha". Ela exibe na tela o texto que você lhe fornecer, e depois pula para a linha seguinte.</p>
+<p>Os <strong>parênteses</strong> <code>( )</code> logo após <code>WriteLine</code> são como você <em>aciona</em> a ação e, ao mesmo tempo, <em>entrega a ela a informação de que ela precisa</em>. Uma ação como "escrever uma linha" precisa saber <em>o que</em> escrever — e é isso que colocamos entre os parênteses. Essa informação entregue a uma ação chama-se <em>argumento</em>. Aqui, o argumento é o texto a ser exibido.</p>
+<p>O texto <strong><code>&quot;Hello, World!&quot;</code></strong>, entre <strong>aspas duplas</strong>, é o conteúdo a ser escrito. As aspas são essenciais: elas dizem ao C# "tudo o que está aqui dentro é texto literal, para ser tratado como uma sequência de caracteres, e não como comando". Um trecho de texto entre aspas assim tem um nome que usaremos muito: uma <em>string</em> (do inglês, uma "cadeia" de caracteres). Se você trocar o conteúdo entre as aspas, trocará a mensagem exibida — e faremos isso já.</p>
+<p>Finalmente, o <strong>ponto e vírgula</strong> (<code>;</code>) ao final marca o <em>fim da instrução</em>. Em C#, cada instrução completa termina com ponto e vírgula, assim como em português cada frase termina com um ponto final. Ele diz ao computador: "esta instrução acabou aqui". Esquecer o ponto e vírgula é um dos erros mais comuns de quem começa, e o compilador reclamará se você o omitir — não por implicância, mas porque, sem ele, a máquina não sabe onde uma instrução termina e a próxima começa.</p>
+<h2>Fazendo o programa ser seu</h2>
+<p>Compreender é bom; experimentar fixa. Vamos alterar o programa para exibir uma mensagem sua. No VS Code, com o arquivo <code>Program.cs</code> aberto, apague o texto entre as aspas e escreva outra coisa — por exemplo, seu nome numa saudação. Deixe a linha assim:</p>
+<pre><code class="language-csharp">Console.WriteLine(&quot;Olá! Meu nome é Ana e este é meu primeiro programa.&quot;);</code></pre>
+<p>(Troque pelo seu nome.) Salve o arquivo (no VS Code, <code>Ctrl+S</code>; uma bolinha na aba do arquivo indica alterações não salvas, e ela some ao salvar). Volte ao terminal, certifique-se de que ainda está na pasta <code>OlaMundo</code>, e digite <code>dotnet run</code> novamente. Sua nova mensagem aparecerá. Acabou de fechar, pela primeira vez, o ciclo que você repetirá milhares de vezes na vida de programador: <strong>escrever, salvar, executar, ver o resultado.</strong> Esse ciclo é o batimento cardíaco da programação.</p>
+<p>Você pode ir além: adicione uma segunda linha de instrução, logo abaixo da primeira, para exibir uma segunda mensagem:</p>
+<pre><code class="language-csharp">Console.WriteLine(&quot;Estou aprendendo C# do zero.&quot;);
+Console.WriteLine(&quot;E este programa faz exatamente o que eu mandei.&quot;);</code></pre>
+<p>Salve e rode. As duas linhas aparecem, na ordem em que foram escritas — porque, como vimos na Aula #01, o computador executa as instruções <em>em sequência, de cima para baixo</em>, na ordem em que estão escritas. Essa ordem importa: se você inverter as duas linhas, a saída inverte junto. A execução sequencial é uma das primeiras verdades fundamentais da programação, e você acabou de vê-la em ação.</p>
+<p>Um programa foi criado, compilado e executado — e, mais importante, dissecado. A linha que imprime um texto na tela deixou de ser uma fórmula copiada e passou a ser um conjunto de peças com nomes e funções: o objeto que representa o console, o método que escreve, os parênteses que delimitam o argumento, as aspas que marcam o texto literal e o ponto e vírgula que encerra a instrução.</p>
+<p>Esse hábito de olhar átomo por átomo é o que distingue quem aprende de quem decora. Cada símbolo em C# está ali por uma razão, e quando um deles falta, a mensagem de erro que aparece passa a ser legível em vez de assustadora.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><strong><a href="https://learn.microsoft.com/dotnet/core/tutorials/with-visual-studio-code" target="_blank" rel="noopener noreferrer">Tutorial: crie um app de console em C#</a></strong> — o passo a passo oficial de criação e execução do primeiro programa, complementar a esta aula.</li>
+<li><strong><a href="https://learn.microsoft.com/dotnet/core/tools/dotnet-run" target="_blank" rel="noopener noreferrer">O comando dotnet run</a></strong> — a documentação oficial do comando que compila e executa o projeto.</li>
+<li><strong><a href="https://learn.microsoft.com/dotnet/api/system.console.writeline" target="_blank" rel="noopener noreferrer">Console.WriteLine (referência)</a></strong> — a referência da ação que exibe texto na tela, com suas variações.</li>
+<li><strong><a href="https://learn.microsoft.com/dotnet/csharp/fundamentals/program-structure/" target="_blank" rel="noopener noreferrer">Estrutura de um programa C#</a></strong> — uma visão de como um programa C# é organizado, útil para revisitar conforme avançamos.</li>
+<li><strong><a href="https://code.visualstudio.com/docs/introvideos/basics" target="_blank" rel="noopener noreferrer">Trabalhando com o VS Code</a></strong> — vídeos introdutórios oficiais do editor, para ganhar fluência na ferramenta.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Crie o projeto <code>OlaMundo</code> seguindo os três comandos da aula e execute-o. Confirme que a mensagem <code>Hello, World!</code> aparece. Descreva, com suas palavras, o que cada um dos três comandos (<code>dotnet new console</code>, <code>cd</code>, <code>dotnet run</code>) fez.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Ao rodar os três comandos, a mensagem <code>Hello, World!</code> aparece. O <code>dotnet new console -n OlaMundo</code> criou um novo projeto de console (programa de janela de texto) chamado OlaMundo, gerando a pasta com os arquivos iniciais. O <code>cd OlaMundo</code> entrou nessa pasta, para que os comandos seguintes agissem sobre o projeto certo. O <code>dotnet run</code> compilou (traduziu) e executou o programa, produzindo a mensagem na tela.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Abra o <code>Program.cs</code> e altere a mensagem para uma saudação com o seu nome. Salve e execute novamente. Depois, explique por que foi necessário <em>salvar</em> o arquivo antes de rodar <code>dotnet run</code>.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Após alterar a mensagem para uma saudação com o próprio nome, salvar e rodar <code>dotnet run</code>, a nova mensagem aparece. Foi necessário salvar antes de executar porque o <code>dotnet run</code> compila e roda o arquivo <em>como ele está salvo em disco</em>; alterações não salvas existem apenas na tela do editor, e sem salvar o programa executaria a versão anterior, ignorando a mudança.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Dissecando a linha <code>Console.WriteLine(&quot;Olá!&quot;);</code>, explique com suas palavras o papel de cada parte: <code>Console</code>, o ponto, <code>WriteLine</code>, os parênteses, o texto entre aspas, e o ponto e vírgula.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>Console</code> é a caixa de ferramentas referente à janela de texto (o console). O ponto (<code>.</code>) conecta, significando "de dentro de <code>Console</code>, use o seguinte". <code>WriteLine</code> é a ação (método) que escreve uma linha de texto na tela e pula para a próxima. Os parênteses acionam a ação e recebem a informação de que ela precisa (o argumento). O texto entre aspas duplas é o conteúdo literal a ser exibido — uma string. O ponto e vírgula marca o fim da instrução, dizendo ao computador que ela terminou ali.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Adicione três linhas de <code>Console.WriteLine</code> ao seu programa, cada uma com uma mensagem diferente, e execute. Depois, inverta a ordem de duas delas, execute de novo, e explique por que a saída mudou. Que verdade fundamental sobre a execução isso demonstra?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Com três <code>WriteLine</code> de mensagens diferentes, as três aparecem na ordem escrita. Ao inverter duas delas e executar de novo, a saída também inverte, refletindo a nova ordem. Isso demonstra a verdade fundamental de que o computador executa as instruções <em>em sequência, de cima para baixo</em>, na ordem em que estão escritas — a ordem das instruções determina a ordem dos efeitos.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Propositalmente, remova o ponto e vírgula do final de uma linha, salve e execute. Leia a mensagem de erro que aparece (você não precisa entendê-la por completo). Depois recoloque o ponto e vírgula e confirme que volta a funcionar. Com base nisso, explique por que o ponto e vírgula é importante.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Ao remover o ponto e vírgula e executar, aparece uma mensagem de erro (tipicamente indicando que se esperava um <code>;</code>), e o programa não roda. Ao recolocá-lo, volta a funcionar. Isso mostra que o ponto e vírgula é importante porque marca onde cada instrução termina; sem ele, o compilador não consegue determinar os limites da instrução e recusa-se a construir o programa, sinalizando o erro em vez de adivinhar a intenção.</p>
+</div>
+</details>
+

@@ -1,0 +1,181 @@
+<p>No artigo <a href="/devops/o-terminal-nao-e-o-inimigo">O Terminal Não é o Inimigo</a> foram apresentados os primeiros movimentos no terminal. Agora é preciso entender o terreno onde esses movimentos acontecem.</p>
+<p>O Linux organiza todos os arquivos em uma única árvore de diretórios que começa em <code>/</code> — chamado de diretório raiz. Não existe <code>C:\</code> ou <code>D:\</code> como no Windows. Tudo — arquivos do sistema, configurações, dispositivos de hardware, discos externos — está dentro dessa árvore.</p>
+<p>Compreender essa estrutura é essencial. Ao configurar um servidor, depurar um container ou escrever um script de automação, será necessário saber exatamente onde estão os arquivos que importam.</p>
+<h2>O Mapa do Sistema</h2>
+<pre><code class="language-bash">ls /
+</code></pre>
+<pre><code>bin  boot  dev  etc  home  lib  media  mnt  opt  proc  root  run  srv  sys  tmp  usr  var
+</code></pre>
+<p>Cada diretório tem uma função específica. Os mais relevantes para o trabalho em DevOps:</p>
+<p><strong><code>/etc</code> — Configurações do sistema</strong></p>
+<p>É onde vivem os arquivos de configuração de praticamente todo serviço do Linux. Nginx, SSH, DNS, usuários — tudo passa pelo <code>/etc</code>.</p>
+<pre><code class="language-bash">cat /etc/hostname        # Nome da máquina
+cat /etc/hosts           # Mapeamento local de nomes para IPs
+cat /etc/os-release      # Informações sobre a distribuição Linux
+</code></pre>
+<p><strong><code>/var</code> — Dados variáveis</strong></p>
+<p>Logs, filas, bancos de dados locais — arquivos que crescem com o tempo. Quando um sistema apresenta comportamento inesperado, <code>/var/log</code> é um dos primeiros lugares a se investigar.</p>
+<pre><code class="language-bash">ls /var/log
+</code></pre>
+<p><strong><code>/home</code> — Diretórios dos usuários</strong></p>
+<p>Cada usuário tem seu espaço em <code>/home/nome-do-usuario</code>. É onde ficam arquivos pessoais, configurações de shell e chaves SSH.</p>
+<p><strong><code>/tmp</code> — Arquivos temporários</strong></p>
+<p>O sistema limpa este diretório automaticamente em reinicializações. Útil para arquivos de trabalho que não precisam persistir.</p>
+<p><strong><code>/usr</code> — Programas e bibliotecas</strong></p>
+<p>A maioria dos programas instalados fica em <code>/usr/bin</code>. Bibliotecas em <code>/usr/lib</code>.</p>
+<p><strong><code>/proc</code> e <code>/sys</code> — O sistema em tempo real</strong></p>
+<p>Não são diretórios reais no disco — são interfaces para o kernel. Informações do sistema podem ser lidas como se fossem arquivos comuns:</p>
+<pre><code class="language-bash">cat /proc/cpuinfo      # Informações sobre o processador
+cat /proc/meminfo      # Uso de memória
+</code></pre>
+<h2>Caminhos Absolutos e Relativos</h2>
+<p>Todo arquivo no Linux possui um <strong>caminho absoluto</strong> — que começa em <code>/</code> e descreve a localização completa:</p>
+<pre><code>/home/usuario/devops-curso/modulo01/anotacoes.txt
+</code></pre>
+<p>E um <strong>caminho relativo</strong> — que parte do diretório atual:</p>
+<pre><code class="language-bash"># Estando em /home/usuario
+cd devops-curso/modulo01
+cat anotacoes.txt
+</code></pre>
+<p>Atalhos essenciais:</p>
+<pre><code class="language-bash">.       # O diretório atual
+..      # O diretório pai
+~       # O home do usuário
+-       # O diretório anterior
+</code></pre>
+<h2>Buscando Arquivos</h2>
+<p>Quando não se sabe onde um arquivo está, usa-se <code>find</code>:</p>
+<pre><code class="language-bash"># Por nome
+find / -name "nginx.conf" 2&gt;/dev/null
+
+# Por extensão dentro de um diretório
+find /etc -name "*.conf"
+
+# Modificados nas últimas 24 horas
+find /var/log -mtime -1
+</code></pre>
+<p>O <code>2&gt;/dev/null</code> descarta mensagens de erro de permissão que poluiriam a saída.</p>
+<p>Para buscas mais rápidas por nome:</p>
+<pre><code class="language-bash">locate nginx.conf
+
+# Atualizar o índice antes, se necessário
+sudo updatedb
+</code></pre>
+<h2>Entendendo o <code>sudo</code></h2>
+<p>O <code>sudo</code> — <em>superuser do</em> — executa um comando com privilégios de administrador.</p>
+<pre><code class="language-bash">sudo ls /root
+</code></pre>
+<p>O diretório <code>/root</code> é o home do superusuário e não é acessível por usuários comuns. Com <code>sudo</code>, elevam-se privilégios apenas para aquele comando específico.</p>
+<p>Executar tudo como root o tempo todo é uma prática perigosa. O princípio do <strong>mínimo privilégio</strong> — elevar apenas o necessário, apenas quando necessário — reaparecerá quando forem abordados IAM na AWS e RBAC no Kubernetes.</p>
+<h2>Inspecionando Arquivos sem Abrir um Editor</h2>
+<pre><code class="language-bash">head /var/log/syslog        # Primeiras 10 linhas
+tail /var/log/syslog        # Últimas 10 linhas
+tail -f /var/log/syslog     # Acompanha em tempo real
+wc -l /var/log/syslog       # Conta linhas
+grep "error" /var/log/syslog          # Filtra por palavra
+grep -i "error" /var/log/syslog       # Sem diferenciar maiúsculas
+</code></pre>
+<p>O <code>tail -f</code> é um dos comandos mais usados em produção. Quando algo está errado em um servidor, abre-se o log com <code>tail -f</code> e observa-se o que acontece em tempo real.</p>
+<h2>Um Exercício Completo</h2>
+<pre><code class="language-bash"># Cria estrutura de um projeto fictício
+mkdir -p ~/devops-curso/modulo01/exercicios
+cd ~/devops-curso/modulo01/exercicios
+
+# Confirma onde está
+pwd
+
+# Cria logs fictícios
+echo "INFO: sistema iniciado" &gt; app.log
+echo "ERROR: falha na conexão com o banco" &gt;&gt; app.log
+echo "INFO: tentativa de reconexão" &gt;&gt; app.log
+echo "INFO: conexão restabelecida" &gt;&gt; app.log
+
+# Filtra apenas erros
+grep "ERROR" app.log
+
+# Conta linhas
+wc -l app.log
+
+# Verifica metadados do arquivo
+ls -la app.log
+</code></pre>
+<p>Saída esperada do <code>grep</code>:</p>
+<pre><code>ERROR: falha na conexão com o banco
+</code></pre>
+<p>Saída do <code>wc -l</code>:</p>
+<pre><code>4 app.log
+</code></pre>
+<p>É exatamente assim que se investiga um problema em um servidor real — sem interface gráfica, sem mouse, apenas comandos e lógica.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<p><strong>Documentação e leitura</strong></p>
+<ul>
+<li><a href="https://refspecs.linuxfoundation.org/fhs.shtml" target="_blank" rel="noopener">Filesystem Hierarchy Standard (FHS)</a> — A especificação oficial que define o que cada diretório do Linux deve conter.</li>
+<li><a href="https://linuxcommand.org/tlcl.php" target="_blank" rel="noopener">The Linux Command Line — Capítulos 3 e 4</a> — Cobre navegação e exploração do sistema de arquivos com profundidade.</li>
+<li><a href="https://www.digitalocean.com/community/tutorials/an-introduction-to-linux-i-o-redirection" target="_blank" rel="noopener">An Introduction to Linux I/O Redirection — DigitalOcean</a> — Explica redirecionamento, pipes e o papel do <code>/dev/null</code>.</li>
+</ul>
+<p><strong>Prática</strong></p>
+<ul>
+<li><a href="https://overthewire.org/wargames/bandit/" target="_blank" rel="noopener">Over The Wire: Bandit — níveis 0 a 5</a> — Os primeiros níveis trabalham exatamente navegação e leitura de arquivos.</li>
+<li><a href="https://tryhackme.com/module/linux-fundamentals" target="_blank" rel="noopener">TryHackMe — Linux Fundamentals</a> — Ambiente interativo no navegador. Não requer configuração local.</li>
+</ul>
+<p><strong>Referência rápida</strong></p>
+<ul>
+<li><a href="https://tldp.org/" target="_blank" rel="noopener">The Linux Documentation Project</a> — Diagramas e explicações concisas sobre a hierarquia de diretórios. Útil como segunda tela enquanto se pratica.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Um serviço está se comportando de forma inesperada em um servidor. Em qual diretório você procura a configuração dele, e em qual procura o registro do que aconteceu? Por que essa separação existe?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A configuração fica em <code>/etc</code>, onde vivem os arquivos de praticamente todo serviço do Linux — Nginx, SSH, DNS, usuários. O registro fica em <code>/var/log</code>, porque <code>/var</code> guarda dados variáveis, aqueles que crescem com o tempo. A separação é proposital: <code>/etc</code> é o que você define, <code>/var</code> é o que o sistema produz. Por isso, ao diagnosticar, um responde "como isto deveria funcionar" e o outro responde "o que de fato aconteceu".</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Por que <code>/proc</code> e <code>/sys</code> não são diretórios reais no disco, e o que essa escolha de design permite na prática?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> São interfaces para o kernel apresentadas em forma de arquivo — o conteúdo é gerado no momento da leitura, não lido de um disco. Isso permite consultar o estado vivo do sistema com as mesmas ferramentas de sempre: <code>cat /proc/cpuinfo</code> para o processador, <code>cat /proc/meminfo</code> para memória. Não é preciso API nem programa especial; qualquer comando que saiba ler arquivo sabe inspecionar o kernel.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Estando em <code>/home/usuario</code>, quais dos caminhos abaixo chegam ao mesmo arquivo? Qual a diferença prática entre eles?</p>
+<pre><code class="language-bash">/home/usuario/devops-curso/modulo01/anotacoes.txt
+devops-curso/modulo01/anotacoes.txt
+~/devops-curso/modulo01/anotacoes.txt
+./devops-curso/modulo01/anotacoes.txt
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Os quatro chegam ao mesmo arquivo. O primeiro é absoluto: começa em <code>/</code> e vale de qualquer lugar. Os outros três dependem de contexto — o relativo parte do diretório atual, <code>~</code> expande para o home do usuário e <code>./</code> é o diretório atual escrito de forma explícita. A diferença aparece em automação: um caminho relativo quebra se o script for executado de outro diretório, e é por isso que scripts de produção costumam usar caminhos absolutos.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>O que <code>2&gt;/dev/null</code> faz no comando abaixo, e por que ele quase sempre acompanha um <code>find</code> que parte da raiz?</p>
+<pre><code class="language-bash">find / -name "nginx.conf" 2&gt;/dev/null
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Redireciona a saída de erro — o descritor <code>2</code> — para <code>/dev/null</code>, descartando-a. Buscar a partir de <code>/</code> faz o <code>find</code> tentar entrar em diretórios que o usuário não tem permissão de ler, e cada tentativa gera um "Permission denied" que afoga o resultado útil no meio do ruído. Repare que só o erro é descartado: os caminhos encontrados continuam saindo normalmente, porque vão pela saída padrão.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p><code>sudo ls /root</code> funciona, mas <code>ls /root</code> não. Explique o motivo — e por que operar sempre como root é considerado prática perigosa.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>/root</code> é o home do superusuário e não é acessível a usuários comuns; o <code>sudo</code> eleva privilégios apenas para aquele comando específico. Operar sempre como root remove a rede de proteção: qualquer erro de digitação ou script mal escrito passa a alcançar o sistema inteiro, sem nada barrando. É o princípio do <strong>mínimo privilégio</strong> — elevar apenas o necessário, apenas quando necessário — e ele reaparece adiante em IAM na AWS e RBAC no Kubernetes.</p>
+</div>
+</details>
+<h3>Exercício 6</h3>
+<p>Considerando o <code>app.log</code> criado no artigo, o que <code>grep "ERROR" app.log</code> retorna? E em que situação <code>grep -i "error"</code> daria um resultado diferente? Por fim, por que <code>tail -f</code> é tão usado em produção?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>grep "ERROR"</code> devolve uma única linha: <code>ERROR: falha na conexão com o banco</code>. Nesse arquivo específico, <code>grep -i "error"</code> devolveria a mesma coisa — mas em log real a diferença é decisiva, porque <code>-i</code> ignora maiúsculas e minúsculas e captura também <code>Error</code> e <code>error</code>, variações que aparecem quando o sistema não padroniza o nível de log. Já o <code>tail -f</code> mantém o arquivo aberto e imprime cada linha conforme ela é escrita: você reproduz o problema e vê o erro surgir no instante em que acontece, em vez de reabrir o log a cada tentativa.</p>
+</div>
+</details>
+

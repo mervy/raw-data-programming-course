@@ -1,0 +1,128 @@
+<p>Antes de escrever a primeira linha de c&oacute;digo, vale a pena entender de onde veio a linguagem que voc&ecirc; est&aacute; prestes a aprender. Python n&atilde;o surgiu do nada &mdash; ele &eacute; o resultado de escolhas deliberadas de design feitas por uma pessoa que queria, acima de tudo, que programar fosse uma atividade agrad&aacute;vel.</p>
+<h2>A Origem: um projeto de natal</h2>
+<p>Em dezembro de 1989, um programador holand&ecirc;s chamado <strong>Guido van Rossum</strong> estava de f&eacute;rias no Natal e decidiu ocupar o tempo livre criando uma nova linguagem de programa&ccedil;&atilde;o. Ele trabalhava no Centro de Matem&aacute;tica e Inform&aacute;tica (CWI) em Amsterd&atilde; e tinha experi&ecirc;ncia com uma linguagem chamada ABC &mdash; elegante, mas fechada e dif&iacute;cil de estender.</p>
+<p>Guido queria algo diferente: uma linguagem leg&iacute;vel como ingl&ecirc;s, f&aacute;cil de aprender, mas poderosa o suficiente para uso profissional. O nome <strong>Python</strong> n&atilde;o veio da serpente &mdash; veio do grupo de com&eacute;dia brit&acirc;nico <strong>Monty Python's Flying Circus</strong>, do qual Guido era f&atilde;.</p>
+<p>A primeira vers&atilde;o p&uacute;blica, <strong>Python 0.9.0</strong>, foi lan&ccedil;ada em fevereiro de <strong>1991</strong>. J&aacute; nessa vers&atilde;o estavam presentes conceitos que permanecem at&eacute; hoje: fun&ccedil;&otilde;es, tratamento de exce&ccedil;&otilde;es, e os tipos centrais como listas e dicion&aacute;rios.</p>
+<h2>A Evolu&ccedil;&atilde;o da Linguagem</h2>
+<p><strong>Python 1.x (1994)</strong> A vers&atilde;o 1.0 chegou em 1994, trazendo ferramentas funcionais como <code>lambda</code>, <code>map</code>, <code>filter</code> e <code>reduce</code>. A linguagem come&ccedil;a a ganhar usu&aacute;rios fora do meio acad&ecirc;mico.</p>
+<p><strong>Python 2.x (2000)</strong> Python 2.0 introduziu as compreens&otilde;es de lista (<em>list comprehensions</em>) e o coletor de lixo autom&aacute;tico. Por anos foi a vers&atilde;o dominante &mdash; mas carregava problemas de design, principalmente no tratamento de texto.</p>
+<p><strong>Python 3.x (2008)</strong> Python 3.0 foi lan&ccedil;ado com uma premissa radical: corrigir os erros do passado mesmo quebrando compatibilidade com o Python 2. O tratamento de texto foi refeito do zero, a divis&atilde;o inteira foi corrigida, e a linguagem ficou mais consistente. Em <strong>1&ordm; de janeiro de 2020</strong>, Python 2 chegou ao fim de vida. Hoje, Python significa Python 3.</p>
+<p>O ciclo virou anual: sai uma vers&atilde;o nova em outubro de cada ano, cada uma com cerca de cinco anos de vida &mdash; um ano e meio recebendo corre&ccedil;&atilde;o de bugs e o restante s&oacute; corre&ccedil;&atilde;o de seguran&ccedil;a. A <strong>3.14</strong> &eacute; a mais recente, e a 3.9 e anteriores j&aacute; sa&iacute;ram de suporte. Antes de come&ccedil;ar um projeto, vale conferir em <a href="https://devguide.python.org/versions/" target="_blank" rel="noopener">devguide.python.org/versions</a> qual ainda recebe corre&ccedil;&atilde;o &mdash; rodar uma vers&atilde;o fora de suporte &eacute; acumular falha conhecida e sem conserto.</p>
+<h2>Por que Python &eacute; t&atilde;o popular?</h2>
+<ul>
+<li><strong>Sintaxe limpa.</strong> Indenta&ccedil;&atilde;o obrigat&oacute;ria for&ccedil;a legibilidade &mdash; um programa Python bem escrito parece prosa t&eacute;cnica.</li>
+<li><strong>Versatilidade.</strong> A mesma linguagem serve para automa&ccedil;&atilde;o, APIs web, an&aacute;lise de dados e machine learning.</li>
+<li><strong>Ecossistema imenso.</strong> O reposit&oacute;rio PyPI cont&eacute;m mais de 500 mil pacotes.</li>
+<li><strong>Comunidade ativa.</strong> Documenta&ccedil;&atilde;o excelente, f&oacute;runs e suporte crescente em portugu&ecirc;s.</li>
+</ul>
+<h2>A Filosofia do Python: o Zen</h2>
+<p>Python tem uma filosofia oficial. Voc&ecirc; pode l&ecirc;-la a qualquer momento &mdash; a sa&iacute;da vem em ingl&ecirc;s, como Tim Peters escreveu:</p>
+<pre><code>python3 -c "import this"
+</code></pre>
+<p>Alguns princ&iacute;pios centrais:</p>
+<pre><code>Bonito &eacute; melhor que feio.
+Expl&iacute;cito &eacute; melhor que impl&iacute;cito.
+Simples &eacute; melhor que complexo.
+Legibilidade conta.
+Se a implementa&ccedil;&atilde;o &eacute; dif&iacute;cil de explicar, &eacute; uma m&aacute; ideia.
+</code></pre>
+<h2>Instala&ccedil;&atilde;o</h2>
+<p><strong>Windows</strong></p>
+<ol>
+<li>Acesse <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">https://www.python.org/downloads/</a></li>
+<li>Baixe a vers&atilde;o mais recente est&aacute;vel</li>
+<li>No instalador, marque <strong>"Add Python to PATH"</strong></li>
+<li>Verifique no Prompt de Comando:</li>
+</ol>
+<pre><code>python --version
+</code></pre>
+<p><strong>macOS</strong></p>
+<pre><code>brew install python
+python3 --version
+</code></pre>
+<p><strong>Linux (Ubuntu/Debian)</strong></p>
+<pre><code>sudo apt update
+sudo apt install python3 python3-pip
+python3 --version
+</code></pre>
+<h2>O Interpretador Interativo (REPL)</h2>
+<p>Abra o terminal e digite <code>python3</code>. Voc&ecirc; ver&aacute; algo assim &mdash; a vers&atilde;o e a data do build variam conforme a sua instala&ccedil;&atilde;o:</p>
+<pre><code>Python 3.12.3 (main, Apr 9 2024, 08:09:14)
+&gt;&gt;&gt;
+</code></pre>
+<p>Experimente:</p>
+<pre><code class="language-python">&gt;&gt;&gt; print("Ol&aacute;, mundo!")
+Ol&aacute;, mundo!
+
+&gt;&gt;&gt; 2 + 2
+4
+
+&gt;&gt;&gt; nome = "Ricardo"
+&gt;&gt;&gt; print(f"Bem-vindo, {nome}!")
+Bem-vindo, Ricardo!
+</code></pre>
+<p>Para sair: <code>exit()</code>, ou <kbd>Ctrl</kbd>+<kbd>D</kbd> no Linux e no macOS e <kbd>Ctrl</kbd>+<kbd>Z</kbd> seguido de <kbd>Enter</kbd> no Windows.</p>
+<p><strong>Se o terminal responder <em>command not found</em>, o problema provavelmente n&atilde;o &eacute; a instala&ccedil;&atilde;o:</strong> o comando nem sempre se chama <code>python3</code>. No Windows o instalador registra <code>python</code> e o lan&ccedil;ador <code>py</code>; em v&aacute;rias instala&ccedil;&otilde;es Linux e dentro de um ambiente virtual existe s&oacute; <code>python</code>, sem o <code>3</code>. Tente o outro nome antes de reinstalar &mdash; daqui em diante, onde estiver escrito <code>python3</code>, use o que responder na sua m&aacute;quina.</p>
+<h2>Primeiro Programa em Arquivo</h2>
+<p>Salve o seguinte como <code>ola_mundo.py</code>:</p>
+<pre><code class="language-python"># Meu primeiro programa em Python
+nome = input("Qual &eacute; o seu nome? ")
+print(f"Ol&aacute;, {nome}! Bem-vindo ao mundo do Python.")
+</code></pre>
+<p>Execute no terminal:</p>
+<pre><code>python3 ola_mundo.py
+</code></pre>
+<p>A história importa aqui por um motivo prático: quase tudo o que parece arbitrário na linguagem deixa de parecer quando se sabe de onde veio. A indentação obrigatória não é preciosismo estético, é a aposta de que código se lê mais vezes do que se escreve. A ruptura do Python 3 custou doze anos de transição justamente porque texto e bytes precisavam deixar de ser coisas distintas, e não havia como consertar isso sem quebrar o que existia. E o ciclo anual de versões, com prazo de validade declarado para cada uma, é o que permite que a linguagem continue mudando sem repetir aquele trauma.</p>
+<p>Do lado prático, o interpretador está instalado, o comando responde — com um nome ou com o outro — e o REPL já devolveu resultado. É pouco código até aqui, e de propósito: nada do que vem depois se aprende lendo, e sim com o terminal aberto e respondendo.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><strong>Documenta&ccedil;&atilde;o oficial do Python</strong> &mdash; <a href="https://docs.python.org/3/" target="_blank" rel="noopener">https://docs.python.org/3/</a></li>
+<li><strong>Hist&oacute;ria do Python (Guido van Rossum)</strong> &mdash; <a href="https://python-history.blogspot.com/" target="_blank" rel="noopener">https://python-history.blogspot.com/</a></li>
+<li><strong>PEP 20 &mdash; The Zen of Python</strong> &mdash; <a href="https://peps.python.org/pep-0020/" target="_blank" rel="noopener">https://peps.python.org/pep-0020/</a></li>
+<li><strong>Python Package Index (PyPI)</strong> &mdash; <a href="https://pypi.org/" target="_blank" rel="noopener">https://pypi.org/</a></li>
+<li><strong>VS Code para Python</strong> &mdash; <a href="https://code.visualstudio.com/docs/languages/python" target="_blank" rel="noopener">https://code.visualstudio.com/docs/languages/python</a></li>
+<li>MATTHES, Eric. <a href="https://nostarch.com/python-crash-course-3rd-edition" target="_blank" rel="noopener"><em>Python Crash Course</em></a>. 3. ed. No Starch Press, 2023.</li>
+<li>LUTZ, Mark. <a href="https://learning-python.com/" target="_blank" rel="noopener"><em>Learning Python</em></a>. 5. ed. O'Reilly Media, 2013.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>O artigo diz que o Python 3 "corrigiu os erros do passado mesmo quebrando compatibilidade" e cita o tratamento de texto. Por que justamente <em>texto</em> foi a mudança que exigiu quebrar tudo, em vez de ser resolvida com uma função nova?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Porque no Python 2 o tipo <code>str</code> era uma <strong>sequência de bytes</strong>, e texto Unicode morava num tipo separado, <code>unicode</code>. Pior: os dois se misturavam em silêncio. Comparar, concatenar ou interpolar um com o outro disparava uma conversão automática usando ASCII como codificação presumida, e o programa só explodia com <code>UnicodeDecodeError</code> quando aparecia o primeiro caractere acentuado — muitas vezes em produção, meses depois, com dado vindo de um usuário. O resultado prático é que <strong>o mesmo programa funcionava ou falhava dependendo do conteúdo dos dados</strong>, o que é o pior tipo de defeito que existe. Não dava para corrigir com uma função nova porque o problema não era falta de ferramenta: era o significado do tipo mais usado da linguagem estar errado. Toda biblioteca, toda assinatura de função, todo código que lia arquivo ou soquete assumia a semântica antiga. No Python 3, <code>str</code> passou a ser texto Unicode e os bytes ganharam o tipo <code>bytes</code>, sem conversão implícita entre eles — se você tentar juntar os dois, o erro acontece <strong>na hora</strong>, não quando o dado for inconveniente. É essa troca, de erro tardio e imprevisível por erro imediato, que justificou doze anos de transição.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>O artigo apresenta o Zen do Python com <code>import this</code> e traduz alguns princípios. Um colega argumenta que "Explícito é melhor que implícito" é conselho vago, do tipo que cabe em qualquer linguagem. Aponte uma decisão concreta de projeto do Python que só se explica por esse princípio.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A mais evidente é o <code>self</code> explícito nos métodos. Em quase toda linguagem orientada a objetos o receptor é implícito — o <code>this</code> de Java, C# ou JavaScript simplesmente existe dentro do método, sem aparecer na assinatura. Em Python, quem escreve <code>def cumprimentar(self, nome):</code> declara o receptor como primeiro parâmetro, e é por isso que <code>obj.metodo(x)</code> e <code>Classe.metodo(obj, x)</code> são a mesma chamada escrita de dois jeitos. Guido defendeu essa escolha publicamente mais de uma vez, e o argumento é exatamente o do Zen: não há regra oculta de resolução de nome, o que está no escopo do método é o que está escrito. Um segundo exemplo, do mesmo princípio: no Python 3 <strong>não existe conversão implícita entre <code>str</code> e <code>bytes</code></strong>, nem entre número e texto — <code>"3" + 3</code> levanta <code>TypeError</code> em vez de adivinhar se o certo era <code>"33"</code> ou <code>6</code>, como faz o JavaScript. Um terceiro: a importação nomeada. Módulo nenhum despeja nomes no escopo global sem que alguém escreva <code>from x import y</code>. Nos três casos a linguagem prefere obrigar você a escrever uma palavra a mais hoje a deixar quem for ler o código daqui a um ano ter de adivinhar.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Você segue a instalação do artigo e digita <code>python3 --version</code> no Prompt de Comando do Windows. O terminal responde que o comando não foi encontrado, ou então abre a Microsoft Store. O que está acontecendo, e qual é a sequência para diagnosticar?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> São dois problemas diferentes com sintomas parecidos. O primeiro é de <strong>nome</strong>: o instalador oficial do Windows não cria nada chamado <code>python3</code>. Ele registra <code>python</code> e o lançador <code>py</code>, que é o caminho mais confiável ali, porque sabe conviver com várias versões instaladas — <code>py -0</code> lista todas e <code>py -3.12</code> escolhe uma. Os comandos com sufixo <code>3</code> são convenção de Linux e macOS, onde precisavam conviver com o Python 2 do sistema. O segundo é o <strong>atalho da Microsoft Store</strong>: o Windows traz um <em>app execution alias</em> para <code>python.exe</code> que, quando não há Python instalado, abre a loja em vez de dar erro. Isso engana porque parece que o comando existe. Se ele aparecer depois de você ter instalado, é sinal de que o alias está na frente da instalação real no <code>PATH</code> — desligue em Configurações, em "Aliases de execução de aplicativo". A sequência de diagnóstico é: tentar <code>py --version</code>, depois <code>python --version</code>; se algum responder, o problema era só o nome. Se nenhum responder, rodar <code>where python</code> para ver o que o <code>PATH</code> está encontrando. E a causa mais comum de tudo isso é a caixa <strong>"Add Python to PATH"</strong>, que vem desmarcada no instalador e que o artigo pede para marcar — sem ela, o Python fica instalado e invisível para o terminal.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>O artigo mostra o REPL como primeiro contato e depois o arquivo <code>ola_mundo.py</code>. Qual é a diferença real entre os dois modos, e em que situação o REPL engana quem está aprendendo?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A diferença que importa é que o REPL <strong>imprime o valor de cada expressão automaticamente</strong>, e o script não. Digitar <code>2 + 2</code> no prompt mostra <code>4</code>; a mesma linha sozinha dentro de um arquivo calcula a soma, descarta o resultado e não mostra nada. É por isso que o iniciante escreve o script, roda, não vê saída nenhuma e conclui que "não funcionou" — quando na verdade funcionou e ninguém pediu para imprimir. No arquivo, o que aparece na tela é só o que passa por <code>print()</code>. Há uma segunda armadilha, mais sutil: o REPL <strong>mantém estado entre os comandos</strong>. Uma variável definida há dez minutos continua lá, e um import feito no começo da sessão continua valendo. Isso faz um trecho quebrado parecer correto, porque ele depende de algo que só existe naquela sessão e que não está no arquivo. Ao copiar código do REPL para um <code>.py</code>, é comum descobrir que falta o <code>import</code>. A regra prática: o REPL serve para <strong>experimentar</strong> — testar o que um método devolve, conferir um comportamento, ler um <code>help()</code> — e o arquivo serve para <strong>construir</strong>, porque é reproduzível, versionável e roda igual na máquina de outra pessoa.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>O artigo conta que Python 2 chegou ao fim de vida em 1º de janeiro de 2020, depois de mais de uma década de convivência com o Python 3. Que lição essa transição deixou, e como ela aparece no jeito como a linguagem é versionada hoje?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A lição é que <strong>quebra de compatibilidade sem caminho de migração paralisa um ecossistema inteiro</strong>. O Python 3 saiu em 2008, e por anos o conselho honesto para quem começava um projeto continuou sendo "use o 2", porque as bibliotecas de que se dependia ainda não tinham migrado — e elas não migravam porque seus usuários estavam no 2. Foi um impasse circular que só se desfez com ferramenta de compatibilidade, um prazo final anunciado com anos de antecedência e adiado uma vez, e muito trabalho voluntário. O efeito nas decisões de hoje é direto e visível em três pontos. Primeiro, <strong>não há Python 4 no horizonte</strong>, e quando o assunto aparece a resposta pública é que não haverá outra ruptura desse tipo. Segundo, mudança incompatível passou a ter rito: a funcionalidade é marcada como obsoleta, emite <code>DeprecationWarning</code> por pelo menos dois ciclos e só então é removida — foi assim com o <code>distutils</code> e com o lote de módulos antigos da biblioteca padrão. Terceiro, o <strong>calendário anual com fim de vida publicado</strong> troca a pergunta "vai quebrar algum dia?" por "quando exatamente", que é uma pergunta que cabe no planejamento. Na prática, para quem escreve código hoje: rodar a suíte de testes com <code>python -W error::DeprecationWarning</code> antecipa a quebra para o momento em que ela ainda é um aviso, e não uma falha em produção.</p>
+</div>
+</details>
+

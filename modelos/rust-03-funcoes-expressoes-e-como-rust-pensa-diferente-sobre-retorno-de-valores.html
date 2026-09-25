@@ -1,0 +1,262 @@
+<p>Se voc&ecirc; vem de Python, JavaScript ou Java, j&aacute; sabe o que &eacute; uma fun&ccedil;&atilde;o. Mas Rust tem uma vis&atilde;o particular sobre fun&ccedil;&otilde;es que vai te surpreender &mdash; especialmente a distin&ccedil;&atilde;o entre <strong>statements</strong> e <strong>expressions</strong>, e a forma como valores s&atilde;o retornados. &Eacute; sutil no come&ccedil;o, mas muda profundamente a forma como voc&ecirc; escreve c&oacute;digo.</p>
+<h2>Declarando fun&ccedil;&otilde;es</h2>
+<p>Fun&ccedil;&otilde;es em Rust s&atilde;o declaradas com <code>fn</code>, seguido do nome, par&acirc;metros e corpo entre chaves. Por conven&ccedil;&atilde;o, nomes de fun&ccedil;&otilde;es usam <code>snake_case</code>:</p>
+<pre><code>fn saudacao() {
+    println!("Ol&aacute;, mundo do Rust!");
+}
+
+fn main() {
+    saudacao();
+}
+</code></pre>
+<p>Diferente de Python ou JavaScript, a ordem de declara&ccedil;&atilde;o das fun&ccedil;&otilde;es <strong>n&atilde;o importa</strong> em Rust. Voc&ecirc; pode chamar uma fun&ccedil;&atilde;o antes de declar&aacute;-la no arquivo &mdash; o compilador encontra tudo antes de gerar o c&oacute;digo.</p>
+<h2>Par&acirc;metros e tipos obrigat&oacute;rios</h2>
+<p>Em Rust, <strong>toda fun&ccedil;&atilde;o deve declarar explicitamente o tipo de cada par&acirc;metro</strong>. N&atilde;o h&aacute; infer&ecirc;ncia aqui &mdash; essa &eacute; uma decis&atilde;o deliberada. Fun&ccedil;&otilde;es s&atilde;o contratos, e contratos precisam ser expl&iacute;citos:</p>
+<pre><code>fn somar(a: i32, b: i32) {
+    println!("{a} + {b} = {}", a + b);
+}
+
+fn main() {
+    somar(10, 32);
+}
+</code></pre>
+<p>M&uacute;ltiplos par&acirc;metros s&atilde;o separados por v&iacute;rgula, cada um com sua pr&oacute;pria anota&ccedil;&atilde;o de tipo. N&atilde;o existe sintaxe como <code>a, b: i32</code> para compartilhar o tipo &mdash; cada par&acirc;metro &eacute; declarado individualmente. Isso torna a assinatura mais verbosa, mas infinitamente mais leg&iacute;vel.</p>
+<h2>Statements vs. Expressions &mdash; a distin&ccedil;&atilde;o que muda tudo</h2>
+<p>Aqui come&ccedil;a a parte que mais confunde quem vem de outras linguagens.</p>
+<p>Em Rust, h&aacute; uma diferen&ccedil;a fundamental entre:</p>
+<ul>
+<li><strong>Statement</strong> &mdash; uma instru&ccedil;&atilde;o que executa uma a&ccedil;&atilde;o e <strong>n&atilde;o retorna valor</strong></li>
+<li><strong>Expression</strong> &mdash; um trecho de c&oacute;digo que <strong>produz um valor</strong></li>
+</ul>
+<p>Em linguagens como C ou Java, essa distin&ccedil;&atilde;o existe mas &eacute; informal. Em Rust, ela &eacute; parte da gram&aacute;tica da linguagem.</p>
+<p>Veja o exemplo:</p>
+<pre><code>fn main() {
+    let x = 5;          // statement: n&atilde;o produz valor
+    let y = {
+        let a = 3;
+        a + 2           // expression: produz 5 (sem ponto e v&iacute;rgula!)
+    };
+
+    println!("y = {y}"); // y = 5
+}
+</code></pre>
+<p>O bloco <code>{ let a = 3; a + 2 }</code> &eacute; uma <strong>expression</strong>. Ele avalia para <code>5</code>, que &eacute; atribu&iacute;do a <code>y</code>. A linha <code>a + 2</code> n&atilde;o tem ponto e v&iacute;rgula &mdash; e isso &eacute; crucial. Adicionar <code>;</code> ao final de uma expression a transforma em um statement, e ela passa a retornar <code>()</code> &mdash; o tipo unit&aacute;rio vazio de Rust.</p>
+<p>Esse detalhe de ponto e v&iacute;rgula &eacute; respons&aacute;vel por uma boa parte da confus&atilde;o inicial de quem aprende Rust. Guarde bem: <strong>aus&ecirc;ncia de ponto e v&iacute;rgula na &uacute;ltima linha de um bloco significa retorno impl&iacute;cito daquele valor.</strong></p>
+<h2>Fun&ccedil;&otilde;es com retorno de valor</h2>
+<p>Para declarar que uma fun&ccedil;&atilde;o retorna um valor, use <code>-&gt;</code> seguido do tipo ap&oacute;s os par&ecirc;nteses:</p>
+<pre><code>fn quadrado(n: i32) -&gt; i32 {
+    n * n   // sem ponto e v&iacute;rgula: retorno impl&iacute;cito
+}
+
+fn main() {
+    let resultado = quadrado(7);
+    println!("7&sup2; = {resultado}"); // 49
+}
+</code></pre>
+<p>N&atilde;o h&aacute; palavra-chave <code>return</code> aqui. A &uacute;ltima express&atilde;o do corpo da fun&ccedil;&atilde;o &eacute; automaticamente o valor retornado. Esse estilo &eacute; idiom&aacute;tico em Rust e voc&ecirc; vai v&ecirc;-lo em praticamente todo c&oacute;digo da linguagem.</p>
+<p>O <code>return</code> expl&iacute;cito existe, mas &eacute; reservado para <strong>retornos antecipados</strong> &mdash; quando voc&ecirc; quer sair da fun&ccedil;&atilde;o antes de chegar ao final:</p>
+<pre><code>fn dividir(a: f64, b: f64) -&gt; f64 {
+    if b == 0.0 {
+        return 0.0; // sa&iacute;da antecipada
+    }
+    a / b // retorno normal ao final
+}
+
+fn main() {
+    println!("{}", dividir(10.0, 2.0)); // 5
+    println!("{}", dividir(10.0, 0.0)); // 0
+}
+</code></pre>
+<h2>Fun&ccedil;&otilde;es que n&atilde;o retornam valor</h2>
+<p>Quando uma fun&ccedil;&atilde;o n&atilde;o retorna nada significativo, seu tipo de retorno &eacute; <code>()</code> &mdash; pronunciado "unit". Voc&ecirc; raramente escreve isso explicitamente, pois &eacute; impl&iacute;cito quando n&atilde;o h&aacute; <code>-&gt;</code>:</p>
+<pre><code>fn imprimir_linha(texto: &amp;str) {
+    println!("{texto}");
+    // retorna () implicitamente
+}
+</code></pre>
+<p>&Eacute; equivalente a:</p>
+<pre><code>fn imprimir_linha(texto: &amp;str) -&gt; () {
+    println!("{texto}");
+}
+</code></pre>
+<p>A segunda forma existe mas &eacute; considerada redundante. Evite-a.</p>
+<h2>Fun&ccedil;&otilde;es como express&otilde;es</h2>
+<p>Como tudo em Rust tende a ser uma expression, chamadas de fun&ccedil;&atilde;o tamb&eacute;m produzem valores e podem ser usadas diretamente:</p>
+<pre><code>fn celsius_para_fahrenheit(c: f64) -&gt; f64 {
+    c * 1.8 + 32.0
+}
+
+fn main() {
+    let temperaturas = [0.0, 20.0, 37.0, 100.0];
+
+    for temp in temperaturas {
+        println!("{temp}&deg;C = {:.1}&deg;F", celsius_para_fahrenheit(temp));
+    }
+}
+</code></pre>
+<p>Sa&iacute;da:</p>
+<pre><code>0&deg;C = 32.0&deg;F
+20&deg;C = 68.0&deg;F
+37&deg;C = 98.6&deg;F
+100&deg;C = 212.0&deg;F
+</code></pre>
+<h2>M&uacute;ltiplos valores de retorno com tuplas</h2>
+<p>Rust n&atilde;o suporta m&uacute;ltiplos valores de retorno nativamente &mdash; mas tuplas resolvem isso com eleg&acirc;ncia:</p>
+<pre><code>fn minmax(lista: &amp;[i32]) -&gt; (i32, i32) {
+    let mut min = lista[0];
+    let mut max = lista[0];
+
+    for &amp;valor in lista {
+        if valor &lt; min { min = valor; }
+        if valor &gt; max { max = valor; }
+    }
+
+    (min, max) // retorna a tupla
+}
+
+fn main() {
+    let numeros = [3, 7, 1, 9, 4, 6, 2, 8, 5];
+    let (minimo, maximo) = minmax(&amp;numeros);
+    println!("M&iacute;nimo: {minimo}, M&aacute;ximo: {maximo}");
+}
+</code></pre>
+<p>Sa&iacute;da:</p>
+<pre><code>M&iacute;nimo: 1, M&aacute;ximo: 9
+</code></pre>
+<p>Note o <code>&amp;[i32]</code> &mdash; isso &eacute; um <strong>slice</strong>, uma refer&ecirc;ncia a uma sequ&ecirc;ncia de inteiros. N&atilde;o se preocupe com os detalhes agora; vamos explorar refer&ecirc;ncias e slices em profundidade nos pr&oacute;ximos artigos.</p>
+<h2>Fun&ccedil;&otilde;es aninhadas</h2>
+<p>Em Rust, voc&ecirc; pode declarar fun&ccedil;&otilde;es dentro de outras fun&ccedil;&otilde;es. Isso &eacute; &uacute;til para organizar l&oacute;gica auxiliar que s&oacute; faz sentido localmente:</p>
+<pre><code>fn calcular_imc(peso: f64, altura: f64) -&gt; f64 {
+    fn imc(p: f64, h: f64) -&gt; f64 {
+        p / (h * h)
+    }
+
+    fn classificar(imc: f64) -&gt; &amp;'static str {
+        if imc &lt; 18.5 { "Abaixo do peso" }
+        else if imc &lt; 25.0 { "Peso normal" }
+        else if imc &lt; 30.0 { "Sobrepeso" }
+        else { "Obesidade" }
+    }
+
+    let valor = imc(peso, altura);
+    println!("IMC: {valor:.2} &mdash; {}", classificar(valor));
+    valor
+}
+
+fn main() {
+    calcular_imc(70.0, 1.75);
+    calcular_imc(50.0, 1.75);
+    calcular_imc(100.0, 1.75);
+}
+</code></pre>
+<p>Sa&iacute;da:</p>
+<pre><code>IMC: 22.86 &mdash; Peso normal
+IMC: 16.33 &mdash; Abaixo do peso
+IMC: 32.65 &mdash; Obesidade
+</code></pre>
+<h2>Um padr&atilde;o que voc&ecirc; vai ver muito</h2>
+<p>Em Rust idiom&aacute;tico, &eacute; muito comum que fun&ccedil;&otilde;es terminem com uma express&atilde;o que resume seu prop&oacute;sito. Aprenda a reconhecer esse padr&atilde;o:</p>
+<pre><code>fn area_retangulo(largura: f64, altura: f64) -&gt; f64 {
+    largura * altura
+}
+
+fn perimetro_retangulo(largura: f64, altura: f64) -&gt; f64 {
+    2.0 * (largura + altura)
+}
+
+fn descrever_retangulo(largura: f64, altura: f64) {
+    println!(
+        "Ret&acirc;ngulo {}&times;{}: &aacute;rea={:.2}, per&iacute;metro={:.2}",
+        largura,
+        altura,
+        area_retangulo(largura, altura),
+        perimetro_retangulo(largura, altura)
+    );
+}
+
+fn main() {
+    descrever_retangulo(5.0, 3.0);
+    descrever_retangulo(10.0, 2.5);
+}
+</code></pre>
+<p>Sa&iacute;da:</p>
+<pre><code>Ret&acirc;ngulo 5&times;3: &aacute;rea=15.00, per&iacute;metro=16.00
+Ret&acirc;ngulo 10&times;2.5: &aacute;rea=25.00, per&iacute;metro=25.00
+</code></pre>
+<p>A distinção entre statement e expression parece detalhe de vocabulário e decide como o código é escrito: como quase tudo em Rust produz valor, o <code>if</code> e o bloco <code>{}</code> podem estar do lado direito de um <code>let</code>, e o ternário deixa de fazer falta. O ponto e vírgula é o interruptor disso — presente, transforma a expression em ação e descarta o valor; ausente na última linha, faz dela o resultado. É também a causa do erro mais comum de quem começa: a função que devolve <code>()</code> porque sobrou um ponto e vírgula no fim.</p>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Explique a diferença entre <em>statement</em> e <em>expression</em> em Rust e diga por que <code>let x = (let y = 5);</code> não compila.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Expression produz um valor; statement executa algo e não produz valor. Em Rust quase tudo é expression — <code>if</code>, <code>match</code>, blocos <code>{}</code> —, e por isso podem aparecer do lado direito de um <code>let</code>. Já <code>let y = 5</code> é um <em>statement</em>: ele vincula um nome, mas não devolve nada. Como não há valor a atribuir, <code>let x = (let y = 5);</code> é recusado pelo compilador. Em C, a atribuição é uma expression e o equivalente compilaria — é justamente essa a fonte do clássico <code>if (x = 1)</code>, que Rust torna impossível.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Preveja o valor de <code>resultado</code> e explique o papel do ponto e vírgula:</p><pre><code class="language-rust">fn main() {
+    let resultado = {
+        let a = 3;
+        let b = 4;
+        a * b
+    };
+    println!("{resultado}");
+}
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>resultado</code> vale 12. O bloco é uma expression e seu valor é o da última linha, <code>a * b</code>, escrita <strong>sem</strong> ponto e vírgula. Se fosse <code>a * b;</code>, a linha viraria statement, o bloco passaria a não produzir valor — o tipo seria <code>()</code> — e o programa não compilaria, porque <code>println!</code> receberia um valor vazio. Em Rust o ponto e vírgula não é pontuação opcional: ele decide se algo é valor ou ação.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>A função abaixo não compila. Explique o erro e mostre as duas formas de corrigi-la.</p><pre><code class="language-rust">fn dobro(x: i32) -&gt; i32 {
+    x * 2;
+}
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O ponto e vírgula transforma <code>x * 2</code> em statement, então a função não devolve nada — o compilador acusa <code>mismatched types: expected i32, found ()</code>. Primeira correção, removendo o ponto e vírgula para que a expression seja o valor de retorno:</p><pre><code class="language-rust">fn dobro(x: i32) -&gt; i32 {
+    x * 2
+}
+</code></pre><p>Segunda, usando <code>return</code> explícito:</p><pre><code class="language-rust">fn dobro(x: i32) -&gt; i32 {
+    return x * 2;
+}
+</code></pre><p>A primeira é a forma idiomática; <code>return</code> costuma ficar reservado para saídas antecipadas no meio da função.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Escreva uma função que receba dois inteiros e devolva a soma e a diferença, e mostre como desestruturar o retorno em duas variáveis.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong></p><pre><code class="language-rust">fn soma_e_diferenca(a: i32, b: i32) -&gt; (i32, i32) {
+    (a + b, a - b)
+}
+
+fn main() {
+    let (soma, diferenca) = soma_e_diferenca(10, 4);
+    println!("soma={soma} diferenca={diferenca}");
+}
+</code></pre><p>O tipo de retorno é a tupla <code>(i32, i32)</code>, e a desestruturação no <code>let</code> nomeia cada parte. Quando os dois valores têm significados que se confundem com facilidade, uma <code>struct</code> com campos nomeados costuma comunicar melhor que a tupla.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Explique por que o <code>if</code> abaixo funciona em Rust e o que aconteceria se os dois ramos devolvessem tipos diferentes.</p><pre><code class="language-rust">let categoria = if idade &gt;= 18 { "adulto" } else { "menor" };
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Funciona porque <code>if</code> é uma expression em Rust: o valor do ramo escolhido vira o valor de toda a construção, dispensando o operador ternário que outras linguagens precisam ter. A condição é obrigatoriamente <code>bool</code> — não há conversão implícita de número para booleano. Se os ramos devolvessem tipos diferentes, por exemplo <code>"adulto"</code> e <code>0</code>, o compilador recusaria com <code>if and else have incompatible types</code>: como o tipo de <code>categoria</code> precisa ser conhecido em tempo de compilação, os dois ramos têm de concordar. Um <code>if</code> sem <code>else</code> usado como valor tem o mesmo problema, porque o caminho ausente produziria <code>()</code>.</p>
+</div>
+</details>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><strong>The Rust Programming Language, Cap. 3.3</strong> &mdash; <em>Functions</em> &mdash; <a href="https://doc.rust-lang.org/book/ch03-03-how-functions-work.html" target="_blank" rel="noopener">https://doc.rust-lang.org/book/ch03-03-how-functions-work.html</a></li>
+<li><strong>Rust by Example &mdash; Functions</strong> &mdash; <a href="https://doc.rust-lang.org/rust-by-example/fn.html" target="_blank" rel="noopener">https://doc.rust-lang.org/rust-by-example/fn.html</a></li>
+<li><strong>Rust Reference &mdash; Expressions</strong> &mdash; <a href="https://doc.rust-lang.org/reference/expressions.html" target="_blank" rel="noopener">https://doc.rust-lang.org/reference/expressions.html</a></li>
+<li><strong>Rust Reference &mdash; Statements</strong> &mdash; <a href="https://doc.rust-lang.org/reference/statements.html" target="_blank" rel="noopener">https://doc.rust-lang.org/reference/statements.html</a></li>
+<li><strong>Rust Reference &mdash; Functions</strong> &mdash; a defini&ccedil;&atilde;o formal de par&acirc;metros, tipo de retorno e corpo como bloco &mdash; <a href="https://doc.rust-lang.org/reference/items/functions.html" target="_blank" rel="noopener">https://doc.rust-lang.org/reference/items/functions.html</a></li>
+<li><strong>Clippy &mdash; <code>needless_return</code></strong> &mdash; o lint que acusa o <code>return</code> escrito onde bastava a express&atilde;o final &mdash; <a href="https://rust-lang.github.io/rust-clippy/master/index.html" target="_blank" rel="noopener">https://rust-lang.github.io/rust-clippy/master/index.html</a></li>
+</ul>

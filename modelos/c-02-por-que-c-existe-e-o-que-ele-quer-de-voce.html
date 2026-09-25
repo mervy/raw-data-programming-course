@@ -1,0 +1,112 @@
+<p>Toda linguagem de programação nasce de uma frustração. E poucas nasceram de uma frustração tão concreta quanto a do C. No início dos anos 1970, nos laboratórios da Bell, Dennis Ritchie e Ken Thompson tentavam construir um sistema operacional novo — o Unix. O problema era que reescrever um sistema operacional inteiro em Assembly, a cada nova máquina, era um trabalho hercúleo e intransferível. Precisavam de algo que fosse quase tão rápido quanto Assembly, mas portável entre máquinas diferentes. Em 1972, Ritchie criou o C para resolver exatamente isso.</p>
+<p>O experimento deu tão certo que, em 1973, o Unix foi reescrito quase inteiramente em C. Pela primeira vez na história, um sistema operacional podia ser transportado para um novo computador recompilando o código, em vez de reescrevê-lo. Essa foi uma revolução silenciosa — e é a razão pela qual, mais de cinquenta anos depois, você ainda está lendo sobre C.</p>
+<h3>Por que aprender C hoje</h3>
+<p>É tentador achar que uma linguagem dos anos 70 seja peça de museu. É o oposto. O kernel do Linux, o do Windows e o do macOS têm C no seu coração. O Python que você talvez já conheça é, ele mesmo, escrito em C. Bancos de dados como PostgreSQL e SQLite, o interpretador do Ruby, o motor do Git, o firmware do seu micro-ondas, do seu carro e do satélite lá em cima — tudo isso é C, ou depende diretamente dele.</p>
+<p>Mas há um motivo ainda mais forte para aprender C hoje: ele te obriga a entender o computador. Linguagens modernas escondem a memória de você, e por boas razões. C não esconde nada. Ao aprendê-lo, você vai entender o que realmente acontece quando um programa roda — como a memória é organizada, o que é um ponteiro, por que um programa trava. Esse conhecimento torna você melhor em qualquer linguagem que aprender depois.</p>
+<h3>O que C quer de você</h3>
+<p>Se o Rust quer que você prove ao compilador que seu código é seguro, o C quer outra coisa: ele quer confiar em você. C parte do princípio de que você sabe o que está fazendo. Ele te dá acesso direto à memória, ponteiros brutos, e quase nenhuma rede de proteção. Se você somar mal um índice e escrever fora de um vetor, C não vai reclamar — ele simplesmente vai escrever onde você mandou, e o resultado pode ser um bug misterioso três funções adiante.</p>
+<p>Isso não é um defeito. É a filosofia da linguagem: controle total, com responsabilidade total. Aprender C é aprender a ser cuidadoso, disciplinado e consciente de cada byte. Essa disciplina é o verdadeiro presente da linguagem.</p>
+<h3>Como um programa em C vira um executável</h3>
+<p>Antes do primeiro código, você precisa entender uma coisa que a maioria dos cursos ignora: o que acontece entre escrever <code>programa.c</code> e rodar <code>./programa</code>. Esse caminho tem quatro etapas, e conhecê-las vai te poupar horas de confusão no futuro.</p>
+<ol>
+<li>
+<p><strong>Pré-processador</strong> — Ele lê seu arquivo e resolve tudo que começa com <code>#</code>. Substitui <code>#include</code> pelo conteúdo dos cabeçalhos, expande as macros de <code>#define</code>. O resultado é um arquivo <code>.c</code> "achatado", ainda em C, mas sem diretivas.</p>
+</li>
+<li>
+<p><strong>Compilador</strong> — Traduz esse C para Assembly, a linguagem específica do seu processador.</p>
+</li>
+<li>
+<p><strong>Montador (assembler)</strong> — Converte o Assembly em código de máquina binário, gerando um arquivo-objeto (<code>.o</code>), ainda incompleto.</p>
+</li>
+<li>
+<p><strong>Ligador (linker)</strong> — Junta seu arquivo-objeto com as bibliotecas necessárias (como a que contém o <code>printf</code>) e produz finalmente o executável.</p>
+</li>
+</ol>
+<p>Quando você roda <code>gcc programa.c -o programa</code>, o GCC executa essas quatro etapas de uma vez. Mas cada uma pode falhar por um motivo diferente — e saber em qual delas o erro aconteceu é meio caminho para resolvê-lo.</p>
+<h3>Seu primeiro programa</h3>
+<p>Vamos ao clássico. Você vai precisar de um compilador; nos sistemas Linux e macOS, o GCC ou o Clang geralmente já estão instalados (ou disponíveis via <code>sudo apt install gcc</code> / Xcode Command Line Tools). No Windows, recomendo o MinGW-w64 ou o WSL.</p>
+<p><strong>Sem instalar nada, por enquanto:</strong> se quiser rodar este primeiro programa antes de montar o ambiente, cole-o no <a href="https://godbolt.org/" target="_blank" rel="noopener noreferrer">Compiler Explorer</a> — ele compila e executa no navegador e mostra o Assembly ao lado, o que torna concretas as quatro etapas que acabamos de descrever. Para só compilar e rodar, o <a href="https://www.onlinegdb.com/online_c_compiler" target="_blank" rel="noopener noreferrer">OnlineGDB</a> basta. Vale como muleta nas primeiras aulas; da Fase 6 em diante, com Valgrind e sanitizers, você vai precisar da sua própria máquina.</p>
+<p>Crie um arquivo chamado <code>ola.c</code>:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf(&quot;Olá, C. Vamos até o fim.\n&quot;);
+    return 0;
+}
+</code></pre>
+<p>Compile e execute:</p>
+<pre><code class="language-bash">gcc ola.c -o ola
+./ola
+</code></pre>
+<p>A saída:</p>
+<pre><code class="language-text">Olá, C. Vamos até o fim.
+</code></pre>
+<h3>Dissecando cada linha</h3>
+<p>Esse programa minúsculo já carrega quase toda a filosofia da linguagem. Vamos por partes.</p>
+<p><code>#include &lt;stdio.h&gt;</code> — Uma diretiva de pré-processador. Ela traz para o seu arquivo o cabeçalho <code>stdio.h</code> (standard input/output), que declara funções como o <code>printf</code>. Sem essa linha, o compilador não saberia o que é <code>printf</code>.</p>
+<p><code>int main(void)</code> — Todo programa em C começa a executar pela função <code>main</code>. O <code>int</code> diz que ela devolve um número inteiro ao sistema operacional ao terminar. O <code>void</code> entre parênteses indica explicitamente que ela não recebe argumentos.</p>
+<p><code>printf("...\n")</code> — Imprime texto na tela. O <code>\n</code> é uma sequência de escape que representa uma quebra de linha. Diferente de outras linguagens, o C não pula a linha sozinho — se você esquecer o <code>\n</code>, a saída sai grudada.</p>
+<p><code>return 0;</code> — Devolve o valor 0 ao sistema operacional. Por convenção, <strong>0 significa "terminou com sucesso"</strong>. Qualquer outro número sinaliza um erro. Esse detalhe é a base de como scripts e outros programas sabem se o seu funcionou.</p>
+<p>Repare no ponto e vírgula ao fim de cada instrução. Em C, ele não é opcional — é o que separa uma instrução da outra. Esquecê-lo é o erro de compilação mais comum de quem está começando.</p>
+<h3>Para a próxima aula</h3>
+<p>Hoje entendemos de onde o C veio, por que ele ainda importa, e o caminho que um programa percorre até virar executável. No artigo <em><a href="/linguagem-c/variaveis-tipos-e-a-memoria-por-tras-deles">Variáveis, Tipos e a Memória por Trás Deles</a></em>, vamos ver variáveis e tipos — e você vai descobrir que, ao contrário do Rust, em C as variáveis são mutáveis por padrão, e que o próprio tamanho de um <code>int</code> pode mudar de máquina para máquina. Vamos aprender a lidar com isso.</p>
+<p>Até lá, instale seu compilador, escreva esse primeiro programa e faça-o rodar. Sinta o ciclo: escrever, compilar, executar. É esse ciclo que vamos repetir por um ano inteiro.</p>
+<p>A jornada de um ano começa com um único <code>int main</code>.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><a href="https://books.google.com/books/about/The_C_Programming_Language.html?id=FGkPBQAAQBAJ" target="_blank" rel="noopener noreferrer"><em>The C Programming Language</em></a> (K&amp;R), Kernighan &amp; Ritchie — o livro definitivo, escrito pelo próprio criador — Cap. 1</li>
+<li><em>Modern C</em>, Jens Gustedt — livro gratuito e atualizado (C17/C23) — <a href="https://gustedt.gitlabpages.inria.fr/modern-c/" target="_blank" rel="noopener noreferrer">https://gustedt.gitlabpages.inria.fr/modern-c/</a></li>
+<li>GCC Documentation — o manual do compilador que usaremos — <a href="https://gcc.gnu.org/onlinedocs/" target="_blank" rel="noopener noreferrer">https://gcc.gnu.org/onlinedocs/</a></li>
+<li>cppreference — C reference — referência técnica completa da linguagem — <a href="https://en.cppreference.com/w/c" target="_blank" rel="noopener noreferrer">https://en.cppreference.com/w/c</a></li>
+<li>Dennis Ritchie, <em>The Development of the C Language</em> — o relato histórico do próprio autor — <a href="https://www.bell-labs.com/usr/dmr/www/chist.html" target="_blank" rel="noopener noreferrer">https://www.bell-labs.com/usr/dmr/www/chist.html</a></li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Modifique o programa <code>ola.c</code> para imprimir seu nome em uma linha e sua cidade na linha seguinte, usando um único <code>printf</code>.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Basta usar duas sequências <code>\n</code> em uma só chamada:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf(&quot;Marcelo Fontes\nCuritiba\n&quot;);
+    return 0;
+}
+</code></pre>
+<p>O <code>\n</code> no meio da string quebra a linha; o do fim garante que o cursor termine numa linha nova.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>O que acontece se você remover o <code>\n</code> do <code>printf</code>? Compile, rode e observe a diferença na saída.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Sem o <code>\n</code>, o texto é impresso e o cursor <strong>não</strong> pula de linha. O prompt do terminal aparece grudado logo após a saída (algo como <code>Olá, C.$</code>). C nunca adiciona quebras de linha automaticamente — a responsabilidade é sempre sua.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Explique, com suas palavras, a diferença entre a etapa de compilação e a etapa de ligação (linking).</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A <strong>compilação</strong> traduz o seu código C em código de máquina, gerando um arquivo-objeto (<code>.o</code>) que ainda tem "buracos": ele usa funções como <code>printf</code> sem saber onde elas estão. A <strong>ligação</strong> preenche esses buracos, juntando seu objeto com as bibliotecas que contêm essas funções, e produz o executável final. Um erro de compilação é de sintaxe/tipo; um erro de ligação é "encontrei a chamada, mas não achei a implementação".</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>O que o número em <code>return 0;</code> significa para o sistema operacional? O que mudaria se fosse <code>return 1;</code>?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O valor de retorno de <code>main</code> é o <strong>código de saída</strong> do programa. Por convenção, <code>0</code> significa sucesso e qualquer valor diferente de zero significa erro. Com <code>return 1;</code>, o sistema operacional (e qualquer script que tenha chamado seu programa) entenderia que ele <strong>falhou</strong>. É assim que, por exemplo, um <code>programa &amp;&amp; echo ok</code> decide se roda ou não o <code>echo</code>.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Compile o programa apenas até a etapa de pré-processamento com <code>gcc -E ola.c</code> e observe o resultado. Por que o arquivo ficou tão grande, se você escreveu só seis linhas?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O <code>-E</code> para o processo logo após o pré-processador. O arquivo fica enorme porque o <code>#include &lt;stdio.h&gt;</code> foi substituído pelo conteúdo <strong>inteiro</strong> do cabeçalho <code>stdio.h</code> (e de tudo que ele, por sua vez, inclui) — centenas de declarações de funções e tipos. Você escreveu seis linhas; o pré-processador colou milhares antes de entregar ao compilador.</p>
+</div>
+</details>
+

@@ -1,0 +1,406 @@
+<p>Todo programa de computador, em sua ess&ecirc;ncia, faz tr&ecirc;s coisas: recebe dados, processa dados e produz resultados. Para isso, precisa de um lugar para guardar informa&ccedil;&otilde;es temporariamente durante a execu&ccedil;&atilde;o &mdash; e esse lugar s&atilde;o as vari&aacute;veis. Neste artigo vamos entender como o PHP lida com vari&aacute;veis, quais tipos de dados existem, como convert&ecirc;-los e como operar sobre eles com os operadores da linguagem.</p>
+<p>Este &eacute; um dos artigos mais densos do M&oacute;dulo 1, mas tamb&eacute;m um dos mais importantes. Tudo que vem depois &mdash; estruturas de controle, fun&ccedil;&otilde;es, orienta&ccedil;&atilde;o a objetos &mdash; depende de voc&ecirc; dominar bem este conte&uacute;do.</p>
+<h2>Vari&aacute;veis</h2>
+<p>No PHP, toda vari&aacute;vel come&ccedil;a com o s&iacute;mbolo <code>$</code> seguido do nome. O nome deve come&ccedil;ar com uma letra ou underscore, e pode conter letras, n&uacute;meros e underscores. O PHP &eacute; case-sensitive: <code>$nome</code> e <code>$Nome</code> s&atilde;o vari&aacute;veis diferentes.</p>
+<pre><code class="language-php">&lt;?php
+
+// Declara&ccedil;&atilde;o e atribui&ccedil;&atilde;o s&atilde;o feitas ao mesmo tempo
+// N&atilde;o existe "declarar sem valor" em PHP como em outras linguagens
+$nome     = "Ricardo";
+$idade    = 35;
+$altura   = 1.78;
+$ativo    = true;
+$endereco = null; // null significa aus&ecirc;ncia intencional de valor
+
+// Vari&aacute;veis podem ser reatribu&iacute;das a qualquer momento
+// e at&eacute; mudar de tipo &mdash; PHP permite isso (tipagem din&acirc;mica)
+$valor = 10;      // int
+$valor = "dez";   // agora &eacute; string &mdash; PHP aceita, mas evite isso
+$valor = 10.5;    // agora &eacute; float
+
+// Exibindo valores
+echo $nome;   // Ricardo
+echo "\n";
+echo $idade;  // 35
+</code></pre>
+<p>A conven&ccedil;&atilde;o de nomenclatura mais usada no PHP &eacute; o <strong>camelCase</strong> para vari&aacute;veis e fun&ccedil;&otilde;es: <code>$nomeDoUsuario</code>, <code>$totalDeItens</code>, <code>$dataDeNascimento</code>. Para constantes, usa-se <code>UPPER_SNAKE_CASE</code>. Siga essas conven&ccedil;&otilde;es &mdash; elas tornam o c&oacute;digo previs&iacute;vel e leg&iacute;vel.</p>
+<h2>Tipos de dados</h2>
+<p>O PHP possui oito tipos primitivos divididos em tr&ecirc;s grupos:</p>
+<p><strong>Escalares</strong> &mdash; armazenam um &uacute;nico valor:</p>
+<ul>
+<li><code>string</code> &mdash; texto</li>
+<li><code>int</code> &mdash; n&uacute;mero inteiro</li>
+<li><code>float</code> &mdash; n&uacute;mero decimal</li>
+<li><code>bool</code> &mdash; verdadeiro ou falso</li>
+</ul>
+<p><strong>Compostos</strong> &mdash; armazenam m&uacute;ltiplos valores:</p>
+<ul>
+<li><code>array</code> &mdash; lista ou mapa de valores</li>
+<li><code>object</code> &mdash; inst&acirc;ncia de uma classe</li>
+</ul>
+<p><strong>Especiais:</strong></p>
+<ul>
+<li><code>null</code> &mdash; aus&ecirc;ncia de valor</li>
+<li><code>resource</code> &mdash; refer&ecirc;ncia a recursos externos (arquivos, conex&otilde;es de banco)</li>
+</ul>
+<pre><code class="language-php">&lt;?php
+
+// STRING &mdash; sequ&ecirc;ncia de caracteres
+// Aspas duplas: interpola vari&aacute;veis
+// Aspas simples: tudo literal, mais perform&aacute;tico para strings sem vari&aacute;veis
+$simples  = 'Ol&aacute;, mundo!';             // aspas simples
+$duplas   = "Ol&aacute;, $simples";           // interpola &mdash; resultado: "Ol&aacute;, Ol&aacute;, mundo!"
+$heredoc  = &lt;&lt;&lt;EOT
+    Texto com m&uacute;ltiplas linhas.
+    Suporta interpola&ccedil;&atilde;o de $simples.
+    EOT;                               // heredoc &mdash; para textos longos
+
+// INT &mdash; inteiro, positivo ou negativo, sem limite fixo (depende do sistema)
+$positivo  =  42;
+$negativo  = -17;
+$hexadec   = 0x1A;  // hexadecimal &mdash; equivale a 26
+$binario   = 0b101; // bin&aacute;rio &mdash; equivale a 5
+$octal     = 0777;  // octal &mdash; equivale a 511
+$separador = 1_000_000; // PHP 7.4+: underscore como separador visual
+
+// FLOAT &mdash; n&uacute;mero com ponto decimal ou nota&ccedil;&atilde;o cient&iacute;fica
+$preco     = 19.99;
+$cientifico = 1.5e3;  // 1500.0
+$negativo_f = -0.001;
+
+// BOOL &mdash; true ou false (case-insensitive: TRUE, True, true s&atilde;o iguais)
+$ativo    = true;
+$inativo  = false;
+
+// NULL &mdash; aus&ecirc;ncia de valor
+$vazio = null;
+
+// Verificando tipos com gettype() e fun&ccedil;&otilde;es is_*
+echo gettype($positivo);  // integer
+echo gettype($preco);     // double (nome interno do float)
+echo gettype($simples);   // string
+echo gettype($ativo);     // boolean
+echo gettype($vazio);     // NULL
+
+var_dump(is_int($positivo));    // bool(true)
+var_dump(is_string($simples));  // bool(true)
+var_dump(is_null($vazio));      // bool(true)
+</code></pre>
+<h2>Strings em detalhes</h2>
+<p>Strings merecem aten&ccedil;&atilde;o especial pois s&atilde;o o tipo mais usado no desenvolvimento web.</p>
+<pre><code class="language-php">&lt;?php
+
+$nome  = "Ana";
+$sobrenome = "Silva";
+
+// Concatena&ccedil;&atilde;o com ponto (.)
+$nomeCompleto = $nome . " " . $sobrenome;
+echo $nomeCompleto; // Ana Silva
+
+// Interpola&ccedil;&atilde;o dentro de aspas duplas
+echo "Ol&aacute;, $nome!";          // Ol&aacute;, Ana!
+echo "Ol&aacute;, {$nome}!";        // Ol&aacute;, Ana! &mdash; chaves deixam o limite da vari&aacute;vel claro
+
+// Fun&ccedil;&otilde;es essenciais de string
+echo strlen($nome);           // 3 &mdash; comprimento
+echo strtoupper($nome);       // ANA &mdash; mai&uacute;sculas
+echo strtolower($nome);       // ana &mdash; min&uacute;sculas
+echo str_replace("Ana", "Maria", $nomeCompleto); // Maria Silva
+echo substr($nomeCompleto, 0, 3); // Ana &mdash; extrai parte da string
+echo strpos($nomeCompleto, "Silva"); // 4 &mdash; posi&ccedil;&atilde;o da substring
+echo trim("  espa&ccedil;os  ");     // "espa&ccedil;os" &mdash; remove espa&ccedil;os nas bordas
+echo str_pad("5", 3, "0", STR_PAD_LEFT); // "005" &mdash; preenchimento
+
+// Verificando conte&uacute;do
+var_dump(str_contains($nomeCompleto, "Silva")); // bool(true) &mdash; PHP 8+
+var_dump(str_starts_with($nomeCompleto, "Ana")); // bool(true) &mdash; PHP 8+
+var_dump(str_ends_with($nomeCompleto, "Silva")); // bool(true) &mdash; PHP 8+
+</code></pre>
+<h2>Convers&atilde;o de tipos (Type Casting)</h2>
+<p>O PHP converte tipos automaticamente em muitos contextos &mdash; isso se chama coer&ccedil;&atilde;o de tipos. Mas voc&ecirc; tamb&eacute;m pode fazer convers&otilde;es expl&iacute;citas, o que &eacute; sempre mais seguro e leg&iacute;vel.</p>
+<pre><code class="language-php">&lt;?php
+
+// Convers&atilde;o impl&iacute;cita (autom&aacute;tica) &mdash; PHP decide o tipo
+$resultado = "5" + 3;      // string inteiramente num&eacute;rica &mdash; resultado: 8
+$resultado = "5 anos" + 3; // l&ecirc; os d&iacute;gitos do in&iacute;cio: 8, com Warning
+$resultado = "anos" + 3;   // PHP 8: TypeError. At&eacute; o PHP 7 isso valia 3, em sil&ecirc;ncio// Convers&atilde;o expl&iacute;cita (casting) &mdash; voc&ecirc; decide &mdash; sempre prefira isso
+$texto   = "42";
+$inteiro = (int) $texto;    // 42 como int
+$decimal = (float) $texto;  // 42.0 como float
+$bool    = (bool) $texto;   // true (string n&atilde;o-vazia = true)
+
+// Regras importantes do casting para bool:
+// S&atilde;o considerados FALSE: 0, 0.0, "", "0", [], null
+// Todo o resto &eacute; TRUE
+var_dump((bool) 0);      // bool(false)
+var_dump((bool) "");     // bool(false)
+var_dump((bool) "0");    // bool(false) &mdash; armadilha!
+var_dump((bool) []);     // bool(false)
+var_dump((bool) "false"); // bool(true) &mdash; a string "false" n&atilde;o &eacute; false!
+
+// Fun&ccedil;&otilde;es de convers&atilde;o &mdash; mais expl&iacute;citas que casting
+$numero = intval("42abc");   // 42 &mdash; para inteiro
+$decimal = floatval("3.14"); // 3.14 &mdash; para float
+$texto = strval(100);        // "100" &mdash; para string
+</code></pre>
+<p>A linha <code>(bool) "false"</code> retornando <code>true</code> &eacute; uma das maiores armadilhas para iniciantes. Lembre-se: o PHP avalia se a string est&aacute; vazia ou &eacute; <code>"0"</code> &mdash; n&atilde;o avalia o conte&uacute;do sem&acirc;ntico.</p>
+<h2>Constantes</h2>
+<p>Constantes s&atilde;o como vari&aacute;veis, mas seu valor n&atilde;o pode ser alterado ap&oacute;s a defini&ccedil;&atilde;o. S&atilde;o definidas com <code>define()</code> ou com a palavra-chave <code>const</code>:</p>
+<pre><code class="language-php">&lt;?php
+
+// define() &mdash; pode ser usado em qualquer ponto do c&oacute;digo
+define('VERSAO_APP', '2.1.0');
+define('MAX_TENTATIVAS', 3);
+define('PI', 3.14159);
+
+// const &mdash; deve ser usada no escopo global ou dentro de classes
+const NOME_EMPRESA = 'Minha Empresa Ltda';
+
+echo VERSAO_APP;    // 2.1.0 &mdash; sem o $
+echo MAX_TENTATIVAS; // 3
+
+// Constantes predefinidas pelo PHP
+echo PHP_VERSION;   // vers&atilde;o do PHP instalado
+echo PHP_INT_MAX;   // maior inteiro suportado
+echo PHP_EOL;       // quebra de linha do sistema operacional
+echo PHP_MAJOR_VERSION; // n&uacute;mero da vers&atilde;o maior (8, no PHP 8.x)
+echo __FILE__;      // caminho completo do arquivo atual
+echo __LINE__;      // n&uacute;mero da linha atual &mdash; &uacute;til para debug
+</code></pre>
+<p>Use constantes para valores que n&atilde;o devem mudar ao longo da execu&ccedil;&atilde;o: vers&otilde;es, limites, nomes de configura&ccedil;&atilde;o, caminhos base. Isso torna o c&oacute;digo mais seguro e mais f&aacute;cil de manter.</p>
+<h2>Operadores</h2>
+<p>Operadores s&atilde;o s&iacute;mbolos que realizam opera&ccedil;&otilde;es sobre um ou mais valores. O PHP tem um conjunto rico de operadores.</p>
+<h3>Operadores aritm&eacute;ticos</h3>
+<pre><code class="language-php">&lt;?php
+
+$a = 10;
+$b = 3;
+
+echo $a + $b;   // 13 &mdash; adi&ccedil;&atilde;o
+echo $a - $b;   // 7  &mdash; subtra&ccedil;&atilde;o
+echo $a * $b;   // 30 &mdash; multiplica&ccedil;&atilde;o
+echo $a / $b;   // 3.333... &mdash; divis&atilde;o (resultado sempre float se n&atilde;o divis&iacute;vel)
+echo $a % $b;   // 1  &mdash; m&oacute;dulo (resto da divis&atilde;o)
+echo $a ** $b;  // 1000 &mdash; exponencia&ccedil;&atilde;o (PHP 5.6+)
+
+// Operadores de incremento e decremento
+$contador = 0;
+$contador++;    // p&oacute;s-incremento: usa o valor DEPOIS incrementa
+++$contador;    // pr&eacute;-incremento: incrementa ANTES de usar o valor
+$contador--;    // p&oacute;s-decremento
+--$contador;    // pr&eacute;-decremento
+
+// Operadores de atribui&ccedil;&atilde;o combinados &mdash; atalhos
+$total = 100;
+$total += 50;   // equivale a $total = $total + 50  &rarr; 150
+$total -= 30;   // equivale a $total = $total - 30  &rarr; 120
+$total *= 2;    // equivale a $total = $total * 2   &rarr; 240
+$total /= 4;    // equivale a $total = $total / 4   &rarr; 60
+$total %= 7;    // equivale a $total = $total % 7   &rarr; 4
+$texto  = "Ol&aacute;";
+$texto .= ", mundo!"; // concatena&ccedil;&atilde;o combinada &rarr; "Ol&aacute;, mundo!"
+</code></pre>
+<h3>Operadores de compara&ccedil;&atilde;o</h3>
+<pre><code class="language-php">&lt;?php
+
+$a = 10;
+$b = "10";
+
+// == compara&ccedil;&atilde;o frouxa (loose) &mdash; compara valor, ignora tipo
+var_dump($a == $b);   // bool(true) &mdash; 10 == "10" ap&oacute;s coer&ccedil;&atilde;o
+
+// === compara&ccedil;&atilde;o estrita &mdash; compara valor E tipo
+var_dump($a === $b);  // bool(false) &mdash; int !== string
+
+// != diferente (frouxa)
+var_dump($a != 5);    // bool(true)
+
+// !== diferente estrita
+var_dump($a !== $b);  // bool(true) &mdash; tipos diferentes
+
+// Compara&ccedil;&otilde;es num&eacute;ricas
+var_dump($a &gt; 5);     // bool(true)
+var_dump($a &lt; 5);     // bool(false)
+var_dump($a &gt;= 10);   // bool(true)
+var_dump($a &lt;= 10);   // bool(true)
+
+// Spaceship operator &lt;=&gt; &mdash; PHP 7+
+// Retorna -1, 0 ou 1 dependendo da compara&ccedil;&atilde;o
+// Muito usado em fun&ccedil;&otilde;es de ordena&ccedil;&atilde;o
+echo (1 &lt;=&gt; 2);   // -1 (esquerda menor)
+echo (2 &lt;=&gt; 2);   //  0 (iguais)
+echo (3 &lt;=&gt; 2);   //  1 (esquerda maior)
+</code></pre>
+<p>Sempre prefira <code>===</code> ao <code>==</code>. A compara&ccedil;&atilde;o frouxa tem regras de coer&ccedil;&atilde;o complexas que causam bugs sutis e dif&iacute;ceis de encontrar.</p>
+<h3>Operadores l&oacute;gicos</h3>
+<pre><code class="language-php">&lt;?php
+
+$idade    = 25;
+$cadastro = true;
+
+// &amp;&amp; e || s&atilde;o os operadores l&oacute;gicos modernos (preferidos)
+var_dump($idade &gt;= 18 &amp;&amp; $cadastro);  // bool(true) &mdash; E l&oacute;gico
+var_dump($idade &lt; 18 || $cadastro);   // bool(true) &mdash; OU l&oacute;gico
+var_dump(!$cadastro);                  // bool(false) &mdash; N&Atilde;O l&oacute;gico
+
+// and, or, not existem mas t&ecirc;m preced&ecirc;ncia MENOR que &amp;&amp;, ||
+// Isso causa comportamento inesperado em express&otilde;es complexas
+// Prefira sempre &amp;&amp; e || para evitar surpresas
+$x = true &amp;&amp; false;  // $x = (true &amp;&amp; false) = false &mdash; correto
+$x = true and false; // $x = true, depois "and false" &eacute; ignorado &mdash; armadilha!
+</code></pre>
+<h3>Operadores espec&iacute;ficos do PHP</h3>
+<pre><code class="language-php">&lt;?php
+
+// Null coalescing (??) &mdash; PHP 7+
+// Retorna o operando esquerdo se n&atilde;o for null, sen&atilde;o retorna o direito
+$nome = null;
+$exibir = $nome ?? "Visitante"; // "Visitante"
+
+// Encadeamento: pega o primeiro valor n&atilde;o-null
+$a = null;
+$b = null;
+$c = "Ricardo";
+echo $a ?? $b ?? $c; // "Ricardo"
+
+// Null coalescing de atribui&ccedil;&atilde;o (??=) &mdash; PHP 7.4+
+$config = [];
+$config['tema'] ??= 'claro'; // s&oacute; atribui se for null
+echo $config['tema']; // "claro"
+
+// Operador tern&aacute;rio
+$idade = 20;
+$status = ($idade &gt;= 18) ? "maior" : "menor";
+echo $status; // "maior"
+
+// Tern&aacute;rio curto (Elvis operator) &mdash; retorna o pr&oacute;prio valor se truthy
+$entrada = "" ;
+$valor = $entrada ?: "padr&atilde;o"; // como $entrada &eacute; falsy, usa "padr&atilde;o"
+echo $valor; // "padr&atilde;o"
+
+// Nullsafe operator (?-&gt;) &mdash; PHP 8+
+// Evita erros ao chamar m&eacute;todos em objetos possivelmente null
+// $resultado = $usuario?-&gt;getPerfil()?-&gt;getAvatar();
+// Se qualquer parte for null, retorna null em vez de erro
+</code></pre>
+<p>A liberdade de tipos do PHP &eacute; conveniente at&eacute; o dia em que deixa de ser: a mesma flexibilidade que permite somar uma string com um inteiro &eacute; a que faz um total de pedido sair errado sem ningu&eacute;m ver. Por isso os dois h&aacute;bitos que valem mais neste artigo n&atilde;o s&atilde;o sobre sintaxe &mdash; s&atilde;o <code>===</code> em vez de <code>==</code>, e convers&atilde;o expl&iacute;cita no ponto em que o dado entra no sistema. Adotados cedo, eles tornam desnecess&aacute;rio decorar a tabela de coer&ccedil;&otilde;es, porque voc&ecirc; deixa de depender dela.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li>
+<p><strong>Tipos suportados &mdash; Manual oficial do PHP</strong> <a href="https://www.php.net/manual/pt_BR/language.types.php" target="_blank" rel="noopener">https://www.php.net/manual/pt_BR/language.types.php</a> Documenta&ccedil;&atilde;o completa de todos os tipos do PHP, com exemplos e detalhes de comportamento em cada situa&ccedil;&atilde;o.</p>
+</li>
+<li>
+<p><strong>Operadores &mdash; Manual oficial do PHP</strong> <a href="https://www.php.net/manual/pt_BR/language.operators.php" target="_blank" rel="noopener">https://www.php.net/manual/pt_BR/language.operators.php</a> Refer&ecirc;ncia completa de todos os operadores, incluindo preced&ecirc;ncia e associatividade.</p>
+</li>
+<li>
+<p><strong>Compara&ccedil;&otilde;es de tipos &mdash; Tabelas de compara&ccedil;&atilde;o do PHP</strong> <a href="https://www.php.net/manual/pt_BR/types.comparisons.php" target="_blank" rel="noopener">https://www.php.net/manual/pt_BR/types.comparisons.php</a> Tabelas mostrando o resultado de <code>==</code> e <code>===</code> para todas as combina&ccedil;&otilde;es de tipos. Bookmarque esta p&aacute;gina.</p>
+</li>
+<li>
+<p><strong>PHP 8 &mdash; Nullsafe operator RFC</strong> <a href="https://wiki.php.net/rfc/nullsafe_operator" target="_blank" rel="noopener">https://wiki.php.net/rfc/nullsafe_operator</a> A proposta formal que introduziu o operador <code>?-&gt;</code> no PHP 8. Leitura interessante para entender a motiva&ccedil;&atilde;o por tr&aacute;s do recurso.</p>
+</li>
+<li>
+<p><strong>FOWLER, Martin.</strong> <em>Refactoring: Improving the Design of Existing Code</em>. 2&ordf; ed. Addison-Wesley, 2018. <a href="https://martinfowler.com/books/refactoring.html" target="_blank" rel="noopener">https://martinfowler.com/books/refactoring.html</a> N&atilde;o &eacute; sobre PHP especificamente, mas o cap&iacute;tulo sobre vari&aacute;veis e nomenclatura &eacute; fundamental para qualquer desenvolvedor.</p>
+</li>
+<li>
+<p><strong>PHP: The Right Way &mdash; Tipos e boas pr&aacute;ticas</strong> <a href="https://phptherightway.com/#language_highlights" target="_blank" rel="noopener">https://phptherightway.com/#language_highlights</a> Se&ccedil;&atilde;o sobre caracter&iacute;sticas da linguagem com foco em boas pr&aacute;ticas modernas.</p>
+</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Diga o que cada linha produz em PHP 8 — e qual delas se comportava de outro jeito no PHP 7.</p>
+<pre><code class="language-php">&lt;?php
+$a = "5" + 3;
+$b = "5 anos" + 3;
+$c = "anos" + 3;</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>$a</code> vale <strong>8</strong>, sem aviso nenhum: <code>"5"</code> é uma string inteiramente numérica, e converter é o comportamento previsto. <code>$b</code> também vale <strong>8</strong>, mas acompanhado de <code>Warning: A non-numeric value encountered</code> — o PHP lê os dígitos iniciais e descarta o resto, avisando que fez isso. <code>$c</code> é a linha que mudou: em PHP 8 ela lança <code>TypeError: Unsupported operand types: string + int</code> e <strong>interrompe a execução</strong>; até o PHP 7.x, a mesma linha devolvia silenciosamente <strong>3</strong>, tratando <code>"anos"</code> como zero. A mudança veio da RFC <em>Saner string to number conversions</em>, e é uma boa notícia: o caso mais perigoso — somar com algo que não tem número nenhum — deixou de ser silencioso. Mas ela também explica por que sistemas antigos quebram ao migrar: código que dependia da conversão para zero agora morre com exceção. A lição prática é não depender de nenhum dos três comportamentos. Dado que vem de formulário, de URL ou de arquivo é <strong>sempre string</strong>, e a conversão deve ser explícita e validada na entrada, com <code>is_numeric()</code> antes do <em>cast</em>, ou com <code>filter_var($v, FILTER_VALIDATE_INT)</code>, que devolve <code>false</code> em vez de adivinhar.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Um carrinho soma três itens de R$ 0,10, R$ 0,20 e R$ 0,70. O código compara o total com 1.00 e diz que é diferente. O que houve, e como se escreve isso direito?</p>
+<pre><code class="language-php">&lt;?php
+$total = 0.1 + 0.2 + 0.7;
+var_dump($total == 1.0);  // false</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Não é bug do PHP: é como o computador guarda número decimal. O tipo <code>float</code> segue o padrão IEEE 754, em base dois, e valores como 0,1 e 0,2 <strong>não têm representação exata</strong> nessa base — do mesmo jeito que 1/3 não tem representação decimal finita. O resultado é que <code>0.1 + 0.2</code> vale <code>0.30000000000000004</code>, e o total do carrinho fica a alguns bilionésimos de 1,0. Imprimir engana, porque <code>echo</code> arredonda na exibição; a diferença só aparece na comparação, ou depois de milhares de somas acumuladas. Para <strong>dinheiro, a solução é não usar float</strong>: guarde centavos em <code>int</code> (1990 em vez de 19.90) e divida só na hora de exibir — inteiro em PHP é exato até 9.223.372.036.854.775.807, o que cobre qualquer valor financeiro real. Em cálculo que exija decimal com precisão arbitrária, use a extensão <strong>bcmath</strong> (<code>bcadd('0.1', '0.2', 2)</code>), que opera sobre strings. E quando for realmente necessário comparar dois <code>float</code>, nunca use <code>==</code>: compare a diferença com uma tolerância, <code>abs($a - $b) &lt; 0.00001</code>. A mesma regra vale para o banco de dados — coluna monetária é <code>DECIMAL</code>, jamais <code>FLOAT</code>.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>O artigo mostra que <code>(bool) "0"</code> é <code>false</code>. Sem executar, diga o valor de cada expressão — duas delas costumam surpreender.</p>
+<pre><code class="language-php">&lt;?php
+var_dump((bool) "0.0");
+var_dump((bool) "false");
+var_dump((bool) []);
+var_dump(0 == "");
+var_dump("abc" == 0);</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Na ordem: <code>true</code>, <code>true</code>, <code>false</code>, <code>false</code>, <code>false</code>. As duas primeiras mostram que a conversão para booleano <strong>não interpreta o conteúdo</strong>: a lista de valores falsos é curta e literal — <code>false</code>, <code>0</code>, <code>0.0</code>, <code>""</code>, <code>"0"</code>, array vazio e <code>null</code>. A string <code>"0.0"</code> não está nela (é <code>"0"</code>, exatamente, e nada além), e <code>"false"</code> é apenas um texto de cinco letras. As duas últimas mudaram no <strong>PHP 8</strong> e são a pegadinha real: até o PHP 7, <code>0 == ""</code> e <code>"abc" == 0</code> davam <strong><code>true</code></strong>, porque a string era convertida para número antes da comparação — o que fazia <code>if ($senha == 0)</code> aceitar qualquer senha de letras. Desde o PHP 8, quando um dos lados é número e o outro é string <strong>não numérica</strong>, o número é que vira string, e a comparação passa a ser textual. É uma das correções mais importantes da versão, e também um motivo de sistemas antigos mudarem de comportamento na migração — sem erro nenhum, só resultado diferente. A conclusão prática não muda: use <code>===</code>, que compara valor e tipo e não tem nenhuma dessas regras.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Você precisa guardar o identificador de uma transação, um número de 19 dígitos. Este código passa, mas o valor sai errado. Por quê, e o que usar no lugar?</p>
+<pre><code class="language-php">&lt;?php
+$id = 9223372036854775807 + 1;
+echo $id;          // 9.2233720368548E+18
+echo gettype($id); // ?</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>gettype()</code> devolve <strong><code>double</code></strong>. O valor da primeira linha é <code>PHP_INT_MAX</code>, o maior inteiro representável em 64 bits; somar 1 estoura o limite e o PHP, em vez de dar erro, <strong>converte o resultado para float</strong>. E float tem cerca de 15 a 16 dígitos significativos, então um número de 19 dígitos perde precisão: o identificador vira outro número, parecido e errado, e a notação científica na saída é o único sinal visível. Isso é especialmente traiçoeiro com identificadores vindos de APIs — o <em>snowflake ID</em> do Twitter e vários sistemas de pagamento usam exatamente essa faixa, e um <code>json_decode</code> despreocupado já os corrompe na entrada. A regra é: <strong>identificador não é número, é texto</strong>. Guarde como <code>string</code>, compare com <code>===</code>, e no banco use <code>VARCHAR</code> ou <code>BIGINT</code> conforme o caso — nunca faça aritmética com ele, porque não existe conta que faça sentido com um identificador. Ao ler JSON com valores grandes, <code>json_decode($j, true, 512, JSON_BIGINT_AS_STRING)</code> evita a perda logo na porta de entrada. Para saber o limite da máquina em que o código roda, <code>PHP_INT_MAX</code> e <code>PHP_INT_SIZE</code> respondem — em 32 bits o teto é bem menor.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p><strong>Desafio:</strong> um formulário envia nome, idade, preço e um campo "aceito os termos". Escreva a conversão da entrada, sabendo que tudo chega como string, e diga o que fazer quando o valor não serve.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O princípio é converter <strong>na fronteira</strong>: nenhuma função do sistema deve receber string e adivinhar. E a diferença entre <em>casting</em> e <em>validação</em> é o centro do exercício — <code>(int) "abc"</code> devolve <code>0</code> sem reclamar, o que transforma lixo em dado plausível.</p>
+<pre><code class="language-php">&lt;?php
+
+declare(strict_types=1);
+
+function converterEntrada(array $post): array
+{
+    $erros = [];
+
+    // Texto: nunca confie no tamanho nem no conteúdo
+    $nome = trim($post['nome'] ?? '');
+    if (mb_strlen($nome) &lt; 2) {
+        $erros[] = 'Informe o nome completo.';
+    }
+
+    // filter_var devolve false quando não é inteiro — (int) devolveria 0
+    $idade = filter_var($post['idade'] ?? '', FILTER_VALIDATE_INT,
+                        ['options' =&gt; ['min_range' =&gt; 0, 'max_range' =&gt; 130]]);
+    if ($idade === false) {
+        $erros[] = 'Idade inválida.';
+    }
+
+    // Formulário em português manda "19,90"; o PHP só entende "19.90"
+    $precoBruto = str_replace(',', '.', trim($post['preco'] ?? ''));
+    $preco = filter_var($precoBruto, FILTER_VALIDATE_FLOAT);
+    if ($preco === false || $preco &lt; 0) {
+        $erros[] = 'Preço inválido.';
+    }
+    // Dinheiro segue em centavos daqui para dentro
+    $centavos = $preco === false ? 0 : (int) round($preco * 100);
+
+    // Caixa desmarcada não é enviada: a ausência é a resposta "não"
+    $aceitou = isset($post['termos']);
+    if (!$aceitou) {
+        $erros[] = 'É preciso aceitar os termos.';
+    }
+
+    return ['nome' =&gt; $nome, 'idade' =&gt; $idade,
+            'centavos' =&gt; $centavos, 'aceitou' =&gt; $aceitou, 'erros' =&gt; $erros];
+}</code></pre>
+<p>Quatro decisões merecem atenção. A idade usa <code>filter_var</code> em vez de <code>(int)</code> porque precisa <strong>distinguir "zero" de "não é número"</strong> — e a comparação é <code>=== false</code>, já que a idade 0 é falsa em contexto booleano. O preço troca vírgula por ponto antes de converter, porque o usuário brasileiro digita como aprendeu e o PHP lê como o padrão americano manda. A caixa de seleção não é convertida e sim <strong>testada por existência</strong>: navegador nenhum envia caixa desmarcada, então <code>$post['termos']</code> simplesmente não existe. E os erros são <strong>acumulados</strong>, não lançados no primeiro problema: quem preencheu o formulário merece ver tudo o que falta de uma vez, em vez de descobrir um erro por tentativa.</p>
+</div>
+</details>
+

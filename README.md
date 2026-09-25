@@ -40,3 +40,24 @@ o `.md` em arquivos individuais.
 
 Nomenclatura: `Curso - <Tecnologia>.md` para a conversa e
 `Curso - <Tecnologia> - Caderno de Exercícios|Respostas.docx` para os cadernos.
+
+## Do bruto ao site: banco em HTML e modelos
+
+Os artigos extraídos destas conversas foram gravados num banco de dados
+(tabela `articles`, coluna `content`) como **fragmentos HTML** — é de lá que o
+site os publica.
+
+A pasta [`modelos/`](modelos/) guarda o `content` dos 5 primeiros artigos
+publicados/revisados de cada curso, exatamente como está no banco, como
+referência de formatação. Nome: `<curso>-<nº>-<slug>.html`.
+
+Padrões que aparecem nos modelos:
+
+- Texto em `<p>`, seções em `<h2>`/`<h3>`.
+- Código em `<pre><code class="language-xxx">` (`language-c`, `language-cpp`,
+  `language-js`, `language-python`, `language-bash`…).
+- Respostas de exercícios em `<div class="exercise-answer">`.
+- Links internos no padrão `/{categoria}/{slug}`.
+- Acentuação: os cursos mais antigos (JavaScript, PHP, Python, Rust) usam
+  entidades HTML (`&atilde;`, `&ccedil;`); os mais novos (C, C++, C#, DevOps)
+  usam UTF-8 direto.

@@ -1,0 +1,178 @@
+<p>Todo programa manipula informa&ccedil;&atilde;o. Para isso, a linguagem precisa de uma forma de armazenar e identificar dados na mem&oacute;ria do computador. Em Python, esse mecanismo &eacute; simples e direto &mdash; mas esconde decis&otilde;es de design que vale entender desde o in&iacute;cio.</p>
+<h2>O que &eacute; uma Vari&aacute;vel?</h2>
+<p>Uma vari&aacute;vel &eacute; um nome que aponta para um valor armazenado na mem&oacute;ria. Em Python, voc&ecirc; n&atilde;o precisa declarar o tipo da vari&aacute;vel antecipadamente &mdash; basta atribuir um valor:</p>
+<pre><code class="language-python">nome = "Ricardo"
+idade = 35
+altura = 1.78
+ativo = True
+</code></pre>
+<p>Python descobre o tipo automaticamente. Isso se chama <strong>tipagem din&acirc;mica</strong> &mdash; o tipo est&aacute; associado ao valor, n&atilde;o ao nome da vari&aacute;vel.</p>
+<p>Diferente de Java ou C, onde voc&ecirc; escreveria:</p>
+<pre><code class="language-java">// Java
+String nome = "Ricardo";
+int idade = 35;
+</code></pre>
+<p>Em Python, o nome da vari&aacute;vel &eacute; apenas um r&oacute;tulo. Voc&ecirc; pode inclusive reatribu&iacute;-lo a um tipo diferente (embora isso seja m&aacute; pr&aacute;tica):</p>
+<pre><code class="language-python">x = 10
+x = "agora sou texto"  # v&aacute;lido, mas evite
+</code></pre>
+<h2>Tipos de Dados Fundamentais</h2>
+<h3>int &mdash; N&uacute;meros inteiros</h3>
+<pre><code class="language-python">ano = 2024
+populacao = 215000000
+temperatura_negativa = -15
+
+print(type(ano))  # &lt;class 'int'&gt;
+</code></pre>
+<p>Python suporta inteiros de tamanho arbitr&aacute;rio &mdash; n&atilde;o h&aacute; limite de bits como em C ou Java.</p>
+<pre><code class="language-python">numero_gigante = 10 ** 100  # 1 googol &mdash; funciona perfeitamente
+</code></pre>
+<h3>float &mdash; N&uacute;meros decimais</h3>
+<pre><code class="language-python">preco = 49.90
+pi = 3.14159
+gravidade = -9.8
+
+print(type(preco))  # &lt;class 'float'&gt;
+</code></pre>
+<p>Aten&ccedil;&atilde;o ao problema cl&aacute;ssico de ponto flutuante:</p>
+<pre><code class="language-python">&gt;&gt;&gt; 0.1 + 0.2
+0.30000000000000004
+</code></pre>
+<p>Isso n&atilde;o &eacute; bug do Python &mdash; &eacute; uma limita&ccedil;&atilde;o do padr&atilde;o IEEE 754, presente em praticamente todas as linguagens. Para c&aacute;lculos financeiros, use o m&oacute;dulo <code>decimal</code> &mdash; e repare nas <strong>aspas</strong>, porque elas s&atilde;o a parte que importa:</p>
+<pre><code class="language-python">from decimal import Decimal
+
+resultado = Decimal("0.1") + Decimal("0.2")
+print(resultado)  # 0.3
+</code></pre>
+<h3>str &mdash; Texto</h3>
+<p>Strings podem ser delimitadas por aspas simples ou duplas &mdash; o resultado &eacute; id&ecirc;ntico:</p>
+<pre><code class="language-python">saudacao = "Ol&aacute;, mundo!"
+linguagem = 'Python'
+</code></pre>
+<p>Para textos com m&uacute;ltiplas linhas, use tr&ecirc;s aspas:</p>
+<pre><code class="language-python">mensagem = """
+Linha 1
+Linha 2
+Linha 3
+"""
+</code></pre>
+<p>Strings em Python s&atilde;o <strong>imut&aacute;veis</strong> &mdash; uma vez criadas, n&atilde;o podem ser alteradas. Opera&ccedil;&otilde;es sobre strings sempre geram uma nova string.</p>
+<pre><code class="language-python">nome = "ricardo"
+print(nome.upper())       # RICARDO
+print(nome.capitalize())  # Ricardo
+print(len(nome))          # 7
+print(nome[0])            # r
+print(nome[-1])           # o
+</code></pre>
+<h3>bool &mdash; Booleanos</h3>
+<pre><code class="language-python">ligado = True
+desligado = False
+
+print(type(ligado))  # &lt;class 'bool'&gt;
+</code></pre>
+<p>Em Python, <code>True</code> e <code>False</code> s&atilde;o escritos com inicial mai&uacute;scula. Booleanos s&atilde;o subclasse de <code>int</code> &mdash; <code>True</code> vale <code>1</code> e <code>False</code> vale <code>0</code>:</p>
+<pre><code class="language-python">&gt;&gt;&gt; True + True
+2
+&gt;&gt;&gt; False * 100
+0
+</code></pre>
+<h3>NoneType &mdash; Aus&ecirc;ncia de valor</h3>
+<p><code>None</code> representa a aus&ecirc;ncia de valor. &Eacute; usado quando uma vari&aacute;vel existe mas ainda n&atilde;o tem conte&uacute;do definido:</p>
+<pre><code class="language-python">resultado = None
+
+if resultado is None:
+    print("Ainda n&atilde;o foi calculado.")
+</code></pre>
+<h2>Convers&atilde;o entre Tipos</h2>
+<p>Python n&atilde;o converte tipos automaticamente (exceto em casos muito espec&iacute;ficos). A convers&atilde;o expl&iacute;cita &eacute; feita com fun&ccedil;&otilde;es:</p>
+<pre><code class="language-python"># str para int
+numero = int("42")
+print(numero + 8)  # 50
+
+# int para str
+texto = str(100)
+print("Valor: " + texto)  # Valor: 100
+
+# str para float
+preco = float("19.99")
+print(preco * 2)  # 39.98
+
+# int para float
+x = float(5)
+print(x)  # 5.0
+</code></pre>
+<p>Tentar converter um valor inv&aacute;lido gera um erro:</p>
+<pre><code class="language-python">int("abc")  # ValueError: invalid literal for int()
+</code></pre>
+<h2>Verificando o Tipo de uma Vari&aacute;vel</h2>
+<pre><code class="language-python">x = 3.14
+print(type(x))          # &lt;class 'float'&gt;
+print(isinstance(x, float))   # True
+print(isinstance(x, int))     # False
+</code></pre>
+<h2>Boas Pr&aacute;ticas na Nomea&ccedil;&atilde;o de Vari&aacute;veis</h2>
+<p>Python adota o estilo <strong>snake_case</strong> para vari&aacute;veis e fun&ccedil;&otilde;es &mdash; palavras em min&uacute;sculo separadas por underscore:</p>
+<pre><code class="language-python"># Correto
+nome_completo = "Ricardo Matos"
+total_de_alunos = 120
+preco_unitario = 9.99
+
+# Evite
+NomeCompleto = "Ricardo Matos"   # reservado para classes
+nomecompleto = "Ricardo Matos"   # dif&iacute;cil de ler
+n = "Ricardo Matos"              # pouco descritivo
+</code></pre>
+<p>Nomes de vari&aacute;veis n&atilde;o podem come&ccedil;ar com n&uacute;mero e n&atilde;o podem ser palavras reservadas da linguagem (<code>if</code>, <code>for</code>, <code>class</code>, <code>return</code>, etc.).</p>
+<p>O ponto que sustenta tudo o que veio nesta parte é a frase que parece apenas didática: em Python o nome é um rótulo, e o tipo mora no valor. Daí decorre a conversão explícita que a linguagem exige, decorre o <code>isinstance</code> ser mais confiável que comparar o resultado de <code>type</code>, e decorre a surpresa de dois nomes apontarem para a mesma lista. Quem entende a variável como uma caixa que guarda um valor vai tropeçar nas três coisas; quem a entende como uma etiqueta colada num objeto não tropeça em nenhuma.</p>
+<p>A aritmética de ponto flutuante merece a mesma atenção. O <code>0.30000000000000004</code> não é defeito do Python nem curiosidade de sala de aula: é o que acontece quando se guarda um número decimal em base dois, e vale para toda linguagem que usa IEEE 754. O <code>decimal</code> resolve, desde que o valor entre como texto — construir um <code>Decimal</code> a partir de um <code>float</code> apenas carrega o erro para dentro do módulo que deveria evitá-lo.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><strong>Tipos nativos do Python</strong> &mdash; <a href="https://docs.python.org/3/library/stdtypes.html" target="_blank" rel="noopener">https://docs.python.org/3/library/stdtypes.html</a></li>
+<li><strong>PEP 8 &mdash; Guia de estilo do Python</strong> &mdash; <a href="https://peps.python.org/pep-0008/" target="_blank" rel="noopener">https://peps.python.org/pep-0008/</a></li>
+<li><strong>M&oacute;dulo decimal</strong> &mdash; <a href="https://docs.python.org/3/library/decimal.html" target="_blank" rel="noopener">https://docs.python.org/3/library/decimal.html</a></li>
+<li><strong>IEEE 754 (ponto flutuante)</strong> &mdash; <a href="https://floating-point-gui.de/" target="_blank" rel="noopener">https://floating-point-gui.de/</a></li>
+<li>MATTHES, Eric. <a href="https://nostarch.com/python-crash-course-3rd-edition" target="_blank" rel="noopener"><em>Python Crash Course</em></a>. 3. ed. No Starch Press, 2023. Cap. 2.</li>
+<li>LUTZ, Mark. <a href="https://learning-python.com/" target="_blank" rel="noopener"><em>Learning Python</em></a>. 5. ed. O'Reilly Media, 2013. Cap. 4&ndash;5.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>O artigo recomenda o módulo <code>decimal</code> para cálculo financeiro e mostra <code>Decimal("0.1") + Decimal("0.2")</code>. Um colega escreve <code>Decimal(0.1) + Decimal(0.2)</code>, sem as aspas, e reclama que "o decimal também erra". Ele está certo?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O módulo está certo; a construção é que está errada. Com aspas, o <code>Decimal</code> recebe o <strong>texto</strong> <code>"0.1"</code> e representa exatamente um décimo. Sem aspas, o que chega ao construtor já é um <code>float</code> — o literal <code>0.1</code> foi convertido para binário <strong>antes</strong> de o <code>decimal</code> ver qualquer coisa, e o que ele recebe é o valor que de fato existe na memória. Dá para ver a olho nu: <code>Decimal(0.1)</code> imprime <code>0.1000000000000000055511151231257827021181583404541015625</code>. O módulo está sendo fiel, reproduzindo o erro que já vinha pronto, e <code>Decimal(0.1) + Decimal(0.2)</code> devolve <code>0.3000000000000000166533453694</code>. A regra é curta e vale para todo sistema que lida com dinheiro: <strong>um valor decimal nunca deve passar por <code>float</code> em nenhum ponto do caminho</strong>. Ele entra como texto vindo do formulário, viaja como <code>Decimal</code>, e é gravado numa coluna <code>DECIMAL</code> do banco — nunca <code>FLOAT</code> nem <code>DOUBLE</code>. Se em algum trecho alguém escreve <code>float(valor)</code> para "facilitar uma conta", o erro entra ali e não sai mais. Vale saber também que a alternativa comum, guardar centavos como inteiro, funciona pelo mesmo motivo: inteiro em Python é exato e não tem limite de tamanho.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>O artigo afirma que os booleanos são subclasse de <code>int</code>, e mostra <code>True + True</code> resultando em <code>2</code>. Isso parece uma curiosidade inofensiva. Descreva um caso em que essa herança produz um defeito real.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O caso mais silencioso é o <strong>dicionário</strong>. Como <code>True == 1</code> e os dois têm o mesmo <em>hash</em>, eles são a <strong>mesma chave</strong>: escrever <code>{1: "um", True: "verdadeiro"}</code> produz um dicionário de um único item, e <code>{1: "a"}[True]</code> devolve <code>"a"</code> sem erro nenhum. Num código que usa identificadores numéricos vindos de um banco e, em algum ponto, deixa passar um booleano — uma <em>flag</em> lida de uma coluna, o retorno de uma comparação —, o valor simplesmente sobrescreve o do identificador <code>1</code>, e o sintoma aparece muito longe da causa. Há um segundo caso, este útil: <code>sum([True, True, False])</code> devolve <code>2</code>, e é por isso que <code>sum(1 for x in lista if condicao(x))</code> e <code>sum(condicao(x) for x in lista)</code> contam a mesma coisa — comportamento em que muito código se apoia de propósito. E há a armadilha da verificação de tipo: <code>isinstance(True, int)</code> devolve <strong><code>True</code></strong>, então uma função que valida a entrada com <code>isinstance(valor, int)</code> aceita <code>True</code> como se fosse número. Se a distinção importa, o teste tem de ser <code>type(valor) is int</code>, que é justamente o caso em que comparar o tipo diretamente é mais correto do que usar <code>isinstance</code>.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>O artigo insiste que "o nome da variável é apenas um rótulo". Você escreve <code>a = [1, 2]</code>, depois <code>b = a</code>, e em seguida <code>b.append(3)</code>. O que acontece com <code>a</code>, e por que o mesmo raciocínio não vale para <code>x = 10</code> seguido de <code>y = x</code>?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>a</code> passa a valer <code>[1, 2, 3]</code>. A atribuição <code>b = a</code> não copiou a lista: colou um segundo rótulo no mesmo objeto, e <code>a is b</code> é <code>True</code>. O <code>append</code> altera esse objeto no lugar, e quem estiver olhando por qualquer um dos nomes vê a mudança. Com <code>x = 10</code> e <code>y = x</code> os dois nomes também apontam para o mesmo objeto, mas <strong>inteiro é imutável</strong> — não existe operação que altere o número 10 no lugar. Ao escrever <code>y += 1</code>, o que acontece não é modificar; é criar o objeto <code>11</code> e reapontar <code>y</code> para ele, deixando <code>x</code> intocado. Ou seja: a regra é a mesma para tudo, e é a <strong>mutabilidade do objeto</strong> que muda o que se observa. Em Python, imutáveis são <code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code>, <code>tuple</code> e <code>frozenset</code>; mutáveis são <code>list</code>, <code>dict</code>, <code>set</code> e a maioria dos objetos que você mesmo define. A consequência prática mais cara aparece quando se passa uma lista para uma função: ela recebe o mesmo objeto, e qualquer alteração feita lá dentro é visível fora. Quem quer trabalhar sobre uma cópia precisa pedir por ela — <code>b = a.copy()</code> para um nível, <code>copy.deepcopy(a)</code> quando há estrutura aninhada.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>O artigo destaca que Python tem inteiros de tamanho arbitrário e mostra <code>10 ** 100</code> funcionando. Isso significa que Python não perde precisão com números grandes?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Não — a garantia vale para <code>int</code>, e só. O <code>10 ** 100</code> é exato, com os 101 dígitos todos corretos, e <code>10 ** 100 + 1</code> é de fato diferente de <code>10 ** 100</code>. Já <code>1e100</code> é um <strong><code>float</code></strong>, com os mesmos 64 bits e a mesma precisão limitada de sempre: <code>1e100 + 1 == 1e100</code> devolve <code>True</code>, porque o <code>1</code> é pequeno demais para aparecer na representação. E as duas formas nem sequer são o mesmo número — <code>1e100 == 10 ** 100</code> devolve <code>False</code>. O detalhe que pega na prática é que basta <strong>um</strong> ponto flutuante na expressão para o resultado inteiro virar <code>float</code> e perder a exatidão: a divisão <code>/</code> sempre devolve <code>float</code>, mesmo quando o resultado é redondo, e é por isso que existe a divisão inteira <code>//</code>. Duas outras conversões enganam pelo mesmo motivo. <code>int(42.9)</code> devolve <code>42</code>, porque <strong>trunca em vez de arredondar</strong>. E <code>round</code> não faz o arredondamento da escola: usa a regra do dígito par, então <code>round(2.5)</code> é <code>2</code> e <code>round(3.5)</code> é <code>4</code> — perfeitamente correto segundo o padrão, e uma surpresa garantida para quem confere uma soma na mão.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Você lê uma planilha exportada em CSV e converte a coluna de quantidade com <code>int(valor)</code>. O código funciona com a maior parte dos arquivos e levanta <code>ValueError</code> em alguns. Quais são as causas prováveis e como tratá-las?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Há quatro causas comuns, e só uma delas é "dado inválido". A primeira é o <strong>decimal disfarçado</strong>: <code>int("42.0")</code> levanta <code>ValueError</code>, mesmo o valor sendo inteiro — a função aceita a representação de um inteiro, não a de um número que por acaso é redondo. Planilha exporta quantidade como <code>42.0</code> com frequência, e a correção é <code>int(float(valor))</code>, ciente de que isso trunca. A segunda é o <strong>campo vazio</strong>: célula em branco chega como <code>""</code>, que também é <code>ValueError</code> e normalmente deveria virar <code>None</code> ou zero, conforme a regra do negócio — decisão que precisa ser tomada, não deixada para o acaso. A terceira é <strong>formatação numérica</strong>: separador de milhar (<code>"1.234"</code> ou <code>"1,234"</code>) e símbolo de moeda vêm colados no número, e aqui mora uma armadilha regional séria, porque <code>"1.234"</code> significa mil e duzentos e trinta e quatro numa planilha em português e um vírgula duzentos e trinta e quatro numa em inglês — adivinhar dá erro por um fator de mil. A quarta é o <strong>caractere invisível</strong>: espaço em volta o <code>int</code> tolera sozinho, mas BOM no começo do arquivo e espaço não separável vindo da web, não. O tratamento certo não é envolver tudo num <code>try</code> que engole a exceção: é normalizar o que se sabe normalizar, e registrar <strong>qual linha e qual valor</strong> falharam, porque numa importação de milhares de registros a mensagem <code>invalid literal for int()</code> sem o contexto não ajuda ninguém a consertar a planilha.</p>
+</div>
+</details>
+

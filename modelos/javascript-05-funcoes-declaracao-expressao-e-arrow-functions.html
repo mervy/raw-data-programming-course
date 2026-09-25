@@ -1,0 +1,381 @@
+<p>Se os la&ccedil;os evitam a repeti&ccedil;&atilde;o de a&ccedil;&otilde;es, as&nbsp;<strong>fun&ccedil;&otilde;es</strong> evitam a repeti&ccedil;&atilde;o de c&oacute;digo. Elas s&atilde;o o bloco de constru&ccedil;&atilde;o mais importante de qualquer programa JavaScript &mdash; e de qualquer linguagem de programa&ccedil;&atilde;o moderna.</p>
+<p>Uma fun&ccedil;&atilde;o &eacute; um trecho de c&oacute;digo com nome pr&oacute;prio que voc&ecirc; pode <strong>chamar quantas vezes quiser</strong>, de qualquer lugar do programa. Sem fun&ccedil;&otilde;es, seu c&oacute;digo seria uma lista gigante de instru&ccedil;&otilde;es imposs&iacute;vel de manter.</p>
+<h3>Por que fun&ccedil;&otilde;es existem?</h3>
+<p>Antes de ver a sintaxe, entenda o problema que elas resolvem:</p>
+<pre><code class="language-js">// Sem fun&ccedil;&otilde;es &mdash; repeti&ccedil;&atilde;o de l&oacute;gica:
+const area1 = 5 * 3;
+console.log(`&Aacute;rea: ${area1}`);
+
+const area2 = 8 * 4;
+console.log(`&Aacute;rea: ${area2}`);
+
+const area3 = 12 * 7;
+console.log(`&Aacute;rea: ${area3}`);
+
+// Com fun&ccedil;&atilde;o &mdash; l&oacute;gica definida uma vez, usada v&aacute;rias:
+function calcularArea(largura, altura) {
+  return largura * altura;
+}
+
+console.log(`&Aacute;rea: ${calcularArea(5, 3)}`);
+console.log(`&Aacute;rea: ${calcularArea(8, 4)}`);
+console.log(`&Aacute;rea: ${calcularArea(12, 7)}`);
+</code></pre>
+<p>Muito melhor. Se a l&oacute;gica mudar, voc&ecirc; altera em um &uacute;nico lugar.</p>
+<h3>Declara&ccedil;&atilde;o de fun&ccedil;&atilde;o (Function Declaration)</h3>
+<p>A forma mais cl&aacute;ssica de criar uma fun&ccedil;&atilde;o:</p>
+<pre><code class="language-js">function saudar(nome) {
+  console.log(`Ol&aacute;, ${nome}! Bem-vindo ao curso.`);
+}
+
+saudar("Ana");    // Ol&aacute;, Ana! Bem-vindo ao curso.
+saudar("Carlos"); // Ol&aacute;, Carlos! Bem-vindo ao curso.
+</code></pre>
+<ul>
+<li><code>function</code> &eacute; a palavra-chave</li>
+<li><code>saudar</code> &eacute; o nome da fun&ccedil;&atilde;o</li>
+<li><code>nome</code> &eacute; o <strong>par&acirc;metro</strong> &mdash; uma vari&aacute;vel local que recebe o valor passado</li>
+<li><code>"Ana"</code> &eacute; o <strong>argumento</strong> &mdash; o valor real passado na chamada</li>
+</ul>
+<h3>Par&acirc;metros e retorno</h3>
+<p>Uma fun&ccedil;&atilde;o pode receber m&uacute;ltiplos par&acirc;metros e retornar um valor com <code>return</code>:</p>
+<pre><code class="language-js">function somar(a, b) {
+  return a + b;
+}
+
+const resultado = somar(10, 5);
+console.log(resultado); // 15
+
+// O return encerra a fun&ccedil;&atilde;o imediatamente
+function verificarIdade(idade) {
+  if (idade &lt; 18) {
+    return "Menor de idade.";
+  }
+  return "Maior de idade.";
+}
+
+console.log(verificarIdade(15)); // Menor de idade.
+console.log(verificarIdade(22)); // Maior de idade.
+</code></pre>
+<p>Quando uma fun&ccedil;&atilde;o n&atilde;o tem <code>return</code>, ela retorna <code>undefined</code> automaticamente.</p>
+<h3>Par&acirc;metros padr&atilde;o (default parameters)</h3>
+<p>Voc&ecirc; pode definir valores padr&atilde;o para par&acirc;metros caso nenhum argumento seja passado:</p>
+<pre><code class="language-js">function cumprimentar(nome = "visitante", periodo = "dia") {
+  return `Bom ${periodo}, ${nome}!`;
+}
+
+console.log(cumprimentar("Maria", "tarde")); // Bom tarde, Maria!
+console.log(cumprimentar("Jo&atilde;o"));           // Bom dia, Jo&atilde;o!
+console.log(cumprimentar());                 // Bom dia, visitante!
+</code></pre>
+<p>Extremamente &uacute;til para criar fun&ccedil;&otilde;es flex&iacute;veis sem quebrar o c&oacute;digo quando um argumento &eacute; omitido.</p>
+<h3>Express&atilde;o de fun&ccedil;&atilde;o (Function Expression)</h3>
+<p>Em JavaScript, fun&ccedil;&otilde;es s&atilde;o <strong>cidad&atilde;os de primeira classe</strong> &mdash; isso significa que podem ser atribu&iacute;das a vari&aacute;veis, passadas como argumento e retornadas por outras fun&ccedil;&otilde;es.</p>
+<pre><code class="language-js">const multiplicar = function(a, b) {
+  return a * b;
+};
+
+console.log(multiplicar(4, 3)); // 12
+</code></pre>
+<p>A diferen&ccedil;a pr&aacute;tica em rela&ccedil;&atilde;o &agrave; declara&ccedil;&atilde;o: <strong>express&otilde;es n&atilde;o sofrem hoisting</strong> &mdash; voc&ecirc; n&atilde;o pode cham&aacute;-las antes de defini-las no c&oacute;digo. Falaremos mais sobre hoisting no artigo <a href="/javascript/escopo-hoisting-e-closures">Escopo, Hoisting e Closures</a>.</p>
+<h3>Arrow Functions &mdash; a sintaxe moderna</h3>
+<p>Introduzida no ES6 (2015), a arrow function &eacute; uma forma mais concisa de escrever fun&ccedil;&otilde;es. &Eacute; a forma que voc&ecirc; mais vai ver em c&oacute;digo moderno, React, e Node.js:</p>
+<pre><code class="language-js">// Fun&ccedil;&atilde;o tradicional:
+function dobrar(n) {
+  return n * 2;
+}
+
+// Arrow function equivalente:
+const dobrar = (n) =&gt; {
+  return n * 2;
+};
+
+// Vers&atilde;o ainda mais curta (quando h&aacute; apenas um return):
+const dobrar = (n) =&gt; n * 2;
+
+console.log(dobrar(7)); // 14
+</code></pre>
+<p>Quando a fun&ccedil;&atilde;o tem apenas um par&acirc;metro, os par&ecirc;nteses s&atilde;o opcionais:</p>
+<pre><code class="language-js">const quadrado = n =&gt; n * n;
+console.log(quadrado(5)); // 25
+</code></pre>
+<p>Quando n&atilde;o tem par&acirc;metros, os par&ecirc;nteses s&atilde;o obrigat&oacute;rios:</p>
+<pre><code class="language-js">const dizerOla = () =&gt; "Ol&aacute;!";
+console.log(dizerOla()); // Ol&aacute;!
+</code></pre>
+<h3>Comparativo das tr&ecirc;s formas</h3>
+<pre><code class="language-js">// 1. Declara&ccedil;&atilde;o de fun&ccedil;&atilde;o
+function somar(a, b) {
+  return a + b;
+}
+
+// 2. Express&atilde;o de fun&ccedil;&atilde;o
+const somar = function(a, b) {
+  return a + b;
+};
+
+// 3. Arrow function
+const somar = (a, b) =&gt; a + b;
+
+// As tr&ecirc;s fazem a mesma coisa neste caso:
+console.log(somar(3, 4)); // 7
+</code></pre>
+<h3>Fun&ccedil;&otilde;es dentro de fun&ccedil;&otilde;es</h3>
+<p>Fun&ccedil;&otilde;es podem chamar outras fun&ccedil;&otilde;es &mdash; e &eacute; assim que constru&iacute;mos programas complexos a partir de pe&ccedil;as simples:</p>
+<pre><code class="language-js">function calcularDesconto(preco, percentual) {
+  return preco * (percentual / 100);
+}
+
+function calcularPrecoFinal(preco, percentual) {
+  const desconto = calcularDesconto(preco, percentual);
+  return preco - desconto;
+}
+
+const precoFinal = calcularPrecoFinal(200, 15);
+console.log(`Pre&ccedil;o final: R$ ${precoFinal}`); // Pre&ccedil;o final: R$ 170
+</code></pre>
+<p>Cada fun&ccedil;&atilde;o faz <strong>uma coisa s&oacute;</strong> e faz bem feito. Isso &eacute; o come&ccedil;o do que chamamos de <strong>clean code</strong> &mdash; c&oacute;digo limpo e f&aacute;cil de manter.</p>
+<h3>Fun&ccedil;&otilde;es como argumentos (callbacks)</h3>
+<p>Uma das caracter&iacute;sticas mais poderosas do JavaScript: passar fun&ccedil;&otilde;es como argumento para outras fun&ccedil;&otilde;es. Esse conceito se chama <strong>callback</strong> e vai aparecer muito nos pr&oacute;ximos artigos.</p>
+<pre><code class="language-js">function executarOperacao(a, b, operacao) {
+  return operacao(a, b);
+}
+
+const soma = (a, b) =&gt; a + b;
+const subtracao = (a, b) =&gt; a - b;
+const multiplicacao = (a, b) =&gt; a * b;
+
+console.log(executarOperacao(10, 5, soma));          // 15
+console.log(executarOperacao(10, 5, subtracao));     // 5
+console.log(executarOperacao(10, 5, multiplicacao)); // 50
+</code></pre>
+<p>Voc&ecirc; passa a fun&ccedil;&atilde;o como se fosse um dado. O JavaScript executa ela no momento certo. Elegante e poderoso.</p>
+<h3>Boas pr&aacute;ticas com fun&ccedil;&otilde;es</h3>
+<p><strong>1. Nomes descritivos &mdash; verbos que explicam a a&ccedil;&atilde;o:</strong></p>
+<pre><code class="language-js">// ❌ Ruim &mdash; nome vago
+function calc(x, y) { return x + y; }
+
+// ✅ Bom &mdash; nome claro
+function calcularTotalPedido(subtotal, frete) {
+  return subtotal + frete;
+}
+</code></pre>
+<p><strong>2. Uma fun&ccedil;&atilde;o, uma responsabilidade:</strong></p>
+<pre><code class="language-js">// ❌ Ruim &mdash; faz coisas demais
+function processarPedido(pedido) {
+  // valida o pedido
+  // calcula o total
+  // aplica desconto
+  // envia email
+  // salva no banco
+}
+
+// ✅ Bom &mdash; cada fun&ccedil;&atilde;o tem seu papel
+function validarPedido(pedido) { /* ... */ }
+function calcularTotal(pedido) { /* ... */ }
+function aplicarDesconto(total, cupom) { /* ... */ }
+</code></pre>
+<p><strong>3. Prefira retornar valores a usar efeitos colaterais:</strong></p>
+<pre><code class="language-js">// ❌ Evite modificar vari&aacute;veis externas dentro da fun&ccedil;&atilde;o
+let total = 0;
+function somar(valor) {
+  total += valor; // efeito colateral &mdash; dif&iacute;cil de rastrear
+}
+
+// ✅ Prefira receber e retornar
+function somar(totalAtual, valor) {
+  return totalAtual + valor;
+}
+</code></pre>
+<h3>Tarefa para voc&ecirc;</h3>
+<p><strong>Desafio 1:</strong> Crie uma fun&ccedil;&atilde;o <code>calcularIMC(peso, altura)</code> que retorne o IMC e uma mensagem de classifica&ccedil;&atilde;o.</p>
+<pre><code class="language-js">// IMC = peso / (altura * altura)
+// &lt; 18.5 &rarr; Abaixo do peso
+// 18.5 a 24.9 &rarr; Peso normal
+// 25 a 29.9 &rarr; Sobrepeso
+// &gt;= 30 &rarr; Obesidade
+
+console.log(calcularIMC(70, 1.75)); // deve retornar algo como "IMC: 22.9 &mdash; Peso normal"
+</code></pre>
+<p><strong>Desafio 2:</strong> Reescreva a fun&ccedil;&atilde;o acima como arrow function de uma linha (s&oacute; o c&aacute;lculo, sem a mensagem).</p>
+<pre><code class="language-js">const calcularIMC = (peso, altura) =&gt; ???;
+</code></pre>
+
+<details>
+<summary><strong>Ver solução</strong> — calcularIMC com classificação, e a versão em uma linha</summary>
+<pre><code class="language-js">// ---------------------------------------------------------------
+// Desafio 1 — IMC com mensagem de classificação
+// ---------------------------------------------------------------
+function calcularIMC(peso, altura) {
+  // Validar antes de calcular: altura 0 daria Infinity, e "Infinity —
+  // Obesidade" é pior que um erro claro.
+  if (typeof peso !== "number" || typeof altura !== "number") {
+    throw new TypeError("peso e altura precisam ser números");
+  }
+  if (peso &lt;= 0 || altura &lt;= 0) {
+    throw new RangeError("peso e altura precisam ser maiores que zero");
+  }
+
+  const imc = peso / (altura * altura);
+
+  // As faixas oficiais não têm buraco entre 24.9 e 25: quem tem IMC 24.95
+  // precisa cair em algum lugar. Por isso o corte é &lt; 25, não &lt;= 24.9.
+  let classificacao;
+  if (imc &lt; 18.5) {
+    classificacao = "Abaixo do peso";
+  } else if (imc &lt; 25) {
+    classificacao = "Peso normal";
+  } else if (imc &lt; 30) {
+    classificacao = "Sobrepeso";
+  } else {
+    classificacao = "Obesidade";
+  }
+
+  return `IMC: ${imc.toFixed(1)} — ${classificacao}`;
+}
+
+console.log(calcularIMC(70, 1.75));  // IMC: 22.9 — Peso normal
+console.log(calcularIMC(95, 1.75));  // IMC: 31.0 — Obesidade
+console.log(calcularIMC(77, 1.75));  // IMC: 25.1 — Sobrepeso
+
+// O caso limite, que parece bug e não é: 76.5 kg dá IMC 24.979...,
+// exibido como "25.0" pelo toFixed(1) — mas a classificação olha o
+// valor cheio, que ainda é menor que 25.
+console.log(calcularIMC(76.5, 1.75)); // IMC: 25.0 — Peso normal
+
+// Arredondar para EXIBIR e arredondar para DECIDIR são coisas
+// diferentes. Se a regra de negócio for a faixa que aparece na tela,
+// arredonde antes de classificar — e uma vez só:
+const imcExibido = Number((76.5 / (1.75 * 1.75)).toFixed(1));
+console.log(imcExibido, imcExibido &gt;= 25); // 25 true
+
+// ---------------------------------------------------------------
+// Desafio 2 — só o cálculo, em uma linha
+// ---------------------------------------------------------------
+// Sem chaves, a arrow retorna a expressão direto: não escreva `return`.
+const imcDe = (peso, altura) =&gt; peso / (altura * altura);
+
+console.log(imcDe(70, 1.75)); // 22.857142857142858
+
+// Com chaves ela vira corpo de bloco e precisa de return explícito.
+// Este é o erro mais comum de quem está começando:
+const imcErrado = (peso, altura) =&gt; {
+  peso / (altura * altura);
+};
+console.log(imcErrado(70, 1.75)); // undefined — faltou o return
+
+// ---------------------------------------------------------------
+// Devolver objeto em vez de frase pronta
+// ---------------------------------------------------------------
+// Frase pronta serve para exibir e mais nada. Devolvendo dados, quem
+// chamou decide se vai exibir, comparar ou somar.
+const classificar = (imc) =&gt;
+  imc &lt; 18.5 ? "Abaixo do peso"
+  : imc &lt; 25 ? "Peso normal"
+  : imc &lt; 30 ? "Sobrepeso"
+  : "Obesidade";
+
+function avaliarIMC(peso, altura) {
+  const imc = imcDe(peso, altura);
+  return { imc: Number(imc.toFixed(1)), classificacao: classificar(imc) };
+}
+
+const { imc, classificacao } = avaliarIMC(70, 1.75);
+console.log(imc, classificacao); // 22.9 'Peso normal'
+
+// Para retornar um OBJETO literal em arrow de uma linha, envolva em
+// parênteses — sem eles, `{` é lido como início de bloco:
+const par = (peso, altura) =&gt; ({ peso, altura });
+console.log(par(70, 1.75)); // { peso: 70, altura: 1.75 }</code></pre>
+<p><code>toFixed()</code> devolve <strong>string</strong>, não número: <code>imc.toFixed(1) + 1</code> resulta em <code>"22.91"</code>. Pior que isso é decidir sobre o valor cheio e mostrar o arredondado — a tela exibe <code>25.0</code> e o sistema classifica como "Peso normal", e ninguém entende por quê. Arredonde uma vez, com <code>Number()</code>, e use o mesmo número para as duas coisas.</p>
+</details>
+<p>Uma função é, antes de tudo, um nome dado a um pedaço de comportamento — e é por isso que ela organiza o código mesmo quando é chamada uma vez só. A escolha entre declaração, expressão e arrow raramente muda o resultado: muda a partir de quando o nome existe e o que acontece com o <code>this</code>. Já passar função como argumento, que aqui apareceu com o nome de callback, é o mecanismo sobre o qual quase tudo que vem adiante é construído.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li>MDN Web Docs &mdash; Functions: <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Functions" target="_blank" rel="noopener">https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Functions</a></li>
+<li>MDN Web Docs &mdash; Arrow Functions: <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Functions/Arrow_functions" target="_blank" rel="noopener">https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Functions/Arrow_functions</a></li>
+<li>JavaScript.info &mdash; Functions: <a href="https://javascript.info/function-basics" target="_blank" rel="noopener">https://javascript.info/function-basics</a></li>
+<li>JavaScript.info &mdash; Arrow Functions: <a href="https://javascript.info/arrow-functions-basics" target="_blank" rel="noopener">https://javascript.info/arrow-functions-basics</a></li>
+<li><em>Eloquent JavaScript</em>, Cap. 3 &mdash; Functions: <a href="https://eloquentjavascript.net/03_functions.html" target="_blank" rel="noopener">https://eloquentjavascript.net/03_functions.html</a></li>
+<li>Airbnb JavaScript Style Guide &mdash; Functions: <a href="https://github.com/airbnb/javascript#functions" target="_blank" rel="noopener">https://github.com/airbnb/javascript#functions</a></li>
+</ul>
+
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>O que as duas linhas finais imprimem?</p>
+<pre><code class="language-js">function saudar(nome) {
+  console.log(`Olá, ${nome}!`);
+}
+
+const retorno = saudar("Ana");
+console.log(retorno);</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Sai <code>Olá, Ana!</code> e depois <code>undefined</code>. A função <strong>imprime</strong>, mas não <strong>retorna</strong> — e toda função sem <code>return</code> devolve <code>undefined</code>. A distinção é essencial: <code>console.log</code> mostra na tela e acabou; <code>return</code> entrega um valor de volta a quem chamou, que pode guardá-lo, somá-lo, passá-lo adiante. Confundir os dois é o motivo mais comum de uma função "que funciona" produzir <code>undefined</code> quando alguém tenta usar o resultado.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Anote as três saídas. A primeira revela um defeito da função — qual é, e como você o corrigiria?</p>
+<pre><code class="language-js">function cumprimentar(nome = "visitante", periodo = "dia") {
+  return `Bom ${periodo}, ${nome}!`;
+}
+
+console.log(cumprimentar("Maria", "tarde"));
+console.log(cumprimentar("João"));
+console.log(cumprimentar());</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Sai <code>Bom tarde, Maria!</code>, <code>Bom dia, João!</code> e <code>Bom dia, visitante!</code>. O defeito está na primeira: em português, é <strong>"Boa tarde"</strong> e "Boa noite" — o gênero do artigo muda com o período, e a função presume que "Bom" serve para todos. É um erro de <em>montar frase por concatenação</em>, comum em qualquer idioma com concordância. A correção honesta não é remendar o template, e sim guardar a saudação inteira: <code>function cumprimentar(nome = "visitante", saudacao = "Bom dia") { return `${saudacao}, ${nome}!`; }</code>.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>As duas chamadas abaixo acontecem <strong>antes</strong> das definições. Uma funciona e a outra não. Qual é qual, e que erro aparece?</p>
+<pre><code class="language-js">console.log(somar(2, 3));
+console.log(multiplicar(2, 3));
+
+function somar(a, b) {
+  return a + b;
+}
+
+const multiplicar = function (a, b) {
+  return a * b;
+};</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A primeira funciona e imprime <code>5</code>; a segunda lança <code>ReferenceError: Cannot access 'multiplicar' before initialization</code> — e, por ser um erro, nem chega a imprimir. A <strong>declaração</strong> de função é içada inteira para o topo do escopo (o <em>hoisting</em>), então <code>somar</code> já existe antes da linha em que foi escrita. A <strong>expressão</strong> de função é apenas um valor atribuído a uma <code>const</code>, e uma <code>const</code> não pode ser lida antes da linha que a inicializa.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Três tentativas de escrever a mesma arrow function. Quais delas imprimem <code>7</code>, e o que a outra imprime?</p>
+<pre><code class="language-js">const somarA = (a, b) =&gt; a + b;
+const somarB = (a, b) =&gt; { return a + b; };
+const somarC = (a, b) =&gt; { a + b; };
+
+console.log(somarA(3, 4));
+console.log(somarB(3, 4));
+console.log(somarC(3, 4));</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>somarA</code> e <code>somarB</code> imprimem <code>7</code>; <code>somarC</code> imprime <code>undefined</code>. A arrow tem duas formas: <strong>sem chaves</strong>, o corpo é uma expressão e seu valor é retornado automaticamente; <strong>com chaves</strong>, o corpo é um bloco comum e o <code>return</code> passa a ser obrigatório. Em <code>somarC</code>, <code>a + b</code> é calculado e descartado — a função chega ao fim sem retornar nada. É o deslize clássico de quem acrescenta chaves a uma arrow curta e esquece de acrescentar também o <code>return</code>.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Alguém trocou <code>soma</code> por <code>soma(10, 5)</code> na chamada. O que acontece?</p>
+<pre><code class="language-js">function executarOperacao(a, b, operacao) {
+  return operacao(a, b);
+}
+
+const soma = (a, b) =&gt; a + b;
+
+console.log(executarOperacao(10, 5, soma(10, 5)));</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Lança <code>TypeError: operacao is not a function</code>. Com os parênteses, <code>soma(10, 5)</code> é <strong>executado na hora</strong> e o que chega ao parâmetro <code>operacao</code> é o número <code>15</code> — e números não podem ser chamados. Um callback se passa <strong>pelo nome, sem parênteses</strong>: os parênteses são o que executa. É a mesma distinção entre entregar a receita e entregar o bolo pronto; <code>executarOperacao</code> quer a receita, para decidir ela mesma quando cozinhar.</p>
+</div>
+</details>
+

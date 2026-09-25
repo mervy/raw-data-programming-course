@@ -1,0 +1,123 @@
+<p>Toda linguagem de programa&ccedil;&atilde;o nasce de uma frustra&ccedil;&atilde;o. <strong>C</strong> nasceu da necessidade de escrever Unix sem assembly. <strong>Python</strong> nasceu do desejo de tornar o c&oacute;digo leg&iacute;vel como prosa. E <strong>Rust</strong>? Rust nasceu do cansa&ccedil;o de ver sistemas travarem, crasharem e serem invadidos por causa de erros de mem&oacute;ria que compiladores simplesmente ignoravam.</p>
+<p>Em 2006, um engenheiro da Mozilla chamado <strong>Graydon Hoare</strong> come&ccedil;ou Rust como um projeto pessoal. Ele estava cansado de ver elevadores &mdash; sim, elevadores &mdash; com software embutido que travava e precisava ser reiniciado manualmente. A pergunta que ele se fez foi simples e devastadora: <em>por que ainda aceitamos que software confi&aacute;vel seja dif&iacute;cil de escrever?</em></p>
+<p>A Mozilla passou a patrocinar o projeto em 2009, e em 2015 foi lan&ccedil;ada a vers&atilde;o est&aacute;vel 1.0. Desde ent&atilde;o, Rust foi eleito a linguagem "mais amada" pelos desenvolvedores por <strong>nove anos consecutivos</strong> na pesquisa anual do Stack Overflow (2016&ndash;2024) &mdash; um feito sem precedentes na hist&oacute;ria da pesquisa.</p>
+<h2>O Problema que Rust resolve</h2>
+<p>Durante d&eacute;cadas, os programadores viveram num dilema cruel.</p>
+<p>Voc&ecirc; podia escrever em <strong>C ou C++</strong> e ter desempenho m&aacute;ximo &mdash; mas pagar o pre&ccedil;o com bugs de mem&oacute;ria dif&iacute;ceis de encontrar: ponteiros nulos, uso de mem&oacute;ria j&aacute; liberada, condi&ccedil;&otilde;es de corrida em c&oacute;digo paralelo. Esses bugs n&atilde;o s&atilde;o apenas inconvenientes. Segundo um relat&oacute;rio interno da <strong>Microsoft de 2019</strong>, aproximadamente <strong>70% das vulnerabilidades de seguran&ccedil;a</strong> nos produtos da empresa eram causadas por erros de gerenciamento de mem&oacute;ria. O Google reportou n&uacute;mero semelhante para o Chrome, tamb&eacute;m em 2019, no blog do Project Zero.</p>
+<p>Ou voc&ecirc; podia escrever em linguagens <strong>gerenciadas</strong> &mdash; Java, Python, Go &mdash; e ganhar seguran&ccedil;a autom&aacute;tica, mas abrir m&atilde;o de controle e desempenho, carregando o peso de um coletor de lixo que pode pausar seu programa nos momentos mais cr&iacute;ticos.</p>
+<p>Rust recusou esse dilema. Sua proposta central &eacute;: <strong>seguran&ccedil;a de mem&oacute;ria sem coletor de lixo, com desempenho equivalente ao C.</strong></p>
+<p>Tanto &eacute; que em 2022, a Casa Branca publicou um relat&oacute;rio oficial &mdash; o <em>"Back to the Building Blocks"</em> &mdash; recomendando o uso de linguagens memory-safe como Rust para o desenvolvimento de software cr&iacute;tico nos Estados Unidos. A NSA fez recomenda&ccedil;&atilde;o semelhante em 2022, citando Rust pelo nome.</p>
+<h2>Como Rust resolve isso?</h2>
+<p>A resposta est&aacute; em um sistema chamado <strong>ownership</strong> &mdash; propriedade. &Eacute; o cora&ccedil;&atilde;o de tudo em Rust, e &eacute; o que vai ocupar boa parte da nossa jornada juntos.</p>
+<p>A ideia central &eacute; elegante: cada valor na mem&oacute;ria tem exatamente um dono. Quando o dono sai de cena, o valor &eacute; destru&iacute;do automaticamente. Sem coletor de lixo. Sem ponteiros pendurados no ar. O compilador verifica tudo isso antes do programa sequer rodar.</p>
+<p>Isso significa que uma classe inteira de erros simplesmente n&atilde;o existe em Rust. O compilador os mata na compila&ccedil;&atilde;o. Voc&ecirc; vai brigar com o compilador no in&iacute;cio &mdash; todos brigam. Mas com o tempo vai entender que ele &eacute; o seu melhor aliado.</p>
+<h2>Instalando o Rust</h2>
+<p>O m&eacute;todo oficial e recomendado para instalar Rust em qualquer sistema operacional &eacute; atrav&eacute;s do <strong>rustup</strong>, um gerenciador de vers&otilde;es e toolchain da linguagem. Ele instala o compilador (<code>rustc</code>), o gerenciador de pacotes (<code>cargo</code>) e mant&eacute;m tudo atualizado com um &uacute;nico comando.</p>
+<h3>No Linux e macOS</h3>
+<p>Abra o terminal e execute:</p>
+<pre><code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+</code></pre>
+<p>O script vai guiar voc&ecirc; pela instala&ccedil;&atilde;o interativa. Ao final, ele pedir&aacute; para voc&ecirc; reiniciar o terminal ou executar:</p>
+<pre><code>source $HOME/.cargo/env
+</code></pre>
+<p>Feito isso, verifique a instala&ccedil;&atilde;o com:</p>
+<pre><code>rustc --version
+cargo --version
+</code></pre>
+<h3>No Windows</h3>
+<p>No Windows, acesse <strong><a href="https://rustup.rs" target="_blank" rel="noopener">https://rustup.rs</a></strong> pelo navegador e baixe o instalador <code>rustup-init.exe</code>. Execute-o como qualquer programa. Uma janela de terminal vai abrir com as op&ccedil;&otilde;es de instala&ccedil;&atilde;o &mdash; na maioria dos casos, basta pressionar <code>1</code> para aceitar a instala&ccedil;&atilde;o padr&atilde;o.</p>
+<p><strong>Aten&ccedil;&atilde;o:</strong> O Rust no Windows depende das ferramentas de compila&ccedil;&atilde;o do <strong>Microsoft C++ Build Tools</strong>. Se voc&ecirc; n&atilde;o as tiver instaladas, o rustup vai indicar como baix&aacute;-las. A forma mais simples &eacute; instalar o <strong>Visual Studio Build Tools 2022</strong> (gratuito), marcando a op&ccedil;&atilde;o "Desktop development with C++" durante a instala&ccedil;&atilde;o.</p>
+<p>Ap&oacute;s concluir, abra um novo Prompt de Comando ou PowerShell e verifique:</p>
+<pre><code>rustc --version
+cargo --version
+</code></pre>
+<p>Se ambos retornarem vers&otilde;es, voc&ecirc; est&aacute; pronto.</p>
+<h3>Configurando o editor</h3>
+<p>Recomendo o <strong>Visual Studio Code</strong> com a extens&atilde;o <strong>rust-analyzer</strong>. Ela oferece autocompletar, verifica&ccedil;&atilde;o de erros em tempo real, e dicas inline do compilador diretamente no editor &mdash; algo especialmente valioso quando voc&ecirc; estiver aprendendo as regras de ownership. Instale pelo marketplace do VS Code pesquisando por "rust-analyzer".</p>
+<h2>Seu primeiro programa em Rust</h2>
+<p>Com tudo instalado, crie um arquivo chamado <code>main.rs</code> e escreva:</p>
+<pre><code>fn main() {
+    println!("Ol&aacute;, Rust. Vamos at&eacute; o fim.");
+}
+</code></pre>
+<p>Compile e execute:</p>
+<pre><code>rustc main.rs
+./main          # Linux/macOS
+.\main.exe      # Windows
+</code></pre>
+<p>Dois detalhes que j&aacute; carregam a filosofia da linguagem merecem aten&ccedil;&atilde;o: <code>fn</code> &eacute; a palavra-chave para fun&ccedil;&otilde;es, e <code>println!</code> &mdash; aquele ponto de exclama&ccedil;&atilde;o &mdash; n&atilde;o &eacute; erro de digita&ccedil;&atilde;o. Ele indica que isso &eacute; uma <strong>macro</strong>, n&atilde;o uma fun&ccedil;&atilde;o comum. Rust distingue os dois explicitamente. Voc&ecirc; vai entender por qu&ecirc; mais adiante.</p>
+<h2>O que esperar desses artigos</h2>
+<p>Ao longo dos pr&oacute;ximos artigos, vamos construir conhecimento de forma progressiva. N&atilde;o existe atalho para dominar Rust &mdash; mas existe um caminho inteligente.</p>
+<p>Nos primeiros meses, vamos entender <strong>ownership, borrowing </strong>e<strong> lifetimes</strong>. Conceitos que n&atilde;o existem em outras linguagens e que v&atilde;o exigir uma mudan&ccedil;a genu&iacute;na na forma como voc&ecirc; pensa sobre mem&oacute;ria.</p>
+<p>Depois, vamos explorar o sistema de tipos de Rust: <strong>enums</strong> com dados, <strong>traits</strong> como interfaces flex&iacute;veis, e tratamento de erros sem exce&ccedil;&otilde;es. Na segunda metade do ano, entraremos em programa&ccedil;&atilde;o concorrente segura, macros, performance e projetos reais.</p>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Rust não tem coletor de lixo e mesmo assim não exige <code>free</code>. Explique, em duas ou três frases, como as duas coisas convivem, e diga em que momento a memória é efetivamente liberada.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Rust decide em tempo de compilação onde cada valor deixa de ser necessário e insere a liberação nesse ponto. Isso é possível porque todo valor tem um dono único, e quando o dono sai de escopo o valor é descartado — sem contador em tempo de execução, como faria um coletor de lixo, e sem depender de o programador lembrar. A liberação acontece no fim do escopo do dono, de forma determinística: o mesmo programa libera sempre no mesmo ponto.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Preveja a saída e depois explique o que o <code>cargo run</code> faz além de executar o programa:</p><pre><code class="language-rust">fn main() {
+    let nome = "mundo";
+    println!("Olá, {nome}!");
+}
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A saída é <code>Olá, mundo!</code>. A interpolação <code>{nome}</code> dentro da string funciona desde o Rust 1.58; em versões anteriores seria <code>println!("Olá, {}!", nome)</code>. O <code>cargo run</code> faz mais que executar: ele verifica se o código mudou desde a última vez, compila o que for preciso (resolvendo e compilando também as dependências declaradas no <code>Cargo.toml</code>), coloca o binário em <code>target/debug/</code> e só então o executa.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>O programa abaixo não compila. Sem consultar o compilador, diga por quê e corrija.</p><pre><code class="language-rust">fn main() {
+    let contador = 0;
+    contador = contador + 1;
+    println!("{contador}");
+}
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Em Rust, <code>let</code> cria um vínculo <strong>imutável</strong> por padrão, então a segunda linha tenta atribuir a algo que não pode mudar e o compilador recusa com <code>cannot assign twice to immutable variable</code>. A correção é declarar a mutabilidade explicitamente:</p><pre><code class="language-rust">fn main() {
+    let mut contador = 0;
+    contador = contador + 1;
+    println!("{contador}");
+}
+</code></pre><p>Vale notar a inversão em relação a C e Python: ali tudo é mutável e a imutabilidade é que precisa ser pedida.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Escreva um programa que declare seu nome e sua idade em variáveis separadas e imprima uma frase usando as duas. Depois, explique por que Rust exige anotar o tipo em alguns casos e em outros não.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Uma versão possível:</p><pre><code class="language-rust">fn main() {
+    let nome = "Ana";
+    let idade = 34;
+    println!("{nome} tem {idade} anos.");
+}
+</code></pre><p>Rust tem <em>inferência de tipos</em>: quando consegue deduzir o tipo a partir do valor ou do uso, a anotação é dispensável — aqui deduz <code>&amp;str</code> e <code>i32</code>. A anotação passa a ser obrigatória quando a inferência é ambígua, como em <code>let n: u64 = "42".parse().unwrap();</code>, em que só o tipo declarado diz em que converter. Inferir não é ser dinâmico: o tipo continua fixo e verificado em tempo de compilação.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Um colega afirma: "Rust é seguro porque proíbe ponteiros". A afirmação está errada em mais de um ponto. Corrija-a, dizendo o que Rust de fato proíbe e o que ele permite.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Rust não proíbe ponteiros: referências (<code>&amp;T</code> e <code>&amp;mut T</code>) são ponteiros, e existem ainda os ponteiros crus (<code>*const T</code> e <code>*mut T</code>). O que o compilador proíbe, no código seguro, é o <em>uso inválido</em> deles — referência que sobrevive ao dado apontado, dois caminhos de escrita simultâneos para a mesma posição, leitura de memória já liberada. Os ponteiros crus continuam disponíveis dentro de blocos <code>unsafe</code>, onde a verificação é suspensa e a responsabilidade passa a ser de quem escreve. A garantia, portanto, não é "não há ponteiro", e sim "fora de <code>unsafe</code>, o compilador provou que estes usos são válidos".</p>
+</div>
+</details>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><strong>The Rust Programming Language</strong> &mdash; Steve Klabnik e Carol Nichols. O livro oficial, gratuito online em <a href="https://doc.rust-lang.org/book/" target="_blank" rel="noopener">https://doc.rust-lang.org/book/</a>. &Eacute; a refer&ecirc;ncia prim&aacute;ria desta s&eacute;rie.</li>
+<li><strong>Stack Overflow Developer Survey 2024</strong> &mdash; <a href="https://survey.stackoverflow.co/2024" target="_blank" rel="noopener">https://survey.stackoverflow.co/2024</a> &mdash; dados sobre a popularidade e ado&ccedil;&atilde;o do Rust.</li>
+<li><strong>Microsoft Security Response Center, 2019</strong> &mdash; <em>"A proactive approach to more secure code"</em> &mdash; <a href="https://msrc.microsoft.com/blog/2019/07/a-proactive-approach-to-more-secure-code/" target="_blank" rel="noopener">https://msrc.microsoft.com/blog/2019/07/a-proactive-approach-to-more-secure-code/</a></li>
+<li><strong>Google Project Zero, 2019</strong> &mdash; <em>"Project Zero: The Rule of 2"</em> &mdash; <a href="https://googleprojectzero.blogspot.com/2019/04/" target="_blank" rel="noopener">https://googleprojectzero.blogspot.com/2019/04/</a></li>
+<li>CISA &mdash; <em>The Case for Memory Safe Roadmaps</em>: <a href="https://www.cisa.gov/resources-tools/resources/case-memory-safe-roadmaps" target="_blank" rel="noopener">https://www.cisa.gov/resources-tools/resources/case-memory-safe-roadmaps</a></li>
+<li><strong>NSA Cybersecurity Information Sheet, 2022</strong> &mdash; <em>"Software Memory Safety"</em> &mdash; dispon&iacute;vel em <a href="https://www.nsa.gov/Press-Room/News-Highlights/Article/3215760/" target="_blank" rel="noopener">https://www.nsa.gov/Press-Room/News-Highlights/Article/3215760/</a></li>
+<li><strong>Rustup &mdash; instala&ccedil;&atilde;o oficial</strong> &mdash; <a href="https://rustup.rs" target="_blank" rel="noopener">https://rustup.rs</a></li>
+<li><strong>rust-analyzer</strong> &mdash; <a href="https://rust-analyzer.github.io" target="_blank" rel="noopener">https://rust-analyzer.github.io</a></li>
+</ul>

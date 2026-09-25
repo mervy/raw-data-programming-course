@@ -1,0 +1,185 @@
+<p>No artigo <em>Referências e Ponteiros, Frente a Frente</em> o <code>const</code> entrou quase de fininho, colado ao padrão <code>const std::string&amp;</code>. Prometi que ele merecia o palco inteiro, e é hora de pagar essa promessa. Em C você conhece o <code>const</code> como uma etiqueta modesta: serve para declarar constantes e pouco mais; muita gente o ignora sem grande prejuízo. Em C++ ele muda de estatura completamente. Vira uma ferramenta de projeto — um jeito de escrever no próprio código uma promessa que o compilador então <em>obriga</em> você a cumprir. Chamamos a prática de usar <code>const</code> em todo lugar em que ele cabe de <em>const-correctness</em>, e ela é uma das marcas que separam o código C++ amador do profissional. Hoje você aprende a fazer essas promessas e a ler as que os outros fizeram.</p>
+<h3>A ideia central: <code>const</code> é um contrato verificado</h3>
+<p>Marcar algo como <code>const</code> é dizer "isto não será modificado". A diferença em relação a um simples comentário é que o compilador <em>checa</em>. Se você quebrar a promessa, o programa não compila — o erro vira impossível de cometer, não apenas desaconselhado.</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+
+int main() {
+    const int limite = 100;
+    limite = 200;   // ERRO de compilação: assignment of read-only variable 'limite'
+    std::cout &lt;&lt; limite &lt;&lt; '\n';
+    return 0;
+}
+</code></pre>
+<p>Até aqui, idêntico ao C. A riqueza do C++ aparece quando o <code>const</code> encontra ponteiros e, mais adiante, métodos de classe.</p>
+<h3>O ponto que confunde todo mundo: <code>const</code> com ponteiros</h3>
+<p>Aqui mora a confusão sincera de quem vem do C, porque <code>const</code> e <code>*</code> podem se combinar de duas formas com significados opostos. A regra que nunca falha é <strong>ler da direita para a esquerda</strong>, a partir do nome da variável:</p>
+<pre><code class="language-cpp">int valor = 10;
+int outro = 20;
+
+// 1) ponteiro para int const: &quot;p1 é ponteiro para um int constante&quot;
+const int* p1 = &amp;valor;
+// *p1 = 99;   // ERRO: não posso mudar o VALOR apontado
+p1 = &amp;outro;   // OK: posso reapontar o ponteiro
+
+// 2) ponteiro const para int: &quot;p2 é um ponteiro constante para int&quot;
+int* const p2 = &amp;valor;
+*p2 = 99;      // OK: posso mudar o valor apontado
+// p2 = &amp;outro; // ERRO: não posso reapontar o ponteiro
+
+// 3) tudo const: &quot;p3 é ponteiro constante para int constante&quot;
+const int* const p3 = &amp;valor;
+// *p3 = 99;    // ERRO
+// p3 = &amp;outro; // ERRO
+</code></pre>
+<p>O truque de leitura: encontre a variável (<code>p1</code>), leia para a esquerda até o <code>*</code> — "<code>p1</code> é ponteiro para" — e o que sobrou (<code>const int</code>) é o alvo. No caso 2, o <code>const</code> está <em>depois</em> do <code>*</code>, então ele qualifica o <em>ponteiro</em>, não o alvo. Diga essas três frases em voz alta uma vez e elas grudam: "ponteiro para constante" (o valor é fixo, o ponteiro anda), "ponteiro constante" (o ponteiro é fixo, o valor muda), "constante para constante" (nada muda). O caso 1 — <code>const int*</code> — é de longe o mais comum, e é exatamente o que está por trás do <code>const std::string&amp;</code> do artigo anterior: uma janela só-leitura para um dado que você não quer copiar.</p>
+<h3>Por que se dar esse trabalho</h3>
+<p>Três ganhos concretos, e vale ser honesto sobre o custo — que é quase zero, apenas disciplina.</p>
+<p>O primeiro ganho é <strong>documentação que não mente</strong>. Quando você vê uma função <code>void processa(const Pedido&amp; p)</code>, a assinatura já promete: "vou olhar seu pedido, mas não vou alterá-lo". Um comentário poderia dizer o mesmo, mas comentários apodrecem; o <code>const</code> é verificado a cada compilação, então nunca fica desatualizado.</p>
+<p>O segundo é <strong>pegar erros cedo</strong>. Se dentro de <code>processa</code> alguém, meses depois, tentar modificar <code>p</code> por engano, o compilador barra na hora, apontando a linha. O bug morre antes de nascer.</p>
+<p>O terceiro é <strong>habilitar otimizações e usos</strong>. Só é possível passar um objeto temporário ou uma constante para um parâmetro <code>const&amp;</code>; um parâmetro <code>&amp;</code> não-const recusa esses casos. E o compilador raciocina melhor sobre código que promete não mudar.</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+void so_le(const std::string&amp; s) {
+    std::cout &lt;&lt; &quot;Tamanho: &quot; &lt;&lt; s.size() &lt;&lt; '\n';  // .size() é seguro, não altera
+}
+
+int main() {
+    so_le(&quot;literal temporário&quot;);   // SÓ funciona porque o parâmetro é const&amp;
+    // Se fosse std::string&amp; (sem const), passar um literal não compilaria.
+    return 0;
+}
+</code></pre>
+<p>Esse detalhe — poder passar temporários e literais — é uma razão prática, não filosófica, para preferir <code>const&amp;</code>. Guarde-o; ele reaparece quando falarmos de <em>move semantics</em> na Fase 2.</p>
+<h3>Uma armadilha honesta: <code>const</code> é uma promessa rasa</h3>
+<p><code>const</code> protege o objeto que você marcou, mas não segue ponteiros automaticamente para proteger o que eles apontam. Um <code>const</code> num ponteiro cru diz respeito ao ponteiro, não necessariamente ao alvo — como vimos nos casos 1 e 2. E existe uma válvula de escape, <code>const_cast</code>, capaz de remover o <code>const</code>. Ela existe para casos raríssimos de interoperar com APIs antigas mal-escritas, e usá-la para de fato modificar um objeto originalmente <code>const</code> é comportamento indefinido. A regra de bolso: se você está escrevendo <code>const_cast</code> para <em>contornar</em> o sistema, quase certamente está fazendo algo errado. Trate-o como o <code>goto</code> do <code>const</code> — existe, mas você passará anos sem precisar.</p>
+<h3>Juntando com o que já sabemos</h3>
+<p>Um exemplo que reúne as três aulas — streams (<a href="/linguagem-cpp/a-filosofia-por-tras-do-c-e-a-saida-elegante-do-printf">A Filosofia por Trás do C++ e a Saída Elegante do printf</a>), referências (<a href="/linguagem-cpp/referencias-e-ponteiros-frente-a-frente">Referências e Ponteiros, Frente a Frente</a>) e <code>const</code> (<a href="/linguagem-cpp/a-disciplina-do-const-promessas-que-o-compilador-cobra">A Disciplina do const</a>) — trabalhando juntas, no espírito de "cada artigo é o curso em miniatura":</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+// Recebe por const&amp; (não copia, não modifica) — o padrão idiomático.
+// A função inteira é uma promessa de só-leitura sobre 'nome' e 'saudacao'.
+void cumprimenta(const std::string&amp; saudacao, const std::string&amp; nome) {
+    std::cout &lt;&lt; saudacao &lt;&lt; &quot;, &quot; &lt;&lt; nome &lt;&lt; &quot;!\n&quot;;
+}
+
+// Modifica o argumento: referência NÃO-const, deixando a intenção explícita.
+void enfatiza(std::string&amp; texto) {
+    texto += &quot;!!!&quot;;   // altera a string do chamador
+}
+
+int main() {
+    const std::string fixa = &quot;Olá&quot;;   // esta saudação nunca muda
+    std::string quem = &quot;Marcelo&quot;;
+
+    cumprimenta(fixa, quem);   // Olá, Marcelo!
+
+    enfatiza(quem);            // quem vira &quot;Marcelo!!!&quot;
+    std::cout &lt;&lt; &quot;Agora: &quot; &lt;&lt; quem &lt;&lt; '\n';
+
+    // enfatiza(fixa);  // ERRO: fixa é const, não pode ir para um std::string&amp;
+    return 0;
+}
+</code></pre>
+<p>Repare na assimetria deliberada: <code>cumprimenta</code> promete não mexer em nada e por isso aceita a <code>fixa</code> const; <code>enfatiza</code> declara abertamente que modifica, e por isso o compilador <em>recusa</em> passar a <code>fixa</code> para ela. As assinaturas contam a história inteira antes de você ler uma linha do corpo. É isso que const-correctness compra: código que se autodocumenta e se autoprotege.</p>
+<p>Para ler declarações com <code>const</code>, a regra que resolve quase tudo é ler de dentro para fora, da direita para a esquerda — e é ela que separa o ponteiro que não pode mudar de destino daquele cujo destino não pode ser alterado. Vale o esforço porque <code>const</code> não é decoração: cada um deles remove uma possibilidade do conjunto que o compilador precisa considerar, e o que o compilador garante você não precisa testar. A ressalva honesta é que a promessa é <strong>rasa</strong>: marcar um ponteiro como constante não protege o que está do outro lado dele.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li>Bjarne Stroustrup, <a href="https://www.stroustrup.com/tour3.html" target="_blank" rel="noopener"><em>A Tour of C++</em></a> (3ª ed.), seções sobre <code>const</code> e <code>constexpr</code>: a visão do criador sobre imutabilidade como ferramenta de projeto.</li>
+<li><a href="https://cppreference.com/w/cpp/language/cv" target="_blank" rel="noopener noreferrer">cppreference.com/w/cpp/language/cv</a>: a referência técnica sobre os qualificadores <code>const</code> e <code>volatile</code>, com todas as regras de combinação.</li>
+<li>Scott Meyers, <a href="https://www.informit.com/store/effective-c-plus-plus-55-specific-ways-to-improve-your-programs-9780321334879" target="_blank" rel="noopener"><em>Effective C++</em></a> (3ª ed.), Item 3 ("Use <code>const</code> whenever possible"): o argumento definitivo a favor da const-correctness, incluindo a leitura direita-para-esquerda dos ponteiros.</li>
+<li>ISO C++ Core Guidelines, seção "Con" (Constants and immutability), regras <a href="https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#rconst-immutable" target="_blank" rel="noopener">Con.1</a> a <a href="https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#rconst-const" target="_blank" rel="noopener">Con.4</a>: as diretrizes oficiais sobre quando e onde aplicar <code>const</code>.</li>
+<li><a href="https://cppreference.com/w/cpp/language/const_cast" target="_blank" rel="noopener noreferrer">cppreference.com/w/cpp/language/const_cast</a>: para entender a válvula de escape e por que ela é perigosa, útil justamente para saber quando <em>não</em> usá-la.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Declare uma constante <code>const double PI = 3.14159;</code> e escreva uma função <code>double area_circulo(double raio)</code> que a utilize. Por que é melhor <code>PI</code> ser <code>const</code> do que uma variável comum?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A função e o motivo:</p>
+<pre><code class="language-cpp">const double PI = 3.14159;
+double area_circulo(double raio) {
+    return PI * raio * raio;
+}
+</code></pre>
+<p><code>PI</code> ser <code>const</code> garante, checado pelo compilador, que nenhum trecho do programa vai reatribuí-lo por engano — uma constante física não deveria mudar em tempo de execução. Além da segurança, comunica intenção a quem lê e permite ao compilador otimizar, sabendo que o valor é fixo. (No C++ moderno, <code>constexpr double PI = ...</code> seria ainda melhor, por garantir o valor em tempo de compilação; veremos <code>constexpr</code> adiante.)</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Leia cada declaração abaixo em português ("é um ponteiro constante para...", etc.) e diga qual das duas atribuições comentadas é ilegal em cada caso:</p>
+<pre><code class="language-cpp">int x = 1, y = 2;
+const int* a = &amp;x;   // (i)  *a = 9;   (ii) a = &amp;y;
+int* const b = &amp;x;   // (i)  *b = 9;   (ii) b = &amp;y;
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Leituras e ilegalidades:
+- <code>const int* a</code> → "<code>a</code> é ponteiro para int constante". Legal reapontar, ilegal mudar o valor. Portanto <strong>(i) <code>*a = 9;</code> é ilegal</strong>; (ii) <code>a = &amp;y;</code> é permitido.
+- <code>int* const b</code> → "<code>b</code> é ponteiro constante para int". Legal mudar o valor, ilegal reapontar. Portanto <strong>(ii) <code>b = &amp;y;</code> é ilegal</strong>; (i) <code>*b = 9;</code> é permitido.
+São exatamente os casos 1 e 2 da aula, invertidos entre si.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>A função abaixo deveria apenas <em>ler</em> o vetor, mas nada impede que ela o modifique. Corrija a assinatura para expressar essa intenção e explique o que muda para quem chama.</p>
+<pre><code class="language-cpp">#include &lt;string&gt;
+int comprimento_total(std::string&amp; s) {
+    return static_cast&lt;int&gt;(s.size());
+}
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Basta adicionar <code>const</code> (e, por consistência com o padrão anterior, note que <code>size()</code> é uma operação só-leitura):</p>
+<pre><code class="language-cpp">#include &lt;string&gt;
+int comprimento_total(const std::string&amp; s) {
+    return static_cast&lt;int&gt;(s.size());
+}
+</code></pre>
+<p>Para quem chama, muda o contrato: agora a função promete não alterar <code>s</code>, o compilador impede qualquer modificação acidental dentro dela, e passa a ser possível chamá-la com literais e strings <code>const</code> — o que a versão sem <code>const</code> recusaria.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Explique por que a chamada comentada não compila e o que isso revela sobre a relação entre <code>const</code> e passagem por referência:</p>
+<pre><code class="language-cpp">void muda(std::string&amp; s) { s += &quot;?&quot;; }
+int main() {
+    const std::string pergunta = &quot;Como vai&quot;;
+    // muda(pergunta);   // por que isto é rejeitado?
+    return 0;
+}
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A chamada é rejeitada porque <code>pergunta</code> é <code>const std::string</code>, e o parâmetro de <code>muda</code> é <code>std::string&amp;</code> — uma referência <strong>não-const</strong>, que é uma promessa de que a função <em>pode modificar</em> o argumento. Ligar uma referência modificável a um objeto <code>const</code> permitiria burlar a imutabilidade de <code>pergunta</code>, então o compilador proíbe. Isso revela a regra central: um objeto <code>const</code> só pode ser passado para parâmetros <code>const&amp;</code> (ou por valor). É o mecanismo que faz o <code>const</code> "pegar" na fronteira das funções.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Escreva uma função <code>void trocar_se_maior(int&amp; a, int&amp; b)</code> que deixa <code>a</code> sempre menor ou igual a <code>b</code>, trocando-os se preciso. Depois responda: por que os parâmetros aqui <strong>não</strong> podem ser <code>const&amp;</code>, ao contrário do padrão de leitura que temos usado?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A função:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+void trocar_se_maior(int&amp; a, int&amp; b) {
+    if (a &gt; b) {
+        int tmp = a;
+        a = b;
+        b = tmp;
+        // No C++ idiomático usaríamos std::swap(a, b); veremos na STL.
+    }
+}
+
+int main() {
+    int x = 9, y = 4;
+    trocar_se_maior(x, y);
+    std::cout &lt;&lt; x &lt;&lt; &quot; &lt;= &quot; &lt;&lt; y &lt;&lt; '\n';  // 4 &lt;= 9
+    return 0;
+}
+</code></pre>
+<p>Os parâmetros <strong>não</strong> podem ser <code>const&amp;</code> porque a função precisa <em>modificar</em> <code>a</code> e <code>b</code> — trocá-los é o objetivo. <code>const&amp;</code> serve para argumentos que você só lê; quando o propósito é alterar o argumento do chamador, a referência tem de ser não-const. É a mesma lição do exercício 4, vista pelo lado de dentro: a assinatura declara honestamente que haverá escrita.</p>
+</div>
+</details>
+

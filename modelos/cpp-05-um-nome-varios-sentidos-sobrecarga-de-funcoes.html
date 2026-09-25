@@ -1,0 +1,232 @@
+<p>Fechamos o artigo <em>A Disciplina do const — Promessas que o Compilador Cobra</em> com a const-correctness firme e uma provocação: em C, quando você queria calcular o valor absoluto, tinha três nomes diferentes na cabeça — <code>abs</code> para <code>int</code>, <code>labs</code> para <code>long</code>, <code>fabs</code> para <code>double</code>. Isso não era um capricho; era uma limitação. Em C, dois símbolos com o mesmo nome brigam entre si no linker, então a biblioteca padrão foi obrigada a inventar um nome distinto para cada tipo. O C++ elimina essa cerimônia com a <em>sobrecarga de funções</em>: você pode ter várias funções chamadas <code>abs</code>, e o compilador descobre qual usar olhando os argumentos. Hoje você aprende a projetar APIs assim, entende exatamente como o compilador faz a escolha, e conhece as ambiguidades que surgem quando essa liberdade é usada sem cuidado.</p>
+<h3>A ideia: mesmo nome, assinaturas diferentes</h3>
+<p>Sobrecarregar é declarar duas ou mais funções com o mesmo nome, desde que difiram na <em>lista de parâmetros</em> — em quantidade ou em tipo. O compilador trata cada uma como uma função distinta e, na hora da chamada, escolhe a que melhor encaixa nos argumentos:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+// Três funções, um só nome. O compilador as distingue pelos parâmetros.
+void imprime(int x) {
+    std::cout &lt;&lt; &quot;inteiro: &quot; &lt;&lt; x &lt;&lt; '\n';
+}
+
+void imprime(double x) {
+    std::cout &lt;&lt; &quot;real: &quot; &lt;&lt; x &lt;&lt; '\n';
+}
+
+void imprime(const std::string&amp; x) {
+    std::cout &lt;&lt; &quot;texto: &quot; &lt;&lt; x &lt;&lt; '\n';
+}
+
+int main() {
+    imprime(42);           // casa com imprime(int)    → inteiro: 42
+    imprime(3.14);         // casa com imprime(double) → real: 3.14
+    imprime(std::string{&quot;oi&quot;});  // casa com imprime(const std::string&amp;) → texto: oi
+    return 0;
+}
+</code></pre>
+<p>Um único nome, <code>imprime</code>, com três comportamentos que fazem sentido para o leitor. Isso é mais do que economia de nomes: é uma API coerente. Quem usa não precisa lembrar <code>imprime_int</code>, <code>imprime_double</code>, <code>imprime_string</code> — só <code>imprime</code>, e o compilador acerta o alvo.</p>
+<h3>O que conta como "diferença" — e o que não conta</h3>
+<p>Aqui mora a primeira armadilha. A diferença tem de estar na <em>assinatura</em>, e a assinatura é feita dos <strong>tipos dos parâmetros</strong>, não do tipo de retorno. Duas funções que diferem <em>só</em> no retorno <strong>não</strong> são uma sobrecarga válida:</p>
+<pre><code class="language-cpp">int  calcula(int x);
+// double calcula(int x);   // ERRO: difere só no retorno — ambíguo, não compila
+</code></pre>
+<p>O motivo é lógico: quando você escreve <code>calcula(5);</code> sem usar o resultado, o compilador não teria como saber qual versão você quis. O retorno não participa da escolha, então não pode ser o único critério de distinção.</p>
+<p>Um segundo ponto sutil: <code>const</code> no parâmetro <strong>por valor</strong> também não conta. <code>void f(int)</code> e <code>void f(const int)</code> são a <em>mesma</em> função aos olhos do compilador, porque uma cópia ser const ou não é irrelevante para quem chama. Mas <code>const</code> numa <em>referência</em> conta, porque muda o que pode ser passado:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+void toca(std::string&amp; s)       { std::cout &lt;&lt; &quot;versão modificável\n&quot;; s += &quot;.&quot;; }
+void toca(const std::string&amp; s) { std::cout &lt;&lt; &quot;versão só-leitura\n&quot;; }
+
+int main() {
+    std::string mutavel = &quot;abc&quot;;
+    const std::string fixo = &quot;xyz&quot;;
+
+    toca(mutavel);   // escolhe a versão std::string&amp; (modificável)
+    toca(fixo);      // escolhe a versão const std::string&amp; (fixo não aceita &amp;)
+    toca(&quot;literal&quot;); // literal é temporário → também vai para a const&amp;
+    return 0;
+}
+</code></pre>
+<p>Repare como as lições anteriores se encaixam: a distinção <code>T&amp;</code> vs <code>const T&amp;</code> (artigos <em>Referências e Ponteiros, Frente a Frente</em> e <em>A Disciplina do const — Promessas que o Compilador Cobra</em>) agora vira um critério de sobrecarga. Um objeto <code>const</code> ou um temporário só casam com a versão <code>const&amp;</code>; um objeto modificável prefere a versão não-const quando ela existe.</p>
+<h3>Como o compilador escolhe: resolução de sobrecarga</h3>
+<p>Quando você chama <code>imprime(algo)</code>, o compilador faz uma triagem em etapas. Primeiro, monta o conjunto de candidatas (todas as <code>imprime</code> visíveis). Depois, descarta as que não poderiam receber aquele argumento. Entre as que sobraram, procura a <strong>melhor correspondência</strong>: uma casa exata (<code>int</code> para <code>int</code>) ganha de uma que exige promoção (<code>char</code> para <code>int</code>), que por sua vez ganha de uma que exige conversão (<code>int</code> para <code>double</code>). Se, no fim, houver um vencedor único, ele é escolhido. Se duas candidatas empatam em "qualidade", o compilador declara <strong>ambiguidade</strong> e recusa compilar:</p>
+<pre><code class="language-cpp">void g(long x)   { }
+void g(double x) { }
+
+int main() {
+    g(10);   // ERRO de ambiguidade: 10 é int; converter para long e para
+             // double são conversões de &quot;mesmo peso&quot;. O compilador não decide.
+    return 0;
+}
+</code></pre>
+<p>A mensagem será algo como <code>call of overloaded 'g(int)' is ambiguous</code>. A cura é dar ao compilador uma escolha inequívoca — por exemplo, chamar <code>g(10L)</code> (o sufixo <code>L</code> faz o literal ser <code>long</code>) ou fornecer uma sobrecarga exata <code>g(int)</code>. A lição honesta: sobrecarga é poderosa, mas sobrecargas cujos tipos são "conversíveis entre si" convidam à ambiguidade. Prefira conjuntos de sobrecargas com tipos bem distintos.</p>
+<h3>Argumentos padrão: um primo próximo (e uma pegadinha)</h3>
+<p>O C++ tem outro recurso que reduz a necessidade de sobrecarga: <em>argumentos padrão</em>. Você dá um valor de reserva a um parâmetro, e quem chama pode omiti-lo:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+// 'moldura' tem valor padrão; se omitido, vale &quot;***&quot;.
+void anuncia(const std::string&amp; msg, const std::string&amp; moldura = &quot;***&quot;) {
+    std::cout &lt;&lt; moldura &lt;&lt; ' ' &lt;&lt; msg &lt;&lt; ' ' &lt;&lt; moldura &lt;&lt; '\n';
+}
+
+int main() {
+    anuncia(&quot;Bem-vindo&quot;);            // usa o padrão → *** Bem-vindo ***
+    anuncia(&quot;Perigo&quot;, &quot;!!!&quot;);        // sobrescreve   → !!! Perigo !!!
+    return 0;
+}
+</code></pre>
+<p>Isso substitui, com elegância, duas sobrecargas que só diferiam por ter ou não o segundo parâmetro. A pegadinha: argumentos padrão só podem vir <strong>à direita</strong> — depois de um parâmetro com padrão, todos os seguintes também precisam ter. E cuidado ao misturar argumentos padrão com sobrecarga: é fácil criar duas formas de chamar que o compilador não consegue distinguir. Quando em dúvida entre argumento padrão e sobrecarga, prefira o argumento padrão para casos que diferem só na <em>quantidade</em> de parâmetros, e a sobrecarga quando diferem no <em>tipo</em> ou no <em>comportamento</em>.</p>
+<h3>Juntando tudo: uma pequena API coerente</h3>
+<p>Reunindo streams (<a href="/linguagem-cpp/a-filosofia-por-tras-do-c-e-a-saida-elegante-do-printf">A Filosofia por Trás do C++ e a Saída Elegante do printf</a>), referências e <code>const</code> (<a href="/linguagem-cpp/referencias-e-ponteiros-frente-a-frente">Referências e Ponteiros, Frente a Frente</a>, <a href="/linguagem-cpp/a-disciplina-do-const-promessas-que-o-compilador-cobra">A Disciplina do const</a>) e a sobrecarga de hoje, eis uma função de formatação com três rostos que convivem sem conflito:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+// Formata um rótulo seguido de um valor, para tipos diferentes.
+void log(const std::string&amp; rotulo, int valor) {
+    std::cout &lt;&lt; rotulo &lt;&lt; &quot; = &quot; &lt;&lt; valor &lt;&lt; &quot; (int)\n&quot;;
+}
+void log(const std::string&amp; rotulo, double valor) {
+    std::cout &lt;&lt; rotulo &lt;&lt; &quot; = &quot; &lt;&lt; valor &lt;&lt; &quot; (double)\n&quot;;
+}
+void log(const std::string&amp; rotulo, const std::string&amp; valor) {
+    std::cout &lt;&lt; rotulo &lt;&lt; &quot; = \&quot;&quot; &lt;&lt; valor &lt;&lt; &quot;\&quot; (texto)\n&quot;;
+}
+
+int main() {
+    log(&quot;idade&quot;, 30);              // idade = 30 (int)
+    log(&quot;altura&quot;, 1.75);           // altura = 1.75 (double)
+    log(&quot;nome&quot;, std::string{&quot;Ana&quot;}); // nome = &quot;Ana&quot; (texto)
+    return 0;
+}
+</code></pre>
+<p>O chamador usa sempre <code>log</code>, e o compilador roteia para a implementação certa. Cada sobrecarga recebe o <code>rotulo</code> por <code>const std::string&amp;</code> — a decisão de projeto que você já toma no automático. Esse é o cheiro de uma API C++ bem-feita: poucos nomes, muitos significados bem escolhidos.</p>
+<p>A sobrecarga resolve um problema de nomes e cria outro, de ambiguidade — e a fronteira entre os dois é mais estreita do que parece. Tipo de retorno não conta como diferença; conversão implícita entrega o desempate a regras que ninguém decora; e argumento padrão combinado com sobrecarga produz chamadas que o compilador recusa sem explicar direito o motivo. A saída não é técnica, é de projeto: sobrecarregue quando as versões fazem <em>a mesma coisa</em> com tipos diferentes, e dê nomes distintos quando fazem coisas distintas — porque o leitor não lê a tabela de resolução, lê o nome.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li>Bjarne Stroustrup, <a href="https://www.stroustrup.com/tour3.html" target="_blank" rel="noopener"><em>A Tour of C++</em></a> (3ª ed.), seção sobre funções e sobrecarga: a apresentação canônica do recurso pelo criador da linguagem.</li>
+<li><a href="https://cppreference.com/w/cpp/language/overload_resolution" target="_blank" rel="noopener noreferrer">cppreference.com/w/cpp/language/overload_resolution</a>: a descrição técnica completa do algoritmo de resolução de sobrecarga, útil para decifrar mensagens de ambiguidade.</li>
+<li><a href="https://cppreference.com/w/cpp/language/default_arguments" target="_blank" rel="noopener noreferrer">cppreference.com/w/cpp/language/default_arguments</a>: as regras precisas dos argumentos padrão, incluindo a exigência de virem à direita.</li>
+<li>Scott Meyers, <a href="https://www.informit.com/store/effective-c-plus-plus-55-specific-ways-to-improve-your-programs-9780321334879" target="_blank" rel="noopener"><em>Effective C++</em></a> (3ª ed.), Item 24 ("Declare non-member functions when type conversions should apply to all parameters"): discute como conversões e sobrecarga interagem em casos sutis.</li>
+<li>ISO C++ Core Guidelines, regras <a href="https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#rf-default-args" target="_blank" rel="noopener">F.51</a> ("Where there is a choice, prefer default arguments over overloading") e <a href="https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#ro-equivalent-2" target="_blank" rel="noopener">C.163</a>: orientação oficial sobre quando escolher argumento padrão e quando sobrecarregar.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Escreva duas sobrecargas de uma função <code>area</code>: uma que recebe o lado de um quadrado (<code>double lado</code>) e outra que recebe base e altura de um retângulo (<code>double base, double altura</code>). Demonstre as duas no <code>main</code>.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Duas assinaturas distintas pelo número de parâmetros:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+
+double area(double lado) {             // quadrado
+    return lado * lado;
+}
+double area(double base, double altura) {  // retângulo
+    return base * altura;
+}
+
+int main() {
+    std::cout &lt;&lt; &quot;quadrado: &quot;  &lt;&lt; area(4.0)       &lt;&lt; '\n';   // 16
+    std::cout &lt;&lt; &quot;retângulo: &quot; &lt;&lt; area(3.0, 5.0)  &lt;&lt; '\n';   // 15
+    return 0;
+}
+</code></pre>
+<p>O compilador distingue pela quantidade de argumentos na chamada.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Diga, sem compilar, se cada par abaixo é uma sobrecarga válida. Justifique:</p>
+<pre><code class="language-cpp">// (a)
+int  f(int x);
+long f(int x);
+// (b)
+void g(int x);
+void g(double x);
+// (c)
+void h(int x);
+void h(const int x);
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Análise:
+- <strong>(a) Inválida.</strong> As duas diferem apenas no tipo de retorno (<code>int</code> vs <code>long</code>); a lista de parâmetros é idêntica (<code>int x</code>). O retorno não faz parte da assinatura, então não compila.
+- <strong>(b) Válida.</strong> Os tipos dos parâmetros diferem (<code>int</code> vs <code>double</code>), que é exatamente o critério legítimo de sobrecarga.
+- <strong>(c) Inválida.</strong> Para parâmetros <em>por valor</em>, <code>const int</code> e <code>int</code> são a mesma assinatura — o <code>const</code> numa cópia não muda nada para o chamador. É uma redefinição, não uma sobrecarga.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>O código a seguir não compila por ambiguidade. Explique a causa e mostre <strong>duas</strong> formas de resolver.</p>
+<pre><code class="language-cpp">void mostra(float x)  { }
+void mostra(double x) { }
+int main() {
+    mostra(3);   // 3 é int
+    return 0;
+}
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A ambiguidade ocorre porque <code>3</code> é <code>int</code>, e converter <code>int</code> para <code>float</code> e para <code>double</code> são conversões consideradas de peso equivalente pelo compilador; nenhuma é "melhor", então ele se recusa a escolher. Duas soluções:</p>
+<pre><code class="language-cpp">// Solução A: tornar o literal explicitamente double.
+mostra(3.0);   // agora casa exatamente com mostra(double)
+</code></pre>
+<pre><code class="language-cpp">// Solução B: adicionar uma sobrecarga que case exatamente com int.
+void mostra(int x) { /* ... */ }
+// Agora mostra(3) tem correspondência exata e ganha das conversões.
+</code></pre>
+<p>A solução A ajusta a chamada; a B ajusta a API. Ambas removem o empate.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Reescreva o par de funções abaixo — que só diferem por uma ter um parâmetro a mais — usando <strong>um argumento padrão</strong> em vez de duas sobrecargas.</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+void repete(const std::string&amp; s) {
+    std::cout &lt;&lt; s &lt;&lt; '\n';
+}
+void repete(const std::string&amp; s, int vezes) {
+    for (int i = 0; i &lt; vezes; ++i) std::cout &lt;&lt; s &lt;&lt; '\n';
+}
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Uma única função com argumento padrão substitui as duas:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+// 'vezes' padrão = 1 cobre o caso de &quot;imprimir uma vez&quot;.
+void repete(const std::string&amp; s, int vezes = 1) {
+    for (int i = 0; i &lt; vezes; ++i)
+        std::cout &lt;&lt; s &lt;&lt; '\n';
+}
+
+int main() {
+    repete(&quot;olá&quot;);       // imprime uma vez (usa o padrão)
+    repete(&quot;eco&quot;, 3);    // imprime três vezes
+    return 0;
+}
+</code></pre>
+<p>Isso segue a diretriz F.51 das Core Guidelines: quando as formas diferem só na <em>quantidade</em> de parâmetros, o argumento padrão é mais enxuto que duas sobrecargas.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Considere as sobrecargas <code>void p(std::string&amp; s)</code> e <code>void p(const std::string&amp; s)</code>. Explique qual delas é chamada em cada uma das três situações abaixo e por quê:</p>
+<pre><code class="language-cpp">std::string a = &quot;x&quot;;
+const std::string b = &quot;y&quot;;
+p(a);
+p(b);
+p(&quot;z&quot;);
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> As escolhas:
+- <code>p(a)</code> → chama <strong><code>p(std::string&amp;)</code></strong>. <code>a</code> é modificável, então casa com a referência não-const, que é a correspondência preferida quando disponível.
+- <code>p(b)</code> → chama <strong><code>p(const std::string&amp;)</code></strong>. <code>b</code> é <code>const</code>; ligá-lo a um <code>std::string&amp;</code> não-const violaria sua imutabilidade, então só a versão <code>const&amp;</code> é viável.
+- <code>p("z")</code> → chama <strong><code>p(const std::string&amp;)</code></strong>. O literal vira um <code>std::string</code> temporário; temporários não podem ligar-se a referências não-const, apenas a <code>const&amp;</code>. É a mesma regra dos artigos <em>Referências e Ponteiros, Frente a Frente</em> e <em>A Disciplina do const — Promessas que o Compilador Cobra</em> governando a resolução de sobrecarga.</p>
+</div>
+</details>
+

@@ -1,0 +1,102 @@
+<p>Até agora, nossos programas apenas exibiram textos que escrevemos de antemão. Eles falavam, mas não <em>lembravam</em> de nada. Um programa verdadeiramente útil precisa guardar informações para usá-las depois: o nome que o usuário digitou, o resultado de uma conta, a quantidade de itens numa lista. Para isso existe o conceito mais fundamental de toda a programação — tão fundamental que, sem ele, nada mais se constrói. Esse conceito é a <strong>variável</strong>. Nesta aula, você entenderá o que é uma variável, como criá-la, como guardar valores nela e como recuperá-los. É um passo modesto na aparência, mas é a porta de entrada para programas que de fato pensam.</p>
+<h2>A metáfora da gaveta</h2>
+<p>Imagine uma cômoda cheia de gavetas. Cada gaveta pode guardar um objeto, e cada uma tem uma etiqueta com um nome, para que você saiba o que há dentro sem precisar abri-la. Você pode colocar algo numa gaveta, olhar depois o que guardou, e até trocar o conteúdo por outro. Uma <strong>variável</strong> é exatamente isso, dentro da memória do computador: um espaço com um <em>nome</em> onde o programa guarda um <em>valor</em>, podendo consultá-lo e alterá-lo depois. O nome é a etiqueta; o valor é o que está guardado dentro.</p>
+<p>Essa metáfora, embora simples, já contém as três operações que você fará com variáveis o tempo todo: <strong>criar</strong> a gaveta (dar-lhe um nome), <strong>guardar</strong> um valor nela, e <strong>ler</strong> o valor que está lá. Vamos ver cada uma em C#.</p>
+<h2>Criando e guardando: a declaração</h2>
+<p>Criar uma variável em C# se chama <em>declarar</em> a variável. A forma básica exige que você diga duas coisas: que <em>tipo</em> de valor a gaveta vai guardar, e qual será o seu <em>nome</em>. Veja um primeiro exemplo:</p>
+<pre><code class="language-csharp">int idade;</code></pre>
+<p>Essa linha declara uma variável. A palavra <code>int</code> diz o <em>tipo</em> — aqui, um número inteiro (do inglês <em>integer</em>); estudaremos os tipos em detalhe na próxima aula, mas por ora saiba que <code>int</code> significa "esta gaveta guardará um número inteiro". A palavra <code>idade</code> é o <em>nome</em> que escolhemos para a variável — a etiqueta da gaveta. E o ponto e vírgula, como você já sabe, encerra a instrução. Neste momento, criamos a gaveta <code>idade</code>, mas ainda não guardamos nada nela.</p>
+<p>Para guardar um valor, usamos o sinal de igual (<code>=</code>), chamado <em>operador de atribuição</em>:</p>
+<pre><code class="language-csharp">idade = 30;</code></pre>
+<p>Aqui é preciso um cuidado importante, porque este é um ponto onde a intuição da matemática engana. O sinal <code>=</code>, em programação, <strong>não significa "é igual a"</strong> no sentido matemático. Ele significa <em>"guarde, na variável à esquerda, o valor à direita"</em>. Leia <code>idade = 30</code> não como "idade é igual a 30", mas como "guarde o valor 30 na gaveta chamada idade". A seta mental correta aponta da direita para a esquerda: o valor <code>30</code> vai <em>para dentro</em> de <code>idade</code>. Compreender isso desde já evitará muita confusão adiante.</p>
+<p>Podemos fazer as duas coisas — declarar e guardar — numa única linha, o que é o mais comum:</p>
+<pre><code class="language-csharp">int idade = 30;   // cria a gaveta &apos;idade&apos; e já guarda 30 nela</code></pre>
+<p>(O texto após <code>//</code> é um <em>comentário</em>: uma anotação para humanos que o computador ignora completamente. Comentários servem para explicar o código a quem o lê — inclusive a você mesmo, no futuro. Use-os para esclarecer suas intenções.)</p>
+<h2>Lendo o valor: usando a variável</h2>
+<p>Guardar um valor só é útil se pudermos recuperá-lo. Para <em>ler</em> uma variável, basta usar o seu nome onde você quer o valor que ela guarda. Por exemplo, podemos exibi-lo:</p>
+<pre><code class="language-csharp">int idade = 30;
+Console.WriteLine(idade);   // exibe: 30</code></pre>
+<p>Repare numa diferença sutil e crucial. Na aula anterior, escrevíamos <code>Console.WriteLine(&quot;idade&quot;)</code> — com aspas — e apareceria a palavra literal <code>idade</code>. Agora escrevemos <code>Console.WriteLine(idade)</code> — <em>sem</em> aspas — e aparece o <em>valor guardado</em>, <code>30</code>. As aspas fazem toda a diferença: com aspas, é texto literal; sem aspas, é o nome de uma variável, e o C# substitui esse nome pelo valor guardado. Essa distinção entre "a palavra em si" e "o que a variável guarda" é fundamental, e vale fixá-la desde já.</p>
+<h2>Trocando o conteúdo: variáveis variam</h2>
+<p>O nome "variável" não é gratuito: o valor guardado <em>pode variar</em> ao longo do programa. Você pode guardar um novo valor na mesma gaveta, e o antigo é substituído:</p>
+<pre><code class="language-csharp">int idade = 30;
+Console.WriteLine(idade);   // exibe: 30
+
+idade = 31;                 // guarda um novo valor; o 30 é substituído
+Console.WriteLine(idade);   // exibe: 31</code></pre>
+<p>Note que, na segunda atribuição, <strong>não repetimos</strong> o <code>int</code> — o tipo é dito apenas uma vez, na declaração. Depois disso, a gaveta já existe, e apenas trocamos o que há dentro. Repetir <code>int idade = 31</code> seria tentar criar uma segunda gaveta com o mesmo nome, o que o C# não permite. Declara-se uma vez; atribui-se quantas vezes quiser.</p>
+<p>O valor à direita da atribuição pode, inclusive, envolver a própria variável. Isto é perfeitamente válido e muito comum:</p>
+<pre><code class="language-csharp">int idade = 30;
+idade = idade + 1;          // lê o valor atual (30), soma 1, e guarda o resultado (31)
+Console.WriteLine(idade);   // exibe: 31</code></pre>
+<p>Leia <code>idade = idade + 1</code> com a regra que aprendemos: "calcule o valor à direita (<code>idade + 1</code>, que é 30 + 1 = 31) e guarde-o na gaveta <code>idade</code>". Primeiro o lado direito é calculado usando o valor <em>atual</em> da variável; depois o resultado é guardado, substituindo o antigo. Se você tentasse ler isso como uma equação matemática ("idade é igual a idade mais um"), pareceria absurdo — e é por isso que insisti que <code>=</code> não é igualdade, e sim atribuição.</p>
+<h2>As regras dos nomes</h2>
+<p>Você tem liberdade para nomear suas variáveis, mas há regras e convenções. As <em>regras</em> (obrigatórias): um nome pode conter letras, números e o sublinhado (<code>_</code>), mas não pode começar com número, não pode conter espaços, e não pode ser uma palavra reservada da linguagem (como <code>int</code>, que já tem significado próprio). As <em>convenções</em> (fortemente recomendadas, embora não obrigatórias): dê nomes <em>descritivos</em>, que revelem o propósito da variável. Uma variável chamada <code>idade</code> ou <code>precoTotal</code> conta o que guarda; uma chamada <code>x</code> ou <code>a</code>, salvo em casos muito específicos, obriga quem lê a adivinhar. Em C#, a convenção para nomes de variáveis é começar com letra minúscula e, se o nome tiver várias palavras, iniciar cada palavra seguinte com maiúscula — um estilo chamado <em>camelCase</em> (<code>precoTotal</code>, <code>nomeDoUsuario</code>, <code>quantidadeDeItens</code>). Bons nomes são uma cortesia com quem lê seu código, e o principal leitor será você mesmo, semanas depois, tentando entender o que fez.</p>
+<p>A variável é o primeiro conceito sem o qual nada mais se constrói, e ele já está assentado. Você sabe declarar uma variável dizendo seu tipo e seu nome, guardar um valor nela com o sinal de igual, ler esse valor usando o nome, e trocar o conteúdo quantas vezes quiser — afinal, variáveis variam.</p>
+<p>O ponto que mais confunde quem começa também ficou resolvido: o sinal de igual não afirma uma igualdade matemática, ele ordena um armazenamento. A seta mental aponta da direita para a esquerda. É por isso que uma instrução como x = x + 1, absurda como equação, é perfeitamente sensata como atribuição.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><strong><a href="https://learn.microsoft.com/dotnet/csharp/fundamentals/" target="_blank" rel="noopener noreferrer">Variáveis e tipos em C# (fundamentos)</a></strong> — o material oficial sobre os conceitos básicos da linguagem, incluindo variáveis; uma referência para revisitar.</li>
+<li><strong><a href="https://learn.microsoft.com/dotnet/csharp/programming-guide/classes-and-structs/local-variable-declarations" target="_blank" rel="noopener noreferrer">Declaração de variáveis locais</a></strong> — a documentação sobre como declarar variáveis, complementar a esta aula.</li>
+<li><strong><a href="https://learn.microsoft.com/dotnet/csharp/fundamentals/coding-style/identifier-names" target="_blank" rel="noopener noreferrer">Convenções de nomenclatura em C#</a></strong> — as regras e convenções oficiais para nomear variáveis e outros elementos.</li>
+<li><strong><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/language-specification/lexical-structure#comments" target="_blank" rel="noopener noreferrer">Comentários em C#</a></strong> — como escrever comentários, as anotações que o computador ignora.</li>
+<li><strong><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/operators/assignment-operator" target="_blank" rel="noopener noreferrer">O operador de atribuição</a></strong> — a referência do sinal <code>=</code> e seu significado de atribuição, não de igualdade.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Num programa novo, declare uma variável <code>int</code> chamada <code>ano</code> e guarde nela o ano atual. Em seguida, exiba-a com <code>Console.WriteLine</code>. Depois, explique com suas palavras a diferença entre escrever <code>Console.WriteLine(ano)</code> e <code>Console.WriteLine(&quot;ano&quot;)</code>.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Exemplo:</p>
+<pre><code class="language-csharp">int ano = 2026;
+Console.WriteLine(ano);   // exibe 2026</code></pre>
+<p>A diferença: <code>Console.WriteLine(ano)</code>, sem aspas, exibe o <em>valor guardado</em> na variável (2026), porque <code>ano</code> é lido como o nome de uma variável e substituído pelo seu conteúdo. Já <code>Console.WriteLine(&quot;ano&quot;)</code>, com aspas, exibe a <em>palavra literal</em> <code>ano</code>, porque tudo entre aspas é tratado como texto, não como nome de variável.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Declare uma variável <code>idade</code> com o valor 20, exiba-a, depois atribua a ela o valor 21 e exiba de novo. Explique por que, na segunda atribuição, você <em>não</em> deve escrever <code>int</code> novamente.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Exemplo:</p>
+<pre><code class="language-csharp">int idade = 20;
+Console.WriteLine(idade);   // 20
+idade = 21;
+Console.WriteLine(idade);   // 21</code></pre>
+<p>Não se escreve <code>int</code> na segunda atribuição porque a variável <code>idade</code> já foi <em>criada</em> (declarada) na primeira linha; a segunda apenas troca o valor guardado na gaveta que já existe. Repetir <code>int idade</code> seria tentar declarar uma segunda variável com o mesmo nome, o que o C# não permite.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Escreva um programa que declare uma variável <code>contador</code> valendo 0, e depois execute três vezes a instrução <code>contador = contador + 1</code>, exibindo o valor após cada uma. Preveja a saída antes de rodar, e depois confirme. Explique, com a regra da atribuição, por que o valor cresce.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Exemplo:</p>
+<pre><code class="language-csharp">int contador = 0;
+contador = contador + 1;
+Console.WriteLine(contador);   // 1
+contador = contador + 1;
+Console.WriteLine(contador);   // 2
+contador = contador + 1;
+Console.WriteLine(contador);   // 3</code></pre>
+<p>A saída é 1, 2, 3. O valor cresce porque, a cada <code>contador = contador + 1</code>, o lado direito é calculado usando o valor <em>atual</em> de <code>contador</code> e somando 1, e o resultado é guardado de volta na mesma variável — então cada execução parte do valor anterior e o incrementa em um.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Explique, com suas palavras, por que o sinal <code>=</code> em programação não significa "é igual a" no sentido matemático. Ilustre com a instrução <code>x = x + 1</code>, mostrando por que ela seria absurda como equação, mas faz sentido como atribuição.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Em programação, <code>=</code> significa "guarde na variável à esquerda o valor calculado à direita", não "os dois lados são iguais". Em <code>x = x + 1</code>, se lido como equação matemática ("x é igual a x mais um"), seria absurdo, pois nenhum número é igual a ele mesmo mais um. Como atribuição, faz todo sentido: calcula-se o lado direito usando o valor atual de <code>x</code> (por exemplo, se <code>x</code> vale 5, <code>x + 1</code> é 6) e guarda-se esse resultado em <code>x</code>, que passa a valer 6. A seta vai da direita para a esquerda.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Para cada nome de variável a seguir, diga se é <em>válido</em> (segue as regras) e se é <em>bom</em> (segue as convenções), justificando: <code>2preco</code>, <code>preco total</code>, <code>precoTotal</code>, <code>x</code>, <code>_contador</code>, <code>int</code>. Corrija os inválidos.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Análise: <code>2preco</code> — <strong>inválido</strong> (não pode começar com número); correção possível: <code>preco2</code>. <code>preco total</code> — <strong>inválido</strong> (não pode conter espaço); correção: <code>precoTotal</code>. <code>precoTotal</code> — <strong>válido e bom</strong> (descritivo, em camelCase). <code>x</code> — <strong>válido, mas ruim</strong> (não é descritivo; obriga a adivinhar o propósito). <code>_contador</code> — <strong>válido</strong> (o sublinhado é permitido, inclusive no início) e aceitável, embora <code>contador</code> seja mais comum para uma variável local. <code>int</code> — <strong>inválido</strong> (é uma palavra reservada da linguagem, com significado próprio); correção: usar outro nome, como <code>numeroInteiro</code>.</p>
+</div>
+</details>
+

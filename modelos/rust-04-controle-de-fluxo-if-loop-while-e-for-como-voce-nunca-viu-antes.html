@@ -1,0 +1,301 @@
+<p>No artigo <a href="/rust/funcoes-expressoes-e-como-rust-pensa-diferente-sobre-retorno-de-valores">Funções, Expressões e Como Rust Pensa Diferente sobre Retorno de Valores</a>, aprendemos que Rust distingue statements de expressions, e que a aus&ecirc;ncia de ponto e v&iacute;rgula no final de um bloco significa retorno de valor. Hoje esse conceito vai se expandir de forma elegante &mdash; porque em Rust, as pr&oacute;prias estruturas de controle de fluxo s&atilde;o expressions. Isso muda tudo.</p>
+<h2>O <code>if</code> que voc&ecirc; conhece &mdash; e o que voc&ecirc; n&atilde;o conhece</h2>
+<p>A forma b&aacute;sica do <code>if</code> em Rust &eacute; familiar:</p>
+<pre><code>fn main() {
+    let temperatura = 38.5;
+
+    if temperatura &gt; 37.5 {
+        println!("Febre detectada.");
+    } else if temperatura &gt; 36.0 {
+        println!("Temperatura normal.");
+    } else {
+        println!("Abaixo do normal.");
+    }
+}
+</code></pre>
+<p>At&eacute; aqui, nada surpreendente. Mas h&aacute; dois detalhes importantes que separam o <code>if</code> de Rust do de outras linguagens:</p>
+<p><strong>Primeiro:</strong> n&atilde;o h&aacute; par&ecirc;nteses em torno da condi&ccedil;&atilde;o. Em C, Java ou JavaScript voc&ecirc; escreve <code>if (x &gt; 0)</code>. Em Rust, os par&ecirc;nteses s&atilde;o desnecess&aacute;rios e o compilador inclusive avisa se voc&ecirc; os usar sem necessidade.</p>
+<p><strong>Segundo:</strong> a condi&ccedil;&atilde;o <strong>deve ser um booleano</strong>. Sem exce&ccedil;&otilde;es. Em C voc&ecirc; pode escrever <code>if (1)</code> ou <code>if (ponteiro)</code>. Em Rust, isso &eacute; um erro de compila&ccedil;&atilde;o. A condi&ccedil;&atilde;o tem que ser explicitamente <code>true</code> ou <code>false</code>. Isso elimina uma classe inteira de bugs sutis.</p>
+<h2><code>if</code> como expression &mdash; a grande virada</h2>
+<p>Aqui est&aacute; o que torna o <code>if</code> de Rust especial. Como ele &eacute; uma expression, pode produzir um valor:</p>
+<pre><code>fn main() {
+    let aprovado = true;
+
+    let mensagem = if aprovado {
+        "Parab&eacute;ns, voc&ecirc; passou!"
+    } else {
+        "Tente novamente."
+    };
+
+    println!("{mensagem}");
+}
+</code></pre>
+<p>O <code>if</code> inteiro avalia para um valor, que &eacute; atribu&iacute;do a <code>mensagem</code>. Isso substitui o operador tern&aacute;rio <code>? :</code> de outras linguagens &mdash; de forma mais leg&iacute;vel e mais poderosa.</p>
+<p>Mas h&aacute; uma regra importante: <strong>ambos os ramos devem retornar o mesmo tipo</strong>. O compilador n&atilde;o aceita isso:</p>
+<pre><code>fn main() {
+    let x = 5;
+    let y = if x &gt; 0 { 42 } else { "negativo" }; // ERRO de tipo!
+}
+</code></pre>
+<p>Um ramo retorna <code>i32</code>, o outro retorna <code>&amp;str</code>. Rust recusa. Os tipos precisam ser compat&iacute;veis &mdash; e isso &eacute; verificado em tempo de compila&ccedil;&atilde;o, n&atilde;o em execu&ccedil;&atilde;o.</p>
+<h2><code>loop</code> &mdash; repeti&ccedil;&atilde;o incondicional</h2>
+<p>O <code>loop</code> em Rust &eacute; o la&ccedil;o mais simples: repete para sempre at&eacute; que voc&ecirc; pe&ccedil;a para parar com <code>break</code>:</p>
+<pre><code>fn main() {
+    let mut tentativas = 0;
+
+    loop {
+        tentativas += 1;
+        println!("Tentativa {tentativas}");
+
+        if tentativas == 3 {
+            println!("Limite atingido.");
+            break;
+        }
+    }
+}
+</code></pre>
+<p>Sa&iacute;da:</p>
+<pre><code>Tentativa 1
+Tentativa 2
+Tentativa 3
+Limite atingido.
+</code></pre>
+<p>Mas o <code>loop</code> tamb&eacute;m &eacute; uma expression. Voc&ecirc; pode retornar um valor do <code>break</code>:</p>
+<pre><code>fn main() {
+    let mut contador = 0;
+
+    let resultado = loop {
+        contador += 1;
+        if contador == 10 {
+            break contador * 2; // retorna 20
+        }
+    };
+
+    println!("Resultado: {resultado}"); // 20
+}
+</code></pre>
+<p>Isso &eacute; especialmente &uacute;til quando voc&ecirc; precisa tentar uma opera&ccedil;&atilde;o repetidamente at&eacute; obter um resultado v&aacute;lido &mdash; como ler entrada do usu&aacute;rio ou aguardar uma conex&atilde;o.</p>
+<h2>Labels em loops aninhados</h2>
+<p>Quando voc&ecirc; tem loops aninhados, o <code>break</code> por padr&atilde;o afeta apenas o loop mais interno. Para sair de um loop externo, Rust oferece <strong>labels</strong>:</p>
+<pre><code>fn main() {
+    let mut encontrado = false;
+
+    'externo: for i in 0..5 {
+        for j in 0..5 {
+            if i + j == 6 {
+                println!("Encontrado: i={i}, j={j}");
+                encontrado = true;
+                break 'externo; // sai do loop externo
+            }
+        }
+    }
+
+    if encontrado {
+        println!("Busca conclu&iacute;da.");
+    }
+}
+</code></pre>
+<p>Labels come&ccedil;am com ap&oacute;strofo (<code>'</code>) &mdash; uma sintaxe incomum, mas f&aacute;cil de identificar visualmente. O <code>continue</code> tamb&eacute;m aceita labels para pular para a pr&oacute;xima itera&ccedil;&atilde;o de um loop espec&iacute;fico.</p>
+<h2><code>while</code> &mdash; repeti&ccedil;&atilde;o condicional</h2>
+<p>O <code>while</code> &eacute; direto ao ponto: repete enquanto a condi&ccedil;&atilde;o for verdadeira:</p>
+<pre><code>fn main() {
+    let mut n = 1;
+
+    while n &lt; 100 {
+        n *= 2;
+    }
+
+    println!("Primeira pot&ecirc;ncia de 2 acima de 100: {n}");
+}
+</code></pre>
+<p>Sa&iacute;da:</p>
+<pre><code>Primeira pot&ecirc;ncia de 2 acima de 100: 128
+</code></pre>
+<p>Um padr&atilde;o muito comum em Rust &eacute; o <code>while let</code>, que combina o la&ccedil;o com <strong>pattern matching</strong> &mdash; veremos mais sobre isso nos artigos de enums. Por enquanto, um vislumbre:</p>
+<pre><code>fn main() {
+    let mut pilha = vec![1, 2, 3, 4, 5];
+
+    while let Some(topo) = pilha.pop() {
+        println!("Removido: {topo}");
+    }
+
+    println!("Pilha vazia.");
+}
+</code></pre>
+<p>Sa&iacute;da:</p>
+<pre><code>Removido: 5
+Removido: 4
+Removido: 3
+Removido: 2
+Removido: 1
+Pilha vazia.
+</code></pre>
+<p>O loop continua enquanto <code>pilha.pop()</code> retornar <code>Some(valor)</code>, e para automaticamente quando retornar <code>None</code> &mdash; ou seja, quando a pilha esvaziar. Elegante e seguro.</p>
+<h2><code>for</code> &mdash; o la&ccedil;o mais usado em Rust</h2>
+<p>O <code>for</code> em Rust n&atilde;o opera sobre &iacute;ndices como em C. Ele itera sobre <strong>iteradores</strong> &mdash; e isso o torna ao mesmo tempo mais seguro e mais expressivo:</p>
+<pre><code>fn main() {
+    let frutas = ["ma&ccedil;&atilde;", "banana", "laranja", "uva"];
+
+    for fruta in frutas {
+        println!("Fruta: {fruta}");
+    }
+}
+</code></pre>
+<p>N&atilde;o h&aacute; risco de acessar um &iacute;ndice inv&aacute;lido. N&atilde;o h&aacute; off-by-one errors. O <code>for</code> consome cada elemento do iterador na ordem correta e para sozinho.</p>
+<h3>Ranges</h3>
+<p>Para iterar sobre n&uacute;meros, Rust usa <strong>ranges</strong>:</p>
+<pre><code>fn main() {
+    // 1 at&eacute; 5, incluindo o 5
+    for i in 1..=5 {
+        println!("{i}");
+    }
+
+    // 0 at&eacute; 4, excluindo o 5
+    for i in 0..5 {
+        println!("{i}");
+    }
+}
+</code></pre>
+<p><code>1..=5</code> &eacute; um <strong>range inclusivo</strong> &mdash; inclui o valor final. <code>0..5</code> &eacute; um <strong>range exclusivo</strong> &mdash; vai de 0 a 4. Essa distin&ccedil;&atilde;o &eacute; expl&iacute;cita na sintaxe, o que elimina ambiguidade.</p>
+<h3>Iterando com &iacute;ndice</h3>
+<p>Quando voc&ecirc; precisa do &iacute;ndice junto com o valor, use <code>.enumerate()</code>:</p>
+<pre><code>fn main() {
+    let linguagens = ["Rust", "Go", "C", "Python"];
+
+    for (indice, linguagem) in linguagens.iter().enumerate() {
+        println!("{}. {}", indice + 1, linguagem);
+    }
+}
+</code></pre>
+<p>Sa&iacute;da:</p>
+<pre><code>1. Rust
+2. Go
+3. C
+4. Python
+</code></pre>
+<h2>Um programa completo: tabuada</h2>
+<p>Vamos unir tudo que aprendemos em um programa que gera tabuadas:</p>
+<pre><code>fn tabuada(numero: u32) {
+    println!("\n── Tabuada do {} ──", numero);
+
+    for i in 1..=10 {
+        let resultado = numero * i;
+        let linha = if i == 10 {
+            format!("{numero} &times; {i:2} = {resultado}")
+        } else {
+            format!("{numero} &times; {i:2} = {resultado}")
+        };
+        println!("{linha}");
+    }
+}
+
+fn main() {
+    for n in 1..=5 {
+        tabuada(n);
+    }
+}
+</code></pre>
+<p>Sa&iacute;da (primeiras linhas):</p>
+<pre><code>── Tabuada do 1 ──
+1 &times; 1 = 1
+1 &times; 2 = 2
+...
+── Tabuada do 2 ──
+2 &times; 1 = 2
+2 &times; 2 = 4
+...
+</code></pre>
+<h2>O que voc&ecirc; deve guardar deste artigo</h2>
+<p>Tr&ecirc;s ideias centrais:</p>
+<p><strong>Primeira:</strong> <code>if</code>, <code>loop</code> e blocos s&atilde;o expressions em Rust. Eles produzem valores. Isso elimina operadores tern&aacute;rios, vari&aacute;veis tempor&aacute;rias desnecess&aacute;rias e torna o c&oacute;digo mais direto.</p>
+<p><strong>Segunda:</strong> tipos devem ser consistentes. Se um <code>if</code> retorna valor, todos os ramos retornam o mesmo tipo. O compilador garante isso antes de qualquer execu&ccedil;&atilde;o.</p>
+<p><strong>Terceira:</strong> o <code>for</code> em Rust n&atilde;o &eacute; um la&ccedil;o de &iacute;ndices &mdash; &eacute; um la&ccedil;o de iteradores. Isso &eacute; fundamental para entender Rust, pois iteradores permeiam toda a linguagem e ser&atilde;o um dos temas mais ricos da s&eacute;rie.</p>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Reescreva o trecho abaixo usando <code>if</code> como expression, sem <code>mut</code>.</p><pre><code class="language-rust">let mut taxa = 0.0;
+if valor &gt; 1000.0 {
+    taxa = 0.02;
+} else {
+    taxa = 0.05;
+}
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong></p><pre><code class="language-rust">let taxa = if valor &gt; 1000.0 { 0.02 } else { 0.05 };
+</code></pre><p>Além de mais curto, o resultado é imutável: o valor é decidido de uma vez e não pode ser alterado depois por engano. É o padrão idiomático em Rust — o <code>mut</code> ali existia só porque a linguagem de origem não tinha <code>if</code> como expression.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Explique a diferença entre <code>loop</code>, <code>while</code> e <code>for</code>, e diga qual deles é o único capaz de devolver um valor.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>loop</code> repete indefinidamente até um <code>break</code>; <code>while</code> testa uma condição antes de cada repetição; <code>for</code> percorre um iterador, do primeiro ao último elemento. Apenas o <code>loop</code> devolve valor, através do <code>break</code>:</p><pre><code class="language-rust">let primeiro_multiplo = loop {
+    contador += 1;
+    if contador % 7 == 0 {
+        break contador;
+    }
+};
+</code></pre><p>O <code>for</code> é o mais usado porque elimina a aritmética de índice, que é onde moram os erros de um a mais ou um a menos.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>O laço abaixo tem um bug. Identifique-o e corrija usando <code>for</code>.</p><pre><code class="language-rust">let nomes = ["Ana", "Bruno", "Carla"];
+let mut i = 0;
+while i &lt;= nomes.len() {
+    println!("{}", nomes[i]);
+    i += 1;
+}
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A condição usa <code>&lt;=</code> em vez de <code>&lt;</code>, então o laço tenta acessar <code>nomes[3]</code> num array de três elementos. Rust não lê memória inválida: verifica o limite em tempo de execução e encerra o programa com <code>index out of bounds: the len is 3 but the index is 3</code> — um <em>panic</em>, não uma falha silenciosa como seria em C. A correção idiomática elimina o índice:</p><pre><code class="language-rust">for nome in nomes {
+    println!("{nome}");
+}
+</code></pre><p>Assim o erro deixa de ser possível: não há condição de parada para escrever errado.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Escreva um laço que percorra os números de 1 a 20 e pare no primeiro divisível por 13, guardando-o numa variável. Explique a escolha da construção.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong></p><pre><code class="language-rust">fn main() {
+    let mut achado = None;
+    for n in 1..=20 {
+        if n % 13 == 0 {
+            achado = Some(n);
+            break;
+        }
+    }
+    println!("{achado:?}");   // Some(13)
+}
+</code></pre><p>O <code>for</code> com o intervalo inclusivo <code>1..=20</code> evita escrever a condição de parada à mão. O <code>Option</code> cobre o caso de não haver nenhum divisível no intervalo, sem inventar um valor mágico como <code>-1</code> para significar ausência.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Explique o que fazem os rótulos em laços aninhados e por que eles são preferíveis a uma variável de controle.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Um rótulo nomeia o laço, permitindo que <code>break</code> e <code>continue</code> escolham a qual deles se aplicam — sem ele, ambos afetam apenas o laço mais interno.</p><pre><code class="language-rust">'externo: for i in 0..5 {
+    for j in 0..5 {
+        if i * j &gt; 6 {
+            break 'externo;
+        }
+    }
+}
+</code></pre><p>A alternativa sem rótulo é uma variável booleana testada nos dois laços, que espalha a lógica de saída por vários pontos e é fácil de esquecer em um deles. O rótulo diz exatamente onde o fluxo vai parar, no ponto em que a decisão é tomada.</p>
+</div>
+</details>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><strong>The Rust Programming Language, Cap. 3.5</strong> &mdash; <em>Control Flow</em> &mdash; <a href="https://doc.rust-lang.org/book/ch03-05-control-flow.html" target="_blank" rel="noopener">https://doc.rust-lang.org/book/ch03-05-control-flow.html</a></li>
+<li><strong>Rust by Example &mdash; Flow of Control</strong> &mdash; <a href="https://doc.rust-lang.org/rust-by-example/flow_control.html" target="_blank" rel="noopener">https://doc.rust-lang.org/rust-by-example/flow_control.html</a></li>
+<li><strong>Rust Reference &mdash; Loops</strong> &mdash; <a href="https://doc.rust-lang.org/reference/expressions/loop-expr.html" target="_blank" rel="noopener">https://doc.rust-lang.org/reference/expressions/loop-expr.html</a></li>
+<li><strong>Rust Reference &mdash; If expressions</strong> &mdash; <a href="https://doc.rust-lang.org/reference/expressions/if-expr.html" target="_blank" rel="noopener">https://doc.rust-lang.org/reference/expressions/if-expr.html</a></li>
+<li><strong>Rust by Example &mdash; for e iteradores</strong> &mdash; por que <code>for x in colecao</code> consome o valor e o que muda com <code>&amp;</code> ou <code>&amp;mut</code> &mdash; <a href="https://doc.rust-lang.org/rust-by-example/flow_control/for.html" target="_blank" rel="noopener">https://doc.rust-lang.org/rust-by-example/flow_control/for.html</a></li>
+<li><strong><code>std::iter::Iterator</code></strong> &mdash; <code>enumerate</code>, <code>zip</code> e <code>rev</code>, que dispensam o la&ccedil;o por &iacute;ndice na maior parte dos casos &mdash; <a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html" target="_blank" rel="noopener">https://doc.rust-lang.org/std/iter/trait.Iterator.html</a></li>
+</ul>

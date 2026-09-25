@@ -1,0 +1,191 @@
+<p>No artigo anterior, escrevemos nosso primeiro programa e entendemos o caminho até o executável. Hoje vamos guardar dados na memória — e já aqui o C revela sua natureza. Se você vem do Rust, espere uma inversão: em C, variáveis são <strong>mutáveis por padrão</strong>, e o compilador confia em você para não errar. Se vem de Python ou JavaScript, espere outra surpresa: aqui, todo dado tem um tipo fixo, declarado por você, e esse tipo determina exatamente quantos bytes ele ocupa na memória.</p>
+<h3>Declarando variáveis</h3>
+<p>Em C, você declara uma variável dizendo primeiro o tipo, depois o nome:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int idade = 30;
+    printf(&quot;Idade: %d\n&quot;, idade);
+
+    idade = 31; // mutável por padrão — sem cerimônia
+    printf(&quot;Ano seguinte: %d\n&quot;, idade);
+
+    return 0;
+}
+</code></pre>
+<p>Repare no <code>%d</code> dentro do <code>printf</code>. Diferente de linguagens modernas, o C não sabe sozinho como imprimir uma variável — você precisa dizer o <strong>tipo</strong> dela com um especificador de formato. <code>%d</code> é para inteiros. Errar o especificador é uma armadilha clássica que veremos adiante.</p>
+<h3>Os tipos inteiros</h3>
+<p>C oferece uma família de tipos inteiros de tamanhos diferentes:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    char        c = 65;      // 1 byte  (também guarda a letra 'A')
+    short       s = 1000;    // geralmente 2 bytes
+    int         i = 100000;  // geralmente 4 bytes
+    long        l = 1000000; // 4 ou 8 bytes, depende da máquina
+    long long   g = 9000000000LL; // pelo menos 8 bytes
+
+    printf(&quot;%d %d %d %ld %lld\n&quot;, c, s, i, l, g);
+    return 0;
+}
+</code></pre>
+<p>Aqui está o primeiro grande "pega" do C: <strong>os tamanhos não são fixos pela linguagem</strong>. O padrão só garante mínimos e uma ordem (<code>char</code> ≤ <code>short</code> ≤ <code>int</code> ≤ <code>long</code> ≤ <code>long long</code>). Um <code>int</code> costuma ter 4 bytes na maioria das máquinas modernas, mas isso não é lei. Se o seu código depende do tamanho exato, você precisa medir — e é isso que o operador <code>sizeof</code> faz:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf(&quot;char:      %zu byte(s)\n&quot;, sizeof(char));
+    printf(&quot;short:     %zu byte(s)\n&quot;, sizeof(short));
+    printf(&quot;int:       %zu byte(s)\n&quot;, sizeof(int));
+    printf(&quot;long:      %zu byte(s)\n&quot;, sizeof(long));
+    printf(&quot;long long: %zu byte(s)\n&quot;, sizeof(long long));
+    return 0;
+}
+</code></pre>
+<p>O especificador <code>%zu</code> é o correto para o resultado de <code>sizeof</code>. Guarde: quando precisar de um inteiro de tamanho garantido, use os tipos de <code>&lt;stdint.h&gt;</code> — <code>int32_t</code>, <code>uint8_t</code>, <code>int64_t</code> — que dizem o tamanho no próprio nome.</p>
+<p><strong>Veja os tamanhos mudarem:</strong> no <a href="https://godbolt.org/" target="_blank" rel="noopener noreferrer">Compiler Explorer</a> dá para trocar o compilador e a arquitetura no menu do topo. Rode o programa do <code>sizeof</code> e alterne entre um alvo de 64 bits e um de 32: o <code>long</code> passa de 8 para 4 bytes na sua frente. É a demonstração mais direta de que o padrão garante mínimos, não tamanhos.</p>
+<h3>Com sinal e sem sinal</h3>
+<p>Todo tipo inteiro pode ser <code>signed</code> (com sinal, o padrão) ou <code>unsigned</code> (só valores não negativos, o que dobra o valor máximo positivo):</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    unsigned int positivos = 4000000000; // caberia? sim, num unsigned de 32 bits
+    int          comSinal  = -42;
+
+    printf(&quot;%u\n&quot;, positivos); // %u para unsigned
+    printf(&quot;%d\n&quot;, comSinal);
+    return 0;
+}
+</code></pre>
+<p>Cuidado: misturar <code>signed</code> e <code>unsigned</code> numa mesma conta é fonte de bugs sutis. Um <code>-1</code> atribuído a um <code>unsigned</code> não vira zero nem dá erro — ele "dá a volta" e vira o maior valor possível. C confia em você; ele não avisa.</p>
+<h3>Ponto flutuante</h3>
+<p>Para números com casas decimais, há <code>float</code> (precisão simples) e <code>double</code> (precisão dupla, o padrão recomendado):</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    float  altura = 1.75f;   // o 'f' marca literal float
+    double pi     = 3.141592653589793;
+
+    printf(&quot;Altura: %.2f\n&quot;, altura); // %.2f = duas casas decimais
+    printf(&quot;Pi:     %.5f\n&quot;, pi);
+    return 0;
+}
+</code></pre>
+<p>Use <code>double</code> por padrão; recorra a <code>float</code> só quando memória for uma restrição real. E lembre-se: ponto flutuante é <strong>aproximado</strong>. <code>0.1 + 0.2</code> não dá exatamente <code>0.3</code> em nenhuma linguagem que use IEEE 754 — e o C não é exceção.</p>
+<h3>Caracteres são números</h3>
+<p>Em C, o tipo <code>char</code> guarda um caractere — mas, por baixo, é só um número inteiro pequeno (o código ASCII do caractere):</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    char letra = 'A';
+    printf(&quot;%c tem código %d\n&quot;, letra, letra); // A tem código 65
+
+    char proxima = letra + 1;
+    printf(&quot;%c\n&quot;, proxima); // B
+
+    return 0;
+}
+</code></pre>
+<p>Isso não é curiosidade acadêmica: é a base de como se manipula texto em C. <code>'A' + 1</code> dá <code>'B'</code> porque, para o C, letras <strong>são</strong> números. Aspas simples (<code>'A'</code>) são para um único caractere; aspas duplas (<code>"A"</code>) são para texto — e são coisas bem diferentes, como veremos ao estudar strings.</p>
+<h3>Constantes: quando o valor não deve mudar</h3>
+<p>Se um valor não deve ser alterado, marque-o com <code>const</code>. O compilador passa a recusar qualquer tentativa de modificá-lo:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    const double TAXA_JUROS = 0.05;
+    // TAXA_JUROS = 0.06; // ERRO de compilação: assignment of read-only variable
+
+    double saldo = 1000.0;
+    saldo = saldo * (1.0 + TAXA_JUROS);
+    printf(&quot;Saldo: %.2f\n&quot;, saldo);
+    return 0;
+}
+</code></pre>
+<p>Existe também o velho <code>#define TAXA_JUROS 0.05</code>, uma substituição feita pelo pré-processador. A diferença é importante: <code>const</code> cria uma variável real, com tipo e verificação; <code>#define</code> é só um "localizar e substituir" de texto, sem tipo. Prefira <code>const</code> no código moderno.</p>
+<h3>Um programa completo</h3>
+<p>Vamos reunir tudo num exemplo de juros compostos, semelhante ao que fizemos com o Rust — para você comparar as duas linguagens:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    const double TAXA_JUROS = 0.05; // 5% ao ano
+    double valor_inicial = 1000.0;
+    double saldo = valor_inicial;
+    int anos = 3;
+
+    for (int ano = 1; ano &lt;= anos; ano++) {
+        saldo = saldo * (1.0 + TAXA_JUROS);
+        printf(&quot;Ano %d: R$ %.2f\n&quot;, ano, saldo);
+    }
+
+    double rendimento = saldo - valor_inicial;
+    printf(&quot;\nRendimento total: R$ %.2f\n&quot;, rendimento);
+    return 0;
+}
+</code></pre>
+<p>Saída:</p>
+<pre><code class="language-text">Ano 1: R$ 1050.00
+Ano 2: R$ 1102.50
+Ano 3: R$ 1157.63
+
+Rendimento total: R$ 157.63
+</code></pre>
+<p>Guardar um dado em C exige decidir antes de que tipo ele é, e essa decisão é mais rígida do que parece: o tipo define quanto espaço a variável ocupa e o que acontece quando ela transborda. O detalhe incômodo que fica é que esses tamanhos não são fixos pela linguagem — dependem da máquina e do compilador, e <code>int</code> não tem obrigação de ter 32 bits. Daí o hábito, cedo ou tarde adquirido por todo programador C, de perguntar ao próprio programa com <code>sizeof</code> em vez de confiar na memória.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><a href="https://books.google.com/books/about/The_C_Programming_Language.html?id=FGkPBQAAQBAJ" target="_blank" rel="noopener noreferrer"><em>The C Programming Language</em></a> (K&amp;R), Kernighan &amp; Ritchie — Cap. 2, <em>Types, Operators and Expressions</em></li>
+<li>cppreference — Fundamental types — <a href="https://en.cppreference.com/w/c/language/types" target="_blank" rel="noopener noreferrer">https://en.cppreference.com/w/c/language/types</a></li>
+<li>cppreference — <code>&lt;stdint.h&gt;</code> — tipos inteiros de tamanho fixo — <a href="https://en.cppreference.com/w/c/types/integer" target="_blank" rel="noopener noreferrer">https://en.cppreference.com/w/c/types/integer</a></li>
+<li><em>What Every Computer Scientist Should Know About Floating-Point Arithmetic</em>, David Goldberg — o texto clássico sobre <code>float</code>/<code>double</code> — <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html" target="_blank" rel="noopener noreferrer">https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html</a></li>
+<li><em>Modern C</em>, Jens Gustedt — Cap. sobre tipos básicos — <a href="https://gustedt.gitlabpages.inria.fr/modern-c/" target="_blank" rel="noopener noreferrer">https://gustedt.gitlabpages.inria.fr/modern-c/</a></li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Escreva um programa que declare sua idade num <code>int</code>, sua altura num <code>double</code> e a inicial do seu nome num <code>char</code>, e imprima os três com os especificadores de formato corretos.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Cada tipo pede seu especificador: <code>%d</code>, <code>%f</code> (ou <code>%.2f</code>) e <code>%c</code>:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int idade = 30;
+    double altura = 1.75;
+    char inicial = 'M';
+    printf(&quot;%c, %d anos, %.2f m\n&quot;, inicial, idade, altura);
+    return 0;
+}
+</code></pre>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Rode o programa do <code>sizeof</code> na sua máquina e anote os tamanhos. Depois, previsão: quantos bytes ocupa um <code>unsigned long long</code>? Confirme com <code>sizeof</code>.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Na maioria das máquinas de 64 bits (Linux/macOS), você verá <code>char</code> = 1, <code>short</code> = 2, <code>int</code> = 4, <code>long</code> = 8, <code>long long</code> = 8. Um <code>unsigned long long</code> tem o mesmo tamanho do <code>long long</code> — normalmente <strong>8 bytes</strong>. O <code>unsigned</code> muda a faixa de valores, não o tamanho.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Atribua o valor <code>-1</code> a uma variável <code>unsigned int</code> e imprima com <code>%u</code>. Explique o resultado que apareceu.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O <code>%u</code> vai imprimir <code>4294967295</code> (num <code>unsigned int</code> de 32 bits). Como <code>unsigned</code> não representa negativos, o <code>-1</code> "dá a volta" (wraparound) e vira o maior valor possível: 2³² − 1. O C não acusa erro — ele apenas reinterpreta os bits. Esse é um dos motivos para tomar cuidado ao misturar <code>signed</code> e <code>unsigned</code>.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Imprima o resultado de <code>0.1 + 0.2</code> com <code>%.17f</code>. O que você observa? Por que isso acontece?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Você verá algo como <code>0.30000000000000004</code>. Isso acontece porque <code>0.1</code> e <code>0.2</code> não têm representação exata em binário (assim como <code>1/3</code> não tem representação exata em decimal). O padrão IEEE 754, usado por praticamente todos os processadores, armazena a aproximação mais próxima — e o pequeno erro aparece quando você força 17 casas.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Troque o <code>const double TAXA_JUROS</code> do exemplo de juros por um <code>#define</code>. O programa continua funcionando? Qual a diferença prática entre as duas formas aqui?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Continua funcionando e imprime o mesmo resultado. A diferença: <code>const double TAXA_JUROS = 0.05;</code> cria uma variável real, com tipo <code>double</code> e verificação pelo compilador. <code>#define TAXA_JUROS 0.05</code> faz o pré-processador trocar o texto <code>TAXA_JUROS</code> por <code>0.05</code> <strong>antes</strong> da compilação — não há variável nem tipo, e erros ficam mais difíceis de rastrear. Por isso o C moderno prefere <code>const</code> para valores tipados.</p>
+</div>
+</details>
+

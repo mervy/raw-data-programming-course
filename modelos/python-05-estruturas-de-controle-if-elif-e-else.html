@@ -1,0 +1,222 @@
+<p>Um programa que executa sempre as mesmas instru&ccedil;&otilde;es na mesma ordem tem utilidade limitada. A capacidade de tomar decis&otilde;es &mdash; executar um bloco de c&oacute;digo ou outro dependendo de uma condi&ccedil;&atilde;o &mdash; &eacute; o que torna os programas verdadeiramente &uacute;teis. Em Python, isso &eacute; feito com as estruturas&nbsp;<code>if</code>, <code>elif</code> e <code>else</code>.</p>
+<h2>A Estrutura if</h2>
+<p>A forma mais simples de controle de fluxo:</p>
+<pre><code class="language-python">temperatura = 38.5
+
+if temperatura &gt; 37.5:
+    print("Febre detectada.")
+    print("Consulte um m&eacute;dico.")
+</code></pre>
+<p>Dois detalhes importantes da sintaxe Python:</p>
+<ol>
+<li>A condi&ccedil;&atilde;o n&atilde;o precisa de par&ecirc;nteses (embora sejam permitidos)</li>
+<li>O bloco de c&oacute;digo &eacute; delimitado por <strong>indenta&ccedil;&atilde;o</strong> &mdash; convencionalmente 4 espa&ccedil;os. N&atilde;o h&aacute; chaves <code>{}</code> como em C, Java ou JavaScript</li>
+</ol>
+<p>Se a condi&ccedil;&atilde;o for <code>False</code>, o bloco &eacute; ignorado e a execu&ccedil;&atilde;o continua ap&oacute;s ele.</p>
+<h2>if e else</h2>
+<p>Para executar um bloco alternativo quando a condi&ccedil;&atilde;o &eacute; falsa:</p>
+<pre><code class="language-python">idade = 16
+
+if idade &gt;= 18:
+    print("Acesso permitido.")
+else:
+    print("Acesso negado. Voc&ecirc; &eacute; menor de idade.")
+</code></pre>
+<h2>if, elif e else</h2>
+<p>Quando h&aacute; mais de duas possibilidades, use <code>elif</code> (contra&ccedil;&atilde;o de "else if"):</p>
+<pre><code class="language-python">nota = 75
+
+if nota &gt;= 90:
+    print("Conceito A")
+elif nota &gt;= 80:
+    print("Conceito B")
+elif nota &gt;= 70:
+    print("Conceito C")
+elif nota &gt;= 60:
+    print("Conceito D")
+else:
+    print("Reprovado")
+</code></pre>
+<p>A partir do Python 3.10 existe uma alternativa para o caso em que o encadeamento compara <strong>sempre a mesma coisa</strong>: a instru&ccedil;&atilde;o <code>match</code>. Ela n&atilde;o substitui o <code>elif</code> &mdash; o exemplo das notas, que testa <em>faixas</em>, continua sendo trabalho de <code>elif</code> &mdash; mas &eacute; mais clara quando se compara um valor contra alternativas fixas.</p>
+<pre><code class="language-python">comando = "sair"
+
+match comando:
+    case "listar":
+        print("mostrando itens")
+    case "sair" | "fechar":      # o | aceita mais de uma alternativa
+        print("encerrando")
+    case _:                      # o _ faz o papel do else
+        print("comando desconhecido")</code></pre>
+<p>Ao contr&aacute;rio do <code>switch</code> de C e de Java, o <code>match</code> do Python n&atilde;o &eacute; s&oacute; compara&ccedil;&atilde;o de igualdade: ele casa <em>formato</em>, e consegue desmontar listas e dicion&aacute;rios direto no <code>case</code>. Por ora basta saber que existe e que exige 3.10 ou mais &mdash; em vers&atilde;o anterior, o programa nem chega a rodar.</p>
+<p>Python avalia as condi&ccedil;&otilde;es de cima para baixo e executa apenas o primeiro bloco cuja condi&ccedil;&atilde;o seja verdadeira. Os demais s&atilde;o ignorados.</p>
+<h2>Condi&ccedil;&otilde;es Compostas</h2>
+<p>&Eacute; comum combinar m&uacute;ltiplas condi&ccedil;&otilde;es em um &uacute;nico <code>if</code>:</p>
+<pre><code class="language-python">salario = 5000
+tempo_empresa = 3
+
+if salario &gt; 3000 and tempo_empresa &gt;= 2:
+    print("Eleg&iacute;vel para promo&ccedil;&atilde;o.")
+
+# Verificando faixas
+valor = 150
+
+if 100 &lt;= valor &lt;= 200:
+    print("Valor dentro da faixa esperada.")
+</code></pre>
+<p>A nota&ccedil;&atilde;o <code>100 &lt;= valor &lt;= 200</code> &eacute; um encadeamento de compara&ccedil;&otilde;es exclusivo do Python, visto em <a href="/python/operadores-e-expressoes">Operadores e Express&otilde;es</a> &mdash; muito mais leg&iacute;vel do que <code>valor &gt;= 100 and valor &lt;= 200</code>.</p>
+<h2>Valores Truthy e Falsy</h2>
+<p>Em Python, qualquer valor pode ser avaliado em um contexto booleano. Alguns valores s&atilde;o considerados "falsos" por natureza:</p>
+<pre><code class="language-python"># Valores Falsy &mdash; avaliados como False
+False
+None
+0
+0.0
+""        # string vazia
+[]        # lista vazia
+{}        # dicion&aacute;rio vazio
+()        # tupla vazia
+set()     # conjunto vazio
+</code></pre>
+<p>Decorar a lista, no entanto, &eacute; a pior forma de aprender isso, porque ela n&atilde;o para a&iacute;: a regra geral &eacute; que um objeto &eacute; falso quando <strong>est&aacute; vazio ou vale zero</strong>, e qualquer tipo pode decidir isso por conta pr&oacute;pria. Um objeto que voc&ecirc; mesmo escrever ser&aacute; falso se definir <code>__len__</code> devolvendo <code>0</code>, ou <code>__bool__</code> devolvendo <code>False</code> &mdash; &eacute; assim que um carrinho de compras vazio pode ser testado com um simples <code>if carrinho:</code>. Vale reparar tamb&eacute;m no que <strong>n&atilde;o</strong> est&aacute; na lista: a string <code>"0"</code>, a string <code>"False"</code> e a lista <code>[0]</code> s&atilde;o todas <em>verdadeiras</em>, porque n&atilde;o est&atilde;o vazias &mdash; o conte&uacute;do n&atilde;o &eacute; olhado.</p>
+<p>Tudo o que n&atilde;o estiver nessa lista &eacute; considerado <code>True</code> (Truthy). Isso permite escrever condi&ccedil;&otilde;es mais expressivas:</p>
+<pre><code class="language-python">nome = input("Digite seu nome: ")
+
+if nome:
+    print(f"Ol&aacute;, {nome}!")
+else:
+    print("Nenhum nome foi digitado.")
+
+lista_de_tarefas = []
+
+if lista_de_tarefas:
+    print("Voc&ecirc; tem tarefas pendentes.")
+else:
+    print("Nenhuma tarefa pendente.")
+</code></pre>
+<h2>O Operador Tern&aacute;rio</h2>
+<p>Python permite escrever um <code>if/else</code> simples em uma &uacute;nica linha &mdash; chamado de <strong>express&atilde;o condicional</strong> ou operador tern&aacute;rio:</p>
+<pre><code class="language-python">idade = 20
+status = "maior de idade" if idade &gt;= 18 else "menor de idade"
+print(status)  # maior de idade
+</code></pre>
+<p>A sintaxe &eacute;: <code>valor_se_verdadeiro if condi&ccedil;&atilde;o else valor_se_falso</code></p>
+<p>Use com modera&ccedil;&atilde;o &mdash; &eacute; elegante para casos simples, mas pode prejudicar a legibilidade em condi&ccedil;&otilde;es complexas.</p>
+<h2>if com in</h2>
+<p>Uma combina&ccedil;&atilde;o muito comum em Python &eacute; usar <code>in</code> dentro de condi&ccedil;&otilde;es:</p>
+<pre><code class="language-python">linguagens = ["Python", "JavaScript", "Go", "Rust"]
+
+escolha = "Python"
+
+if escolha in linguagens:
+    print(f"{escolha} est&aacute; na lista.")
+
+# Verificando caracteres em strings
+email = "usuario@exemplo.com"
+
+if "@" in email and "." in email:
+    print("Formato de e-mail v&aacute;lido.")
+else:
+    print("E-mail inv&aacute;lido.")
+</code></pre>
+<h2>Aninhamento de if</h2>
+<p>&Eacute; poss&iacute;vel colocar um <code>if</code> dentro de outro &mdash; chamado de <strong>if aninhado</strong>:</p>
+<pre><code class="language-python">tem_conta = True
+saldo = 1500
+valor_saque = 500
+
+if tem_conta:
+    if saldo &gt;= valor_saque:
+        saldo -= valor_saque
+        print(f"Saque realizado. Saldo restante: R$ {saldo}")
+    else:
+        print("Saldo insuficiente.")
+else:
+    print("Voc&ecirc; n&atilde;o possui conta cadastrada.")
+</code></pre>
+<p>Aninhamento excessivo dificulta a leitura. Uma boa pr&aacute;tica &eacute; usar <strong>cl&aacute;usulas de guarda</strong> &mdash; retornando ou encerrando cedo quando uma condi&ccedil;&atilde;o n&atilde;o &eacute; atendida:</p>
+<pre><code class="language-python">def realizar_saque(tem_conta, saldo, valor):
+    if not tem_conta:
+        print("Sem conta cadastrada.")
+        return
+
+    if saldo &lt; valor:
+        print("Saldo insuficiente.")
+        return
+
+    saldo -= valor
+    print(f"Saque realizado. Saldo: R$ {saldo}")
+</code></pre>
+<h2>Exemplo Completo: Classificador de IMC</h2>
+<pre><code class="language-python">peso = float(input("Digite seu peso (kg): "))
+altura = float(input("Digite sua altura (m): "))
+
+imc = peso / altura ** 2
+
+print(f"\nSeu IMC &eacute;: {imc:.2f}")
+
+if imc &lt; 18.5:
+    print("Classifica&ccedil;&atilde;o: Abaixo do peso")
+elif imc &lt; 25.0:
+    print("Classifica&ccedil;&atilde;o: Peso normal")
+elif imc &lt; 30.0:
+    print("Classifica&ccedil;&atilde;o: Sobrepeso")
+elif imc &lt; 35.0:
+    print("Classifica&ccedil;&atilde;o: Obesidade grau I")
+elif imc &lt; 40.0:
+    print("Classifica&ccedil;&atilde;o: Obesidade grau II")
+else:
+    print("Classifica&ccedil;&atilde;o: Obesidade grau III")
+</code></pre>
+<p>Duas ideias desta parte vão reaparecer em todo código Python que você escrever. A primeira é que a indentação não é convenção de estilo: é sintaxe, e o interpretador se recusa a rodar quando ela não fecha. Isso incomoda quem vem de linguagens com chaves e, passada a estranheza, elimina de uma vez uma classe inteira de discussão sobre formatação — não existe o bloco que parece pertencer a um lugar e pertence a outro.</p>
+<p>A segunda é a regra de veracidade, e ela merece mais cuidado do que parece. Escrever <code>if lista:</code> em vez de <code>if len(lista) > 0:</code> é idiomático e legível, e funciona porque vazio é falso. O problema aparece quando o valor testado é um número ou pode ser nulo: aí <code>0</code> e <code>None</code> respondem igual, embora signifiquem coisas opostas — um é uma resposta, o outro é a ausência dela. A regra prática que evita o defeito é escolher o teste pelo que se quer perguntar: <code>if lista:</code> quando a pergunta é sobre estar vazio, <code>if valor is not None:</code> quando a pergunta é sobre existir.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><strong>Estruturas de controle &mdash; documenta&ccedil;&atilde;o oficial</strong> &mdash; <a href="https://docs.python.org/3/tutorial/controlflow.html" target="_blank" rel="noopener">https://docs.python.org/3/tutorial/controlflow.html</a></li>
+<li><strong>Express&otilde;es condicionais (PEP 308)</strong> &mdash; <a href="https://peps.python.org/pep-0308/" target="_blank" rel="noopener">https://peps.python.org/pep-0308/</a></li>
+<li><strong>Truthy e Falsy em Python</strong> &mdash; <a href="https://docs.python.org/3/library/stdtypes.html#truth-value-testing" target="_blank" rel="noopener">https://docs.python.org/3/library/stdtypes.html#truth-value-testing</a></li>
+<li>MATTHES, Eric. <a href="https://nostarch.com/python-crash-course-3rd-edition" target="_blank" rel="noopener"><em>Python Crash Course</em></a>. 3. ed. No Starch Press, 2023. Cap. 5.</li>
+<li>LUTZ, Mark. <a href="https://learning-python.com/" target="_blank" rel="noopener"><em>Learning Python</em></a>. 5. ed. O'Reilly Media, 2013. Cap. 12.</li>
+<li>HUNT, John. <a href="https://openlibrary.org/works/OL20840344W" target="_blank" rel="noopener"><em>A Beginners Guide to Python 3 Programming</em></a>. Springer, 2019. Cap. 7.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Uma função registra a leitura de um sensor e grava no banco só quando há leitura. O código é <code>if leitura:</code>. Os testes passam, e em campo o sistema perde dados de forma intermitente e sem erro nenhum no log. O que está errado?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A leitura de valor <strong>zero</strong> está sendo descartada como se o sensor não tivesse respondido. O <code>if leitura:</code> não pergunta "veio alguma coisa?" — pergunta "isso é verdadeiro?", e em Python são falsos o <code>0</code>, o <code>0.0</code>, a string vazia, a lista vazia e o <code>None</code>. Os cinco caem no mesmo balde, mas só o <code>None</code> significa ausência. Um sensor de temperatura marcando zero grau, um contador zerado, um saldo zerado: todos legítimos, todos silenciosamente jogados fora. É intermitente porque depende do valor lido, e não aparece no log porque nada falhou — o programa fez exatamente o que foi escrito. O conserto é testar a pergunta real: <code>if leitura is not None:</code>. A regra que evita a classe inteira de defeito é simples de enunciar: use a veracidade quando a pergunta for mesmo sobre <em>estar vazio</em> — <code>if lista:</code>, <code>if nome:</code> — e use <code>is not None</code> quando a pergunta for sobre <em>existir</em>. Vale notar, para completar, que o inverso também engana: a string <code>"0"</code> é verdadeira, porque não está vazia, e ninguém olha o que tem dentro dela.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Um colega troca o encadeamento de <code>elif</code> do classificador de notas por uma sequência de <code>if</code> independentes, argumentando que "dá na mesma e fica mais fácil de ler". Ele está certo?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Não, e o resultado muda. O <code>elif</code> forma uma cadeia em que <strong>no máximo um bloco executa</strong>: assim que uma condição é verdadeira, as demais nem são avaliadas. Uma sequência de <code>if</code> independentes avalia todas, e <em>todas</em> as verdadeiras executam. No classificador de notas isso é fatal, porque as condições se sobrepõem de propósito: uma nota 95 satisfaz <code>&gt;= 90</code>, <code>&gt;= 80</code>, <code>&gt;= 70</code> e <code>&gt;= 60</code>, e o aluno receberia quatro conceitos em vez de um. O encadeamento é o que permite escrever apenas o limite inferior de cada faixa — a superior está implícita no fato de as anteriores terem falhado. Sem ele, cada teste precisaria dos dois limites: <code>if 80 &lt;= nota &lt; 90:</code>. Há dois casos em que o colega teria razão. O primeiro é quando as condições são <strong>mutuamente exclusivas por construção</strong> e nunca se sobrepõem — aí o resultado coincide, embora o <code>elif</code> continue sendo mais rápido e mais honesto sobre a intenção. O segundo é quando se <em>quer</em> que mais de uma ação aconteça, por exemplo acumulando mensagens de validação de um formulário: aí os <code>if</code> separados são a estrutura certa, e usar <code>elif</code> é que seria o defeito, porque só o primeiro erro seria reportado.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Você copia um trecho de código de um site e cola no seu arquivo. Ao rodar, o Python reclama de <code>IndentationError</code> ou <code>TabError</code> numa linha que, na tela, está visivelmente alinhada com as outras. Como isso é possível e como se resolve?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Porque o que o editor mostra e o que está no arquivo são coisas diferentes. Um bloco indentado com <strong>tabulação</strong> e outro com <strong>espaços</strong> podem ocupar exatamente a mesma largura na tela — depende só de como o editor está configurado para exibir o tab — e ainda assim serem bytes distintos. O interpretador compara os caracteres, não o alinhamento visual, e recusa o arquivo. É o defeito clássico do copiar e colar, porque a página web quase sempre entrega espaços e o seu arquivo talvez use tab, ou o contrário. Em Python 3 misturar os dois é erro declarado, e não uma escolha de estilo: a mensagem <code>TabError: inconsistent use of tabs and spaces in indentation</code> existe só para esse caso. A solução definitiva não é contar espaços na mão — é configurar o editor para <strong>inserir espaços ao pressionar Tab</strong> e mostrar os caracteres invisíveis, que é o que a <a href="https://peps.python.org/pep-0008/" target="_blank" rel="noopener">PEP 8</a> recomenda com seus quatro espaços por nível. Para consertar um arquivo já bagunçado, qualquer formatador resolve de uma vez. E vale a observação mais ampla: a indentação em Python é <strong>sintaxe</strong>, não convenção. Em C um bloco mal indentado é feio; em Python, é outro programa, ou nenhum.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>O artigo valida e-mail com <code>if "@" in email and "." in email:</code>. Que entradas passam nessa validação sem serem e-mails, e qual é a abordagem correta?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Passam muitas. <code>"@."</code> passa. <code>".@"</code> passa. <code>"a@b"</code> não passa, mas <code>"a.b@"</code> passa, assim como <code>"@@@..."</code> e qualquer frase que por acaso contenha os dois caracteres. O teste verifica <em>presença</em>, não <em>posição</em> nem <em>estrutura</em> — e nem sequer exige que o ponto venha depois do arroba. Mas o ponto mais importante é outro, e é contraintuitivo: <strong>tentar validar e-mail por regra própria é quase sempre a decisão errada</strong>, porque o formato real é muito mais permissivo do que a intuição sugere. Endereços com sinal de mais, com aspas, com caracteres acentuados no domínio e com domínios sem ponto (como <code>localhost</code>) são todos válidos, e as expressões regulares que circulam na internet rejeitam endereços legítimos de gente real. A abordagem correta tem duas camadas. Na entrada, uma verificação <strong>frouxa</strong>, só para pegar erro de digitação óbvio — há exatamente um arroba, há algo antes e algo depois dele. E, para saber se o endereço <em>existe</em>, o único teste que funciona é <strong>mandar um e-mail de confirmação</strong> com um link. Nenhuma regra sintática distingue <code>joao@empresa.com</code> de <code>jaoo@empresa.com</code>, e é esse o erro que importa pegar.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>O resumo do artigo recomenda "evitar aninhamento excessivo — prefira cláusulas de guarda". Explique o que é uma cláusula de guarda e por que ela deixa o código melhor, e não apenas mais curto.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Cláusula de guarda é tratar os casos inválidos <strong>logo no início</strong> da função, saindo dela imediatamente, em vez de envolver o caso válido em <code>if</code> aninhados. Em vez de <code>if conta_existe:</code> contendo <code>if conta_ativa:</code> contendo <code>if saldo_suficiente:</code> contendo finalmente o saque, escreve-se o contrário: <code>if not conta_existe: return</code>, <code>if not conta_ativa: return</code>, <code>if saldo &lt; valor: return</code>, e então o saque, sem indentação nenhuma. O ganho não é economia de linhas — é <strong>carga mental</strong>. Com aninhamento, quem lê a linha do saque precisa manter na cabeça três condições simultâneas para saber em que circunstância aquilo executa, e a indentação cresce até o código escapar pela margem. Com guardas, cada condição é lida, resolvida e <em>descartada</em>: ao chegar no saque, tudo o que restou é o caminho feliz, e ele está no nível zero. Há um segundo ganho, menos citado e mais valioso: as guardas põem cada erro <strong>ao lado da sua causa</strong>, o que torna natural dar uma mensagem específica para cada um — em vez do <code>else</code> solitário lá no fim, distante de tudo, que responde "operação inválida" sem dizer qual das três coisas falhou. E vale para além do <code>if</code>: é a mesma ideia por trás de tratar erro cedo em vez de embrulhar o programa inteiro num bloco de exceção gigante.</p>
+</div>
+</details>
+

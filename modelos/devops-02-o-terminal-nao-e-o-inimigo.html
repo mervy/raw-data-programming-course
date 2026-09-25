@@ -1,0 +1,173 @@
+<p>Quando se fala para alunos que o primeiro mês inteiro será dedicado ao terminal Linux, a reação costuma ser a mesma: uma certa decepção. Onde estão os containers? A nuvem? O Kubernetes?</p>
+<p>A resposta é simples. Cada ferramenta que será aprendida neste ano — Docker, Terraform, AWS CLI, kubectl — é operada pelo terminal. Os servidores onde os sistemas vão rodar usam Linux. Os containers que serão orquestrados rodam Linux por dentro. Ignorar o terminal é como querer dirigir sem entender o volante.</p>
+<p>Este artigo é o ponto de entrada. Sem pré-requisitos, sem pressa.</p>
+<h2>O Que é o Terminal</h2>
+<p>O terminal é uma interface de texto para conversar com o sistema operacional. Em vez de clicar em ícones, digitam-se comandos. Parece um retrocesso, mas é exatamente o contrário: comandos podem ser automatizados, combinados, versionados e executados em milhares de servidores ao mesmo tempo. Cliques não.</p>
+<p>No Linux, o programa que interpreta os comandos se chama <strong>shell</strong>. O mais comum é o <strong>Bash</strong> — Bourne Again Shell. Quando se abre um terminal, é o Bash que está escutando o que se digita.</p>
+<h2>Abrindo o Terminal</h2>
+<p>No Ubuntu ou em qualquer distribuição baseada em Debian, pressiona-se <code>Ctrl + Alt + T</code>. No Windows, recomenda-se o uso do <strong>WSL</strong> (Windows Subsystem for Linux) — é a forma mais prática de acompanhar este curso sem precisar de uma máquina separada.</p>
+<p>Ao abrir, aparecerá algo assim:</p>
+<pre><code class="language-bash">usuario@maquina:~$
+</code></pre>
+<p>Isso é o <strong>prompt</strong>. Ele informa quem é o usuário (<code>usuario</code>), em qual máquina está (<code>maquina</code>) e em qual diretório se encontra (<code>~</code>, que representa o diretório home). O <code>$</code> indica usuário comum — se fosse <code>#</code>, seria o superusuário root.</p>
+<h2>Os Primeiros Comandos</h2>
+<p><strong>Saber onde se está:</strong></p>
+<pre><code class="language-bash">pwd
+</code></pre>
+<p><code>pwd</code> significa <em>print working directory</em>. Exibe o caminho completo do diretório atual. Resultado típico:</p>
+<pre><code>/home/usuario
+</code></pre>
+<p><strong>Listar arquivos e pastas:</strong></p>
+<pre><code class="language-bash">ls
+</code></pre>
+<p>Para ver mais detalhes — permissões, tamanho, data de modificação:</p>
+<pre><code class="language-bash">ls -la
+</code></pre>
+<p>O <code>-l</code> ativa o formato longo. O <code>-a</code> mostra arquivos ocultos (aqueles que começam com ponto).</p>
+<p><strong>Navegar entre diretórios:</strong></p>
+<pre><code class="language-bash">cd /etc       # vai para /etc
+cd -          # volta ao diretório anterior
+cd ..         # sobe um nível
+cd ~          # vai direto ao home
+</code></pre>
+<p><strong>Criar pastas:</strong></p>
+<pre><code class="language-bash">mkdir projetos
+
+# Para criar pastas aninhadas de uma vez
+mkdir -p projetos/devops/lab01
+</code></pre>
+<p><strong>Criar e escrever arquivos:</strong></p>
+<pre><code class="language-bash">touch notas.txt
+echo "Meu primeiro arquivo DevOps" &gt; notas.txt
+echo "Segunda linha" &gt;&gt; notas.txt
+</code></pre>
+<p>O <code>&gt;</code> redireciona a saída para o arquivo, sobrescrevendo. O <code>&gt;&gt;</code> acrescenta sem apagar o que já existe.</p>
+<p><strong>Ler arquivos:</strong></p>
+<pre><code class="language-bash">cat notas.txt
+
+# Para arquivos longos, com navegação linha a linha
+less notas.txt
+</code></pre>
+<p>Dentro do <code>less</code>, usam-se as setas para navegar e <code>q</code> para sair.</p>
+<p><strong>Copiar, mover e remover:</strong></p>
+<pre><code class="language-bash">cp notas.txt notas-backup.txt
+mv notas.txt documentos/notas.txt
+rm notas-backup.txt
+
+# Remover uma pasta inteira — sem desfazer
+rm -rf pasta-de-testes
+</code></pre>
+<p>O <code>rm -rf</code> não tem confirmação nem lixeira. Deve ser usado com total consciência.</p>
+<h2>Obtendo Ajuda</h2>
+<p>Nenhum profissional memoriza todos os comandos. O que diferencia um bom usuário de terminal é saber onde encontrar a informação quando necessário.</p>
+<pre><code class="language-bash">man ls        # manual completo do comando
+ls --help     # resumo rápido das opções
+</code></pre>
+<p>A maioria dos comandos aceita <code>--help</code>. É o primeiro recurso antes de qualquer busca externa.</p>
+<h2>Um Fluxo Prático</h2>
+<pre><code class="language-bash"># Vai para o home
+cd ~
+
+# Cria a estrutura do curso
+mkdir -p devops-curso/modulo01
+
+# Entra na pasta
+cd devops-curso/modulo01
+
+# Cria um arquivo de anotações
+touch anotacoes.txt
+
+# Escreve algo nele
+echo "Módulo 1 - Terminal e Linux" &gt; anotacoes.txt
+echo "Data de início: $(date)" &gt;&gt; anotacoes.txt
+
+# Lê o resultado
+cat anotacoes.txt
+
+# Confirma onde está
+pwd
+</code></pre>
+<p>Resultado esperado no <code>cat</code>:</p>
+<pre><code>Módulo 1 - Terminal e Linux
+Data de início: Mon Mar 10 14:32:05 UTC 2025
+</code></pre>
+<p>O <code>$(date)</code> é a primeira amostra de algo poderoso: é possível inserir a saída de um comando dentro de outro. Esse padrão aparecerá com frequência em shell script.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<p><strong>Documentação e leitura</strong></p>
+<ul>
+<li><a href="https://linuxcommand.org/tlcl.php" target="_blank" rel="noopener">The Linux Command Line — William E. Shotts Jr.</a> — Disponível gratuitamente. É a referência mais completa e acessível para quem está começando no terminal.</li>
+<li><a href="https://www.gnu.org/software/bash/manual/" target="_blank" rel="noopener">GNU Bash Reference Manual</a> — A documentação oficial do Bash. Densa, mas indispensável como consulta.</li>
+<li><a href="https://man7.org/linux/man-pages/" target="_blank" rel="noopener">Linux man pages online</a> — Versão web dos manuais do sistema. Útil quando não há acesso ao <code>man</code> localmente.</li>
+</ul>
+<p><strong>Prática interativa</strong></p>
+<ul>
+<li><a href="https://overthewire.org/wargames/bandit/" target="_blank" rel="noopener">Over The Wire: Bandit</a> — Desafios progressivos que ensinam terminal de forma prática. Altamente recomendado como exercício paralelo aos artigos.</li>
+<li><a href="https://linuxjourney.com/" target="_blank" rel="noopener">Linux Journey</a> — Guia interativo e gratuito cobrindo terminal e conceitos de Linux com exercícios embutidos.</li>
+</ul>
+<p><strong>Comunidade</strong></p>
+<ul>
+<li><a href="https://unix.stackexchange.com/" target="_blank" rel="noopener">Unix &amp; Linux Stack Exchange</a> — O melhor lugar para tirar dúvidas específicas sobre comandos e comportamentos do shell.</li>
+<li><a href="https://www.youtube.com/@LearnLinuxTV" target="_blank" rel="noopener">LearnLinuxTV — YouTube</a> — Conteúdo em inglês de alta qualidade focado em Linux para profissionais de infraestrutura.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Por que um curso de DevOps dedica o primeiro mês inteiro ao terminal, em vez de começar por Docker ou Kubernetes?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Porque todas as ferramentas do curso — Docker, Terraform, AWS CLI, kubectl — são operadas pelo terminal, os servidores onde os sistemas rodam usam Linux e os containers orquestrados rodam Linux por dentro. Há também uma razão estrutural: comandos podem ser automatizados, combinados, versionados e executados em milhares de servidores ao mesmo tempo — cliques não. Sem essa base, o resto do curso vira decoreba de comandos sem entender o que está acontecendo.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Você abre o terminal e vê o prompt abaixo. O que cada parte informa? E o que muda se o último caractere for <code>#</code> em vez de <code>$</code>?</p>
+<pre><code class="language-bash">usuario@maquina:~$
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>usuario</code> é quem está logado; <code>maquina</code> é o host em que a sessão está aberta; <code>~</code> é o diretório atual, atalho para o home; e <code>$</code> indica usuário comum. Se aparecer <code>#</code>, a sessão é do superusuário <strong>root</strong> — sem as restrições de permissão que protegem o sistema. Na prática isso muda o nível de atenção: um comando errado como root atinge arquivos de sistema que um usuário comum nem conseguiria tocar.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Qual a diferença entre <code>&gt;</code> e <code>&gt;&gt;</code>? Diga exatamente o que <code>notas.txt</code> contém depois desta sequência:</p>
+<pre><code class="language-bash">echo "linha A" &gt; notas.txt
+echo "linha B" &gt; notas.txt
+echo "linha C" &gt;&gt; notas.txt
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>&gt;</code> redireciona a saída sobrescrevendo o arquivo; <code>&gt;&gt;</code> acrescenta ao final, preservando o conteúdo. O arquivo termina com duas linhas:</p>
+<pre><code>linha B
+linha C
+</code></pre>
+<p>A "linha A" foi perdida no segundo comando, que apagou o arquivo antes de escrever. Trocar <code>&gt;&gt;</code> por <code>&gt;</code> por descuido é uma das formas mais fáceis de destruir um arquivo de log ou de configuração sem perceber.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>No comando <code>ls -la</code>, o que cada flag faz? Por que a flag <code>-a</code> é especialmente importante ao inspecionar um servidor?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>-l</code> ativa o formato longo, mostrando permissões, dono, tamanho e data de modificação. <code>-a</code> exibe os arquivos ocultos, aqueles cujo nome começa com ponto. O <code>-a</code> importa porque em Linux quase toda configuração vive em arquivos ocultos — <code>.bashrc</code>, <code>.ssh/</code>, <code>.env</code>, <code>.gitignore</code>. Um <code>ls</code> simples esconde exatamente os arquivos que costumam explicar por que o ambiente está se comportando de forma inesperada.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Por que <code>rm -rf</code> exige atenção redobrada? O que cada flag faz, e por que <code>rm pasta-de-testes</code> sozinho não funcionaria?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>-r</code> é recursivo: entra na pasta e remove tudo que houver dentro, em qualquer profundidade. <code>-f</code> força: não pede confirmação e não reclama de arquivos inexistentes. Sem <code>-r</code>, o <code>rm</code> se recusa a apagar um diretório — daí <code>rm pasta-de-testes</code> falhar. O ponto crítico é que não existe confirmação nem lixeira: o que sai não volta. E o erro mais comum não é digitar o comando errado, e sim o caminho errado — um espaço a mais transforma <code>rm -rf /caminho</code> em <code>rm -rf / caminho</code>, que ataca a raiz do sistema.</p>
+</div>
+</details>
+<h3>Exercício 6</h3>
+<p>O artigo destaca <code>$(date)</code> como uma primeira amostra de algo que reaparecerá em shell script. Que recurso é esse, e o que a linha abaixo grava no arquivo?</p>
+<pre><code class="language-bash">echo "Data de início: $(date)" &gt;&gt; anotacoes.txt
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> É a <strong>substituição de comando</strong>: o shell executa primeiro o que está dentro de <code>$( )</code> e substitui a expressão pela saída daquele comando. Aqui o <code>date</code> roda antes do <code>echo</code>, e a linha acrescentada ao arquivo fica parecida com <code>Data de início: Mon Mar 10 14:32:05 UTC 2025</code>. O valor é resolvido no momento da execução, não do salvamento — é o que permite scripts gerarem nomes de arquivo, timestamps de log e tags de release automaticamente.</p>
+</div>
+</details>
+

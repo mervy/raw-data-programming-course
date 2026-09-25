@@ -1,0 +1,288 @@
+<p>No Javascript n&oacute;s guardamos informa&ccedil;&otilde;es em vari&aacute;veis como visto em um outro arrtigo. Mas um programa de verdade precisa <strong>tomar decis&otilde;es</strong>. Se o usu&aacute;rio est&aacute; logado, mostre o painel. Se a senha est&aacute; errada, exiba um erro. Se o saldo &eacute; suficiente, finalize a compra.</p>
+<p>&Eacute; exatamente isso que as <strong>estruturas condicionais</strong> fazem: permitem que seu c&oacute;digo siga caminhos diferentes dependendo de uma condi&ccedil;&atilde;o.</p>
+<h3>Operadores de Compara&ccedil;&atilde;o</h3>
+<p>Antes de entrar no <code>if</code>, precisamos entender como comparar valores. O resultado de uma compara&ccedil;&atilde;o &eacute; sempre <code>true</code> ou <code>false</code>.</p>
+<pre><code class="language-js">const a = 10;
+const b = 5;
+
+console.log(a &gt; b);   // true  &mdash; maior que
+console.log(a &lt; b);   // false &mdash; menor que
+console.log(a &gt;= 10); // true  &mdash; maior ou igual
+console.log(a &lt;= 9);  // false &mdash; menor ou igual
+console.log(a === 10); // true &mdash; igual em valor E tipo (use sempre este)
+console.log(a !== b);  // true &mdash; diferente
+</code></pre>
+<p><strong>Aten&ccedil;&atilde;o importante:</strong> sempre use <code>===</code> em vez de <code>==</code>. O operador <code>==</code> faz convers&atilde;o autom&aacute;tica de tipos e pode causar resultados inesperados:</p>
+<pre><code class="language-js">console.log(0 == false);  // true  &larr; perigoso!
+console.log(0 === false); // false &larr; correto
+console.log("5" == 5);    // true  &larr; perigoso!
+console.log("5" === 5);   // false &larr; correto
+</code></pre>
+<p>Grave essa regra: <strong><code>===</code> sempre.</strong></p>
+<h3>if e else</h3>
+<p>A estrutura mais b&aacute;sica de decis&atilde;o:</p>
+<pre><code class="language-js">const hora = 14;
+
+if (hora &lt; 12) {
+  console.log("Bom dia!");
+} else {
+  console.log("Boa tarde!");
+}
+// Resultado: "Boa tarde!"
+</code></pre>
+<p>O bloco dentro do <code>if</code> s&oacute; executa se a condi&ccedil;&atilde;o for <code>true</code>. Caso contr&aacute;rio, o bloco do <code>else</code> &eacute; executado.</p>
+<h3>else if &mdash; m&uacute;ltiplas condi&ccedil;&otilde;es</h3>
+<p>Quando voc&ecirc; tem mais de dois caminhos poss&iacute;veis:</p>
+<pre><code class="language-js">const hora = 20;
+
+if (hora &lt; 12) {
+  console.log("Bom dia!");
+} else if (hora &lt; 18) {
+  console.log("Boa tarde!");
+} else {
+  console.log("Boa noite!");
+}
+// Resultado: "Boa noite!"
+</code></pre>
+<p>O JavaScript testa cada condi&ccedil;&atilde;o de cima para baixo e executa <strong>apenas o primeiro bloco</strong> cuja condi&ccedil;&atilde;o seja verdadeira. Os demais s&atilde;o ignorados.</p>
+<h3>Operadores L&oacute;gicos</h3>
+<p>Voc&ecirc; pode combinar condi&ccedil;&otilde;es usando os operadores l&oacute;gicos:</p>
+<pre><code class="language-js">const idade = 20;
+const temCarteira = true;
+
+// &amp;&amp; (E) &mdash; ambas as condi&ccedil;&otilde;es precisam ser true
+if (idade &gt;= 18 &amp;&amp; temCarteira) {
+  console.log("Pode dirigir.");
+}
+
+// || (OU) &mdash; basta uma condi&ccedil;&atilde;o ser true
+const temIngresso = false;
+const eVIP = true;
+
+if (temIngresso || eVIP) {
+  console.log("Pode entrar no evento.");
+}
+
+// ! (N&Atilde;O) &mdash; inverte o valor booleano
+const estaLogado = false;
+
+if (!estaLogado) {
+  console.log("Por favor, fa&ccedil;a login.");
+}
+</code></pre>
+<h3>Exemplo pr&aacute;tico: sistema de notas</h3>
+<pre><code class="language-js">const nota = 7.5;
+
+if (nota &gt;= 9) {
+  console.log("Conceito A &mdash; Excelente!");
+} else if (nota &gt;= 7) {
+  console.log("Conceito B &mdash; Bom!");
+} else if (nota &gt;= 5) {
+  console.log("Conceito C &mdash; Regular.");
+} else {
+  console.log("Reprovado. Vamos tentar de novo.");
+}
+// Resultado: "Conceito B &mdash; Bom!"
+</code></pre>
+<h3>Operador Tern&aacute;rio</h3>
+<p>Quando a condi&ccedil;&atilde;o &eacute; simples, existe uma forma mais curta de escrever um <code>if/else</code>. &Eacute; chamado de <strong>operador tern&aacute;rio</strong>:</p>
+<pre><code class="language-js">// Sintaxe: condi&ccedil;&atilde;o ? valorSeTrue : valorSeFalse
+
+const idade = 20;
+const acesso = idade &gt;= 18 ? "Permitido" : "Negado";
+console.log(acesso); // "Permitido"
+
+// Equivale a:
+// if (idade &gt;= 18) {
+//   acesso = "Permitido"
+// } else {
+//   acesso = "Negado"
+// }
+</code></pre>
+<p>Use o tern&aacute;rio apenas para casos simples. Se a l&oacute;gica for complexa, prefira o <code>if/else</code> tradicional &mdash; c&oacute;digo leg&iacute;vel vale mais do que c&oacute;digo curto.</p>
+<h3>switch &mdash; quando h&aacute; muitas op&ccedil;&otilde;es fixas</h3>
+<p>O <code>switch</code> &eacute; ideal quando voc&ecirc; precisa comparar uma vari&aacute;vel com v&aacute;rios valores poss&iacute;veis e espec&iacute;ficos:</p>
+<pre><code class="language-js">const diaDaSemana = 3;
+
+switch (diaDaSemana) {
+  case 1:
+    console.log("Segunda-feira");
+    break;
+  case 2:
+    console.log("Ter&ccedil;a-feira");
+    break;
+  case 3:
+    console.log("Quarta-feira");
+    break;
+  case 4:
+    console.log("Quinta-feira");
+    break;
+  case 5:
+    console.log("Sexta-feira");
+    break;
+  default:
+    console.log("Final de semana!");
+}
+// Resultado: "Quarta-feira"
+</code></pre>
+<p><strong>Nunca esque&ccedil;a o <code>break</code>!</strong> Sem ele, o JavaScript continua executando os pr&oacute;ximos <code>case</code> mesmo que a condi&ccedil;&atilde;o n&atilde;o corresponda &mdash; comportamento chamado de <em>fall-through</em>.</p>
+<p>Voc&ecirc; pode agrupar casos que compartilham o mesmo resultado:</p>
+<pre><code class="language-js">const mes = 4;
+
+switch (mes) {
+  case 1:
+  case 3:
+  case 5:
+  case 7:
+  case 8:
+  case 10:
+  case 12:
+    console.log("31 dias");
+    break;
+  case 4:
+  case 6:
+  case 9:
+  case 11:
+    console.log("30 dias");
+    break;
+  case 2:
+    console.log("28 ou 29 dias");
+    break;
+}
+// Resultado: "30 dias"
+</code></pre>
+<h3>if vs switch &mdash; quando usar cada um?</h3>
+<table>
+<thead>
+<tr>
+<th>Situa&ccedil;&atilde;o</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compara&ccedil;&otilde;es com ranges (maior, menor)</td>
+<td><code>if / else if</code></td>
+</tr>
+<tr>
+<td>Condi&ccedil;&otilde;es compostas com <code>&amp;&amp;</code> e <code>||</code></td>
+<td><code>if / else if</code></td>
+</tr>
+<tr>
+<td>Compara&ccedil;&atilde;o com valores fixos e espec&iacute;ficos</td>
+<td><code>switch</code></td>
+</tr>
+<tr>
+<td>Apenas dois caminhos simples</td>
+<td>Tern&aacute;rio <code>? :</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Tarefa para voc&ecirc;</h3>
+<p>Escreva um programa que receba a velocidade de um carro e exiba uma mensagem. Por exemplo velocidade = 95; a&iacute;:</p>
+<ul>
+<li>Se velocidade &lt;= 60: "Dentro do limite."&nbsp;</li>
+<li>Se velocidade &lt;= 80: "Aten&ccedil;&atilde;o: velocidade moderada."&nbsp;</li>
+<li>Se velocidade &lt;= 110: "Acima do limite permitido. Multa leve."&nbsp;</li>
+<li>Se velocidade &gt; 110: "Perigo! Multa grave."</li>
+</ul>
+<p>Tente resolver antes de ver a <a href="#resposta">resposta</a>. Depois, modifique os valores e observe os resultados.</p>
+<p>O <code>===</code> é a peça que mais economiza tempo aqui: comparar sem coerção elimina uma categoria inteira de surpresa, e o custo de digitar um caractere a mais é nenhum. O resto é escolha de forma — <code>if</code> e <code>else if</code> quando cada condição é uma pergunta diferente, o ternário quando a decisão cabe numa linha sem ficar ilegível, e o <code>switch</code> quando é sempre a mesma variável comparada contra uma lista de valores fixos.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li>MDN Web Docs &mdash; Condicionais: <a href="https://developer.mozilla.org/pt-BR/docs/Learn/JavaScript/Building_blocks/conditionals" target="_blank" rel="noopener">https://developer.mozilla.org/pt-BR/docs/Learn/JavaScript/Building_blocks/conditionals</a></li>
+<li>MDN Web Docs &mdash; Operadores de compara&ccedil;&atilde;o: <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Operators" target="_blank" rel="noopener">https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Operators</a></li>
+<li>JavaScript.info &mdash; Operadores l&oacute;gicos: <a href="https://javascript.info/logical-operators" target="_blank" rel="noopener">https://javascript.info/logical-operators</a></li>
+<li>JavaScript.info &mdash; Condicionais: <a href="https://javascript.info/ifelse" target="_blank" rel="noopener">https://javascript.info/ifelse</a></li>
+<li><em>Eloquent JavaScript</em>, Cap. 2 &mdash; Marijn Haverbeke: <a href="https://eloquentjavascript.net/02_program_structure.html" target="_blank" rel="noopener">https://eloquentjavascript.net/02_program_structure.html</a></li>
+<li>MDN &mdash; a instru&ccedil;&atilde;o <code>switch</code>: <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/switch" target="_blank" rel="noopener">https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/switch</a></li>
+</ul>
+<p><a href="#resposta">Resposta</a> do exerc&iacute;cio proposto:</p>
+<pre><code class="language-js">const velocidade = 95;
+
+if (velocidade &lt;= 60) {
+  console.log("Dentro do limite.");
+} else if (velocidade &lt;= 80) {
+  console.log("Aten&ccedil;&atilde;o: velocidade moderada.");
+} else if (velocidade &lt;= 110) {
+  console.log("Acima do limite permitido. Multa leve.");
+} else {
+  console.log("Perigo! Multa grave.");
+}
+</code></pre>
+
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Anote a saída exata de cada linha e explique, em uma frase, o que o <code>==</code> fez de diferente do <code>===</code>.</p>
+<pre><code class="language-js">console.log(0 == false);
+console.log(0 === false);
+console.log("5" == 5);
+console.log("5" === 5);</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>true</code>, <code>false</code>, <code>true</code>, <code>false</code>, nessa ordem. O <code>==</code> <strong>converte os tipos antes de comparar</strong>: transforma <code>false</code> em <code>0</code>, e a string <code>"5"</code> no número <code>5</code> — e aí encontra igualdade onde não há. O <code>===</code> compara valor <strong>e</strong> tipo, então número e booleano nunca são iguais, nem número e texto. É por isso que a regra do artigo é sem exceção: use sempre <code>===</code>.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Alguém reordenou a cadeia de notas e agora todo aluno recebe "Conceito C". Rode mentalmente com <code>nota = 9.5</code>, diga o que sai e explique por quê.</p>
+<pre><code class="language-js">const nota = 9.5;
+
+if (nota &gt;= 5) {
+  console.log("Conceito C — Regular.");
+} else if (nota &gt;= 7) {
+  console.log("Conceito B — Bom!");
+} else if (nota &gt;= 9) {
+  console.log("Conceito A — Excelente!");
+}</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Sai <code>Conceito C — Regular.</code> — e sairia o mesmo para <code>9.5</code>, <code>8</code> ou <code>5</code>. O JavaScript testa as condições <strong>de cima para baixo e para na primeira verdadeira</strong>, ignorando as demais. Como <code>9.5 &gt;= 5</code> já é verdade na primeira linha, as outras nunca são alcançadas. Numa cadeia de faixas, a ordem tem de ir <strong>da condição mais restritiva para a mais ampla</strong>: primeiro <code>&gt;= 9</code>, depois <code>&gt;= 7</code>, depois <code>&gt;= 5</code>.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Removeram o <code>break</code> de um dos casos. Com <code>diaDaSemana = 3</code>, quantas linhas o programa imprime, e quais?</p>
+<pre><code class="language-js">const diaDaSemana = 3;
+
+switch (diaDaSemana) {
+  case 3:
+    console.log("Quarta-feira");
+  case 4:
+    console.log("Quinta-feira");
+    break;
+  case 5:
+    console.log("Sexta-feira");
+    break;
+}</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Imprime <strong>duas linhas</strong>: <code>Quarta-feira</code> e <code>Quinta-feira</code>. O <code>switch</code> não escolhe um caso e para — ele <strong>salta para o caso que casa e executa dali em diante</strong>, até encontrar um <code>break</code>. Sem o <code>break</code> no <code>case 3</code>, a execução escorrega para o <code>case 4</code> (o <em>fall-through</em>) e só para no <code>break</code> dele. O <code>case 5</code> não roda. É exatamente esse escorregamento que a versão com casos agrupados usa de propósito.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>No <code>switch</code> de meses do artigo, que compara <code>mes</code> com 1 a 12, o que acontece se <code>mes</code> valer <code>13</code>? E o que deveria ser acrescentado?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <strong>Nada é impresso</strong> e nenhum erro é lançado — o programa simplesmente segue adiante em silêncio, porque nenhum <code>case</code> casou e não existe <code>default</code>. Falta justamente ele: um <code>default: console.log("Mês inválido");</code> ao final transforma a entrada inesperada numa mensagem visível. É a diferença entre um valor errado que se anuncia e um que se esconde — e o segundo é sempre o mais caro de encontrar.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Reescreva o <code>if/else</code> abaixo usando o operador ternário. Depois, diga um caso em que você <strong>não</strong> faria essa troca.</p>
+<pre><code class="language-js">const idade = 20;
+let acesso;
+
+if (idade &gt;= 18) {
+  acesso = "Permitido";
+} else {
+  acesso = "Negado";
+}</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Fica <code>const acesso = idade &gt;= 18 ? "Permitido" : "Negado";</code> — e repare que a variável pode virar <code>const</code>, porque agora ela nasce já com o valor. <strong>Quando não trocar:</strong> quando há mais de dois caminhos, quando cada ramo faz mais de uma coisa, ou quando a condição é composta a ponto de a linha não caber na tela. Um ternário aninhado dentro de outro é o sinal clássico de que o <code>if/else</code> era a escolha certa: o artigo é explícito em que código legível vale mais que código curto.</p>
+</div>
+</details>
+

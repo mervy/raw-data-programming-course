@@ -1,0 +1,298 @@
+<p>Até agora, nossos programas seguiam sempre o mesmo caminho, da primeira à última linha. Mas um programa útil precisa <strong>escolher</strong>: cobrar frete se o pedido for abaixo de um valor, mostrar "aprovado" se a nota passar de sete, encerrar se o usuário digitar "sair". Hoje damos ao C o poder de decidir. E, como sempre, vamos descobrir uma ou duas armadilhas que a linguagem reserva para os desatentos.</p>
+<h3>A decisão mais simples: if</h3>
+<p>O <code>if</code> executa um bloco apenas se uma condição for verdadeira:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int nota = 8;
+
+    if (nota &gt;= 7) {
+        printf(&quot;Aprovado!\n&quot;);
+    }
+
+    return 0;
+}
+</code></pre>
+<p>A condição fica entre parênteses. Se ela for verdadeira, o bloco entre chaves roda; se não, é ignorado. Você pode omitir as chaves quando o bloco tem uma única linha, mas <strong>não faça isso</strong>. Chaves sempre presentes evitam uma classe inteira de bugs difíceis — voltaremos a esse ponto.</p>
+<h3>Os dois caminhos: if e else</h3>
+<p>O <code>else</code> cobre o caso contrário:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int idade = 16;
+
+    if (idade &gt;= 18) {
+        printf(&quot;Maior de idade.\n&quot;);
+    } else {
+        printf(&quot;Menor de idade.\n&quot;);
+    }
+
+    return 0;
+}
+</code></pre>
+<p>E, para mais de dois caminhos, encadeamos <code>else if</code>:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int nota = 6;
+
+    if (nota &gt;= 9) {
+        printf(&quot;Excelente\n&quot;);
+    } else if (nota &gt;= 7) {
+        printf(&quot;Aprovado\n&quot;);
+    } else if (nota &gt;= 5) {
+        printf(&quot;Recuperação\n&quot;);
+    } else {
+        printf(&quot;Reprovado\n&quot;);
+    }
+
+    return 0;
+}
+</code></pre>
+<p>O C testa as condições de cima para baixo e para na primeira verdadeira. Por isso a ordem importa: se você colocasse <code>nota &gt;= 5</code> antes de <code>nota &gt;= 9</code>, ninguém jamais seria "Excelente".</p>
+<h3>Verdadeiro e falso, à moda do C</h3>
+<p>Aqui está um traço fundamental da linguagem: o C não tinha, originalmente, um tipo booleano. Para ele, <strong>zero é falso e qualquer coisa diferente de zero é verdadeira</strong>. Isso significa que uma condição não precisa ser uma comparação:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int estoque = 3;
+
+    if (estoque) { // verdadeiro porque 3 != 0
+        printf(&quot;Ainda há %d unidades.\n&quot;, estoque);
+    }
+
+    return 0;
+}
+</code></pre>
+<p>Desde o C99, existe o cabeçalho <code>&lt;stdbool.h&gt;</code>, que traz <code>bool</code>, <code>true</code> e <code>false</code> por comodidade — mas por baixo dos panos continuam sendo <code>1</code> e <code>0</code>. Use-o para deixar a intenção clara:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+
+int main(void) {
+    bool logado = true;
+    if (logado) {
+        printf(&quot;Bem-vindo de volta.\n&quot;);
+    }
+    return 0;
+}
+</code></pre>
+<h3>Operadores de comparação e lógicos</h3>
+<p>Para construir condições, você combina operadores relacionais e lógicos:</p>
+<pre><code class="language-text">==   igual a            &amp;&amp;   E (and)
+!=   diferente de       ||   OU (or)
+&lt;    menor que          !    NÃO (not)
+&gt;    maior que
+&lt;=   menor ou igual
+&gt;=   maior ou igual
+</code></pre>
+<p>Exemplo combinando os dois:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int idade = 25;
+    double renda = 3500.0;
+
+    if (idade &gt;= 18 &amp;&amp; renda &gt;= 2000.0) {
+        printf(&quot;Elegível para o crédito.\n&quot;);
+    } else {
+        printf(&quot;Não elegível.\n&quot;);
+    }
+
+    return 0;
+}
+</code></pre>
+<p>Os operadores <code>&amp;&amp;</code> e <code>||</code> têm <strong>avaliação em curto-circuito</strong>: em <code>a &amp;&amp; b</code>, se <code>a</code> já for falso, o <code>b</code> nem é avaliado (o resultado já está decidido). Isso não é um detalhe — é uma técnica útil para proteger operações, como veremos ao estudar ponteiros.</p>
+<h3>A armadilha clássica: = em vez de ==</h3>
+<p>Este é possivelmente o erro mais famoso do C. Comparação é <code>==</code> (dois sinais). Um único <code>=</code> é <strong>atribuição</strong>, e o C aceita atribuição dentro de um <code>if</code> sem reclamar:</p>
+<pre><code class="language-c">int x = 5;
+
+if (x = 0) {        // ATRIBUI 0 a x — e 0 é falso!
+    printf(&quot;nunca entra aqui\n&quot;);
+}
+// x agora vale 0, e você nem percebeu
+</code></pre>
+<p>O código compila, roda, e faz a coisa errada em silêncio. Duas defesas: compile sempre com <code>gcc -Wall</code> (ele avisa), e adote o hábito de escrever a constante à esquerda — <code>if (0 == x)</code> — pois aí um <code>=</code> acidental vira erro de compilação.</p>
+<p><strong>Veja o aviso aparecer:</strong> no <a href="https://godbolt.org/" target="_blank" rel="noopener noreferrer">Compiler Explorer</a>, o campo ao lado do compilador aceita as mesmas flags da linha de comando. Cole o <code>if</code> com <code>=</code>, compile sem nada e depois com <code>-Wall</code>: só o segundo reclama do valor usado como condição. Acrescente <code>-Wextra</code> e deixe os dois ligados desde já.</p>
+<h3>O operador ternário: um if que devolve valor</h3>
+<p>Para escolhas simples entre dois valores, há um atalho — o operador <code>? :</code>:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int idade = 20;
+    const char *status = (idade &gt;= 18) ? &quot;adulto&quot; : &quot;menor&quot;;
+    printf(&quot;Status: %s\n&quot;, status);
+    return 0;
+}
+</code></pre>
+<p>Leia como: "se <code>idade &gt;= 18</code>, o valor é <code>"adulto"</code>; senão, <code>"menor"</code>". É elegante para casos curtos, mas não abuse — encadear ternários vira código ilegível rapidamente.</p>
+<h3>Escolha entre muitos casos: switch</h3>
+<p>Quando você compara uma mesma variável contra vários valores fixos, o <code>switch</code> é mais claro que uma escada de <code>else if</code>:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int dia = 3;
+
+    switch (dia) {
+        case 1:
+            printf(&quot;Domingo\n&quot;);
+            break;
+        case 2:
+            printf(&quot;Segunda\n&quot;);
+            break;
+        case 3:
+            printf(&quot;Terça\n&quot;);
+            break;
+        default:
+            printf(&quot;Outro dia\n&quot;);
+            break;
+    }
+
+    return 0;
+}
+</code></pre>
+<p>Três pontos merecem atenção. O <code>break</code> ao fim de cada <code>case</code> é <strong>obrigatório na prática</strong>: sem ele, a execução "escorrega" para o próximo caso (o chamado <em>fall-through</em>). O <code>default</code> cobre qualquer valor não previsto — como o <code>else</code> final. E o <code>switch</code> só funciona com valores inteiros ou caracteres, nunca com <code>double</code> ou strings.</p>
+<p>O <em>fall-through</em>, aliás, às vezes é intencional — para agrupar casos:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    char c = 'e';
+
+    switch (c) {
+        case 'a':
+        case 'e':
+        case 'i':
+        case 'o':
+        case 'u':
+            printf(&quot;Vogal\n&quot;);
+            break;
+        default:
+            printf(&quot;Consoante\n&quot;);
+    }
+
+    return 0;
+}
+</code></pre>
+<p>Aqui a ausência de <code>break</code> nos primeiros casos é proposital: qualquer vogal cai no mesmo bloco.</p>
+<h3>Um programa que junta tudo</h3>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    double valor = 150.0;
+    int itens = 4;
+    double frete;
+
+    if (valor &gt;= 200.0) {
+        frete = 0.0;
+    } else if (itens &gt;= 3) {
+        frete = 15.0;
+    } else {
+        frete = 25.0;
+    }
+
+    const char *faixa = (valor &gt;= 200.0) ? &quot;frete grátis&quot; : &quot;frete cobrado&quot;;
+
+    printf(&quot;Pedido: R$ %.2f, %d itens\n&quot;, valor, itens);
+    printf(&quot;Frete: R$ %.2f (%s)\n&quot;, frete, faixa);
+    printf(&quot;Total: R$ %.2f\n&quot;, valor + frete);
+
+    return 0;
+}
+</code></pre>
+<p>Saída:</p>
+<pre><code class="language-text">Pedido: R$ 150.00, 4 itens
+Frete: R$ 15.00 (frete cobrado)
+Total: R$ 165.00
+</code></pre>
+<p>Com <code>if</code>, <code>else</code> e <code>switch</code>, o programa deixa de executar uma receita fixa e passa a responder ao que encontra. Duas armadilhas clássicas do C moram aqui e merecem atenção permanente: o <code>=</code> escrito onde cabia <code>==</code>, que atribui em vez de comparar e ainda assim compila, e o <code>case</code> sem <code>break</code>, que escorrega para o seguinte. Nenhuma das duas é erro de sintaxe — são erros de lógica que o compilador, na melhor das hipóteses, apenas avisa.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><a href="https://books.google.com/books/about/The_C_Programming_Language.html?id=FGkPBQAAQBAJ" target="_blank" rel="noopener noreferrer"><em>The C Programming Language</em></a> (K&amp;R), Kernighan &amp; Ritchie — Cap. 3, <em>Control Flow</em></li>
+<li>cppreference — <code>if</code> statement — <a href="https://en.cppreference.com/w/c/language/if" target="_blank" rel="noopener noreferrer">https://en.cppreference.com/w/c/language/if</a></li>
+<li>cppreference — <code>switch</code> statement — <a href="https://en.cppreference.com/w/c/language/switch" target="_blank" rel="noopener noreferrer">https://en.cppreference.com/w/c/language/switch</a></li>
+<li>cppreference — <code>&lt;stdbool.h&gt;</code> — <a href="https://en.cppreference.com/w/c/types/boolean" target="_blank" rel="noopener noreferrer">https://en.cppreference.com/w/c/types/boolean</a></li>
+<li>GCC — a opção <code>-Wall</code> e o aviso contra <code>=</code> em condições — <a href="https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html" target="_blank" rel="noopener noreferrer">https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html</a></li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Escreva um programa que leia (ou fixe) um número inteiro e imprima "par" ou "ímpar". Dica: use o operador resto <code>%</code>.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O resto da divisão por 2 é 0 para pares:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main(void) {
+    int n = 7;
+    if (n % 2 == 0) printf(&quot;par\n&quot;);
+    else            printf(&quot;ímpar\n&quot;);
+    return 0;
+}
+</code></pre>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Usando <code>else if</code>, classifique uma temperatura em: "congelando" (&lt; 0), "frio" (0 a 15), "agradável" (16 a 25) ou "quente" (&gt; 25).</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A ordem das faixas precisa ser coerente (do menor para o maior, aproveitando o corte anterior):</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main(void) {
+    double t = 22.0;
+    if (t &lt; 0)        printf(&quot;congelando\n&quot;);
+    else if (t &lt;= 15) printf(&quot;frio\n&quot;);
+    else if (t &lt;= 25) printf(&quot;agradável\n&quot;);
+    else              printf(&quot;quente\n&quot;);
+    return 0;
+}
+</code></pre>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Reescreva a classificação de vogal/consoante do artigo usando <code>if</code>/<code>else if</code> em vez de <code>switch</code>. Qual das duas versões você acha mais legível, e por quê?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Uma versão com <code>if</code>:</p>
+<pre><code class="language-c">if (c=='a' || c=='e' || c=='i' || c=='o' || c=='u')
+    printf(&quot;Vogal\n&quot;);
+else
+    printf(&quot;Consoante\n&quot;);
+</code></pre>
+<p>O <code>switch</code> com <em>fall-through</em> costuma ser mais legível quando há muitos valores discretos e explícitos (fica claro que são cinco casos agrupados). O <code>if</code> com <code>||</code> é mais compacto, mas a linha cresce e fica mais fácil errar um operador. Ambos são corretos; a escolha é de estilo.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Explique o que este trecho imprime e por quê: <code>int x = 5; if (x = 0) printf("A\n"); else printf("B\n");</code></p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Imprime <strong>B</strong>. O <code>if (x = 0)</code> <strong>atribui</strong> 0 a <code>x</code> (não compara). O resultado da atribuição é 0, que é falso, então o <code>else</code> roda e imprime "B". De quebra, <code>x</code> agora vale 0. É exatamente a armadilha do <code>=</code> no lugar de <code>==</code>.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Escreva um <code>switch</code> que receba um caractere de operação (<code>'+'</code>, <code>'-'</code>, <code>'*'</code>, <code>'/'</code>) e dois números <code>double</code>, e imprima o resultado da conta correspondente. Trate a divisão por zero.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main(void) {
+    char op = '/';
+    double a = 10.0, b = 0.0;
+    switch (op) {
+        case '+': printf(&quot;%.2f\n&quot;, a + b); break;
+        case '-': printf(&quot;%.2f\n&quot;, a - b); break;
+        case '*': printf(&quot;%.2f\n&quot;, a * b); break;
+        case '/':
+            if (b != 0.0) printf(&quot;%.2f\n&quot;, a / b);
+            else          printf(&quot;Erro: divisão por zero\n&quot;);
+            break;
+        default:  printf(&quot;Operação inválida\n&quot;);
+    }
+    return 0;
+}
+</code></pre>
+<p>Aqui o <code>if (b != 0.0)</code> protege a conta antes de dividir — a mesma disciplina defensiva que o C sempre pede de você.</p>
+</div>
+</details>
+

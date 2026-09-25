@@ -1,0 +1,69 @@
+<p>Todo grande aprendizado começa com um mapa. Antes de escrevermos a primeira linha de código de verdade, quero mostrar aonde vamos chegar e por qual caminho. Não é um catálogo de tópicos soltos: é uma escalada planejada, em que cada aula apoia a próxima. Você vai começar imprimindo texto na tela e vai terminar escrevendo um programa que cria processos, conversa pela rede e gerencia sua própria memória. Um ano, cinquenta e duas aulas, um arco só.</p>
+<p>Este artigo é o seu guia. Guarde-o e volte a ele sempre que quiser saber "onde estou e o que vem depois".</p>
+<h3>Como esta série pensa</h3>
+<p>Três princípios orientam cada aula. Primeiro, <strong>nada de saltos</strong>: cada conceito só aparece depois que você tem a base para entendê-lo. Não falo de <code>malloc</code> antes de você entender a memória; não falo de listas encadeadas antes de você dominar ponteiros. Segundo, <strong>código que roda</strong>: todo artigo traz exemplos completos, que compilam e executam, mais cinco exercícios com respostas para você fixar na prática. Terceiro, <strong>honestidade sobre o perigo</strong>: o C é uma linguagem que confia em você e não perdoa descuidos. Em vez de esconder isso, vou apontar cada armadilha no momento certo — porque saber onde estão os buracos é o que separa quem programa em C de quem apenas tropeça nele.</p>
+<h3>As nove fases da escalada</h3>
+<p><strong>Fase 1 — Fundamentos da Linguagem (aulas 01 a 06).</strong> O alicerce. Você entende de onde o C veio e por que ainda importa, aprende a guardar dados em variáveis, a organizar código em funções, a fazer o programa tomar decisões e repetir tarefas, e dá o primeiro passo dentro da memória com os vetores. Ao fim desta fase, você já escreve programas completos e úteis.</p>
+<p><strong>Fase 2 — Ponteiros e Gerenciamento de Memória (aulas 07 a 13).</strong> O coração do C, e a fase que separa o iniciante do programador de verdade. Você vai descobrir o que é um endereço de memória, como manipulá-lo, como o C organiza a pilha e o heap, e como pedir e devolver memória em tempo de execução. É aqui que quase tudo o que parecia misterioso nas fases anteriores se revela. Ao fim, você entende o que <strong>realmente</strong> acontece quando um programa roda.</p>
+<p><strong>Fase 3 — Tipos Compostos e Organização do Código (aulas 14 a 20).</strong> Você deixa de usar só os tipos prontos e passa a criar os seus, com structs, unions e enums. Aprende também a espalhar um projeto por vários arquivos com cabeçalhos, e a dominar o pré-processador. Ao fim, seu código deixa de ser um único arquivo gigante e vira um projeto organizado.</p>
+<p><strong>Fase 4 — Entrada, Saída e a Biblioteca Padrão (aulas 21 a 27).</strong> O programa passa a conversar com o mundo: lê e grava arquivos de texto e binários, usa a rica biblioteca padrão do C e aprende um recurso poderoso — os ponteiros para função, que permitem tratar comportamento como dado. Ao fim, seus programas persistem informação e reaproveitam algoritmos prontos.</p>
+<p><strong>Fase 5 — Algoritmos e Estruturas de Dados (aulas 28 a 35).</strong> Com ponteiros dominados, construímos as estruturas que só existem por causa deles: listas encadeadas, pilhas, filas, árvores e tabelas hash. Passamos também por recursão e manipulação de bits. Ao fim, você implementa do zero as estruturas que outras linguagens te dão prontas — e entende como elas funcionam por dentro.</p>
+<p><strong>Fase 6 — Ferramentas Profissionais (aulas 36 a 42).</strong> Ninguém programa em C sério sem ferramentas. Você aprende a depurar com o GDB, a caçar bugs de memória com Valgrind e sanitizers, a automatizar a compilação com Make e CMake, e a tratar erros de forma idiomática. Ao fim, você trabalha como um profissional, não como um amador que compila no escuro.</p>
+<p><strong>Fase 7 — Qualidade e Boas Práticas (aulas 43 a 46).</strong> A diferença entre código que funciona e código que se pode manter. Nomes, funções bem desenhadas, programação defensiva, organização de projeto e noções de desempenho. Ao fim, seu código fica legível e confiável — para os outros e para o seu "eu" de daqui a seis meses.</p>
+<p><strong>Fase 8 — Programação de Sistemas (aulas 47 a 51).</strong> O C em seu habitat natural, conversando diretamente com o sistema operacional: criação de processos, threads, sincronização, sockets de rede e sinais. Ao fim, você toca no motivo pelo qual sistemas operacionais inteiros são escritos nesta linguagem.</p>
+<p><strong>Fase 9 — Fechamento (aula 52).</strong> Um projeto capstone do zero, integrando tudo, seguido de uma retrospectiva de tudo que percorremos. Ao fim, você não terá "estudado C" — você terá <strong>construído</strong> algo real em C.</p>
+<h3>Uma palavra sobre o percurso</h3>
+<p>Como cada aula é escrita passo a passo, um ou outro título pode ser ajustado no caminho: um tema denso pode render duas aulas, dois temas afins podem se juntar. Mas o arco é firme, e é ele que importa. Se você seguir na ordem, sem pular ponteiros para chegar logo às "coisas legais", vai construir uma base que raramente se vê. A pressa é a maior inimiga de quem aprende C.</p>
+<h3>Como aproveitar cada aula</h3>
+<p>Leia com o editor aberto ao lado. Não copie e cole os exemplos — <strong>digite-os</strong>. Errar de propósito ensina: apague um ponto e vírgula, troque um <code>%d</code> por <code>%f</code>, e leia o que o compilador diz. Faça os cinco exercícios antes de ver as respostas. E compile sempre com <code>gcc -Wall -Wextra</code>, para o compilador virar seu professor particular, apontando os deslizes antes que virem bugs.</p>
+<p>Está com o mapa nas mãos. A escalada começa na próxima aula, com o primeiro programa. Nos vemos lá.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><a href="https://books.google.com/books/about/The_C_Programming_Language.html?id=FGkPBQAAQBAJ" target="_blank" rel="noopener noreferrer"><em>The C Programming Language</em></a> (K&amp;R), Kernighan &amp; Ritchie — o clássico que acompanha toda a série</li>
+<li><em>Modern C</em>, Jens Gustedt — livro gratuito e atualizado, ótimo complemento — <a href="https://gustedt.gitlabpages.inria.fr/modern-c/" target="_blank" rel="noopener noreferrer">https://gustedt.gitlabpages.inria.fr/modern-c/</a></li>
+<li>cppreference — a referência técnica que consultaremos aula após aula — <a href="https://en.cppreference.com/w/c" target="_blank" rel="noopener noreferrer">https://en.cppreference.com/w/c</a></li>
+<li><a href="https://openlibrary.org/isbn/9780393979503" target="_blank" rel="noopener"><em>C Programming: A Modern Approach</em></a>, K. N. King — livro-texto didático, excelente para aprofundar</li>
+<li>GCC Documentation — o manual do compilador que usaremos do início ao fim — <a href="https://gcc.gnu.org/onlinedocs/" target="_blank" rel="noopener noreferrer">https://gcc.gnu.org/onlinedocs/</a></li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Instale um compilador C na sua máquina (GCC ou Clang) e confirme a instalação rodando <code>gcc --version</code> (ou <code>clang --version</code>) no terminal. Anote a versão que apareceu.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Em máquinas Linux e macOS, o GCC ou o Clang costumam já estar instalados ou disponíveis via gerenciador de pacotes (<code>sudo apt install gcc build-essential</code> no Debian/Ubuntu; Xcode Command Line Tools no macOS). No Windows, instale o MinGW-w64 ou use o WSL. O comando <code>gcc --version</code> deve responder com uma linha de versão — se responder, o passo está cumprido; a versão exata não importa para o curso.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Configure um editor com suporte a C (por exemplo, VS Code com a extensão C/C++, ou Vim/Neovim, ou CLion). Crie uma pasta chamada <code>curso-c</code> onde você guardará uma subpasta por aula.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Não há resposta única: o objetivo é ter um ambiente confortável e uma organização de pastas. Uma subpasta por aula (<code>aula-01</code>, <code>aula-02</code>, ...) facilita revisitar exemplos e comparar seu progresso ao longo do ano.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Compile um programa mínimo (<code>int main(void){return 0;}</code>) com <code>gcc -Wall -Wextra teste.c -o teste</code> e confirme que ele compila sem avisos.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Se <code>gcc -Wall -Wextra teste.c -o teste</code> não imprimir nada e criar o executável <code>teste</code>, está tudo certo — nenhum aviso é o resultado esperado para um <code>main</code> vazio. Se aparecer erro, provavelmente há um problema de digitação no arquivo ou o compilador não está no PATH.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Olhando o mapa das nove fases, identifique em qual fase está o tema que mais te atrai e em qual está o que mais te intimida. Escreva uma frase sobre cada.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Exercício de reflexão, sem gabarito. O propósito é você começar a série com consciência do próprio ponto de partida — é comum, por exemplo, que "ponteiros" (Fase 2) sejam o tema intimidante e "estruturas de dados" ou "programação de sistemas" sejam os atraentes. Reconhecer isso agora ajuda a manter o foco quando a Fase 2 chegar.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Defina sua meta de ritmo: quantas aulas por semana você pretende fazer as 52 em cerca de um ano? Calcule e anote.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Uma conta simples: 52 aulas ÷ 52 semanas = 1 aula por semana para um ano redondo. Duas por semana concluem em cerca de seis meses; três, em pouco mais de quatro. O ritmo ideal é o que você <strong>sustenta</strong> sem pular os exercícios — constância vale mais que velocidade.</p>
+</div>
+</details>
+

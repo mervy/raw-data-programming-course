@@ -1,0 +1,73 @@
+<p>Quando voc&ecirc; acessa um site, preenche um formul&aacute;rio, faz login em uma plataforma ou compra algo em uma loja virtual, existe uma grande chance de que, nos bastidores, um servidor esteja rodando PHP. Discreta, por&eacute;m onipresente, essa linguagem de programa&ccedil;&atilde;o completou trinta anos de exist&ecirc;ncia e continua sendo uma das mais utilizadas no mundo &mdash; n&atilde;o por in&eacute;rcia, mas porque ela evoluiu de forma consistente e resolveu problemas reais com eleg&acirc;ncia crescente.</p>
+<p>Este primeiro artigo n&atilde;o &eacute; sobre c&oacute;digo. &Eacute; sobre contexto. Antes de aprender a sintaxe, voc&ecirc; precisa entender o terreno onde est&aacute; pisando: o que o PHP &eacute;, o que ele n&atilde;o &eacute;, e por que vale a pena dedicar um ano inteiro ao seu dom&iacute;nio.</p>
+<h2>O que &eacute; o PHP, tecnicamente falando</h2>
+<p>PHP &eacute; uma linguagem de programa&ccedil;&atilde;o de prop&oacute;sito geral, com foco hist&oacute;rico no desenvolvimento web. Ela &eacute; <strong>interpretada</strong> (o c&oacute;digo &eacute; executado linha a linha, sem necessidade de compila&ccedil;&atilde;o pr&eacute;via), <strong>dinamicamente tipada</strong> (voc&ecirc; n&atilde;o precisa declarar o tipo das vari&aacute;veis antecipadamente) e roda principalmente no <strong>lado do servidor</strong>.</p>
+<p>Essa &uacute;ltima caracter&iacute;stica &eacute; fundamental. Ao contr&aacute;rio do JavaScript, que executa no navegador do usu&aacute;rio, o PHP executa na m&aacute;quina do servidor. O usu&aacute;rio nunca v&ecirc; o c&oacute;digo PHP &mdash; ele recebe apenas o resultado, geralmente em HTML. Isso traz vantagens importantes: a l&oacute;gica de neg&oacute;cio fica protegida no servidor, o resultado funciona em qualquer navegador, e voc&ecirc; tem controle total sobre o que &eacute; entregue ao cliente.</p>
+<p>O PHP se integra naturalmente ao HTML, conecta-se a praticamente qualquer banco de dados do mercado, manipula arquivos, envia e-mails, consome APIs externas, gera PDFs, processa imagens e muito mais. &Eacute; uma linguagem completa para o back-end web.</p>
+<h2>Por que aprender PHP hoje?</h2>
+<p>Essa pergunta merece uma resposta honesta, n&atilde;o um discurso de vendas.</p>
+<p>O PHP alimenta mais de 75% dos sites com back-end identific&aacute;vel na internet. O WordPress &mdash; que move cerca de 43% de todos os sites do mundo &mdash; &eacute; escrito em PHP. O Laravel, framework PHP moderno, &eacute; consistentemente eleito um dos frameworks web mais amados pelos desenvolvedores em pesquisas anuais como a Stack Overflow Developer Survey.</p>
+<p>O mercado de trabalho para PHP &eacute; vasto e real. H&aacute; uma enorme base de sistemas legados que precisam de manuten&ccedil;&atilde;o, moderniza&ccedil;&atilde;o e novos recursos. E h&aacute; tamb&eacute;m um ecossistema moderno e vibrante, com ferramentas, padr&otilde;es e comunidade ativos.</p>
+<p>Aprender PHP significa ter acesso imediato a oportunidades de emprego, &agrave; possibilidade de criar projetos pr&oacute;prios com rapidez, e a uma base s&oacute;lida que facilita o aprendizado de outros frameworks e linguagens.</p>
+<h2>O que o PHP n&atilde;o &eacute;</h2>
+<p>&Eacute; importante desmistificar algumas cr&iacute;ticas que voc&ecirc; certamente vai encontrar.</p>
+<p>"PHP &eacute; uma linguagem ruim." Essa afirma&ccedil;&atilde;o &eacute; baseada, em grande parte, no PHP das vers&otilde;es 3 e 4, da virada do mil&ecirc;nio. O PHP moderno, a partir da vers&atilde;o 7 e especialmente na vers&atilde;o 8, &eacute; uma linguagem bem projetada, com sistema de tipos robusto, orienta&ccedil;&atilde;o a objetos madura e ferramentas de qualidade.</p>
+<p>"PHP &eacute; lento." Falso para o PHP moderno. O PHP 8 com JIT (Just-In-Time compiler) &eacute; significativamente mais r&aacute;pido que vers&otilde;es anteriores e compete com outras linguagens interpretadas em cen&aacute;rios web reais.</p>
+<p>"PHP est&aacute; morrendo." Os dados contradizem isso consistentemente. Novas vers&otilde;es s&atilde;o lan&ccedil;adas regularmente, o Laravel continua crescendo, e a comunidade &eacute; ativa e produtiva.</p>
+<p>Nada do que veio at&eacute; aqui era c&oacute;digo, e ainda assim decide como voc&ecirc; vai escrever o primeiro. Saber que a execu&ccedil;&atilde;o acontece no servidor muda o que voc&ecirc; confia ao navegador; saber que a tipagem &eacute; din&acirc;mica muda o cuidado que voc&ecirc; toma com o dado que chega de fora; e saber que as cr&iacute;ticas mais repetidas descrevem uma vers&atilde;o aposentada da linguagem poupa muita discuss&atilde;o in&uacute;til. O caminho agora &eacute; ver de onde essa linguagem veio &mdash; porque boa parte das esquisitices que voc&ecirc; vai encontrar s&oacute; faz sentido &agrave; luz da hist&oacute;ria dela.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><strong><a href="https://www.php.net/manual/pt_BR/" target="_blank" rel="noopener">php.net/manual/pt_BR</a></strong> &mdash; Manual oficial do PHP em portugu&ecirc;s. Ponto de partida obrigat&oacute;rio para qualquer d&uacute;vida sobre a linguagem.</li>
+<li><strong><a href="https://stackoverflow.com/questions/tagged/php" target="_blank" rel="noopener">stackoverflow.com/questions/tagged/php</a></strong> &mdash; Maior reposit&oacute;rio de perguntas e respostas sobre PHP do mundo.</li>
+<li><strong><a href="https://www.jetbrains.com/lp/devecosystem-2023/" target="_blank" rel="noopener">jetbrains.com/lp/devecosystem</a></strong> &mdash; Pesquisa anual de ecossistema de desenvolvimento, com dados reais sobre uso de linguagens.</li>
+<li><strong><a href="https://w3techs.com/technologies/details/pl-php" target="_blank" rel="noopener">w3techs.com/technologies/details/pl-php</a></strong> &mdash; Estat&iacute;sticas atualizadas sobre uso de PHP na web.</li>
+<li>TATROE, Kevin; MACINTYRE, Peter. <a href="https://openlibrary.org/works/OL19548412W" target="_blank" rel="noopener"><em>Programming PHP</em></a>. 4. ed. O'Reilly Media, 2020. &mdash; Refer&ecirc;ncia completa da linguagem, do b&aacute;sico ao avan&ccedil;ado.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Um colega guarda a chave da API de pagamento numa constante do JavaScript e argumenta: "é o mesmo que fazer em PHP, o usuário não vai olhar". Explique por que não é o mesmo.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A diferença não é de opinião, é de <strong>onde o código roda</strong>. O JavaScript da página é baixado pelo navegador para ser executado lá — o arquivo inteiro está na máquina do usuário, e basta abrir as ferramentas do desenvolvedor, ou a aba de rede, para ler qualquer valor dentro dele. Minificar não esconde nada: é só texto embaralhado. Já o PHP é executado no servidor e <strong>nunca sai de lá</strong>; o navegador recebe apenas o resultado, em geral HTML. Se a chave está numa variável PHP, o usuário não tem como alcançá-la, porque não tem como alcançar o código. O teste mental que resolve a discussão é este: <em>o que o usuário recebe é o programa ou é a saída do programa?</em> No navegador, ele recebe o programa. E o agravante é que uma chave exposta assim não fica só à vista de quem procura — rastreadores varrem repositórios e bundles públicos justamente atrás desse padrão, e a chave costuma ser usada antes de alguém perceber. Quando o front-end precisa mesmo falar com o serviço, a saída é o servidor intermediar a chamada, ou emitir um token de curta duração e escopo restrito, que é feito para ser público.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>"PHP é lento" — o artigo responde que o PHP 8 tem JIT. Se você ligar o JIT na sua aplicação web, o que espera medir? E o que realmente costuma acelerar um site em PHP?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Espere medir <strong>quase nada</strong> — e essa é a resposta que separa quem leu a manchete de quem entendeu o mecanismo. O JIT compila trechos quentes para código de máquina, e brilha em carga <strong>limitada por CPU</strong>: laços numéricos longos, processamento de imagem, cálculo matemático. Uma aplicação web típica não é isso: ela passa a maior parte do tempo <strong>esperando</strong> — o banco responder, o disco ler, a API externa voltar. Acelerar a parte que não era o gargalo não muda o tempo total. O que de fato acelera um site em PHP é o <strong>OPcache</strong>, e ele é anterior ao JIT: sem ele, cada requisição recompila todos os arquivos <code>.php</code> do zero, todas as vezes; com ele, o bytecode fica em memória compartilhada e a recompilação some. Em produção, <code>opcache.validate_timestamps=0</code> ainda evita que o PHP verifique a data de cada arquivo a cada requisição (ao custo de exigir recarga do FPM no deploy). Depois disso, os ganhos reais estão fora da linguagem: índice no banco, resolver o N+1 de consultas, cache de resultado, e não abrir conexão nova a cada chamada. Ligar o JIT antes de ter OPcache configurado e consulta indexada é otimizar a etapa errada.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>O artigo diz que o PHP é dinamicamente tipado. Este código passa pelo interpretador sem reclamar nada. Qual é o problema, e como fechá-lo?</p>
+<pre><code class="language-php">&lt;?php
+function calcularDesconto($preco, $percentual) {
+    return $preco - ($preco * $percentual / 100);
+}
+
+echo calcularDesconto("199,90", "10");  // ?</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O resultado é <code>179.1</code> — e está errado, embora nada tenha falhado. A string <code>"199,90"</code> usa vírgula decimal, e o PHP, ao convertê-la para número, lê os dígitos até o primeiro caractere inválido: vira <strong>199</strong>, e os centavos desaparecem em silêncio. Esse é o custo real da tipagem dinâmica: o erro não aparece onde foi cometido, e sim várias camadas adiante, quando alguém percebe que o total do relatório não fecha. Fechar o buraco tem duas partes. A primeira é <strong>declarar os tipos</strong> na assinatura: <code>function calcularDesconto(float $preco, float $percentual): float</code>. A segunda, sem a qual a primeira engana, é <code>declare(strict_types=1);</code> no topo do arquivo — sem ele o PHP ainda <em>coage</em> a string para float e o defeito continua, apenas mais escondido; com ele, a chamada lança <code>TypeError</code> na hora. O terceiro cuidado é converter na <strong>fronteira</strong>: dado que chega de formulário é sempre string, e a conversão de "199,90" para <code>199.90</code> é trabalho de quem recebe a entrada, não da função de cálculo. E, para valor monetário, o mais seguro é nem usar float: trabalhar em centavos inteiros evita que <code>0.1 + 0.2</code> deixe de ser <code>0.3</code>.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>O artigo informa que o WordPress move cerca de 43% dos sites do mundo. Traduza esse número em consequência prática para quem está aprendendo PHP agora.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A consequência é que <strong>a maior parte das vagas de PHP é de manutenção, não de criação</strong> — e isso muda o que vale a pena estudar. Um mercado formado por milhões de instalações de WordPress, Magento e sistemas internos antigos demanda, no dia a dia, ler código que você não escreveu, entender uma base legada sem documentação, migrar versão, corrigir falha de segurança e integrar com o que já existe. É um tipo de competência diferente da de começar um projeto do zero com o framework da moda, e costuma ser mal preparada pelos cursos, que só ensinam a partir da folha em branco. Há duas leituras erradas comuns. A primeira é concluir que basta aprender WordPress: quem só sabe o plugin, e não a linguagem embaixo dele, trava no primeiro problema que não está no painel. A segunda é desprezar o legado como se fosse trabalho menor — é onde está o dinheiro, e onde se aprende mais rápido, porque sistema em produção ensina com consequência. A leitura útil é: aprender PHP de verdade dá acesso tanto ao ecossistema moderno (Laravel, APIs, filas) quanto a essa base instalada gigantesca, e quem transita nos dois lados é raro.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p><strong>Desafio:</strong> uma cliente quer um sistema de reservas para três salas, com agenda, e-mail de confirmação e relatório mensal. Prazo curto, um desenvolvedor, hospedagem compartilhada. Defenda a escolha do PHP — e diga em que cenário você mudaria de ideia.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Para esse caso o PHP é a escolha mais fácil de defender, e o argumento decisivo é a <strong>hospedagem</strong>: o requisito "compartilhada" praticamente elimina as alternativas. Um plano compartilhado já vem com PHP, Apache ou Nginx, MySQL e envio de e-mail configurados; o deploy pode ser um <code>git pull</code>, e não há processo para manter vivo, nem supervisor, nem contêiner. Rodar Node, Python ou Go no mesmo plano costuma exigir VPS, o que muda o custo e adiciona administração de servidor a um projeto de um desenvolvedor só. Os demais requisitos reforçam: reserva de sala é CRUD com regra de conflito de horário, relatório mensal é consulta agregada, e-mail é tarefa resolvida — Laravel entrega autenticação, validação, agendador e envio de e-mail prontos, e o prazo curto é exatamente o cenário em que framework maduro vale mais que preferência pessoal. Eu mudaria de ideia em três situações, todas sobre o <strong>modelo de execução</strong>: se a agenda precisasse ser colaborativa em tempo real, com várias pessoas vendo a mesma tela atualizar (conexão persistente não combina com o processo-por-requisição); se houvesse processamento pesado e contínuo, como transcodificar vídeo, que ocuparia os <em>workers</em> do FPM; ou se a equipe que vai manter já dominasse outra stack — a linguagem que o time sabe manter costuma vencer a que é tecnicamente marginalmente melhor.</p>
+</div>
+</details>
+

@@ -1,0 +1,212 @@
+<p>No artigo <em>O Mapa da Jornada: de C a C++ em 52 Passos</em> desenhamos o mapa e compilamos um "Olá, C++!" quase sem explicar por quê. Prometi que a partir daqui todo código roda de verdade e que começaríamos pelo que muda de imediato ao sair do C. Cumpro a promessa aqui atacando três coisas que você vê logo na primeira linha de qualquer programa C++: o <code>#include &lt;iostream&gt;</code> no lugar do <code>&lt;stdio.h&gt;</code>, o <code>std::cout</code> no lugar do <code>printf</code>, e esse prefixo <code>std::</code> que aparece grudado em quase tudo. Por trás desses três detalhes está a filosofia inteira da linguagem — e entendê-la agora vai poupar você de muita confusão adiante.</p>
+<h3>Por que o C++ existe (e no que ele discorda do C)</h3>
+<p>O C foi projetado para ser uma camada finíssima sobre o hardware: o que você escreve é quase exatamente o que a máquina executa. Isso o torna previsível e rápido, mas joga toda a responsabilidade nas suas costas — é você quem libera memória, verifica tipos e evita erros. O C++ nasceu da tese de Bjarne Stroustrup de que dava para manter essa performance de C e, ao mesmo tempo, deixar o compilador trabalhar mais a seu favor: pegar erros antes de o programa rodar, deixar os recursos se auto-gerenciarem, e permitir abstrações que não custam nada em tempo de execução. Essa última ideia tem nome — <em>zero-overhead abstraction</em> — e é o lema da casa: você não paga pelo que não usa, e o que usa é tão eficiente quanto se tivesse escrito à mão em C. Guarde essa promessa; ela explica por que tantos recursos "de alto nível" que veremos (ponteiros inteligentes, iteradores, lambdas) não deixam o programa mais lento.</p>
+<h3>Streams: o fim da string de formato</h3>
+<p>Em C, você imprime assim:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int idade = 30;
+    printf(&quot;Idade: %d\n&quot;, idade);  // você promete que 'idade' é um int
+    return 0;
+}
+</code></pre>
+<p>O <code>%d</code> é uma promessa que <em>você</em> faz ao compilador: "aqui vai um <code>int</code>". Se você mentir — passar um <code>double</code>, ou trocar a ordem dos argumentos — o compilador raramente reclama, e o programa imprime lixo ou quebra. Em C++, a saída é feita por <em>streams</em>, e a promessa some:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;   // std::cout, std::cin, std::endl vivem aqui
+
+int main() {
+    int idade = 30;
+    // O operador &lt;&lt; descobre SOZINHO que 'idade' é int e imprime como int.
+    // Sem string de formato, sem chance de descasar tipo e argumento.
+    std::cout &lt;&lt; &quot;Idade: &quot; &lt;&lt; idade &lt;&lt; '\n';
+    return 0;
+}
+</code></pre>
+<p>O <code>std::cout</code> é o fluxo de saída padrão (equivalente ao <code>stdout</code>), e <code>&lt;&lt;</code> é o operador de inserção: ele "empurra" o valor para dentro do fluxo. A mágica é que <code>&lt;&lt;</code> está <em>sobrecarregado</em> para cada tipo — existe uma versão para <code>int</code>, outra para <code>double</code>, outra para <code>std::string</code> — e o compilador escolhe a certa em tempo de compilação, olhando o tipo real do dado. Você nunca mais descasa <code>%d</code> de um <code>double</code>. A contrapartida honesta: a formatação numérica fina (casas decimais, alinhamento, preenchimento) é mais verbosa com streams do que com <code>printf</code>, e voltaremos a ela quando fizer diferença.</p>
+<p>A entrada é simétrica. Onde em C você usava <code>scanf("%d", &amp;idade)</code> — com aquele <code>&amp;</code> obrigatório e fácil de esquecer —, em C++ você usa <code>std::cin</code> com o operador <code>&gt;&gt;</code>:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+
+int main() {
+    int idade;
+    std::cout &lt;&lt; &quot;Digite sua idade: &quot;;
+    // &gt;&gt; lê da entrada e escreve direto na variável.
+    // Repare: NÃO precisa do &amp; que o scanf exigia.
+    std::cin &gt;&gt; idade;
+    std::cout &lt;&lt; &quot;Ano que vem você terá &quot; &lt;&lt; idade + 1 &lt;&lt; &quot; anos.\n&quot;;
+    return 0;
+}
+</code></pre>
+<p>Some o <code>&amp;</code>. Some a string de formato. O <code>std::cin &gt;&gt; idade</code> sabe que <code>idade</code> é um <code>int</code> e lê um inteiro. Se o usuário digitar texto em vez de número, o stream entra num estado de erro em vez de corromper a memória — tratar esse estado é assunto de uma aula futura, mas note desde já que o <em>default</em> aqui é falhar com segurança, não com um comportamento indefinido.</p>
+<h3>Namespaces e o mistério do <code>std::</code></h3>
+<p>Falta explicar esse <code>std::</code> colado em <code>cout</code>, <code>cin</code> e <code>endl</code>. Em C, todos os nomes vivem num único saco global: se a biblioteca padrão tem uma função <code>count</code> e você também cria uma <code>count</code>, há conflito, e o remédio clássico era prefixar tudo à mão (<code>minhalib_count</code>, <code>outralib_count</code>). O C++ resolve isso com <strong>namespaces</strong>: gavetas nomeadas onde os nomes moram. Toda a biblioteca padrão vive na gaveta chamada <code>std</code>, e <code>std::cout</code> significa literalmente "o <code>cout</code> que está dentro de <code>std</code>". O <code>::</code> é o operador de resolução de escopo — ele diz "procure este nome dentro daquela gaveta".</p>
+<p>Você <em>pode</em> pedir para abrir a gaveta e não repetir o prefixo:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;   // traz TODOS os nomes de std para o escopo atual
+
+int main() {
+    cout &lt;&lt; &quot;Sem prefixo agora\n&quot;;  // funciona, mas...
+    return 0;
+}
+</code></pre>
+<p>Isso compila e muita gente faz — mas eu vou te pedir para <strong>não</strong> fazer, e a honestidade sobre o trade-off é o ponto. O <code>using namespace std;</code> despeja centenas de nomes no seu escopo, e um deles pode colidir com algo seu (a STL tem <code>count</code>, <code>distance</code>, <code>swap</code>, <code>data</code>... nomes tão comuns que você provavelmente já usou). Em programas pequenos raramente dói; em código real e em cabeçalhos, é fonte de bugs sutis. O meio-termo idiomático é abrir só o que você usa:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+
+int main() {
+    using std::cout;   // traz apenas 'cout' para este escopo
+    cout &lt;&lt; &quot;Só o cout foi importado\n&quot;;
+    // std::cin continua exigindo o prefixo — o que é bom: fica explícito
+    return 0;
+}
+</code></pre>
+<p>Ao longo da série eu vou manter o <code>std::</code> explícito na maioria dos exemplos. Não é preciosismo: escrever <code>std::sort</code> deixa claro para quem lê que aquele <code>sort</code> é o da biblioteca padrão, e não uma função sua. Clareza vale mais que economia de cinco caracteres.</p>
+<h3>Juntando tudo</h3>
+<p>Um programa completo que lê dois números e imprime a soma reúne as três ideias — streams de entrada e saída, e o namespace <code>std</code> — num exemplo que já é C++ idiomático, não C disfarçado:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+
+int main() {
+    std::cout &lt;&lt; &quot;Programa da soma. Digite dois inteiros separados por espaço: &quot;;
+
+    int a, b;
+    std::cin &gt;&gt; a &gt;&gt; b;   // o &gt;&gt; pode ser encadeado: lê a, depois b
+
+    // A saída também encadeia: texto, número, texto, número...
+    std::cout &lt;&lt; a &lt;&lt; &quot; + &quot; &lt;&lt; b &lt;&lt; &quot; = &quot; &lt;&lt; (a + b) &lt;&lt; '\n';
+
+    return 0;
+}
+</code></pre>
+<p>Compile e rode com a linha que fixamos no artigo <em>O Mapa da Jornada: de C a C++ em 52 Passos</em>:</p>
+<pre><code class="language-bash">g++ -std=c++20 -Wall -Wextra soma.cpp -o soma
+./soma
+# Digite: 7 5
+# Saída: 7 + 5 = 12
+</code></pre>
+<p>Nenhum <code>&amp;</code>, nenhum <code>%d</code>, nenhum prefixo artesanal em nomes. É pouco código, mas cada linha marca uma diferença concreta com o C que você já conhecia.</p>
+<p>A troca do <code>printf</code> pelo <code>cout</code> não é questão de gosto. A string de formato é um contrato que o compilador do C não conferia, e cada <code>%d</code> desalinhado com o argumento virava comportamento indefinido — daquele tipo que funciona na sua máquina e corrompe a pilha na do cliente. O stream move essa verificação para a compilação. E o <code>std::</code> que incomoda no começo é o preço de nomes que não colidem, em vez do prefixo manual que o C obrigava. Os dois são a mesma ideia: o compilador trabalhando mais para você errar menos.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li>Bjarne Stroustrup, <a href="https://www.stroustrup.com/tour3.html" target="_blank" rel="noopener"><em>A Tour of C++</em></a> (3ª ed.), Capítulo 1 ("The Basics"): apresenta streams e namespaces exatamente no espírito desta aula, direto do criador da linguagem.</li>
+<li><a href="https://cppreference.com/w/cpp/io/cout" target="_blank" rel="noopener noreferrer">cppreference.com/w/cpp/io/cout</a> e /w/cpp/io/cin: a documentação precisa dos dois streams que usamos hoje, com todas as sobrecargas do operador.</li>
+<li><a href="https://cppreference.com/w/cpp/language/namespace" target="_blank" rel="noopener noreferrer">cppreference.com/w/cpp/language/namespace</a>: referência completa sobre namespaces, o operador <code>::</code> e as formas do <code>using</code>.</li>
+<li>ISO C++ Core Guidelines, regra <a href="https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#rs-using-directive" target="_blank" rel="noopener">SF.7</a> ("Don't write <code>using namespace</code> at global scope in a header file"): a justificativa oficial para o conselho que dei sobre evitar o <code>using namespace std;</code>.</li>
+<li>Herb Sutter &amp; Andrei Alexandrescu, <a href="https://www.informit.com/store/c-plus-plus-coding-standards-101-rules-guidelines-and-best-9780321113580" target="_blank" rel="noopener"><em>C++ Coding Standards</em></a>: item sobre uso de namespaces e por que o prefixo explícito melhora a legibilidade em bases de código reais.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Escreva um programa que peça o nome do usuário e o cumprimente, imprimindo "Olá, &lt;nome&gt;!". Use <code>std::string</code> para guardar o nome (basta incluir <code>&lt;string&gt;</code>) e <code>std::cin &gt;&gt; nome</code> para ler uma palavra.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A leitura com <code>&gt;&gt;</code> pega apenas uma palavra (para no primeiro espaço), o que basta aqui:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;          // necessário para std::string
+
+int main() {
+    std::string nome;
+    std::cout &lt;&lt; &quot;Qual é o seu nome? &quot;;
+    std::cin &gt;&gt; nome;      // lê uma palavra
+    std::cout &lt;&lt; &quot;Olá, &quot; &lt;&lt; nome &lt;&lt; &quot;!\n&quot;;
+    return 0;
+}
+</code></pre>
+<p>Se você digitar "Maria Silva", só "Maria" será lido — porque <code>&gt;&gt;</code> para no espaço. Para ler a linha inteira existe <code>std::getline</code>, que veremos com calma na aula de strings.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Adapte o programa da soma para também imprimir a diferença, o produto e a divisão inteira de <code>a</code> por <code>b</code>, tudo em linhas separadas, num único encadeamento por linha.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Basta encadear cada operação em sua linha. Atenção à divisão por zero:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+
+int main() {
+    std::cout &lt;&lt; &quot;Digite dois inteiros: &quot;;
+    int a, b;
+    std::cin &gt;&gt; a &gt;&gt; b;
+
+    std::cout &lt;&lt; &quot;Soma:      &quot; &lt;&lt; (a + b) &lt;&lt; '\n';
+    std::cout &lt;&lt; &quot;Diferença: &quot; &lt;&lt; (a - b) &lt;&lt; '\n';
+    std::cout &lt;&lt; &quot;Produto:   &quot; &lt;&lt; (a * b) &lt;&lt; '\n';
+    if (b != 0)
+        std::cout &lt;&lt; &quot;Divisão:   &quot; &lt;&lt; (a / b) &lt;&lt; '\n';
+    else
+        std::cout &lt;&lt; &quot;Divisão:   indefinida (b = 0)\n&quot;;
+    return 0;
+}
+</code></pre>
+<p>Note que dividir inteiro por zero é comportamento indefinido em C++, exatamente como em C — por isso a checagem. O reflexo de C continua valendo aqui.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Corrija o código a seguir, que não compila, e explique o erro:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+int main() {
+    cout &lt;&lt; &quot;Testando&quot; &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O código não compila porque <code>cout</code> e <code>endl</code> vivem no namespace <code>std</code> e não há prefixo nem <code>using</code>. Duas correções válidas:</p>
+<pre><code class="language-cpp">// Opção A: prefixar (recomendada)
+#include &lt;iostream&gt;
+int main() {
+    std::cout &lt;&lt; &quot;Testando&quot; &lt;&lt; std::endl;
+    return 0;
+}
+</code></pre>
+<pre><code class="language-cpp">// Opção B: importar os nomes usados
+#include &lt;iostream&gt;
+int main() {
+    using std::cout;
+    using std::endl;
+    cout &lt;&lt; &quot;Testando&quot; &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+<p>O erro do compilador será algo como <code>'cout' was not declared in this scope</code> — a pista clássica de que faltou o <code>std::</code>.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>O programa abaixo tem um comportamento perigoso quando o usuário digita uma letra em vez de um número. Compile-o, digite <code>abc</code> quando ele pedir o número, e descreva o que acontece. (Ainda não vamos consertar — só observar.)</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+int main() {
+    int n;
+    std::cout &lt;&lt; &quot;Digite um número: &quot;;
+    std::cin &gt;&gt; n;
+    std::cout &lt;&lt; &quot;Você digitou: &quot; &lt;&lt; n &lt;&lt; '\n';
+    return 0;
+}
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Ao digitar <code>abc</code>, o <code>std::cin &gt;&gt; n</code> falha: como <code>n</code> é <code>int</code> e a entrada não é um número, o stream entra em estado de falha e <strong>não altera</strong> <code>n</code>. Como <code>n</code> foi declarado sem inicializar, ele contém lixo — e o programa imprime esse valor indeterminado (frequentemente <code>0</code> em muitos compiladores, mas isso não é garantido). O ponto pedagógico é duplo: primeiro, o C++ falhou com segurança (não corrompeu a memória, apenas não leu); segundo, uma variável não inicializada em C++ é tão perigosa quanto em C. Um bom hábito, que adotaremos, é sempre inicializar: <code>int n = 0;</code>. Como detectar e tratar o estado de falha do stream fica para depois.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Reescreva o exercício 1 usando <code>using std::cout;</code> e <code>using std::cin;</code> no início do <code>main</code>, sem prefixar as chamadas, mas mantendo <code>std::string</code> com prefixo. Isso compila? Por quê?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Sim, compila. O <code>using std::cout;</code> e <code>using std::cin;</code> trazem esses dois nomes específicos para o escopo do <code>main</code>, então você pode chamá-los sem prefixo; e <code>std::string</code>, que você não importou, continua exigindo o <code>std::</code>:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+int main() {
+    using std::cout;
+    using std::cin;
+
+    std::string nome;      // ainda com prefixo, pois não foi importado
+    cout &lt;&lt; &quot;Qual é o seu nome? &quot;;
+    cin &gt;&gt; nome;
+    cout &lt;&lt; &quot;Olá, &quot; &lt;&lt; nome &lt;&lt; &quot;!\n&quot;;
+    return 0;
+}
+</code></pre>
+<p>Isso ilustra o meio-termo idiomático: importar por nome o que você usa muito, mantendo o resto explícito. É mais seguro que <code>using namespace std;</code> e mais enxuto que prefixar tudo.</p>
+</div>
+</details>
+

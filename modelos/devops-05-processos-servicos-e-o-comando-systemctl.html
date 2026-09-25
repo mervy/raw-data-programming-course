@@ -1,0 +1,198 @@
+<p>Cada programa em execução no Linux — seja um servidor web, um agente de monitoramento, um script de backup ou o próprio shell — existe no sistema como um <strong>processo</strong>. Todo processo tem um identificador numérico único chamado <strong>PID</strong> (Process ID), um dono, um estado e um consumo de recursos.</p>
+<p>Saber como inspecionar, controlar e entender processos é uma habilidade cotidiana em DevOps. Quando uma aplicação trava, quando um servidor fica lento, quando um serviço não sobe — a investigação começa sempre pelos processos.</p>
+<h2>Inspecionando Processos em Execução</h2>
+<p>O comando mais direto para ver o que está rodando:</p>
+<pre><code class="language-bash">ps aux
+</code></pre>
+<p>A saída tem várias colunas. As mais importantes:</p>
+<pre><code>USER       PID  %CPU  %MEM  COMMAND
+root         1   0.0   0.1  /sbin/init
+www-data   842   0.3   1.2  nginx: worker process
+usuario   1203   0.1   0.5  bash
+</code></pre>
+<ul>
+<li><code>USER</code> — quem está rodando o processo</li>
+<li><code>PID</code> — identificador único do processo</li>
+<li><code>%CPU</code> e <code>%MEM</code> — consumo de recursos</li>
+<li><code>COMMAND</code> — o comando que originou o processo</li>
+</ul>
+<p>Para uma visão dinâmica, atualizada em tempo real — equivalente ao Gerenciador de Tarefas do Windows:</p>
+<pre><code class="language-bash">top
+</code></pre>
+<p>Uma alternativa mais visual e informativa, se disponível:</p>
+<pre><code class="language-bash">htop
+</code></pre>
+<p>Para instalar o <code>htop</code> caso não esteja presente:</p>
+<pre><code class="language-bash">sudo apt install htop   # Debian/Ubuntu
+</code></pre>
+<h2>Encontrando um Processo Específico</h2>
+<p>Combinando <code>ps</code> com <code>grep</code>:</p>
+<pre><code class="language-bash">ps aux | grep nginx
+</code></pre>
+<p>Ou de forma mais direta, com <code>pgrep</code>:</p>
+<pre><code class="language-bash">pgrep nginx          # Retorna apenas o PID
+pgrep -l nginx       # Retorna PID e nome
+</code></pre>
+<h2>Encerrando Processos com <code>kill</code></h2>
+<p>O comando <code>kill</code> envia um <strong>sinal</strong> ao processo. O sinal mais comum é o <code>SIGTERM</code> (15) — pede educadamente que o processo se encerre, permitindo que ele faça limpeza antes de sair:</p>
+<pre><code class="language-bash">kill 1203            # Envia SIGTERM ao processo de PID 1203
+</code></pre>
+<p>Quando o processo não responde ao <code>SIGTERM</code>, usa-se o <code>SIGKILL</code> (9) — encerramento forçado, imediato, sem chance de limpeza:</p>
+<pre><code class="language-bash">kill -9 1203
+</code></pre>
+<p>O <code>SIGKILL</code> deve ser o último recurso. Processos encerrados abruptamente podem deixar arquivos de lock, conexões abertas ou dados incompletos.</p>
+<p>Para encerrar todos os processos de um determinado nome:</p>
+<pre><code class="language-bash">pkill nginx
+</code></pre>
+<h2>Serviços e o systemd</h2>
+<p>Na maioria das distribuições Linux modernas, os serviços — programas que rodam em segundo plano continuamente, como Nginx, PostgreSQL, SSH — são gerenciados pelo <strong>systemd</strong>, o sistema de inicialização padrão do Linux.</p>
+<p>O systemd é responsável por:</p>
+<ul>
+<li>Iniciar serviços quando o sistema liga</li>
+<li>Reiniciar serviços que caíram</li>
+<li>Gerenciar dependências entre serviços</li>
+<li>Coletar os logs de cada serviço</li>
+</ul>
+<p>A interface de linha de comando do systemd é o <code>systemctl</code>.</p>
+<h2>Gerenciando Serviços com <code>systemctl</code></h2>
+<p>Os comandos fundamentais:</p>
+<pre><code class="language-bash"># Verifica o estado de um serviço
+sudo systemctl status nginx
+
+# Inicia um serviço
+sudo systemctl start nginx
+
+# Para um serviço
+sudo systemctl stop nginx
+
+# Reinicia completamente
+sudo systemctl restart nginx
+
+# Recarrega configuração sem derrubar o serviço
+sudo systemctl reload nginx
+
+# Habilita o serviço para iniciar automaticamente com o sistema
+sudo systemctl enable nginx
+
+# Desabilita o início automático
+sudo systemctl disable nginx
+
+# Habilita e já inicia de uma vez
+sudo systemctl enable --now nginx
+</code></pre>
+<p>A saída do <code>systemctl status</code> merece atenção:</p>
+<pre><code>● nginx.service - A high performance web server
+     Loaded: loaded (/lib/systemd/system/nginx.service; enabled)
+     Active: active (running) since Mon 2025-03-10 10:00:00 UTC; 2h ago
+   Main PID: 842 (nginx)
+</code></pre>
+<p>Os campos mais importantes são <code>Active</code> — que informa se o serviço está rodando — e <code>Loaded</code>, que mostra se está configurado para iniciar com o sistema (<code>enabled</code>) ou não (<code>disabled</code>).</p>
+<h2>Lendo Logs de Serviços com <code>journalctl</code></h2>
+<p>O systemd centraliza os logs de todos os serviços em um diário chamado <strong>journal</strong>. O comando para consultá-lo é <code>journalctl</code>:</p>
+<pre><code class="language-bash"># Logs de um serviço específico
+sudo journalctl -u nginx
+
+# Logs em tempo real (equivalente ao tail -f)
+sudo journalctl -u nginx -f
+
+# Logs das últimas 2 horas
+sudo journalctl -u nginx --since "2 hours ago"
+
+# Logs desde uma data específica
+sudo journalctl -u nginx --since "2025-03-10 08:00:00"
+</code></pre>
+<p>Em produção, <code>journalctl -u nome-do-servico -f</code> é frequentemente o primeiro comando executado quando algo começa a falhar.</p>
+<h2>Um Cenário Real: Diagnosticando um Serviço que Não Sobe</h2>
+<p>Suponha que o Nginx foi instalado mas não está respondendo. O processo de investigação segue uma lógica clara:</p>
+<pre><code class="language-bash"># 1. Verifica o estado
+sudo systemctl status nginx
+# Resultado: "failed" — o serviço tentou subir e falhou
+
+# 2. Lê os logs para entender o motivo
+sudo journalctl -u nginx --since "10 minutes ago"
+# Resultado: "nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)"
+
+# 3. Descobre quem está usando a porta 80
+sudo ss -tlnp | grep :80
+# Resultado: mostra outro processo ocupando a porta
+
+# 4. Encerra o processo conflitante ou reconfigura o Nginx
+sudo kill -9 &lt;PID do processo conflitante&gt;
+
+# 5. Sobe o Nginx novamente
+sudo systemctl start nginx
+
+# 6. Verifica se subiu corretamente
+sudo systemctl status nginx
+</code></pre>
+<p>Esse fluxo — status, logs, investigação, ação, verificação — é repetido diariamente por profissionais de infraestrutura em todo o mundo.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<p><strong>Documentação oficial</strong></p>
+<ul>
+<li><a href="https://systemd.io/" target="_blank" rel="noopener">systemd Documentation — freedesktop.org</a> — Documentação oficial do systemd, incluindo referência completa do <code>systemctl</code> e do <code>journalctl</code>.</li>
+<li><a href="https://man7.org/linux/man-pages/man1/systemctl.1.html" target="_blank" rel="noopener">systemctl man page — man7.org</a> — Referência completa de todas as opções e sinais do <code>systemctl</code>.</li>
+</ul>
+<p><strong>Leitura técnica</strong></p>
+<ul>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units" target="_blank" rel="noopener">How To Use Systemctl — DigitalOcean</a> — Tutorial prático da DigitalOcean cobrindo os casos de uso mais comuns do <code>systemctl</code> com exemplos reais.</li>
+<li><a href="https://www.redhat.com/sysadmin/systemd-commands" target="_blank" rel="noopener">Understanding Systemd — Red Hat</a> — Artigo do Red Hat explicando a filosofia do systemd e os comandos essenciais para administração de serviços.</li>
+</ul>
+<p><strong>Prática</strong></p>
+<ul>
+<li><a href="https://linuxupskillchallenge.org/" target="_blank" rel="noopener">Linux Upskill Challenge</a> — Curso gratuito de 20 dias focado em administração de servidores Linux reais. Os dias 4 e 5 cobrem processos e serviços diretamente.</li>
+<li><a href="https://overthewire.org/wargames/bandit/" target="_blank" rel="noopener">Over The Wire: Bandit</a> — Os níveis intermediários envolvem processos em execução e serviços ativos.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Qual a diferença entre <code>kill 1203</code> e <code>kill -9 1203</code>? Por que o segundo deve ser o último recurso?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>kill</code> sem argumento envia <code>SIGTERM</code> (15): um pedido para que o processo se encerre. Ele é avisado e tem a chance de fechar conexões, gravar o que está em buffer e remover arquivos de lock antes de sair. Já <code>kill -9</code> envia <code>SIGKILL</code>, executado pelo kernel — o processo não é notificado e morre no ato. Por isso o <code>-9</code> é o último recurso: o que ele deixa para trás são exatamente os locks presos, as conexões meio abertas e os dados gravados pela metade que causam o próximo problema.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Qual a diferença entre <code>systemctl restart nginx</code> e <code>systemctl reload nginx</code>? Em que situação você escolheria cada um?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>restart</code> derruba o serviço e sobe de novo: existe uma janela de indisponibilidade e as conexões em andamento caem. <code>reload</code> pede ao serviço que releia a configuração sem encerrar, mantendo o atendimento. Em produção, mudança de configuração — um novo virtual host no Nginx, um ajuste de limite — pede <code>reload</code>. O <code>restart</code> fica para quando o binário foi atualizado ou quando a alteração não é contemplada pelo reload.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Qual a diferença entre <code>systemctl start</code> e <code>systemctl enable</code>? Que problema o <code>enable --now</code> resolve?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>start</code> sobe o serviço agora e não diz nada sobre o próximo boot. <code>enable</code> registra o serviço para subir junto com o sistema, mas não o inicia neste momento. O erro clássico é dar apenas <code>start</code>: tudo funciona, o time comemora, e o serviço desaparece no primeiro reinício do servidor — geralmente semanas depois, quando ninguém associa mais uma coisa à outra. <code>enable --now</code> faz as duas coisas na mesma linha, eliminando esse esquecimento.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Na saída abaixo, o que <code>Loaded</code> e <code>Active</code> informam? Por que consultar os dois é necessário?</p>
+<pre><code>● nginx.service - A high performance web server
+     Loaded: loaded (/lib/systemd/system/nginx.service; enabled)
+     Active: active (running) since Mon 2025-03-10 10:00:00 UTC; 2h ago
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>Active</code> responde sobre o presente: o serviço está rodando agora, e desde quando. <code>Loaded</code>, com o <code>enabled</code> no final, responde sobre o futuro: ele voltará sozinho no próximo boot. São perguntas independentes, e é por isso que os dois importam. Um serviço pode estar <code>active (running)</code> e <code>disabled</code> — no ar hoje, ausente depois do reinício. Ou <code>inactive</code> e <code>enabled</code> — parado agora, mas de volta ao reiniciar. Só os dois campos juntos respondem se o serviço está no ar <em>e</em> continuará estando.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Reconstrua o diagnóstico do Nginx que não subia: qual era a causa, e o que cada comando do fluxo contribuiu para descobri-la?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A causa era a porta 80 já ocupada por outro processo. O <code>systemctl status</code> deu o estado — <code>failed</code>, o serviço tentou subir e não conseguiu. O <code>journalctl</code> deu o motivo, na mensagem <code>bind() to 0.0.0.0:80 failed (98: Address already in use)</code>. O <code>ss -tlnp | grep :80</code> identificou qual processo detinha a porta. Encerrar o conflitante (ou reconfigurar a porta do Nginx) liberou o recurso, o <code>start</code> subiu o serviço e um novo <code>status</code> confirmou. O valor está na ordem — estado, causa, identificação, ação, verificação. Pular direto para a ação é o que produz o "reiniciei e voltou, mas não sei por quê", que reaparece na semana seguinte.</p>
+</div>
+</details>
+<h3>Exercício 6</h3>
+<p>Por que <code>journalctl -u nginx -f</code> costuma ser o primeiro comando quando um serviço começa a falhar? Em que ele difere de um <code>tail -f</code> em arquivo de log?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>-u</code> filtra pela unidade do systemd e <code>-f</code> acompanha em tempo real, então o comando entrega apenas o que aquele serviço está produzindo, no instante em que produz. A diferença para o <code>tail -f</code> é o que você precisa saber de antemão: o journal centraliza a saída de todos os serviços gerenciados pelo systemd, com unidade, PID, prioridade e horário, sem que você precise descobrir onde aquele serviço grava — ou se ele grava em arquivo. O <code>tail -f</code> exige o caminho exato e só funciona quando existe um arquivo para seguir.</p>
+</div>
+</details>
+

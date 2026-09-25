@@ -1,0 +1,203 @@
+<p>Poucas linguagens de programa&ccedil;&atilde;o t&ecirc;m uma origem t&atilde;o humana quanto o PHP. Ela n&atilde;o nasceu em um laborat&oacute;rio de pesquisa nem foi projetada por um comit&ecirc;. Nasceu de uma necessidade pessoal, cresceu de forma org&acirc;nica, e a cada crise de identidade &mdash; e houve v&aacute;rias &mdash; se reinventou. Entender essa hist&oacute;ria n&atilde;o &eacute; apenas curiosidade: &eacute; compreender por que a linguagem tem certas caracter&iacute;sticas, por que algumas decis&otilde;es foram tomadas, e por que o PHP moderno &eacute; t&atilde;o diferente do PHP que seus cr&iacute;ticos conhecem.</p>
+<h2>1994 &mdash; O come&ccedil;o: um script para rastrear visitas</h2>
+<p>Em 1994, <strong>Rasmus Lerdorf</strong>, um programador dinamarqu&ecirc;s-canadense, queria saber quantas pessoas estavam acessando seu curr&iacute;culo online. Para isso, escreveu um conjunto de scripts em Perl que registravam as visitas. Logo percebeu que seria mais pr&aacute;tico reescrev&ecirc;-los em C, criando uma camada que se encaixasse diretamente no servidor web Apache.</p>
+<p>Esse conjunto de ferramentas ele chamou de <strong>Personal Home Page Tools</strong> &mdash; as PHP Tools. N&atilde;o havia inten&ccedil;&atilde;o de criar uma linguagem de programa&ccedil;&atilde;o. Era uma cole&ccedil;&atilde;o utilit&aacute;ria, pragm&aacute;tica, feita para resolver um problema imediato. Em 1995, Lerdorf lan&ccedil;ou o c&oacute;digo publicamente, e a comunidade de desenvolvedores web da &eacute;poca, &aacute;vida por ferramentas que facilitassem a cria&ccedil;&atilde;o de p&aacute;ginas din&acirc;micas, adotou as PHP Tools rapidamente.</p>
+<h2>1997&ndash;1998 &mdash; PHP 3: a primeira linguagem de verdade</h2>
+<p>Dois programadores israelenses, <strong>Zeev Suraski e Andi Gutmans</strong>, encontraram as PHP Tools enquanto tentavam desenvolver um sistema de e-commerce para um projeto universit&aacute;rio. As ferramentas de Lerdorf n&atilde;o eram suficientes, ent&atilde;o decidiram reescrever o n&uacute;cleo do sistema do zero. O resultado foi uma linguagem muito mais robusta: suporte a m&uacute;ltiplos bancos de dados, sintaxe mais consistente e arquitetura extens&iacute;vel.</p>
+<p>Em colabora&ccedil;&atilde;o com Lerdorf, lan&ccedil;aram o <strong>PHP 3</strong> em 1998. Foi nessa vers&atilde;o que o acr&ocirc;nimo ganhou seu novo significado recursivo: <strong>PHP: Hypertext Preprocessor</strong>. Ao final de 1998, estima-se que cerca de 10% de todos os servidores web da internet j&aacute; rodavam PHP.</p>
+<h2>2000 &mdash; PHP 4 e a explos&atilde;o do LAMP</h2>
+<p>Suraski e Gutmans n&atilde;o pararam. Reescreveram o motor de execu&ccedil;&atilde;o do PHP, criando o <strong>Zend Engine</strong> (o nome vem da jun&ccedil;&atilde;o de Zeev e Andi). O PHP 4, lan&ccedil;ado em 2000, trouxe performance muito superior, suporte a sess&otilde;es, bufferiza&ccedil;&atilde;o de sa&iacute;da e melhor suporte a orienta&ccedil;&atilde;o a objetos &mdash; ainda que incompleto.</p>
+<p>Foi durante a era do PHP 4 que a linguagem explodiu em popularidade. A facilidade de hospedar PHP em servidores compartilhados baratos, combinada com o MySQL como banco de dados gratuito, criou o famoso stack <strong>LAMP</strong> (Linux, Apache, MySQL, PHP). Milhares de sistemas foram constru&iacute;dos nesse per&iacute;odo.</p>
+<p>Foi tamb&eacute;m nessa &eacute;poca que pr&aacute;ticas question&aacute;veis se espalharam. A facilidade de uso atraiu muitos programadores sem forma&ccedil;&atilde;o formal, que criavam c&oacute;digo sem seguran&ccedil;a, sem estrutura e sem manutenibilidade. Essa heran&ccedil;a manchou a reputa&ccedil;&atilde;o da linguagem por anos &mdash; e &eacute;, em grande parte, a origem das cr&iacute;ticas que ainda circulam hoje.</p>
+<h2>2004 &mdash; PHP 5 e a maturidade orientada a objetos</h2>
+<p>O <strong>PHP 5</strong>, lan&ccedil;ado em 2004 com o Zend Engine 2, foi uma virada de chave. Trouxe um modelo de orienta&ccedil;&atilde;o a objetos completo e bem projetado: classes, interfaces, heran&ccedil;a, m&eacute;todos abstratos, modificadores de acesso (<code>public</code>, <code>protected</code>, <code>private</code>), exce&ccedil;&otilde;es com <code>try/catch</code>, e muito mais.</p>
+<p>Foi no PHP 5 que frameworks s&eacute;rios come&ccedil;aram a surgir &mdash; Zend Framework, CodeIgniter, CakePHP, Symfony. O PHP passou a ser usado em projetos corporativos de maior porte, e a comunidade come&ccedil;ou a discutir padr&otilde;es, boas pr&aacute;ticas e arquitetura de software.</p>
+<p>O PHP 5 teve uma vida longa, com vers&otilde;es menores trazendo melhorias cont&iacute;nuas. A vers&atilde;o 5.3 introduziu namespaces e closures. A 5.4 trouxe traits. A 5.5, generators. Cada vers&atilde;o tornava a linguagem mais expressiva e poderosa.</p>
+<h2>2015 &mdash; PHP 7: a ressurrei&ccedil;&atilde;o</h2>
+<p>Por raz&otilde;es hist&oacute;ricas complexas &mdash; uma vers&atilde;o PHP 6 foi abandonada ap&oacute;s anos de desenvolvimento sem conseguir implementar suporte nativo a Unicode de forma satisfat&oacute;ria &mdash;, a vers&atilde;o seguinte ao PHP 5 foi chamada de <strong>PHP 7</strong>, lan&ccedil;ada em dezembro de 2015.</p>
+<p>O impacto foi dram&aacute;tico. O PHP 7 trouxe o novo <strong>Zend Engine 3</strong>, com ganhos de performance de at&eacute; 100% em rela&ccedil;&atilde;o ao PHP 5.6 em benchmarks reais. De repente, aplica&ccedil;&otilde;es rodavam duas vezes mais r&aacute;pido sem nenhuma mudan&ccedil;a no c&oacute;digo.</p>
+<p>Al&eacute;m da performance, o PHP 7 introduziu declara&ccedil;&otilde;es de tipo para par&acirc;metros e retorno de fun&ccedil;&otilde;es, o operador spaceship (<code>&lt;=&gt;</code>), o operador null coalescing (<code>??</code>), classes an&ocirc;nimas e muito mais. A linguagem crescia com coer&ecirc;ncia e dire&ccedil;&atilde;o clara.</p>
+<h2>2020 em diante &mdash; PHP 8 e a linguagem moderna</h2>
+<p>O <strong>PHP 8.0</strong>, lan&ccedil;ado em novembro de 2020, &eacute; possivelmente a vers&atilde;o mais importante da hist&oacute;ria da linguagem. Ele introduziu o <strong>JIT (Just-In-Time compiler)</strong>, que compila partes do c&oacute;digo em tempo de execu&ccedil;&atilde;o, trazendo ganhos de performance em workloads espec&iacute;ficos.</p>
+<p>Mas mais que o JIT, o PHP 8 trouxe mudan&ccedil;as de linguagem que transformaram a forma de escrever c&oacute;digo:</p>
+<ul>
+<li><strong>Match expressions</strong> &mdash; alternativa mais segura e expressiva ao <code>switch</code></li>
+<li><strong>Named arguments</strong> &mdash; passagem de argumentos pelo nome, n&atilde;o pela posi&ccedil;&atilde;o</li>
+<li><strong>Constructor property promotion</strong> &mdash; reduz drasticamente o boilerplate em classes</li>
+<li><strong>Union types e Nullsafe operator</strong> &mdash; sistema de tipos mais expressivo</li>
+<li><strong>Attributes</strong> &mdash; metadados nativos</li>
+<li><strong>Fibers</strong> (PHP 8.1) &mdash; programa&ccedil;&atilde;o ass&iacute;ncrona nativa</li>
+<li><strong>Enums</strong> (PHP 8.1) &mdash; enumera&ccedil;&otilde;es nativas</li>
+<li><strong>Readonly properties</strong> (PHP 8.1/8.2) &mdash; imutabilidade no n&iacute;vel da linguagem</li>
+<li><strong>Lazy objects</strong> (PHP 8.4) &mdash; instancia&ccedil;&atilde;o adiada para performance</li>
+</ul>
+<p>Veja como o PHP evoluiu em expressividade. O mesmo conceito, escrito em PHP 5 e em PHP 8:</p>
+<pre><code class="language-php">&lt;?php
+// ── PHP 5: muito boilerplate ──────────────────────────────────────
+class Usuario {
+    private $nome;
+    private $email;
+
+    // Sem tipo na assinatura: em PHP 5 a &uacute;nica garantia era conferir &agrave; m&atilde;o
+    public function __construct($nome, $email) {
+        $this-&gt;nome  = $nome;
+        $this-&gt;email = $email;
+    }
+
+    public function getNome()  { return $this-&gt;nome;  }
+    public function getEmail() { return $this-&gt;email; }
+}// ── PHP 8: constructor promotion + readonly ───────────────────────
+class Usuario {
+    // O PHP 8 cria, atribui e torna imut&aacute;vel em uma &uacute;nica linha
+    public function __construct(
+        public readonly string $nome,
+        public readonly string $email,
+    ) {}
+}
+
+// O resultado final &eacute; id&ecirc;ntico &mdash; mas o c&oacute;digo PHP 8 &eacute; limpo e direto
+$u = new Usuario('Ana', 'ana@email.com');
+echo $u-&gt;nome; // Ana
+</code></pre>
+<p>A diferen&ccedil;a n&atilde;o &eacute; apenas visual &mdash; &eacute; filos&oacute;fica. O PHP 8 remove o ru&iacute;do e deixa a inten&ccedil;&atilde;o do c&oacute;digo falar por si mesma.</p>
+<h2>A linha do tempo completa</h2>
+<table>
+<thead>
+<tr>
+<th>Vers&atilde;o</th>
+<th>Ano</th>
+<th>Marco principal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PHP Tools</td>
+<td>1994</td>
+<td>Scripts pessoais de Rasmus Lerdorf</td>
+</tr>
+<tr>
+<td>PHP 2</td>
+<td>1997</td>
+<td>Formul&aacute;rios, comunica&ccedil;&atilde;o com bancos de dados</td>
+</tr>
+<tr>
+<td>PHP 3</td>
+<td>1998</td>
+<td>Primeira linguagem de verdade &mdash; Suraski &amp; Gutmans</td>
+</tr>
+<tr>
+<td>PHP 4</td>
+<td>2000</td>
+<td>Zend Engine 1, explos&atilde;o do stack LAMP</td>
+</tr>
+<tr>
+<td>PHP 5</td>
+<td>2004</td>
+<td>OOP completa, frameworks s&eacute;rios surgem</td>
+</tr>
+<tr>
+<td>PHP 7</td>
+<td>2015</td>
+<td>Zend Engine 3, performance 2x, tipagem</td>
+</tr>
+<tr>
+<td>PHP 8.0</td>
+<td>2020</td>
+<td>JIT, match, named args, attributes</td>
+</tr>
+<tr>
+<td>PHP 8.1</td>
+<td>2021</td>
+<td>Enums, fibers, readonly, intersection types</td>
+</tr>
+<tr>
+<td>PHP 8.2</td>
+<td>2022</td>
+<td>Readonly classes, DNF types, true/false/null types</td>
+</tr>
+<tr>
+<td>PHP 8.3</td>
+<td>2023</td>
+<td>Typed class constants, json_validate(), melhorias em readonly</td>
+</tr>
+<tr>
+<td>PHP 8.4</td>
+<td>2024</td>
+<td>Property hooks, lazy objects, melhorias em arrays</td>
+</tr>
+</tbody>
+</table>
+<h2>O que essa hist&oacute;ria nos ensina</h2>
+<p>A trajet&oacute;ria do PHP &eacute; uma li&ccedil;&atilde;o sobre evolu&ccedil;&atilde;o pragm&aacute;tica. A linguagem nunca foi projetada de cima para baixo com perfei&ccedil;&atilde;o acad&ecirc;mica &mdash; ela cresceu respondendo a necessidades reais, cometeu erros, aprendeu com eles e se reinventou. Quem a critica com base no PHP de 2003 est&aacute; cometendo o mesmo erro de julgar um arquiteto pelo primeiro rabisco que fez aos vinte anos.</p>
+<p>Aprender PHP hoje significa aprender uma linguagem moderna, com d&eacute;cadas de li&ccedil;&otilde;es incorporadas em seu design. E significa tamb&eacute;m entender um ecossistema enorme de sistemas existentes que precisam de profissionais qualificados.</p>
+<p>Conhecer essa trajetória tem um uso imediato: ela explica o que você vai encontrar em código alheio. O excesso de verificação manual de tipo é herança de quando não havia tipo na assinatura; o arquivo que mistura consulta e HTML é do tempo em que isso era o que se ensinava; o <code>mysql_query</code> que você vai achar num sistema antigo foi a forma padrão de falar com o banco durante uma década. Nenhuma dessas escolhas foi burrice de quem escreveu &mdash; foram as ferramentas daquele momento. O que mudou não foi só a sintaxe, foi o que a linguagem passou a cobrar de quem escreve.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li>
+<p><strong>Manual oficial do PHP</strong> &mdash; Hist&oacute;rico de vers&otilde;es e changelogs completos: <a href="https://www.php.net/ChangeLog-8.php" target="_blank" rel="noopener">https://www.php.net/ChangeLog-8.php</a></p>
+</li>
+<li>
+<p><strong>"PHP: a fractal of bad design"</strong> &mdash; O artigo cr&iacute;tico mais famoso sobre PHP, escrito em 2012 (baseado no PHP 5). Vale ler para entender as cr&iacute;ticas hist&oacute;ricas e avaliar quais ainda se aplicam: <a href="https://eev.ee/blog/2012/04/09/php-a-fractal-of-bad-design/" target="_blank" rel="noopener">https://eev.ee/blog/2012/04/09/php-a-fractal-of-bad-design/</a></p>
+</li>
+<li>
+<p><strong>"PHP in 2024"</strong> &mdash; Resposta moderna &agrave;s cr&iacute;ticas, com dados atualizados: <a href="https://stitcher.io/blog/php-in-2024" target="_blank" rel="noopener">https://stitcher.io/blog/php-in-2024</a></p>
+</li>
+<li>
+<p><strong>Zeev Suraski &mdash; The Secret History of PHP</strong> &mdash; Palestra do cocriador do Zend Engine contando a hist&oacute;ria em primeira pessoa (YouTube): <a href="https://www.youtube.com/watch?v=APoz6nEJpyI" target="_blank" rel="noopener">https://www.youtube.com/watch?v=APoz6nEJpyI</a></p>
+</li>
+<li>
+<p><strong>LERDORF, Rasmus. "PHP/FI &mdash; Personal Home Page / Forms Interpreter"</strong> &mdash; O an&uacute;ncio original de 1995 na Usenet, dispon&iacute;vel em: <a href="https://groups.google.com/g/comp.infosystems.www.authoring.cgi/c/PyJ25gZ6z7A" target="_blank" rel="noopener">https://groups.google.com/g/comp.infosystems.www.authoring.cgi/c/PyJ25gZ6z7A</a></p>
+</li>
+<li>
+<p><strong>TATROE, K.; MACINTYRE, P.</strong> <em>Programming PHP</em>, 4&ordf; ed. O'Reilly Media, 2020. Cap&iacute;tulo 1: History of PHP. Dispon&iacute;vel em: <a href="https://www.oreilly.com/library/view/programming-php-4th/9781492054122/" target="_blank" rel="noopener">https://www.oreilly.com/library/view/programming-php-4th/9781492054122/</a></p>
+</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Um sistema roda em PHP 5.6 e você quer saber o que pode usar. Para cada recurso abaixo, diga em que versão ele entrou: <code>namespace</code>, <code>trait</code>, <code>yield</code>, tipo escalar em parâmetro, tipo em propriedade, <code>enum</code>.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>namespace</code> e as <em>closures</em> chegaram no <strong>5.3</strong>; <code>trait</code>, no <strong>5.4</strong>; <code>yield</code> e os geradores, no <strong>5.5</strong>. Esses três estão disponíveis no 5.6, então um sistema dessa época já podia ser organizado com autoload PSR-4 e composição por traits — e muito código legado não usa nada disso por hábito, não por impossibilidade. Os três seguintes não: <strong>tipo escalar em parâmetro e retorno</strong> (<code>int</code>, <code>string</code>, <code>float</code>, <code>bool</code>) só veio no <strong>7.0</strong>, junto do <code>declare(strict_types=1)</code>; <strong>tipo em propriedade</strong> (<code>private string $nome;</code>) só no <strong>7.4</strong>; e <code>enum</code>, no <strong>8.1</strong>. A consequência prática é que, em 5.6, a única forma de garantir tipo é verificar à mão no começo do método e lançar exceção — o que explica o excesso de <code>is_string()</code> e <code>InvalidArgumentException</code> em código daquela época. Vale a checagem inversa também: ao copiar solução de blog ou resposta de fórum, confira a data. Código escrito para 8.x cola em 5.6 sem erro de sintaxe visível e quebra só na hora de executar.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Por que não existe PHP 6? E o que a razão do fracasso revela sobre como o PHP trata texto até hoje?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O PHP 6 foi desenvolvido durante anos com um objetivo central: suporte nativo a <strong>Unicode</strong> no núcleo da linguagem, com cada string carregando sua codificação. O esforço foi abandonado — a complexidade se espalhava por toda a base de código e por todas as extensões, e o ganho não compensava. Como o nome "PHP 6" já tinha circulado demais em livros e artigos, reaproveitá-lo confundiria todo mundo, e a versão seguinte pulou para <strong>PHP 7</strong>. O que isso revela é o ponto que interessa no dia a dia: em PHP, <strong>string é uma sequência de bytes</strong>, não de caracteres. <code>strlen("ação")</code> devolve <code>6</code>, não <code>4</code>, porque "ç" e "ã" ocupam dois bytes cada em UTF-8; <code>strtoupper</code> não acentua corretamente; e <code>substr</code> pode cortar um caractere ao meio e produzir lixo. Daí a existência da família <code>mb_*</code> — <code>mb_strlen</code>, <code>mb_substr</code>, <code>mb_strtoupper</code> —, que precisa ser usada em qualquer texto que possa conter acento, e que exige a extensão <code>mbstring</code> instalada. A regra prática para código em português é simples: se a função mexe em texto do usuário, prefira a versão <code>mb_</code>, e defina <code>mb_internal_encoding('UTF-8')</code> na inicialização.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Você abre um sistema de 2006 e encontra isto. O que esse código pressupõe, e por que ele não roda mais?</p>
+<pre><code class="language-php">&lt;?php
+// login.php
+if ($usuario == "admin" &amp;&amp; $senha == "123") {
+    $_SESSION['logado'] = 1;
+}
+$busca = $_GET['q'];
+mysql_query("SELECT * FROM produtos WHERE nome LIKE '%$busca%'");</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Repare que <code>$usuario</code> e <code>$senha</code> aparecem do nada — nunca foram atribuídas. Esse código depende do <strong><code>register_globals</code></strong>, um ajuste que transformava automaticamente cada parâmetro de URL ou formulário em variável global: um acesso a <code>login.php?usuario=admin&amp;senha=123</code> criava as duas variáveis sozinho. Era prático e catastrófico — qualquer variável do script podia ser sobrescrita de fora, inclusive as que controlavam autenticação. O recurso foi desativado por padrão no <strong>4.2</strong>, marcado como obsoleto no 5.3 e <strong>removido no 5.4</strong>; hoje o código simplesmente não autentica ninguém, porque as variáveis são nulas. Da mesma era vem o <code>magic_quotes_gpc</code>, que escapava a entrada automaticamente e criava o hábito de confiar nela — também removido no 5.4. E a extensão <code>mysql_*</code> foi descontinuada no 5.5 e <strong>removida no 7.0</strong>, o que derruba a última linha por função inexistente. A modernização não é cosmética: é substituir <code>$usuario</code> por <code>$_POST['usuario']</code> validado, a comparação de senha por <code>password_verify()</code> contra um hash, e a consulta por <em>prepared statement</em> com PDO. Um sistema assim não "para de funcionar" por capricho da linguagem — ele para porque cada um desses recursos era uma falha de segurança de fábrica.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>O artigo cita ganhos de até 100% do PHP 7 sobre o 5.6. Você migra um sistema e mede 30% de melhora, não 100%. Isso indica que algo foi feito errado?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Não indica nada de errado — indica que você mediu uma aplicação real, e não um <em>benchmark</em>. O ganho do PHP 7 veio da reengenharia das <strong>estruturas internas</strong> do Zend Engine: o <code>zval</code> (a estrutura que representa qualquer valor) encolheu e passou a ser alocado na pilha, os <em>arrays</em> ganharam uma tabela hash muito mais compacta, e o número de alocações de memória caiu drasticamente. Isso acelera o que o interpretador faz <strong>sozinho</strong>: criar variáveis, percorrer arrays, chamar funções. Não acelera nada que dependa de terceiros — e é aí que uma aplicação web passa a maior parte do tempo, esperando consulta ao banco, leitura de disco e resposta de API. Um script que só manipula arrays em memória chega perto do dobro; um que passa 70% do tempo esperando o MySQL melhora no máximo naquele terço restante, o que dá exatamente uma casa de 30%. A lição vale para qualquer promessa de desempenho: o ganho anunciado se aplica à parte que a mudança toca, e o efeito total depende de quanto essa parte pesava. Antes de migrar para ganhar velocidade, meça onde o tempo é gasto — se for no banco, a versão do PHP não é o assunto.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p><strong>Desafio:</strong> você precisa migrar um sistema em produção de PHP 5.6 para 8.4. Monte o plano — na ordem em que você faria, e dizendo o que mediria antes de cada passo.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O primeiro movimento não é técnico, é de medição: <strong>ter como saber se quebrou</strong>. Sem nenhum teste, o resto do plano é apostar. Escreva ao menos testes de fumaça nos fluxos que geram receita — login, busca, finalizar pedido — porque eles vão ser rodados dezenas de vezes. Em seguida, levante o terreno: <code>php -m</code> na máquina atual para listar as extensões em uso, e <code>composer why-not php 8.4</code> para descobrir qual dependência trava a subida. É comum que a barreira não seja o seu código, e sim uma biblioteca abandonada — decidir entre substituí-la ou assumir a manutenção dela é a decisão mais cara do projeto, e é melhor tomá-la no começo. Depois, migre <strong>por etapas, não de uma vez</strong>: 5.6 → 7.4 → 8.4. O salto para o 7 é o que expõe as quebras clássicas (<code>mysql_*</code> removido, <code>ereg</code> removido, mudanças no tratamento de erro), e o 7.4 é uma parada confortável porque aceita quase tudo do 7.x e já prepara o 8. Em cada etapa, rode o <strong>PHPStan</strong> no nível mais baixo que passar e o <strong>Rector</strong> com o conjunto de regras da versão-alvo, que faz a parte mecânica sozinho. Ligue <code>error_reporting(E_ALL)</code> em homologação e trate <em>deprecation</em> como erro: no 8.0 muitos avisos viraram <code>Error</code>, e um <code>Notice</code> ignorado hoje é uma tela branca amanhã. Suba em homologação com dados reais de produção anonimizados, deixe rodar alguns dias, e só então troque a produção — com o caminho de volta pronto, porque plano de migração sem plano de retorno é torcida.</p>
+</div>
+</details>
+

@@ -1,0 +1,98 @@
+<p>Você chega aqui com uma vantagem enorme e um risco igualmente grande. A vantagem é que você já sabe C: entende ponteiros, sabe o que é a pilha e o heap, já fez <code>malloc</code>/<code>free</code> na mão, já lutou com segmentation faults e ganhou. Nada disso será jogado fora — pelo contrário, é a fundação sobre a qual vamos construir. O risco é acreditar que C++ é "C com classes", uma casquinha de açúcar sintático por cima do que você já conhece. Não é. C++ é uma linguagem com uma filosofia própria, às vezes oposta à do C, e o maior obstáculo do programador C experiente não é aprender o novo — é desaprender certos hábitos. Este primeiro artigo não ensina sintaxe nenhuma: ele é o mapa. Vou te mostrar aonde vamos chegar em cada uma das nove fases, para que, quando um conceito difícil aparecer, você já saiba qual peça do quebra-cabeça ele preenche.</p>
+<p>A ideia central que atravessa todo o curso cabe em uma frase: <strong>em C, você gerencia recursos; em C++, os recursos se gerenciam sozinhos.</strong> Toda vez que em C você escreveria um <code>free</code>, um <code>fclose</code>, um <code>pthread_mutex_unlock</code>, o C++ moderno oferece um jeito de deixar isso acontecer automaticamente, no momento certo, mesmo que o código exploda com um erro no meio do caminho. Esse mecanismo se chama RAII, e ele é o coração pulsante da linguagem. Se você sair deste curso entendendo profundamente uma única coisa, que seja RAII — guarde este nome, porque a Fase 2 inteira é dedicada a ele e praticamente tudo depois se apoia nele.</p>
+<h3>Como vamos trabalhar</h3>
+<p>A ferramenta é o compilador <code>g++</code> (ou <code>clang++</code>, se preferir). Ao longo da série usaremos C++ moderno — predominantemente C++17 e C++20 — e eu sempre direi quando um recurso for específico de uma versão, para você não se surpreender ao compilar num ambiente mais antigo. A linha de compilação padrão que usaremos, com os avisos ligados, é esta:</p>
+<pre><code class="language-bash"># -std=c++20  → escolhe o padrão da linguagem (C++20)
+# -Wall -Wextra → liga a maioria dos avisos úteis do compilador
+# -o programa → nome do executável de saída
+g++ -std=c++20 -Wall -Wextra programa.cpp -o programa
+./programa
+</code></pre>
+<p>Repare que a extensão é <code>.cpp</code>, não <code>.c</code>, e o compilador é <code>g++</code>, não <code>gcc</code>. Isso já basta para o "Olá, mundo" mais famoso do C++ mostrar sua cara — e a diferença em relação ao <code>printf</code> do C já conta uma história:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;   // entrada e saída por streams, o equivalente ao &lt;stdio.h&gt;
+
+int main() {          // em C++, main() sem parâmetros dispensa o 'void'
+    // std::cout é o fluxo de saída; &lt;&lt; &quot;empurra&quot; dados para dentro dele.
+    // std::endl imprime uma quebra de linha e descarrega o buffer.
+    std::cout &lt;&lt; &quot;Olá, C++!&quot; &lt;&lt; std::endl;
+    return 0;
+}
+</code></pre>
+<p>Onde em C você diria <code>printf("Olá, C++!\n")</code>, aqui usamos <code>std::cout &lt;&lt;</code>. Não há string de formato, não há <code>%d</code> nem <code>%s</code>, não há risco de passar o tipo errado e corromper a pilha. O operador <code>&lt;&lt;</code> sabe, em tempo de compilação, o tipo de cada coisa que você imprime. Essa é a primeira pista da filosofia do C++: empurrar o máximo de segurança para o momento da compilação. Não se preocupe com o <code>std::</code> na frente de tudo agora — namespaces são assunto do artigo <em>A Filosofia por Trás do C++ e a Saída Elegante do printf</em>.</p>
+<h3>As nove fases da jornada</h3>
+<p>A série tem 52 artigos organizados em nove fases. Cada fase fecha com um balanço do que você conquistou.</p>
+<p>Na <strong>Fase 1 — O que muda ao sair do C</strong>, atacamos justamente os hábitos de C que precisam de ajuste: streams no lugar de <code>printf</code>/<code>scanf</code>, namespaces, referências como alternativa mais segura aos ponteiros, <code>const</code>-correctness levada a sério, sobrecarga de funções, a classe <code>std::string</code> no lugar do <code>char*</code> cru, <code>nullptr</code> no lugar de <code>NULL</code>, e uma primeira olhada em <code>auto</code>. Ao fim dela, você escreve C++ que já não parece C disfarçado.</p>
+<p>Na <strong>Fase 2 — RAII e gerenciamento de recursos</strong>, chegamos ao coração da linguagem: construtores, destrutores, e a descoberta de por que o par <code>malloc</code>/<code>free</code> praticamente desaparece. Você conhecerá os ponteiros inteligentes (<code>unique_ptr</code>, <code>shared_ptr</code>, <code>weak_ptr</code>) e entenderá por que <code>new</code>/<code>delete</code> cru se torna raro. Como consequência natural, veremos <em>move semantics</em> — mover recursos em vez de copiá-los. Ao fim, você não vaza mais memória por acidente, porque o próprio design impede o vazamento.</p>
+<p>Na <strong>Fase 3 — Classes e orientação a objetos</strong>, construímos tipos de verdade: encapsulamento, herança, polimorfismo com funções virtuais, classes abstratas e sobrecarga de operadores. Mas seremos honestos sobre quando OO ajuda e quando atrapalha — nem tudo precisa virar uma hierarquia de classes.</p>
+<p>Na <strong>Fase 4 — A STL</strong>, você ganha as estruturas de dados que em C você implementava à mão: <code>vector</code>, <code>map</code>, <code>set</code>, <code>unordered_map</code>, tudo unificado pelo conceito de iterador, e a biblioteca <code>&lt;algorithm&gt;</code> (<code>sort</code>, <code>find</code>, <code>transform</code>, <code>accumulate</code>). Ao fim, você para de reinventar listas ligadas e tabelas hash.</p>
+<p>Na <strong>Fase 5 — Genericidade</strong>, entramos nos templates: funções e classes que funcionam com qualquer tipo, especialização, uma introdução a <em>concepts</em> (C++20), lambdas e <code>std::function</code>. É a fase em que você escreve código uma vez e ele serve para tudo.</p>
+<p>Na <strong>Fase 6 — Tratamento de erros e C++ moderno</strong>, vemos exceções e sua relação íntima com RAII, além dos tipos que modelam ausência e alternativas: <code>std::optional</code>, <code>std::variant</code>, <code>std::expected</code>, <em>structured bindings</em> e a dedução de tipos com <code>auto</code> em profundidade.</p>
+<p>Na <strong>Fase 7 — Concorrência</strong>, comparamos com os <code>pthreads</code> do C e usamos as ferramentas nativas: <code>std::thread</code>, <code>std::async</code>, <code>std::mutex</code>, <code>std::atomic</code>, <code>std::condition_variable</code>, e aprendemos a evitar <em>data races</em> e <em>deadlocks</em>.</p>
+<p>Na <strong>Fase 8 — Ferramentas, qualidade e boas práticas</strong>, montamos projetos de verdade com CMake, ligamos <em>sanitizers</em> e <code>clang-tidy</code>, seguimos as C++ Core Guidelines e escrevemos testes com Catch2 ou GoogleTest.</p>
+<p>E a <strong>Fase 9 — Fechamento</strong> é o projeto capstone: uma aplicação real, do zero, que integra tudo — RAII, ponteiros inteligentes, classes, STL, templates, exceções e testes —, seguida de uma retrospectiva da jornada inteira.</p>
+<p>Um mapa não substitui o caminho, mas evita a sensação de estar perdido no meio dele — e é isso que este primeiro artigo compra: quando o RAII aparecer, você já saberá que fase ele fecha e que problema ele resolve. Vale voltar aqui sempre que um conceito parecer solto, porque quase nenhum deles é: a maior parte do C++ que vem adiante existe para resolver algo que o C deixava por sua conta.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li>Bjarne Stroustrup, <a href="https://www.stroustrup.com/tour3.html" target="_blank" rel="noopener"><em>A Tour of C++</em></a> (3ª ed., 2022): escrito pelo criador da linguagem, é o panorama moderno mais conciso e a leitura de cabeceira ideal para acompanhar esta série.</li>
+<li>Bjarne Stroustrup, <a href="https://www.stroustrup.com/4th.html" target="_blank" rel="noopener"><em>The C++ Programming Language</em></a> (4ª ed.): a referência completa e definitiva, para consulta aprofundada quando um tema pedir mais.</li>
+<li><a href="https://cppreference.com" target="_blank" rel="noopener noreferrer">cppreference.com</a>: a documentação online mais confiável e precisa da biblioteca padrão; será citada em quase todos os artigos. Comece por <a href="https://cppreference.com/w/cpp/language/history" target="_blank" rel="noopener noreferrer">cppreference.com/w/cpp/language/history</a>.</li>
+<li>ISO C++ Core Guidelines (<a href="https://isocpp.github.io/CppCoreGuidelines" target="_blank" rel="noopener noreferrer">isocpp.github.io/CppCoreGuidelines</a>): o guia de boas práticas mantido por Stroustrup e Herb Sutter; usaremos várias de suas regras ao longo do curso.</li>
+<li>Documentação do GCC (<a href="https://gcc.gnu.org/onlinedocs" target="_blank" rel="noopener noreferrer">gcc.gnu.org/onlinedocs</a>): referência das flags de compilação que adotaremos, incluindo <code>-std</code> e os avisos.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Verifique qual versão do <code>g++</code> você tem instalada e confirme que ela suporta C++20. (Dica: existe uma flag para o compilador imprimir a própria versão.)</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O comando é <code>g++ --version</code>. A saída mostra a versão (por exemplo, <code>g++ (GCC) 13.2.0</code>). Como regra prática, GCC 10 ou superior dá bom suporte a C++20, e GCC 11+ é ainda mais completo. Se a sua versão for antiga, atualize antes de seguir — o curso assume C++20 disponível.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Salve o "Olá, C++!" deste artigo em um arquivo <code>ola.cpp</code>, compile-o com as flags recomendadas e execute-o.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Basta colar o código do artigo em <code>ola.cpp</code> e rodar:</p>
+<pre><code class="language-bash">g++ -std=c++20 -Wall -Wextra ola.cpp -o ola
+./ola
+# Saída: Olá, C++!
+</code></pre>
+<p>Se não compilar, o erro mais comum é ter usado <code>gcc</code> (compilador C) em vez de <code>g++</code>.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Modifique o programa para imprimir duas linhas: seu nome numa linha e o ano atual em outra, usando um único <code>std::cout</code> encadeado com dois <code>&lt;&lt;</code> e uma quebra de linha no meio.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Uma solução encadeia tudo em um só <code>std::cout</code>:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+
+int main() {
+    // Um único statement com vários operadores &lt;&lt;.
+    // O '\n' quebra a linha entre o nome e o ano.
+    std::cout &lt;&lt; &quot;Maria Silva&quot; &lt;&lt; '\n' &lt;&lt; 2026 &lt;&lt; std::endl;
+    return 0;
+}
+</code></pre>
+<p>Repare que <code>'\n'</code> (aspas simples) é um único caractere, mais barato que <code>std::endl</code>, que além de quebrar a linha também descarrega o buffer. Voltaremos a essa distinção adiante.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Compile o mesmo programa uma vez com <code>-std=c++20</code> e outra com <code>-std=c++11</code>. Ele funciona nos dois casos? Reflita sobre por que um "Olá, mundo" não revela diferença entre os padrões.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Sim, funciona nos dois padrões. Um "Olá, mundo" usa apenas recursos presentes desde os primeiros C++, então nenhuma diferença aparece. As diferenças entre C++11, C++17 e C++20 só surgem quando você usa recursos específicos de cada versão — e é por isso que este curso vai introduzi-los aos poucos, sempre dizendo a partir de qual padrão cada um existe.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Sem escrever código: para cada uma das nove fases, escreva em uma frase qual hábito de C você espera que ela substitua ou aprimore. (Este é um exercício de mapa mental; compare sua resposta com o gabarito.)</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Não há uma resposta única, mas um bom mapa mental seria: Fase 1 substitui <code>printf</code>/<code>scanf</code> e <code>char*</code> por streams e <code>std::string</code>; Fase 2 substitui <code>malloc</code>/<code>free</code> por RAII e ponteiros inteligentes; Fase 3 substitui structs com funções soltas por classes com comportamento encapsulado; Fase 4 substitui suas implementações manuais de listas e tabelas hash pela STL; Fase 5 substitui macros e duplicação de código por templates; Fase 6 substitui códigos de erro por exceções e tipos como <code>std::optional</code>; Fase 7 substitui <code>pthreads</code> por <code>std::thread</code> e companhia; Fase 8 substitui Makefiles artesanais e depuração no escuro por CMake, sanitizers e testes; Fase 9 junta tudo num projeto real. Se a sua lista bateu em espírito com esta, você já entendeu para onde vamos.</p>
+</div>
+</details>
+

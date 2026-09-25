@@ -1,0 +1,233 @@
+<p>Em um artigo <a href="/rust/por-que-rust-existe-e-o-que-ele-quer-de-voce">Por que Rust existe e o que ele quer de você</a>, instalamos o Rust e entendemos por que ele existe. Hoje vamos escrever c&oacute;digo de verdade &mdash; e j&aacute; na primeira linha voc&ecirc; vai se deparar com algo que surpreende quem vem de outras linguagens:&nbsp;<strong>vari&aacute;veis em Rust s&atilde;o imut&aacute;veis por padr&atilde;o.</strong></p>
+<p>Isso n&atilde;o &eacute; um descuido do designer da linguagem. &Eacute; uma decis&atilde;o filos&oacute;fica profunda, e ao final deste artigo voc&ecirc; vai entender por qu&ecirc; ela torna seu c&oacute;digo mais seguro e mais f&aacute;cil de raciocinar.</p>
+<h2>Declarando vari&aacute;veis com <code>let</code></h2>
+<p>Em Rust, voc&ecirc; declara vari&aacute;veis com a palavra-chave <code>let</code>:</p>
+<pre><code>fn main() {
+    let x = 5;
+    println!("O valor de x &eacute;: {x}");
+}
+</code></pre>
+<p>Simples. Mas tente mudar o valor de <code>x</code> depois:</p>
+<pre><code>fn main() {
+    let x = 5;
+    x = 10; // ERRO: cannot assign twice to immutable variable
+    println!("{x}");
+}
+</code></pre>
+<p>O compilador recusa. E mais importante: ele te diz exatamente o que fazer para corrigir. Essa &eacute; uma marca registrada de Rust &mdash; mensagens de erro que ensinam, n&atilde;o apenas acusam.</p>
+<h2>Quando voc&ecirc; precisa mudar: <code>mut</code></h2>
+<p>Para declarar uma vari&aacute;vel mut&aacute;vel, voc&ecirc; usa a palavra-chave <code>mut</code>:</p>
+<pre><code>fn main() {
+    let mut contador = 0;
+    println!("Antes: {contador}");
+    contador += 1;
+    println!("Depois: {contador}");
+}
+</code></pre>
+<p>O <code>mut</code> &eacute; uma declara&ccedil;&atilde;o de inten&ccedil;&atilde;o. Quando voc&ecirc; l&ecirc; <code>let x</code>, sabe que esse valor n&atilde;o vai mudar. Quando l&ecirc; <code>let mut x</code>, sabe imediatamente que esse valor ser&aacute; modificado em algum momento. Isso torna o c&oacute;digo autodocumentado &mdash; uma leitura r&aacute;pida j&aacute; revela quais partes do estado do programa s&atilde;o din&acirc;micas.</p>
+<p>Em equipes grandes, essa distin&ccedil;&atilde;o evita horas de debugging.</p>
+<h2>Tipos primitivos</h2>
+<p>Rust &eacute; uma linguagem <strong>estaticamente tipada</strong>: todo valor tem um tipo conhecido em tempo de compila&ccedil;&atilde;o. Na maioria dos casos, o compilador <strong>infere</strong> o tipo automaticamente &mdash; voc&ecirc; n&atilde;o precisa escrev&ecirc;-lo. Mas &eacute; fundamental conhec&ecirc;-los.</p>
+<h3>Inteiros</h3>
+<p>Rust oferece inteiros de tamanhos expl&iacute;citos, com e sem sinal:</p>
+<pre><code>fn main() {
+    let a: i32 = -42;      // inteiro de 32 bits com sinal
+    let b: u32 = 42;       // inteiro de 32 bits sem sinal
+    let c: i64 = 1_000_000; // underscore para legibilidade
+    let d: u8  = 255;      // 0 a 255
+
+    println!("{a} {b} {c} {d}");
+}
+</code></pre>
+<p>Os tipos dispon&iacute;veis s&atilde;o: <code>i8</code>, <code>i16</code>, <code>i32</code>, <code>i64</code>, <code>i128</code>, <code>isize</code> (com sinal) e suas vers&otilde;es <code>u</code> (sem sinal). O tipo padr&atilde;o, quando n&atilde;o especificado, &eacute; <code>i32</code> &mdash; escolha segura e eficiente na maioria dos processadores modernos.</p>
+<p>O <code>isize</code> e <code>usize</code> t&ecirc;m tamanho dependente da arquitetura (32 ou 64 bits) e s&atilde;o usados especialmente para &iacute;ndices de cole&ccedil;&otilde;es.</p>
+<h3>Ponto flutuante</h3>
+<pre><code>fn main() {
+    let pi: f64 = 3.14159265358979;
+    let altura: f32 = 1.75;
+    println!("PI &asymp; {pi}, altura = {altura}");
+}
+</code></pre>
+<p><code>f64</code> &eacute; o padr&atilde;o e o mais comum &mdash; oferece precis&atilde;o dupla. Use <code>f32</code> apenas quando mem&oacute;ria for uma restri&ccedil;&atilde;o real.</p>
+<h3>Booleanos</h3>
+<pre><code>fn main() {
+    let ativo: bool = true;
+    let deslogado = false; // tipo inferido
+    println!("{ativo} {deslogado}");
+}
+</code></pre>
+<h3>Caracteres</h3>
+<p>O tipo <code>char</code> em Rust &eacute; <strong>Unicode completo</strong> &mdash; n&atilde;o apenas ASCII. Ocupa 4 bytes:</p>
+<pre><code>fn main() {
+    let letra = 'A';
+    let emoji = '🦀'; // o caranguejo, mascote do Rust
+    let kanji = '日';
+    println!("{letra} {emoji} {kanji}");
+}
+</code></pre>
+<h2>Shadowing &mdash; redeclarar com prop&oacute;sito</h2>
+<p>Rust tem um recurso chamado <strong>shadowing</strong>: voc&ecirc; pode redeclarar uma vari&aacute;vel com <code>let</code> no mesmo escopo, e a nova declara&ccedil;&atilde;o "sombrea" a anterior:</p>
+<pre><code>fn main() {
+    let x = 5;
+    let x = x + 1;    // novo x, baseado no anterior
+    let x = x * 2;    // novo x novamente
+
+    println!("x = {x}"); // imprime: x = 12
+}
+</code></pre>
+<p>Isso parece mutabilidade, mas &eacute; diferente em dois aspectos importantes. Primeiro, cada <code>let x</code> cria uma nova vari&aacute;vel &mdash; a anterior deixa de existir naquele escopo. Segundo, voc&ecirc; pode <strong>mudar o tipo</strong>:</p>
+<pre><code>fn main() {
+    let texto = "   42   ";
+    let texto: i32 = texto.trim().parse().expect("N&atilde;o &eacute; um n&uacute;mero");
+    println!("{texto}"); // 42, agora um inteiro
+}
+</code></pre>
+<p>Com <code>mut</code>, mudar o tipo seria um erro de compila&ccedil;&atilde;o. Com shadowing, &eacute; natural. Use shadowing quando estiver transformando um valor em algo novo &mdash; semanticamente diferente do original.</p>
+<h2>Constantes</h2>
+<p>Al&eacute;m de vari&aacute;veis, Rust tem <strong>constantes</strong> com <code>const</code>. Elas s&atilde;o sempre imut&aacute;veis, exigem anota&ccedil;&atilde;o de tipo expl&iacute;cita, e existem durante toda a execu&ccedil;&atilde;o do programa:</p>
+<pre><code>const VELOCIDADE_DA_LUZ: u64 = 299_792_458; // metros por segundo
+
+fn main() {
+    println!("c = {VELOCIDADE_DA_LUZ} m/s");
+}
+</code></pre>
+<p>Por conven&ccedil;&atilde;o, constantes s&atilde;o escritas em <code>SNAKE_CASE_MAI&Uacute;SCULO</code>. Elas podem ser declaradas em qualquer escopo, inclusive fora de fun&ccedil;&otilde;es &mdash; algo que <code>let</code> n&atilde;o permite.</p>
+<h2>Tipos compostos: tuplas e arrays</h2>
+<h3>Tuplas</h3>
+<p>Tuplas agrupam valores de <strong>tipos diferentes</strong> em um &uacute;nico valor. T&ecirc;m tamanho fixo:</p>
+<pre><code>fn main() {
+    let pessoa: (&amp;str, u8, f64) = ("Ana", 30, 1.68);
+
+    let nome = pessoa.0;
+    let idade = pessoa.1;
+    let altura = pessoa.2;
+
+    println!("{nome} tem {idade} anos e {altura}m de altura.");
+}
+</code></pre>
+<p>Voc&ecirc; tamb&eacute;m pode desestruturar uma tupla diretamente:</p>
+<pre><code>fn main() {
+    let (nome, idade, altura) = ("Ana", 30, 1.68);
+    println!("{nome}, {idade}, {altura}");
+}
+</code></pre>
+<h3>Arrays</h3>
+<p>Arrays agrupam valores do <strong>mesmo tipo</strong> com tamanho fixo em tempo de compila&ccedil;&atilde;o:</p>
+<pre><code>fn main() {
+    let dias = ["Seg", "Ter", "Qua", "Qui", "Sex"];
+    let primeiro = dias[0];
+    println!("Primeiro dia &uacute;til: {primeiro}");
+
+    let zeros = [0u32; 5]; // cinco zeros do tipo u32
+    println!("{:?}", zeros); // {:?} imprime arrays inteiros
+}
+</code></pre>
+<p>Arrays em Rust <strong>n&atilde;o crescem</strong>. Para cole&ccedil;&otilde;es din&acirc;micas, usaremos <code>Vec&lt;T&gt;</code> &mdash; mas isso &eacute; assunto para artigos futuros.</p>
+<h2>Um programa completo</h2>
+<p>Vamos reunir o que aprendemos em um exemplo coeso:</p>
+<pre><code>fn main() {
+    const TAXA_JUROS: f64 = 0.05; // 5% ao ano
+
+    let valor_inicial: f64 = 1_000.0;
+    let mut saldo = valor_inicial;
+
+    let anos = 3;
+    let mut ano_atual = 1;
+
+    while ano_atual &lt;= anos {
+        saldo = saldo * (1.0 + TAXA_JUROS);
+        println!("Ano {ano_atual}: R$ {saldo:.2}");
+        ano_atual += 1;
+    }
+
+    let rendimento = saldo - valor_inicial;
+    println!("\nRendimento total: R$ {rendimento:.2}");
+}
+</code></pre>
+<p>Sa&iacute;da esperada:</p>
+<pre><code>Ano 1: R$ 1050.00
+Ano 2: R$ 1102.50
+Ano 3: R$ 1157.63
+
+Rendimento total: R$ 157.63
+</code></pre>
+<p>Note o <code>{saldo:.2}</code> &mdash; a formata&ccedil;&atilde;o com duas casas decimais. Rust tem um sistema de formata&ccedil;&atilde;o poderoso embutido na macro <code>println!</code>.</p>
+<h2>O que o compilador nos ensina</h2>
+<p>Se voc&ecirc; escreveu c&oacute;digo Rust hoje e o compilador reclamou, n&atilde;o desanime. Experimente propositalmente causar um erro &mdash; declare uma vari&aacute;vel imut&aacute;vel e tente alter&aacute;-la. Leia a mensagem completa. Rust &eacute; provavelmente a linguagem com as <strong>mensagens de erro mais did&aacute;ticas</strong> que existem. Cada erro vem com uma explica&ccedil;&atilde;o e, frequentemente, com a corre&ccedil;&atilde;o sugerida.</p>
+<p>Aprender a ler o compilador &eacute; parte essencial de aprender Rust.</p>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Explique a diferença entre <em>shadowing</em> e <code>mut</code>, e dê um caso concreto em que o shadowing resolve algo que <code>mut</code> não resolveria.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>mut</code> permite alterar o valor de um vínculo mantendo o mesmo tipo; o shadowing cria um <strong>vínculo novo</strong> com o mesmo nome, podendo inclusive mudar o tipo. O caso típico é a conversão de entrada:</p><pre><code class="language-rust">let idade = "34";              // &amp;str
+let idade: u32 = idade.trim().parse().unwrap();  // agora u32
+</code></pre><p>Com <code>mut</code> isso não compilaria, porque o tipo do vínculo não pode mudar. O shadowing também deixa o valor final imutável, o que <code>mut</code> não faz.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Preveja a saída:</p><pre><code class="language-rust">fn main() {
+    let x = 5;
+    let x = x + 1;
+    {
+        let x = x * 2;
+        println!("interno: {x}");
+    }
+    println!("externo: {x}");
+}
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Imprime <code>interno: 12</code> e depois <code>externo: 6</code>. O segundo <code>let</code> sombreia o primeiro e produz 6. Dentro do bloco, um terceiro <code>let</code> sombreia esse e vale 12, mas apenas até o fim do bloco — ao sair, o vínculo interno deixa de existir e o nome volta a se referir ao valor 6.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>O código abaixo não compila. Explique o erro e mostre duas correções diferentes.</p><pre><code class="language-rust">fn main() {
+    let numeros = [1, 2, 3];
+    numeros[0] = 10;
+    println!("{:?}", numeros);
+}
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O array foi declarado sem <code>mut</code>, então nenhum de seus elementos pode ser alterado — o erro é <code>cannot assign to <span>numeros[_]</span>, as <span>numeros</span> is not declared as mutable</code>. Primeira correção, tornando o array mutável:</p><pre><code class="language-rust">let mut numeros = [1, 2, 3];
+numeros[0] = 10;
+</code></pre><p>Segunda, construindo já com o valor desejado e mantendo tudo imutável:</p><pre><code class="language-rust">let numeros = [10, 2, 3];
+</code></pre><p>A segunda costuma ser preferível quando o valor é conhecido na construção: imutável por padrão é o hábito que Rust incentiva.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Declare uma constante para a quantidade de segundos em uma hora e uma variável comum com o mesmo valor. Aponte três diferenças entre <code>const</code> e <code>let</code>.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong></p><pre><code class="language-rust">const SEGUNDOS_POR_HORA: u32 = 60 * 60;
+
+fn main() {
+    let segundos_por_hora = 60 * 60;
+    println!("{SEGUNDOS_POR_HORA} e {segundos_por_hora}");
+}
+</code></pre><p>Três diferenças: (1) a anotação de tipo é obrigatória em <code>const</code> e opcional em <code>let</code>; (2) o valor de uma <code>const</code> precisa ser calculável em tempo de compilação, enquanto <code>let</code> aceita qualquer expressão de execução; (3) <code>const</code> pode ser declarada fora de função, em escopo global, e nunca aceita <code>mut</code> — já <code>let</code> só existe dentro de um escopo e admite <code>mut</code>.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Um programa precisa guardar as coordenadas de um ponto e, separadamente, as cinco notas de um aluno. Escolha entre tupla e array para cada caso, justificando, e escreva a declaração dos dois.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O ponto pede <strong>tupla</strong>, porque agrupa valores que significam coisas diferentes (e podem ter tipos diferentes); as notas pedem <strong>array</strong>, porque são muitos valores do mesmo tipo e mesmo papel, percorridos em conjunto.</p><pre><code class="language-rust">let ponto: (f64, f64) = (3.5, -1.2);
+let notas: [f32; 5] = [8.0, 7.5, 9.0, 6.5, 10.0];
+</code></pre><p>O tamanho faz parte do tipo do array (<code>[f32; 5]</code>), o que significa que ele não cresce — para uma quantidade que varia em tempo de execução, o tipo adequado seria <code>Vec&lt;f32&gt;</code>.</p>
+</div>
+</details>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><strong>The Rust Programming Language, Cap. 3</strong> &mdash; <em>Common Programming Concepts</em> &mdash; <a href="https://doc.rust-lang.org/book/ch03-00-common-programming-concepts.html" target="_blank" rel="noopener">https://doc.rust-lang.org/book/ch03-00-common-programming-concepts.html</a></li>
+<li><strong>Rust Reference &mdash; Types</strong> &mdash; especifica&ccedil;&atilde;o formal dos tipos primitivos &mdash; <a href="https://doc.rust-lang.org/reference/types.html" target="_blank" rel="noopener">https://doc.rust-lang.org/reference/types.html</a></li>
+<li><strong>Rust by Example &mdash; Primitives</strong> &mdash; exemplos interativos no navegador &mdash; <a href="https://doc.rust-lang.org/rust-by-example/primitives.html" target="_blank" rel="noopener">https://doc.rust-lang.org/rust-by-example/primitives.html</a></li>
+<li><strong>The Rust Reference &mdash; Const items</strong> &mdash; <a href="https://doc.rust-lang.org/reference/items/constant-items.html" target="_blank" rel="noopener">https://doc.rust-lang.org/reference/items/constant-items.html</a></li>
+<li><strong>Rustlings</strong> &mdash; exerc&iacute;cios pr&aacute;ticos para fixar os conceitos deste artigo &mdash; <a href="https://github.com/rust-lang/rustlings" target="_blank" rel="noopener">https://github.com/rust-lang/rustlings</a></li>
+</ul>

@@ -1,0 +1,227 @@
+<p>Chegamos ao artigo mais importante da s&eacute;rie. Tudo que aprendemos at&eacute; aqui &mdash; vari&aacute;veis, tipos, fun&ccedil;&otilde;es, controle de fluxo &mdash; existe em outras linguagens com pequenas varia&ccedil;&otilde;es. Mas <strong>ownership</strong> &eacute; exclusivo de Rust. &Eacute; o conceito que explica por que Rust &eacute; seguro sem coletor de lixo, e &eacute; o conceito que mais desafia quem vem de outras linguagens.</p>
+<p>Reserve tempo para este artigo. Leia com calma. Volte quantas vezes precisar.</p>
+<h2>Por que gerenciamento de mem&oacute;ria &eacute; dif&iacute;cil</h2>
+<p>Para entender ownership, precisamos primeiro entender o problema que ele resolve.</p>
+<p>Todo programa usa mem&oacute;ria. Existem basicamente duas regi&otilde;es que nos interessam:</p>
+<p>A <strong>stack</strong> &eacute; r&aacute;pida, organizada, e funciona como uma pilha de pratos: o &uacute;ltimo a entrar &eacute; o primeiro a sair. Vari&aacute;veis de tamanho conhecido em tempo de compila&ccedil;&atilde;o vivem aqui &mdash; inteiros, booleanos, floats, tuplas de tamanho fixo. Quando uma fun&ccedil;&atilde;o termina, toda a sua stack &eacute; liberada automaticamente.</p>
+<p>O <strong>heap</strong> &eacute; uma regi&atilde;o de mem&oacute;ria maior e mais flex&iacute;vel, usada para dados cujo tamanho n&atilde;o se conhece em tempo de compila&ccedil;&atilde;o &mdash; ou que precisam sobreviver al&eacute;m do escopo onde foram criados. Mas o heap tem um custo: voc&ecirc; precisa gerenci&aacute;-lo manualmente ou ter um sistema que fa&ccedil;a isso por voc&ecirc;.</p>
+<p>Em <strong>C</strong>, voc&ecirc; gerencia manualmente com <code>malloc</code> e <code>free</code>. Esque&ccedil;a o <code>free</code> e voc&ecirc; tem um <strong>memory leak</strong>. Libere duas vezes e voc&ecirc; tem um <strong>double free</strong>, que corrompe o programa. Use a mem&oacute;ria depois de liberar e voc&ecirc; tem um <strong>use-after-free</strong> &mdash; porta de entrada para ataques de seguran&ccedil;a.</p>
+<p>Em <strong>Java, Python e Go</strong>, um coletor de lixo monitora quais objetos ainda s&atilde;o referenciados e libera os que n&atilde;o s&atilde;o mais usados. Seguro &mdash; mas com custo: pausas imprevis&iacute;veis, overhead de CPU e mem&oacute;ria.</p>
+<p>Rust escolheu um terceiro caminho: <strong>ownership</strong>.</p>
+<h2>As tr&ecirc;s regras de Ownership</h2>
+<p>Ownership em Rust se resume a tr&ecirc;s regras. O compilador as verifica em tempo de compila&ccedil;&atilde;o &mdash; sem custo em execu&ccedil;&atilde;o:</p>
+<p><strong>Regra 1:</strong> Cada valor em Rust tem exatamente um dono.</p>
+<p><strong>Regra 2:</strong> S&oacute; pode haver um dono por vez.</p>
+<p><strong>Regra 3:</strong> Quando o dono sai de escopo, o valor &eacute; destru&iacute;do.</p>
+<p>Simples de enunciar. Profundas nas consequ&ecirc;ncias. Vamos explorar cada uma.</p>
+<h2>Escopo e destrui&ccedil;&atilde;o autom&aacute;tica</h2>
+<p>Comece com o mais simples &mdash; a regra 3:</p>
+<pre><code>fn main() {
+    {
+        let s = String::from("ol&aacute;"); // s entra em escopo
+        println!("{s}");
+    } // s sai de escopo aqui &mdash; mem&oacute;ria liberada automaticamente
+
+    // println!("{s}"); // ERRO: s n&atilde;o existe mais
+}
+</code></pre>
+<p>Quando <code>s</code> sai do bloco, Rust chama automaticamente uma fun&ccedil;&atilde;o especial chamada <code>drop</code> &mdash; que libera a mem&oacute;ria do heap. Isso acontece deterministicamente, sempre no mesmo ponto, sem coletor de lixo.</p>
+<p>Note que usamos <code>String</code> aqui, n&atilde;o <code>&amp;str</code>. A diferen&ccedil;a &eacute; importante:</p>
+<ul>
+<li><code>&amp;str</code> &eacute; uma refer&ecirc;ncia a uma string de tamanho fixo, geralmente armazenada no bin&aacute;rio do programa. Vive na stack.</li>
+<li><code>String</code> &eacute; uma string din&acirc;mica, alocada no heap, que pode crescer e mudar.</li>
+</ul>
+<h2>Move &mdash; a regra 2 em a&ccedil;&atilde;o</h2>
+<p>Aqui est&aacute; onde a maioria das pessoas trope&ccedil;a pela primeira vez:</p>
+<pre><code>fn main() {
+    let s1 = String::from("hello");
+    let s2 = s1; // s1 &eacute; movido para s2
+
+    println!("{s1}"); // ERRO: s1 foi movido!
+}
+</code></pre>
+<p>Quando voc&ecirc; escreve <code>let s2 = s1</code>, em outras linguagens esperaria uma c&oacute;pia ou dois ponteiros para o mesmo dado. Em Rust, ocorre um <strong>move</strong>: a propriedade do valor &eacute; transferida de <code>s1</code> para <code>s2</code>. Ap&oacute;s isso, <code>s1</code> n&atilde;o existe mais &mdash; o compilador o invalida.</p>
+<p>Por qu&ecirc;? Porque se dois nomes apontassem para o mesmo dado no heap, quando ambos sa&iacute;ssem de escopo, o <code>drop</code> seria chamado duas vezes &mdash; o famoso double free. Rust simplesmente n&atilde;o permite que isso aconte&ccedil;a.</p>
+<p>Visualmente, o que ocorre:</p>
+<pre><code>Antes do move:
+s1 --&gt; [ ptr | len=5 | cap=5 ] --&gt; heap: "hello"
+
+Ap&oacute;s let s2 = s1:
+s1 --&gt; (inv&aacute;lido)
+s2 --&gt; [ ptr | len=5 | cap=5 ] --&gt; heap: "hello"
+</code></pre>
+<h2>Clone &mdash; quando voc&ecirc; realmente quer uma c&oacute;pia</h2>
+<p>Se voc&ecirc; precisa de uma c&oacute;pia independente do dado no heap, use <code>.clone()</code>:</p>
+<pre><code>fn main() {
+    let s1 = String::from("hello");
+    let s2 = s1.clone(); // c&oacute;pia profunda do heap
+
+    println!("s1 = {s1}"); // funciona!
+    println!("s2 = {s2}"); // funciona!
+}
+</code></pre>
+<p>O clone cria uma segunda c&oacute;pia completa dos dados no heap. Agora s1 e s2 s&atilde;o independentes, cada um com seu pr&oacute;prio dono. Ambos ser&atilde;o destru&iacute;dos quando sa&iacute;rem de escopo.</p>
+<p>O <code>.clone()</code> &eacute; expl&iacute;cito por design &mdash; em Rust, opera&ccedil;&otilde;es custosas nunca acontecem nas suas costas. Se voc&ecirc; est&aacute; clonando, est&aacute; dizendo conscientemente: <em>"Sei que isso tem um custo, e quero faz&ecirc;-lo assim mesmo."</em></p>
+<h2>Tipos que copiam automaticamente</h2>
+<p>Mas espera &mdash; no artigo <a href="/rust/variaveis-tipos-e-a-arte-da-imutabilidade">Variáveis, Tipos e a Arte da Imutabilidade</a> fizemos isso sem problemas:</p>
+<pre><code>fn main() {
+    let x = 5;
+    let y = x;
+    println!("{x} {y}"); // funciona!
+}
+</code></pre>
+<p>Por que <code>x</code> n&atilde;o foi movido? Porque <code>i32</code> &eacute; um tipo que vive inteiramente na stack, de tamanho fixo e conhecido. Para esses tipos, copiar &eacute; t&atilde;o barato quanto mover &mdash; ent&atilde;o Rust simplesmente copia. N&atilde;o h&aacute; risco de double free porque n&atilde;o h&aacute; heap envolvido.</p>
+<p>Tipos com essa propriedade implementam o trait <code>Copy</code>. S&atilde;o eles: todos os inteiros, floats, <code>bool</code>, <code>char</code>, e tuplas compostas apenas de tipos <code>Copy</code>. <code>String</code> <strong>n&atilde;o</strong> implementa <code>Copy</code> &mdash; ela tem dados no heap.</p>
+<h2>Ownership e fun&ccedil;&otilde;es</h2>
+<p>As mesmas regras se aplicam quando voc&ecirc; passa valores para fun&ccedil;&otilde;es:</p>
+<pre><code>fn consumir(s: String) {
+    println!("{s}");
+} // s &eacute; destru&iacute;do aqui
+
+fn main() {
+    let minha_string = String::from("mundo");
+    consumir(minha_string); // ownership transferido para a fun&ccedil;&atilde;o
+
+    // println!("{minha_string}"); // ERRO: foi movido!
+}
+</code></pre>
+<p>Passar uma <code>String</code> para uma fun&ccedil;&atilde;o &eacute; um <strong>move</strong>. A fun&ccedil;&atilde;o se torna a nova dona. Quando a fun&ccedil;&atilde;o termina, a string &eacute; destru&iacute;da.</p>
+<p>E quando a fun&ccedil;&atilde;o retorna um valor, o ownership &eacute; transferido de volta:</p>
+<pre><code>fn criar_string() -&gt; String {
+    let s = String::from("novo valor");
+    s // ownership transferido para quem chamou
+}
+
+fn main() {
+    let minha = criar_string();
+    println!("{minha}");
+} // minha &eacute; destru&iacute;da aqui
+</code></pre>
+<h2>O problema que isso cria</h2>
+<p>Imagine que voc&ecirc; quer usar uma string em uma fun&ccedil;&atilde;o mas ainda precisa dela depois:</p>
+<pre><code>fn tamanho(s: String) -&gt; usize {
+    s.len()
+}
+
+fn main() {
+    let s = String::from("hello");
+    let tam = tamanho(s);
+    // println!("{s}"); // ERRO! s foi movido para tamanho()
+    println!("Tamanho: {tam}");
+}
+</code></pre>
+<p>Uma solu&ccedil;&atilde;o seria retornar a string de volta junto com o resultado:</p>
+<pre><code>fn tamanho(s: String) -&gt; (String, usize) {
+    let len = s.len();
+    (s, len) // devolve a string junto com o resultado
+}
+
+fn main() {
+    let s = String::from("hello");
+    let (s, tam) = tamanho(s);
+    println!("{s} tem {tam} caracteres");
+}
+</code></pre>
+<p>Funciona &mdash; mas &eacute; verboso e inconveniente. Ter que devolver toda vari&aacute;vel que voc&ecirc; usa em uma fun&ccedil;&atilde;o seria insuport&aacute;vel em programas reais.</p>
+<p>&Eacute; exatamente para resolver isso que Rust introduz o conceito de <strong>borrowing</strong> &mdash; refer&ecirc;ncias que permitem usar um valor sem tomar posse dele.</p>
+<h2>Um vislumbre do borrowing</h2>
+<p>O borrowing usa o s&iacute;mbolo <code>&amp;</code> para criar uma refer&ecirc;ncia:</p>
+<pre><code>fn tamanho(s: &amp;String) -&gt; usize {
+    s.len()
+}
+
+fn main() {
+    let s = String::from("hello");
+    let tam = tamanho(&amp;s); // emprestamos s, n&atilde;o movemos
+    println!("{s} tem {tam} caracteres"); // s ainda &eacute; v&aacute;lida!
+}
+</code></pre>
+<p>Com <code>&amp;s</code>, estamos <strong>emprestando</strong> a string para a fun&ccedil;&atilde;o &mdash; ela pode us&aacute;-la, mas n&atilde;o &eacute; a dona. Quando a fun&ccedil;&atilde;o termina, ela devolve o empr&eacute;stimo automaticamente. <code>s</code> continua v&aacute;lida no <code>main</code>.</p>
+<p>Essa &eacute; a ess&ecirc;ncia do borrowing, tratada a fundo em <a href="/rust/borrowing-e-referencias-usando-sem-possuir">Borrowing e Referências — Usando sem Possuir</a>.</p>
+<h2>Resumo visual das regras</h2>
+<pre><code>// MOVE: ownership transferido
+let s1 = String::from("a");
+let s2 = s1;          // s1 inv&aacute;lido
+
+// CLONE: c&oacute;pia independente
+let s1 = String::from("a");
+let s2 = s1.clone();  // s1 e s2 v&aacute;lidos
+
+// COPY: tipos simples copiam automaticamente
+let x: i32 = 5;
+let y = x;            // x e y v&aacute;lidos
+
+// BORROW (preview): refer&ecirc;ncia sem transferir ownership
+let s1 = String::from("a");
+let tam = tamanho(&amp;s1); // s1 ainda v&aacute;lido
+</code></pre>
+<h2>O compilador como professor</h2>
+<p>Ownership &eacute; a parte de Rust que mais gera erros nos primeiros dias. Mas cada erro do compilador &eacute; uma li&ccedil;&atilde;o &mdash; ele te diz exatamente o que aconteceu e frequentemente sugere a corre&ccedil;&atilde;o. N&atilde;o tente contornar os erros. Tente entend&ecirc;-los.</p>
+<p>Com o tempo, voc&ecirc; vai internalizar as regras a ponto de escrev&ecirc;-las naturalmente. E quando isso acontecer, vai perceber que est&aacute; escrevendo c&oacute;digo que simplesmente n&atilde;o tem certos bugs &mdash; n&atilde;o porque voc&ecirc; &eacute; mais cuidadoso, mas porque o compilador tornou esses bugs imposs&iacute;veis.</p>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Enuncie as três regras de ownership e explique o que acontece com a memória quando o dono sai de escopo.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> (1) Cada valor tem um dono. (2) Só pode haver um dono por vez. (3) Quando o dono sai de escopo, o valor é descartado. No fim do escopo o compilador insere a chamada de <code>drop</code>, que libera os recursos do valor — para uma <code>String</code>, a memória alocada no heap. Isso ocorre em ponto determinado em tempo de compilação, sem coletor de lixo e sem <code>free</code> manual.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>O código não compila. Explique o erro com precisão e mostre duas correções com efeitos diferentes.</p><pre><code class="language-rust">fn main() {
+    let s1 = String::from("olá");
+    let s2 = s1;
+    println!("{s1}");
+}
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A atribuição <code>let s2 = s1</code> é um <strong>move</strong>: a posse do buffer passa para <code>s2</code> e <code>s1</code> deixa de ser válida, para que os dois não tentem liberar a mesma memória. O erro é <code>borrow of moved value: s1</code>. Primeira correção, duplicando os dados no heap:</p><pre><code class="language-rust">let s2 = s1.clone();
+println!("{s1}");
+</code></pre><p>Segunda, emprestando em vez de mover:</p><pre><code class="language-rust">let s2 = &amp;s1;
+println!("{s1} {s2}");
+</code></pre><p>A diferença é de custo: <code>clone</code> aloca e copia o conteúdo; a referência não copia nada, mas exige que <code>s1</code> continue viva enquanto <code>s2</code> existir.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Por que <code>let x = 5; let y = x; println!("{x}");</code> compila, enquanto o equivalente com <code>String</code> não?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Porque <code>i32</code> implementa o trait <code>Copy</code>. Tipos <code>Copy</code> vivem inteiramente na pilha e têm tamanho fixo conhecido, então duplicá-los é copiar alguns bytes — barato e sem dono a disputar. A atribuição faz uma cópia e o original continua válido. A <code>String</code> tem um ponteiro para o heap: copiar os bytes do cabeçalho criaria dois donos do mesmo buffer, e a liberação dupla que isso causaria é exatamente o que o move evita. São <code>Copy</code> os inteiros, os reais, <code>bool</code>, <code>char</code> e as tuplas cujos elementos sejam todos <code>Copy</code>.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Escreva uma função que receba uma <code>String</code>, conte seus caracteres e devolva a contagem — de modo que quem chamou ainda possa usar a string depois. Mostre a chamada.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A forma idiomática é emprestar em vez de tomar posse:</p><pre><code class="language-rust">fn contar(s: &amp;String) -&gt; usize {
+    s.chars().count()
+}
+
+fn main() {
+    let texto = String::from("olá mundo");
+    let n = contar(&amp;texto);
+    println!("{texto} tem {n} caracteres");
+}
+</code></pre><p>Se a função tomasse <code>String</code> por valor, o texto seria movido para dentro dela e ficaria inacessível no <code>main</code> — a saída seria devolver a string junto com a contagem, numa tupla, o que é desajeitado. Na prática, o parâmetro melhor é <code>&amp;str</code>, que aceita tanto <code>String</code> quanto literal. Note também <code>chars().count()</code> em vez de <code>len()</code>: <code>len()</code> devolve bytes, e em UTF-8 um caractere acentuado ocupa mais de um.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Um colega diz que ownership existe para economizar memória. Corrija a afirmação, dizendo qual classe de bugs o sistema de fato elimina.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Ownership não economiza memória — um programa em Rust usa aproximadamente o mesmo que o equivalente em C. O que ele elimina, em tempo de compilação, é uma classe inteira de bugs: uso depois da liberação, liberação dupla, ponteiro pendurado e o esquecimento de liberar. Em C esses erros compilam e falham em execução, muitas vezes longe da causa; em Rust não passam do compilador. O ganho é de correção e previsibilidade, não de consumo — e vem sem o custo de tempo de execução de um coletor de lixo.</p>
+</div>
+</details>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><strong>The Rust Programming Language, Cap. 4</strong> &mdash; <em>Understanding Ownership</em> &mdash; <a href="https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html" target="_blank" rel="noopener">https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html</a></li>
+<li><strong>Rust by Example &mdash; Ownership and moves</strong> &mdash; <a href="https://doc.rust-lang.org/rust-by-example/scope/move.html" target="_blank" rel="noopener">https://doc.rust-lang.org/rust-by-example/scope/move.html</a></li>
+<li><strong>Visualizing Memory Layout of Rust's Data Types</strong> &mdash; Raph Levien &mdash; <a href="https://docs.google.com/presentation/d/1q-c7UAyrUlM-eZyTo1pd8SZ0qwA_wYxmPZVOQkoDmH4" target="_blank" rel="noopener">https://docs.google.com/presentation/d/1q-c7UAyrUlM-eZyTo1pd8SZ0qwA_wYxmPZVOQkoDmH4</a></li>
+<li><strong>Jon Gjengset &mdash; Crust of Rust: Ownership</strong> &mdash; aula em v&iacute;deo aprofundada &mdash; <a href="https://www.youtube.com/watch?v=8M0QfLUDaaA" target="_blank" rel="noopener">https://www.youtube.com/watch?v=8M0QfLUDaaA</a></li>
+<li>The Rust Book &mdash; o que &eacute; ownership: <a href="https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html" target="_blank" rel="noopener">https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html</a></li>
+</ul>

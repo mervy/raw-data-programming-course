@@ -1,0 +1,91 @@
+<p>Toda arte tem suas ferramentas, e a programação não é exceção. Antes de escrever a primeira instrução, precisamos equipar o seu computador com aquilo que transforma o texto que você digita em um programa que funciona. Esta aula é integralmente prática: ao final dela, seu computador estará pronto para programar em C#. Não pressuponho que você tenha instalado qualquer coisa relacionada a programação antes, nem que conheça termos técnicos — explicarei cada ferramenta, o que ela faz e por que você precisa dela, antes de instalá-la. Vá com calma, siga os passos na ordem, e não se preocupe se algo parecer estranho: a estranheza inicial com ferramentas novas é normal e passa com o uso.</p>
+<h2>As três ferramentas de que você precisa</h2>
+<p>Para programar em C#, você precisa de três coisas, e vale entender o papel de cada uma antes de instalá-las.</p>
+<p>A primeira é o <strong>.NET SDK</strong>. Lembra que, na aula anterior, dissemos que o que você escreve precisa ser <em>traduzido</em> para a linguagem de máquina? O SDK (sigla, em inglês, para "kit de desenvolvimento de software") contém justamente essa ferramenta de tradução — chamada <em>compilador</em> — mais tudo o que é necessário para <em>executar</em> os programas resultantes. Pense no SDK como o motor invisível de toda a operação: você raramente interage com ele diretamente, mas nada funciona sem ele. Instalar o .NET SDK é instalar a capacidade de o seu computador entender e rodar C#.</p>
+<p>A segunda é um <strong>editor de código</strong>: o programa onde você efetivamente <em>escreve</em> suas instruções. Em princípio, qualquer editor de texto serviria, mas um bom editor de código faz muito mais que aceitar texto — ele colore as palavras para facilitar a leitura, aponta erros enquanto você digita, sugere continuações, e ajuda a organizar arquivos. Usaremos o <strong>Visual Studio Code</strong> (abreviado "VS Code"), gratuito, leve e um dos mais populares do mundo. Um cuidado com os nomes, que confunde muitos iniciantes: "Visual Studio Code" (VS Code) é o editor leve que usaremos; existe também um programa maior chamado apenas "Visual Studio", que é uma ferramenta diferente e mais pesada. Para este curso, queremos o <strong>VS Code</strong>.</p>
+<p>A terceira ferramenta não se instala; você já a tem: o <strong>terminal</strong>, também chamado de linha de comando ou console. É uma janela onde você digita comandos em texto e o computador responde, também em texto — uma forma de conversar com a máquina mais direta e antiga que os cliques e janelas a que você está acostumado. Programadores usam o terminal o tempo todo, porque ele é rápido e preciso, e nós o usaremos para pedir ao .NET que crie e execute nossos programas. Se ele lhe parece intimidante agora, tenha paciência: em poucas aulas você o achará natural.</p>
+<h2>Uma decisão inicial: Windows ou Linux (via WSL)</h2>
+<p>Aqui preciso apresentar uma bifurcação. Se você usa Windows, tem duas opções: programar diretamente no Windows, ou usar uma ferramenta chamada <strong>WSL</strong> (sigla, em inglês, para "Subsistema do Windows para Linux"), que faz rodar um sistema Linux <em>dentro</em> do seu Windows. O Linux é outro sistema operacional, muito usado por programadores e por servidores que hospedam sites e serviços. Aprender a programar já dentro de um ambiente Linux é vantajoso, porque é o ambiente que você encontrará profissionalmente com frequência — mas exige um passo de instalação a mais. Como você está começando do zero, apresentarei os dois caminhos, e você pode escolher o que lhe for mais confortável; o restante do curso funciona identicamente nos dois. Se estiver em dúvida, comece pelo Windows nativo, que é mais simples, e experimente o WSL quando se sentir à vontade.</p>
+<h2>Caminho A — Instalando no Windows (direto)</h2>
+<p>No Windows moderno, o jeito mais simples de instalar o .NET SDK usa uma ferramenta chamada <code>winget</code>, que já vem no sistema e serve para instalar programas por comando. Abra o menu Iniciar, digite "PowerShell" (um dos terminais do Windows), abra-o, e digite o seguinte, pressionando Enter ao final:</p>
+<pre><code class="language-powershell">winget install Microsoft.DotNet.SDK.10</code></pre>
+<p>Aguarde a instalação concluir. Depois, <strong>feche e reabra</strong> o PowerShell (isso é necessário para ele reconhecer a nova ferramenta) e confirme que deu certo digitando:</p>
+<pre><code class="language-powershell">dotnet --version</code></pre>
+<p>Se aparecer um número como <code>10.0.100</code>, o SDK está instalado e funcionando. Se preferir não usar o <code>winget</code>, você também pode baixar um instalador gráfico no site oficial <code>dotnet.microsoft.com/download</code> — escolha o <strong>SDK</strong> (e não apenas o "Runtime", que só executa programas mas não os cria). Em seguida, instale o VS Code baixando-o de <code>code.visualstudio.com</code> e seguindo o instalador; ao abri-lo pela primeira vez, instale a extensão chamada <strong>C# Dev Kit</strong> (veremos como na próxima aula).</p>
+<h2>Caminho B — Instalando no Linux via WSL</h2>
+<p>Se você optou pelo WSL, primeiro instale-o. Abra o PowerShell <strong>como administrador</strong> (clique com o botão direito no PowerShell e escolha "Executar como administrador") e digite:</p>
+<pre><code class="language-powershell">wsl --install</code></pre>
+<p>Isso instala o WSL com o Ubuntu, uma das versões mais populares do Linux. Reinicie o computador se for solicitado. Ao abrir o Ubuntu pela primeira vez (ele aparece no menu Iniciar), ele pedirá que você crie um nome de usuário e uma senha para o Linux — anote-os. A partir daí, você está diante de um terminal Linux. Instale o .NET SDK digitando:</p>
+<pre><code class="language-bash">sudo apt-get update
+sudo apt-get install -y dotnet-sdk-10.0</code></pre>
+<p>O <code>sudo</code> é o comando que executa uma ação com permissões de administrador; ele pedirá a senha que você criou (ao digitá-la, os caracteres não aparecem na tela — isso é normal, por segurança). Ao final, confirme com:</p>
+<pre><code class="language-bash">dotnet --version</code></pre>
+<p>Um número como <code>10.0.100</code> confirma o sucesso. Para editar código, instale o VS Code no <em>Windows</em> (não dentro do Linux) a partir de <code>code.visualstudio.com</code>, e adicione as extensões <strong>WSL</strong> e <strong>C# Dev Kit</strong> — com elas, o editor roda no Windows mas trabalha com os arquivos do Linux, o melhor dos dois mundos.</p>
+<p><strong>Se o terminal responder <em>Unable to locate package dotnet-sdk-10.0</em>, o erro não é seu.</strong> Esse pacote não existe em toda distribuição Linux: o Ubuntu o empacota nos próprios repositórios, o Debian não. Quando ele não é encontrado, há dois caminhos, e os dois funcionam.</p>
+<p>O primeiro é acrescentar o repositório da Microsoft, que mantém o .NET sob o gerenciador de pacotes do sistema — é o caminho preferível quando a sua distribuição é suportada. No Debian:</p>
+<pre><code class="language-bash">wget https://packages.microsoft.com/config/debian/13/packages-microsoft-prod.deb -O /tmp/pmp.deb
+sudo dpkg -i /tmp/pmp.deb
+sudo apt-get update
+sudo apt-get install -y dotnet-sdk-10.0</code></pre>
+<p>Troque o <code>13</code> pelo número da sua versão do Debian. O segundo caminho funciona em <em>qualquer</em> distribuição, não depende de repositório e nem sequer pede senha de administrador: o script oficial de instalação, que baixa o SDK para dentro da sua pasta pessoal.</p>
+<pre><code class="language-bash">curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
+chmod +x dotnet-install.sh
+./dotnet-install.sh --channel 10.0</code></pre>
+<p>Esse segundo caminho tem uma pegadinha que derruba quase todo mundo: <strong>o script não altera o <code>PATH</code></strong>. Ele instala em <code>~/.dotnet</code>, anuncia que terminou com sucesso, e ainda assim o terminal responde <em>command not found</em> quando você digita <code>dotnet</code> — porque ele não sabe onde procurar. O próprio script avisa isso na penúltima linha da saída, e é fácil não reparar. As três linhas abaixo resolvem de vez, inclusive para os próximos terminais que você abrir:</p>
+<pre><code class="language-bash">echo &#39;export DOTNET_ROOT=$HOME/.dotnet&#39; &gt;&gt; ~/.bashrc
+echo &#39;export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools&#39; &gt;&gt; ~/.bashrc
+source ~/.bashrc</code></pre>
+<h2>Sobre não entender tudo agora</h2>
+<p>É perfeitamente esperado que vários termos desta aula — SDK, compilador, terminal, WSL — ainda pareçam nebulosos. Você não precisa dominá-los agora; precisa apenas ter as ferramentas instaladas e funcionando. A compreensão profunda de cada uma virá naturalmente, com o uso, ao longo do curso. Programar se aprende programando, e o entendimento das ferramentas se sedimenta à medida que você as usa para fins concretos. Por ora, o objetivo é simples e verificável: digitar <code>dotnet --version</code> e ver um número. Se você chegou a esse ponto, seu ambiente está pronto, e o mais empolgante vem a seguir.</p>
+<p>O ambiente está de pé. Você instalou o SDK do .NET, escolheu entre trabalhar no Windows nativo ou dentro do Linux via WSL, e conheceu as três ferramentas que sustentam o trabalho diário: o kit de desenvolvimento, o editor e o terminal. Cada uma tem um papel distinto, e entender essa divisão evita a confusão comum de achar que o editor é quem compila.</p>
+<p>Se alguma parte do processo pareceu opaca, isso é esperado e não é um problema. Configurar ambiente é a tarefa menos intuitiva da programação justamente porque envolve peças que só fazem sentido depois de usadas. O que importa é que o comando de verificação respondeu com um número de versão: a máquina está pronta.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><strong><a href="https://learn.microsoft.com/dotnet/core/install" target="_blank" rel="noopener noreferrer">Instalação do .NET (guia oficial)</a></strong> — o passo a passo oficial de instalação do SDK por sistema operacional; a referência definitiva se algo divergir nesta aula.</li>
+<li><strong><a href="https://learn.microsoft.com/dotnet/core/install/linux" target="_blank" rel="noopener noreferrer">Instalação do .NET no Linux</a></strong> — o procedimento detalhado por distribuição, útil para o caminho WSL caso o pacote não seja encontrado.</li>
+<li><strong><a href="https://learn.microsoft.com/windows/wsl" target="_blank" rel="noopener noreferrer">Documentação do WSL</a></strong> — o guia oficial para instalar e usar o Subsistema do Windows para Linux.</li>
+<li><strong><a href="https://code.visualstudio.com" target="_blank" rel="noopener noreferrer">Download do Visual Studio Code</a></strong> — a página oficial do editor que usaremos, com instaladores para todos os sistemas.</li>
+<li><strong><a href="https://code.visualstudio.com/docs/terminal/basics" target="_blank" rel="noopener noreferrer">Introdução ao terminal (VS Code)</a></strong> — uma introdução ao terminal integrado ao editor, útil para se familiarizar com a linha de comando.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Explique, com suas palavras, o papel de cada uma das três ferramentas apresentadas: o .NET SDK, o editor de código e o terminal. Qual delas efetivamente "traduz e executa" o seu programa?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O <strong>.NET SDK</strong> contém o compilador (que traduz seu código para a linguagem de máquina) e o necessário para executar os programas — é ele que efetivamente traduz e executa. O <strong>editor de código</strong> (VS Code) é onde você escreve suas instruções, com auxílios como coloração e detecção de erros. O <strong>terminal</strong> é a janela onde você digita comandos em texto para pedir ações ao computador, como criar e rodar programas. A ferramenta que traduz e executa é o SDK.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Instale o .NET SDK pelo caminho que você escolheu (Windows direto ou WSL) e execute <code>dotnet --version</code>. Anote o número exibido. Se aparecer um erro dizendo que o comando não foi encontrado, o que a aula sugere que você faça?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Após a instalação, <code>dotnet --version</code> deve exibir um número como <code>10.0.100</code>. Se aparecer "comando não encontrado", a aula sugere fechar e reabrir o terminal — porque o sistema precisa reiniciar o terminal para reconhecer a ferramenta recém-instalada; se ainda assim não funcionar, revisar se a instalação concluiu corretamente.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Instale o Visual Studio Code. Ao procurá-lo, você encontrará também um programa chamado apenas "Visual Studio" — explique, com base na aula, por que precisa tomar cuidado para instalar o programa certo, e qual é o certo para este curso.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> É preciso cuidado porque os nomes são parecidos, mas os programas são diferentes: "Visual Studio Code" (VS Code) é o editor leve e gratuito que usaremos, enquanto "Visual Studio" (sem "Code") é uma ferramenta separada, maior e mais pesada. Para este curso, o programa certo é o <strong>Visual Studio Code (VS Code)</strong>; instalar o outro por engano traria uma ferramenta diferente da que as aulas assumem.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Pesquise brevemente e explique, em uma ou duas frases, a diferença entre baixar o "SDK" e baixar apenas o "Runtime" do .NET. Por que quem vai <em>criar</em> programas precisa do SDK?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O <strong>Runtime</strong> contém apenas o necessário para <em>executar</em> programas .NET já prontos — é o que um usuário final instala para rodar um programa. O <strong>SDK</strong> contém o Runtime <em>mais</em> o compilador e as ferramentas para <em>criar e compilar</em> programas. Quem vai criar programas precisa do SDK porque, sem o compilador, não há como transformar o código escrito em algo executável; o Runtime sozinho apenas roda o que já foi criado.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Sem instalar nada além do necessário: abra o terminal do seu sistema (PowerShell no Windows, ou o Ubuntu se você usou WSL) e digite <code>dotnet --help</code>. Você não precisa entender a saída; apenas descreva o que aconteceu e reflita sobre o que significa "conversar com o computador por texto".</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Ao digitar <code>dotnet --help</code>, o terminal exibe uma lista de comandos e opções disponíveis da ferramenta <code>dotnet</code> — muito texto que você ainda não precisa entender. O que aconteceu foi uma conversa por texto: você digitou uma instrução (<code>dotnet --help</code>) e o computador respondeu em texto. "Conversar com o computador por texto" significa exatamente isso: em vez de clicar em botões e menus, você escreve comandos precisos e recebe respostas escritas, um modo de interação mais direto e poderoso, ainda que menos visual, do que o das janelas.</p>
+</div>
+</details>
+

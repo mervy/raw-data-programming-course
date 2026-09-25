@@ -1,0 +1,205 @@
+<p>Você já usou uma função sem perceber: <code>main</code> é uma. E já chamou outra: <code>printf</code>. Hoje vamos aprender a criar as nossas. Funções são a ferramenta mais básica de organização em C — mas por trás delas há dois conceitos que definem o caráter da linguagem: a exigência de <strong>declarar antes de usar</strong> e a <strong>passagem por valor</strong>. Entender esse segundo ponto hoje vai fazer os ponteiros, mais adiante, parecerem inevitáveis em vez de misteriosos.</p>
+<h3>Anatomia de uma função</h3>
+<p>Uma função em C tem: um tipo de retorno, um nome, uma lista de parâmetros (cada um com seu tipo) e um corpo:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int quadrado(int n) {
+    return n * n;
+}
+
+int main(void) {
+    int resultado = quadrado(7);
+    printf(&quot;7² = %d\n&quot;, resultado); // 49
+    return 0;
+}
+</code></pre>
+<p><code>int quadrado(int n)</code> diz: "esta função recebe um <code>int</code> chamado <code>n</code> e devolve um <code>int</code>". Ao contrário do Rust, o <code>return</code> em C é <strong>sempre explícito</strong> — não existe retorno implícito da última expressão. Se a função promete devolver um <code>int</code>, ela precisa de um <code>return</code>.</p>
+<h3>Funções que não retornam nada: <code>void</code></h3>
+<p>Quando a função só executa uma ação e não devolve valor, seu tipo de retorno é <code>void</code>:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+void imprimir_linha(const char *texto) {
+    printf(&quot;%s\n&quot;, texto);
+}
+
+int main(void) {
+    imprimir_linha(&quot;Primeira linha&quot;);
+    imprimir_linha(&quot;Segunda linha&quot;);
+    return 0;
+}
+</code></pre>
+<p>O <code>const char *texto</code> é um parâmetro do tipo string — que estudaremos a fundo depois. Por ora, basta saber que <code>%s</code> imprime texto.</p>
+<h3>A ordem importa: declare antes de usar</h3>
+<p>Aqui o C difere do Rust de forma marcante. O compilador lê o arquivo de cima para baixo e precisa <strong>conhecer</strong> uma função antes que ela seja chamada. Se você definir <code>quadrado</code> <strong>depois</strong> de <code>main</code>, o compilador reclama ao encontrar a chamada.</p>
+<p>A solução idiomática é o <strong>protótipo</strong>: você anuncia a assinatura da função no topo do arquivo e escreve o corpo onde quiser:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// Protótipos — anunciam as funções antes do uso
+int  quadrado(int n);
+void imprimir_resultado(int valor);
+
+int main(void) {
+    imprimir_resultado(quadrado(9));
+    return 0;
+}
+
+// Definições — a ordem aqui já não importa
+int quadrado(int n) {
+    return n * n;
+}
+
+void imprimir_resultado(int valor) {
+    printf(&quot;Resultado: %d\n&quot;, valor);
+}
+</code></pre>
+<p>O protótipo termina com ponto e vírgula e não tem corpo. Ele é uma <strong>promessa</strong> ao compilador: "esta função existe e tem esta assinatura; confie em mim, a definição vem depois". É exatamente esse mecanismo que, mais adiante, vai permitir espalhar funções por vários arquivos usando cabeçalhos (<code>.h</code>).</p>
+<h3>Passagem por valor: o conceito central de hoje</h3>
+<p>Preste muita atenção aqui, porque isso explica metade dos "comportamentos estranhos" que iniciantes veem em C. Quando você passa uma variável para uma função, o C entrega uma <strong>cópia</strong> dela. A função trabalha sobre a cópia; o original permanece intocado.</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+void tentar_dobrar(int x) {
+    x = x * 2;
+    printf(&quot;Dentro da função: %d\n&quot;, x);
+}
+
+int main(void) {
+    int numero = 10;
+    tentar_dobrar(numero);
+    printf(&quot;Depois da função: %d\n&quot;, numero);
+    return 0;
+}
+</code></pre>
+<p>Saída:</p>
+<pre><code class="language-text">Dentro da função: 20
+Depois da função: 10
+</code></pre>
+<p>O <code>numero</code> continua <code>10</code>. A função dobrou a <strong>cópia</strong> que recebeu, não o original. Isso não é um bug — é uma garantia: uma função não pode alterar suas variáveis por acidente.</p>
+<p>"Mas e se eu <em>quiser</em> que a função altere o original?" Excelente pergunta — e é exatamente para isso que existem os <strong>ponteiros</strong>, que veremos em detalhe em breve. Por ora, guarde a pergunta; ela é a ponte para um dos temas mais importantes do C.</p>
+<h3>Escopo: onde uma variável vive</h3>
+<p>Uma variável declarada dentro de um bloco (<code>{ ... }</code>) só existe ali. Fora dele, é como se nunca tivesse existido:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int fora = 1;
+
+    {
+        int dentro = 2;
+        printf(&quot;%d %d\n&quot;, fora, dentro); // ok: 1 2
+    }
+
+    // printf(&quot;%d\n&quot;, dentro); // ERRO: 'dentro' não existe aqui
+    printf(&quot;%d\n&quot;, fora); // ok
+    return 0;
+}
+</code></pre>
+<p>O mesmo vale para parâmetros e variáveis locais de uma função: eles nascem quando a função é chamada e morrem quando ela retorna. Cada chamada tem seu próprio conjunto de variáveis locais, independentes das outras.</p>
+<p>Existem também variáveis <strong>globais</strong>, declaradas fora de qualquer função, visíveis por todo o arquivo. Elas são tentadoras, mas perigosas: qualquer função pode alterá-las, o que torna o código difícil de rastrear. Use-as com muita parcimônia — a regra é preferir sempre o escopo mais restrito possível.</p>
+<h3>Um exemplo que junta tudo</h3>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+double celsius_para_fahrenheit(double c);
+void   descrever(double celsius);
+
+int main(void) {
+    double temperaturas[] = {0.0, 20.0, 37.0, 100.0};
+    int total = 4;
+
+    for (int i = 0; i &lt; total; i++) {
+        descrever(temperaturas[i]);
+    }
+    return 0;
+}
+
+double celsius_para_fahrenheit(double c) {
+    return c * 1.8 + 32.0;
+}
+
+void descrever(double celsius) {
+    double f = celsius_para_fahrenheit(celsius);
+    printf(&quot;%.1f°C = %.1f°F\n&quot;, celsius, f);
+}
+</code></pre>
+<p>Saída:</p>
+<pre><code class="language-text">0.0°C = 32.0°F
+20.0°C = 68.0°F
+37.0°C = 98.6°F
+100.0°C = 212.0°F
+</code></pre>
+<p>Repare em como o programa fica legível: <code>main</code> cuida do laço, <code>descrever</code> cuida da apresentação, e <code>celsius_para_fahrenheit</code> cuida da conta. Cada função faz uma coisa. Esse é o começo do que, mais adiante, chamaremos de código limpo.</p>
+<p>Funções em C carregam duas exigências que surpreendem quem vem de linguagens mais novas: é preciso anunciá-las antes de usá-las, e tudo o que elas recebem chega como cópia. A segunda é a mais importante das duas. Enquanto só existir passagem por valor, nenhuma função consegue alterar a variável de quem a chamou — e é exatamente desse limite que nascem os ponteiros, algumas aulas adiante. Vale guardar a inquietação: ela tem resposta.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><a href="https://books.google.com/books/about/The_C_Programming_Language.html?id=FGkPBQAAQBAJ" target="_blank" rel="noopener noreferrer"><em>The C Programming Language</em></a> (K&amp;R), Kernighan &amp; Ritchie — Cap. 4, <em>Functions and Program Structure</em></li>
+<li>cppreference — Functions — <a href="https://en.cppreference.com/w/c/language/functions" target="_blank" rel="noopener noreferrer">https://en.cppreference.com/w/c/language/functions</a></li>
+<li>cppreference — Scope — <a href="https://en.cppreference.com/w/c/language/scope" target="_blank" rel="noopener noreferrer">https://en.cppreference.com/w/c/language/scope</a></li>
+<li><em>Modern C</em>, Jens Gustedt — capítulo sobre funções e o modelo de execução — <a href="https://gustedt.gitlabpages.inria.fr/modern-c/" target="_blank" rel="noopener noreferrer">https://gustedt.gitlabpages.inria.fr/modern-c/</a></li>
+<li>GCC Warning Options — use <code>-Wall -Wextra</code> para o compilador te avisar sobre protótipos faltando — <a href="https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html" target="_blank" rel="noopener noreferrer">https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html</a></li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Escreva uma função <code>int cubo(int n)</code> que devolva <code>n</code> ao cubo, e chame-a a partir de <code>main</code> para os números de 1 a 5.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int cubo(int n) {
+    return n * n * n;
+}
+
+int main(void) {
+    for (int i = 1; i &lt;= 5; i++) {
+        printf(&quot;%d³ = %d\n&quot;, i, cubo(i));
+    }
+    return 0;
+}
+</code></pre>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Escreva uma função <code>void saudar(const char *nome)</code> que imprima "Olá, &lt;nome&gt;!". Chame-a com três nomes diferentes.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+void saudar(const char *nome) {
+    printf(&quot;Olá, %s!\n&quot;, nome);
+}
+
+int main(void) {
+    saudar(&quot;Ana&quot;);
+    saudar(&quot;Bruno&quot;);
+    saudar(&quot;Marcelo&quot;);
+    return 0;
+}
+</code></pre>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>No exemplo de passagem por valor, adicione um <code>printf</code> dentro de <code>tentar_dobrar</code> mostrando o valor <strong>antes</strong> de multiplicar. Explique, olhando a saída, por que o <code>numero</code> original em <code>main</code> não muda.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Com o <code>printf</code> extra, a saída de <code>tentar_dobrar</code> mostra o valor entrando como <code>10</code> e saindo como <code>20</code>, mas o <code>main</code> segue imprimindo <code>10</code>. O motivo: a função recebeu uma <strong>cópia</strong> de <code>numero</code>. Todas as operações (<code>x = x * 2</code>) modificaram essa cópia local, que é destruída quando a função retorna. O original em <code>main</code> nunca foi tocado — a passagem por valor garante isso.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Reescreva o programa do cubo movendo a definição de <code>cubo</code> para <strong>depois</strong> de <code>main</code>, sem usar protótipo. Compile com <code>gcc -Wall</code>. Que aviso ou erro aparece? Depois, adicione o protótipo e compile de novo.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Sem protótipo e com a definição depois de <code>main</code>, o <code>gcc -Wall</code> emite um aviso como <em>"implicit declaration of function 'cubo'"</em> (e, em padrões recentes como C23, isso já é <strong>erro</strong>). O compilador encontrou a chamada antes de conhecer a função. Ao adicionar o protótipo <code>int cubo(int n);</code> no topo, o aviso desaparece: você anunciou a assinatura antes do uso.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Declare uma variável dentro de um bloco <code>{ }</code> interno em <code>main</code> e tente usá-la fora do bloco. Que erro o compilador dá? O que isso ensina sobre escopo?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O compilador dá um erro do tipo <em>"'x' undeclared (first use in this function)"</em> ao tentar usar a variável fora do bloco onde ela foi declarada. Isso mostra que variáveis têm <strong>escopo de bloco</strong>: elas existem apenas dentro do par de chaves em que foram criadas, e deixam de existir ao fim dele. É o mecanismo que evita que nomes locais de uma parte do código colidam com os de outra.</p>
+</div>
+</details>
+

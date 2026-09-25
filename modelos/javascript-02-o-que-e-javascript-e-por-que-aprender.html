@@ -1,0 +1,229 @@
+<p>Se voc&ecirc; quer trabalhar com desenvolvimento web &mdash; seja criando sites, aplica&ccedil;&otilde;es, sistemas ou at&eacute; servidores &mdash; o JavaScript &eacute; inevit&aacute;vel. Ele &eacute; a &uacute;nica linguagem que roda nativamente nos navegadores, e hoje tamb&eacute;m roda no servidor, em aplicativos mobile, em IoT, e muito mais.</p>
+<p>Neste artigo inaugural da nossa s&eacute;rie, vou te apresentar o JavaScript do zero, com calma e sem atalhos. Em um ano, voc&ecirc; vai dominar desde o b&aacute;sico at&eacute; frameworks modernos como React e Node.js. Mas todo grande edif&iacute;cio come&ccedil;a pela funda&ccedil;&atilde;o.</p>
+<h3>O que &eacute; JavaScript?</h3>
+<p>JavaScript &eacute; uma linguagem de programa&ccedil;&atilde;o <strong>interpretada</strong>, <strong>din&acirc;mica</strong> e <strong>orientada a eventos</strong>, criada em 1995 por Brendan Eich em apenas 10 dias. Apesar da origem apressada, ela se tornou a linguagem mais popular do mundo por d&eacute;cadas seguidas.</p>
+<p>Ela foi criada para dar vida &agrave;s p&aacute;ginas HTML &mdash; que sozinhas s&atilde;o est&aacute;ticas, como um documento de texto. Com JavaScript, voc&ecirc; consegue reagir a cliques, validar formul&aacute;rios, buscar dados de uma API, animar elementos, e muito mais.</p>
+<h3>Onde o JavaScript roda?</h3>
+<p><strong>No navegador (front-end):</strong> Todo browser moderno &mdash; Chrome, Firefox, Safari, Edge &mdash; possui um motor JavaScript embutido. O do Chrome se chama <strong>V8</strong>, e &eacute; extremamente poderoso.</p>
+<p><strong>No servidor (back-end):</strong> Gra&ccedil;as ao <strong>Node.js</strong>, criado em 2009, o JavaScript saiu do navegador e passou a rodar tamb&eacute;m no servidor. Hoje voc&ecirc; pode escrever toda a sua aplica&ccedil;&atilde;o &mdash; do banco de dados &agrave; interface &mdash; em JavaScript.</p>
+<h3>Seu primeiro c&oacute;digo</h3>
+<p>Abra o navegador, pressione <code>F12</code> para abrir o DevTools, clique na aba <strong>Console</strong> e digite:</p>
+<pre><code class="language-js">console.log("Ol&aacute;, mundo!");
+</code></pre>
+<p>Pronto. Voc&ecirc; acabou de executar seu primeiro programa JavaScript. O <code>console.log()</code> &eacute; o comando mais b&aacute;sico para exibir informa&ccedil;&otilde;es &mdash; ele vai ser seu melhor amigo nos pr&oacute;ximos meses.</p>
+<h3>Vari&aacute;veis: guardando informa&ccedil;&otilde;es</h3>
+<p>Em JavaScript moderno, usamos <code>let</code> e <code>const</code> para declarar vari&aacute;veis. Esque&ccedil;a o <code>var</code> por enquanto &mdash; ele existe, mas tem comportamentos problem&aacute;ticos que vamos estudar no futuro.</p>
+<pre><code class="language-js">// const: valor que n&atilde;o vai mudar
+const nome = "Ana";
+
+// let: valor que pode mudar
+let idade = 25;
+
+console.log(nome);  // Ana
+console.log(idade); // 25
+
+idade = 26; // isso funciona com let
+console.log(idade); // 26
+
+// nome = "Maria"; // ERRO! const n&atilde;o pode ser reatribu&iacute;da
+</code></pre>
+<p><strong>Regra pr&aacute;tica:</strong> use <code>const</code> por padr&atilde;o. S&oacute; use <code>let</code> quando souber que o valor vai mudar.</p>
+<h3>Tipos de dados b&aacute;sicos</h3>
+<p>JavaScript possui alguns tipos primitivos essenciais:</p>
+<pre><code class="language-js">// String (texto)
+const saudacao = "Bem-vindo ao curso!";
+
+// Number (n&uacute;mero &mdash; inteiro ou decimal)
+const preco = 49.90;
+const ano = 2025;
+
+// Boolean (verdadeiro ou falso)
+const estaLogado = true;
+const temDesconto = false;
+
+// Null (aus&ecirc;ncia intencional de valor)
+const endereco = null;
+
+// Undefined (vari&aacute;vel declarada sem valor)
+let profissao;
+console.log(profissao); // undefined
+</code></pre>
+<p>N&atilde;o se preocupe em memorizar tudo agora. Vamos usar cada tipo exaustivamente nos pr&oacute;ximos artigos.</p>
+<h3>Operadores b&aacute;sicos</h3>
+<pre><code class="language-js">const a = 10;
+const b = 3;
+
+console.log(a + b);  // 13 &mdash; soma
+console.log(a - b);  // 7  &mdash; subtra&ccedil;&atilde;o
+console.log(a * b);  // 30 &mdash; multiplica&ccedil;&atilde;o
+console.log(a / b);  // 3.333... &mdash; divis&atilde;o
+console.log(a % b);  // 1  &mdash; resto da divis&atilde;o (m&oacute;dulo)
+console.log(a ** b); // 1000 &mdash; pot&ecirc;ncia (10&sup3;)
+</code></pre>
+<h3>Concatenando textos com Template Literals</h3>
+<p>Uma das formas mais modernas e limpas de trabalhar com texto:</p>
+<pre><code class="language-js">const nome = "Carlos";
+const idade = 30;
+
+// Jeito antigo (evite):
+console.log("Meu nome &eacute; " + nome + " e tenho " + idade + " anos.");
+
+// Jeito moderno com template literal (use sempre):
+console.log(`Meu nome &eacute; ${nome} e tenho ${idade} anos.`);
+</code></pre>
+<p>Note as crases <code>`</code> em vez de aspas, e o <code>${}</code> para inserir vari&aacute;veis dentro do texto. Limpo, leg&iacute;vel, elegante.</p>
+<h3>Coment&aacute;rios no c&oacute;digo</h3>
+<p>C&oacute;digo bem comentado &eacute; c&oacute;digo respeitoso &mdash; com seus colegas e com voc&ecirc; mesmo do futuro:</p>
+<pre><code class="language-js">// Isso &eacute; um coment&aacute;rio de linha &uacute;nica
+
+/*
+  Isso &eacute; um coment&aacute;rio
+  de m&uacute;ltiplas linhas.
+  &Uacute;til para explica&ccedil;&otilde;es mais longas.
+*/
+
+const taxa = 0.1; // 10% de juros ao m&ecirc;s
+</code></pre>
+<h3>Tarefa para voc&ecirc;</h3>
+<p>Abra o console do navegador e tente o seguinte:</p>
+<ol>
+<li>Crie uma <code>const</code> com seu nome</li>
+<li>Crie um <code>let</code> com seu ano de nascimento</li>
+<li>Calcule sua idade subtraindo o ano atual</li>
+<li>Exiba uma frase completa usando template literal</li>
+</ol>
+<pre><code class="language-js">const meuNome = "???";
+let anoNascimento = ???;
+const anoAtual = 2025;
+const minhaIdade = anoAtual - anoNascimento;
+
+console.log(`Ol&aacute;! Meu nome &eacute; ${meuNome} e tenho ${minhaIdade} anos.`);
+</code></pre>
+
+<details>
+<summary><strong>Ver solução</strong> — os quatro passos, e a idade que só muda no aniversário</summary>
+<pre><code class="language-js">// ---------------------------------------------------------------
+// 1 a 4 — o esqueleto do exercício, preenchido
+// ---------------------------------------------------------------
+const meuNome = "Ana Prado";
+let anoNascimento = 1998;
+
+// getFullYear() em vez de 2025 fixo: o ano vem do relógio da máquina,
+// então a conta não vence virando o ano.
+const anoAtual = new Date().getFullYear();
+const minhaIdade = anoAtual - anoNascimento;
+
+console.log(`Olá! Meu nome é ${meuNome} e tenho ${minhaIdade} anos.`);
+
+// ---------------------------------------------------------------
+// Por que const no nome e let no ano
+// ---------------------------------------------------------------
+anoNascimento = 1999; // let aceita: a variável pode ser reatribuída
+// meuNome = "Outro";  // const recusa: TypeError: Assignment to constant variable.
+
+// ---------------------------------------------------------------
+// A conta acima está errada em metade do ano
+// ---------------------------------------------------------------
+// Subtrair só os anos dá a idade que a pessoa VAI fazer. Quem nasceu em
+// dezembro passa onze meses "mais velho" do que é. A idade de verdade
+// depende de o aniversário já ter passado ou não.
+function calcularIdade(dataNascimento) {
+  const hoje = new Date();
+  let idade = hoje.getFullYear() - dataNascimento.getFullYear();
+
+  // Meses em JavaScript são 0-based: janeiro é 0, dezembro é 11.
+  const mes = hoje.getMonth() - dataNascimento.getMonth();
+  const aindaNaoFezAniversario =
+    mes &lt; 0 || (mes === 0 &amp;&amp; hoje.getDate() &lt; dataNascimento.getDate());
+
+  if (aindaNaoFezAniversario) {
+    idade = idade - 1;
+  }
+
+  return idade;
+}
+
+const nascimento = new Date(1998, 11, 25); // 25/12/1998 — mês 11 é dezembro
+console.log(`Idade exata: ${calcularIdade(nascimento)} anos.`);
+
+// ---------------------------------------------------------------
+// Tipos e template literal
+// ---------------------------------------------------------------
+console.log(typeof meuNome);      // "string"
+console.log(typeof minhaIdade);   // "number"
+console.log(typeof nascimento);   // "object" — Date não é um tipo primitivo
+
+// Template literal aceita expressão inteira, não só variável:
+console.log(`No ano que vem eu faço ${calcularIdade(nascimento) + 1}.`);</code></pre>
+<p>Duas armadilhas num exercício de três linhas: <code>getMonth()</code> devolve <strong>0 a 11</strong> (dezembro é 11, não 12), e subtrair anos não dá idade — dá idade a partir do aniversário. A segunda é clássica em cadastro que valida maioridade.</p>
+</details>
+<p>Com <code>const</code>, <code>let</code>, os tipos primitivos e o template literal você já tem o suficiente para escrever algo que funcione — e para errar de maneiras interessantes, que é como se aprende linguagem. O console do navegador continua sendo o melhor lugar para isso: nada a instalar, resposta imediata e nenhuma consequência. Tudo o que vem adiante é construído sobre esse punhado de peças.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li>MDN Web Docs &mdash; Guia de JavaScript: <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide" target="_blank" rel="noopener">https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide</a></li>
+<li>MDN Web Docs &mdash; Primeiros passos com JavaScript: <a href="https://developer.mozilla.org/pt-BR/docs/Learn/JavaScript/First_steps" target="_blank" rel="noopener">https://developer.mozilla.org/pt-BR/docs/Learn/JavaScript/First_steps</a></li>
+<li>MDN Web Docs &mdash; Tipos de dados e estruturas: <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Data_structures" target="_blank" rel="noopener">https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Data_structures</a></li>
+<li>JavaScript.info &mdash; Vari&aacute;veis: <a href="https://javascript.info/variables" target="_blank" rel="noopener">https://javascript.info/variables</a></li>
+<li>JavaScript.info &mdash; Tipos de dados: <a href="https://javascript.info/types" target="_blank" rel="noopener">https://javascript.info/types</a></li>
+<li>TC39 &mdash; a especifica&ccedil;&atilde;o da linguagem: <a href="https://tc39.es/ecma262/" target="_blank" rel="noopener">https://tc39.es/ecma262/</a></li>
+<li><em>Eloquent JavaScript</em> &mdash; Marijn Haverbeke, livro completo e gratuito: <a href="https://eloquentjavascript.net/" target="_blank" rel="noopener">https://eloquentjavascript.net/</a></li>
+<li><em>You Don't Know JS Yet</em> &mdash; Kyle Simpson: <a href="https://github.com/getify/You-Dont-Know-JS" target="_blank" rel="noopener">https://github.com/getify/You-Dont-Know-JS</a></li>
+<li>Can I use &mdash; suporte dos navegadores a cada recurso: <a href="https://caniuse.com/" target="_blank" rel="noopener">https://caniuse.com/</a></li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Rode o trecho abaixo no console e anote as três saídas exatas, com todos os dígitos que aparecerem.</p>
+<pre><code class="language-js">const a = 10;
+const b = 3;
+
+console.log(a % b);
+console.log(a ** b);
+console.log(a / b);</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>1</code>, <code>1000</code> e <code>3.3333333333333335</code>. As duas primeiras não surpreendem: o resto de 10 por 3 é 1, e 10³ é 1000. A terceira é a que importa: aparece um <strong>5 no último dígito</strong>. Números em JavaScript são de ponto flutuante, e 10/3 não tem representação exata em binário — o valor impresso é o mais próximo que cabe. Guarde isso: é a razão de <code>0.1 + 0.2</code> não dar exatamente <code>0.3</code>.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>O que cada uma das duas últimas linhas produz? Se alguma delas gera erro, escreva a mensagem exata.</p>
+<pre><code class="language-js">const nome = "Ana";
+let profissao;
+
+console.log(profissao);
+nome = "Maria";</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A primeira imprime <code>undefined</code> — <code>let profissao;</code> declara sem atribuir, e o valor de uma variável declarada e não inicializada é <code>undefined</code>. A segunda lança <code>TypeError: Assignment to constant variable.</code> e interrompe a execução. Repare que o erro é na <strong>reatribuição</strong>, não na declaração: <code>const</code> proíbe apontar o nome para outro valor.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Reescreva a linha abaixo usando template literal. Depois responda: o que imprime <code>console.log(`Daqui a um ano: ${idade + 1}`)</code>?</p>
+<pre><code class="language-js">const nome = "Carlos";
+const idade = 30;
+
+console.log("Meu nome é " + nome + " e tenho " + idade + " anos.");</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A reescrita é <code>console.log(`Meu nome é ${nome} e tenho ${idade} anos.`);</code> — com <strong>crases</strong>, não aspas. A segunda linha imprime <code>Daqui a um ano: 31</code>: dentro de <code>${}</code> cabe uma <strong>expressão</strong> inteira, não apenas o nome de uma variável. É por isso que o template literal substitui a concatenação com vantagem — some o vaivém de aspas e sinais de mais, e o texto final fica legível na própria linha.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>O artigo apresenta <code>null</code> e <code>undefined</code> lado a lado. Qual é a diferença entre os dois, e qual dos dois você escreve no seu próprio código?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>undefined</code> é a ausência que a linguagem produz: uma variável declarada sem valor, um parâmetro que não foi passado, uma propriedade que não existe. <code>null</code> é a ausência que <strong>você declara</strong> — "aqui não há endereço, e isso é intencional". Na prática: <code>undefined</code> você encontra, <code>null</code> você escreve. É a diferença entre "ninguém preencheu" e "eu decidi que está vazio".</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Explique, com o que o artigo apresentou, por que o JavaScript é a única linguagem que você não pode simplesmente trocar por outra ao trabalhar no navegador — e o que mudou em 2009.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Porque é a única que os navegadores <strong>executam nativamente</strong>: cada um traz um motor embutido (o do Chrome é o <strong>V8</strong>), e não há como pedir a eles que rodem outra coisa — o que existe hoje são linguagens que se convertem em JavaScript antes de chegar ao navegador. Em <strong>2009</strong>, o Node.js pegou o V8 e o colocou para rodar fora do navegador, no servidor: a partir dali a mesma linguagem passou a servir das telas ao back-end, que é o que torna possível a série inteira ir do console ao React sem trocar de linguagem no caminho.</p>
+</div>
+</details>
+

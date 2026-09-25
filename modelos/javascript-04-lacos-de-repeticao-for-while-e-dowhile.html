@@ -1,0 +1,379 @@
+<p>Imagine que voc&ecirc; precisa exibir os n&uacute;meros de 1 a 100. Voc&ecirc; escreveria cem linhas de&nbsp;<code>console.log</code>? Claro que n&atilde;o. &Eacute; exatamente para isso que existem os <strong>la&ccedil;os de repeti&ccedil;&atilde;o</strong> &mdash; eles permitem que um bloco de c&oacute;digo seja executado v&aacute;rias vezes, de forma controlada e elegante.</p>
+<p>Este &eacute; um dos conceitos mais fundamentais de qualquer linguagem de programa&ccedil;&atilde;o. Dominar os la&ccedil;os &eacute; o que come&ccedil;a a separar quem escreve c&oacute;digo de quem resolve problemas com c&oacute;digo.</p>
+<h3>O la&ccedil;o for</h3>
+<p>O <code>for</code> &eacute; o la&ccedil;o mais usado quando voc&ecirc; sabe <strong>quantas vezes</strong> quer repetir algo.</p>
+<pre><code class="language-js">for (let i = 1; i &lt;= 5; i++) {
+  console.log(`Repeti&ccedil;&atilde;o n&uacute;mero ${i}`);
+}
+
+// Repeti&ccedil;&atilde;o n&uacute;mero 1
+// Repeti&ccedil;&atilde;o n&uacute;mero 2
+// Repeti&ccedil;&atilde;o n&uacute;mero 3
+// Repeti&ccedil;&atilde;o n&uacute;mero 4
+// Repeti&ccedil;&atilde;o n&uacute;mero 5
+</code></pre>
+<p>O <code>for</code> tem tr&ecirc;s partes separadas por ponto e v&iacute;rgula:</p>
+<pre><code class="language-js">for (inicializa&ccedil;&atilde;o ; condi&ccedil;&atilde;o ; incremento) {
+  // c&oacute;digo executado a cada volta
+}
+</code></pre>
+<ul>
+<li><strong>Inicializa&ccedil;&atilde;o:</strong> <code>let i = 1</code> &mdash; define o ponto de partida</li>
+<li><strong>Condi&ccedil;&atilde;o:</strong> <code>i &lt;= 5</code> &mdash; enquanto for verdadeira, o la&ccedil;o continua</li>
+<li><strong>Incremento:</strong> <code>i++</code> &mdash; executado ao final de cada volta (equivale a <code>i = i + 1</code>)</li>
+</ul>
+<h3>Contando de forma diferente</h3>
+<p>O <code>for</code> &eacute; flex&iacute;vel. Voc&ecirc; pode contar de qualquer jeito:</p>
+<pre><code class="language-js">// Contando de 2 em 2
+for (let i = 0; i &lt;= 10; i += 2) {
+  console.log(i); // 0, 2, 4, 6, 8, 10
+}
+
+// Contando de tr&aacute;s para frente
+for (let i = 5; i &gt;= 1; i--) {
+  console.log(i); // 5, 4, 3, 2, 1
+}
+
+// Tabuada do 7
+for (let i = 1; i &lt;= 10; i++) {
+  console.log(`7 x ${i} = ${7 * i}`);
+}
+</code></pre>
+<h3>Percorrendo arrays com for</h3>
+<p>Uma das aplica&ccedil;&otilde;es mais comuns do <code>for</code> &eacute; percorrer listas de dados:</p>
+<pre><code class="language-js">const frutas = ["ma&ccedil;&atilde;", "banana", "laranja", "uva"];
+
+for (let i = 0; i &lt; frutas.length; i++) {
+  console.log(`Fruta ${i + 1}: ${frutas[i]}`);
+}
+
+// Fruta 1: ma&ccedil;&atilde;
+// Fruta 2: banana
+// Fruta 3: laranja
+// Fruta 4: uva
+</code></pre>
+<p><code>frutas.length</code> retorna o tamanho do array &mdash; neste caso, 4. Por isso a condi&ccedil;&atilde;o &eacute; <code>i &lt; 4</code> (os &iacute;ndices v&atilde;o de 0 a 3).</p>
+<h3>for...of &mdash; a forma moderna de percorrer listas</h3>
+<p>Quando voc&ecirc; n&atilde;o precisa do &iacute;ndice, o <code>for...of</code> &eacute; mais limpo e leg&iacute;vel:</p>
+<pre><code class="language-js">const frutas = ["ma&ccedil;&atilde;", "banana", "laranja", "uva"];
+
+for (const fruta of frutas) {
+  console.log(fruta);
+}
+
+// ma&ccedil;&atilde;
+// banana
+// laranja
+// uva
+</code></pre>
+<p>Prefira o <code>for...of</code> sempre que s&oacute; precisar dos valores. Guarde o <code>for</code> cl&aacute;ssico para quando precisar controlar o &iacute;ndice.</p>
+<h3>O la&ccedil;o while</h3>
+<p>O <code>while</code> &eacute; usado quando voc&ecirc; <strong>n&atilde;o sabe exatamente quantas vezes</strong> vai repetir &mdash; voc&ecirc; repete enquanto uma condi&ccedil;&atilde;o for verdadeira.</p>
+<pre><code class="language-js">let tentativas = 0;
+const maxTentativas = 3;
+
+while (tentativas &lt; maxTentativas) {
+  console.log(`Tentativa ${tentativas + 1} de ${maxTentativas}`);
+  tentativas++;
+}
+
+// Tentativa 1 de 3
+// Tentativa 2 de 3
+// Tentativa 3 de 3
+</code></pre>
+<p><strong>Cuidado com o loop infinito!</strong> Se a condi&ccedil;&atilde;o nunca se tornar <code>false</code>, o programa trava. Sempre garanta que algo dentro do la&ccedil;o vai eventualmente tornar a condi&ccedil;&atilde;o falsa.</p>
+<pre><code class="language-js">// ⚠️ NUNCA fa&ccedil;a isso &mdash; loop infinito:
+while (true) {
+  console.log("Isso nunca para...");
+}
+</code></pre>
+<h3>Exemplo real com while &mdash; tentativas de senha</h3>
+<pre><code class="language-js">const senhaCorreta = "js2025";
+let tentativa = "";
+let tentativas = 0;
+
+// Simulando tentativas
+const senhasDigitadas = ["abc", "1234", "js2025", "outra"];
+
+while (tentativa !== senhaCorreta &amp;&amp; tentativas &lt; senhasDigitadas.length) {
+  tentativa = senhasDigitadas[tentativas];
+  tentativas++;
+
+  if (tentativa === senhaCorreta) {
+    console.log(`Acesso liberado na tentativa ${tentativas}!`);
+  } else {
+    console.log(`Senha incorreta: "${tentativa}"`);
+  }
+}
+
+// Senha incorreta: "abc"
+// Senha incorreta: "1234"
+// Acesso liberado na tentativa 3!
+</code></pre>
+<h3>O la&ccedil;o do...while</h3>
+<p>Parecido com o <code>while</code>, mas com uma diferen&ccedil;a crucial: o bloco de c&oacute;digo <strong>sempre executa pelo menos uma vez</strong>, mesmo que a condi&ccedil;&atilde;o seja falsa desde o in&iacute;cio.</p>
+<pre><code class="language-js">let numero = 10;
+
+do {
+  console.log(`O n&uacute;mero &eacute; ${numero}`);
+  numero++;
+} while (numero &lt; 5);
+
+// O n&uacute;mero &eacute; 10
+// (executa uma vez mesmo com n&uacute;mero &gt;= 5)
+</code></pre>
+<p>Isso &eacute; &uacute;til, por exemplo, quando voc&ecirc; precisa exibir um menu e pedir uma escolha antes de verificar se ela &eacute; v&aacute;lida:</p>
+<pre><code class="language-js">let opcao;
+
+// Simulando: usu&aacute;rio digitou op&ccedil;&otilde;es at&eacute; escolher uma v&aacute;lida
+const entradas = [9, 0, 2];
+let i = 0;
+
+do {
+  opcao = entradas[i];
+  console.log(`Op&ccedil;&atilde;o digitada: ${opcao}`);
+  i++;
+} while (opcao &lt; 1 || opcao &gt; 3);
+
+// Op&ccedil;&atilde;o digitada: 9
+// Op&ccedil;&atilde;o digitada: 0
+// Op&ccedil;&atilde;o digitada: 2  &larr; v&aacute;lida, para aqui
+</code></pre>
+<h3>break e continue &mdash; controlando o la&ccedil;o</h3>
+<p><strong><code>break</code></strong> interrompe o la&ccedil;o imediatamente:</p>
+<pre><code class="language-js">for (let i = 1; i &lt;= 10; i++) {
+  if (i === 5) {
+    console.log("Encontrei o 5! Parando.");
+    break;
+  }
+  console.log(i);
+}
+
+// 1
+// 2
+// 3
+// 4
+// Encontrei o 5! Parando.
+</code></pre>
+<p><strong><code>continue</code></strong> pula a itera&ccedil;&atilde;o atual e vai para a pr&oacute;xima:</p>
+<pre><code class="language-js">for (let i = 1; i &lt;= 10; i++) {
+  if (i % 2 === 0) continue; // pula os pares
+  console.log(i);
+}
+
+// 1, 3, 5, 7, 9
+</code></pre>
+<h3>La&ccedil;os aninhados</h3>
+<p>Um la&ccedil;o dentro de outro. &Uacute;til para trabalhar com matrizes ou combina&ccedil;&otilde;es:</p>
+<pre><code class="language-js">// Tabuada completa de 1 a 3
+for (let i = 1; i &lt;= 3; i++) {
+  for (let j = 1; j &lt;= 3; j++) {
+    console.log(`${i} x ${j} = ${i * j}`);
+  }
+}
+
+// 1 x 1 = 1
+// 1 x 2 = 2
+// 1 x 3 = 3
+// 2 x 1 = 2
+// ...e assim por diante
+</code></pre>
+<p>Use la&ccedil;os aninhados com modera&ccedil;&atilde;o &mdash; eles crescem em complexidade rapidamente.</p>
+<h3>Comparativo r&aacute;pido</h3>
+<table>
+<thead>
+<tr>
+<th>La&ccedil;o</th>
+<th>Use quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>for</code></td>
+<td>Sabe o n&uacute;mero exato de repeti&ccedil;&otilde;es</td>
+</tr>
+<tr>
+<td><code>for...of</code></td>
+<td>Quer percorrer os valores de um array</td>
+</tr>
+<tr>
+<td><code>while</code></td>
+<td>Repete enquanto uma condi&ccedil;&atilde;o for verdadeira</td>
+</tr>
+<tr>
+<td><code>do...while</code></td>
+<td>Precisa executar ao menos uma vez antes de verificar</td>
+</tr>
+</tbody>
+</table>
+<h3>Tarefa para voc&ecirc;</h3>
+<p>Tente resolver estes desafios no console do navegador:</p>
+<p><strong>Desafio 1:</strong> Exiba todos os n&uacute;meros de 1 a 20 que sejam divis&iacute;veis por 3.</p>
+<p><strong>Desafio 2:</strong> Some todos os n&uacute;meros de 1 a 100 e exiba o resultado.</p>
+<pre><code class="language-js">// Dica para o desafio 2:
+let soma = 0;
+// seu la&ccedil;o aqui...
+console.log(`A soma &eacute;: ${soma}`); // deve ser 5050
+</code></pre>
+<p><strong>Desafio 3:</strong> Percorra o array abaixo e exiba apenas os nomes com mais de 4 letras.</p>
+<pre><code class="language-js">const nomes = ["Ana", "Carlos", "Li", "Fernanda", "Bob", "Mariana"];
+</code></pre>
+
+<details>
+<summary><strong>Ver solução</strong> — os três desafios, e por que o laço escolhido muda</summary>
+<pre><code class="language-js">// ---------------------------------------------------------------
+// Desafio 1 — números de 1 a 20 divisíveis por 3
+// ---------------------------------------------------------------
+for (let i = 1; i &lt;= 20; i++) {
+  if (i % 3 === 0) {
+    console.log(i); // 3, 6, 9, 12, 15, 18
+  }
+}
+
+// Dá para pular direto de 3 em 3 e nem testar o resto: o laço faz 6
+// voltas em vez de 20. Quando a condição É o passo, ela sai do corpo.
+for (let i = 3; i &lt;= 20; i += 3) {
+  console.log(i);
+}
+
+// ---------------------------------------------------------------
+// Desafio 2 — somar de 1 a 100
+// ---------------------------------------------------------------
+let soma = 0;
+
+for (let i = 1; i &lt;= 100; i++) {
+  soma += i;
+}
+
+console.log(`A soma é: ${soma}`); // A soma é: 5050
+
+// Conferindo com a fórmula de Gauss — n * (n + 1) / 2.
+// Serve de teste: se o laço estivesse errado (&lt;= virando &lt;, por exemplo),
+// os dois números não bateriam.
+const n = 100;
+console.log(`Conferência: ${(n * (n + 1)) / 2}`); // 5050
+
+// ---------------------------------------------------------------
+// Desafio 3 — nomes com mais de 4 letras
+// ---------------------------------------------------------------
+const nomes = ["Ana", "Carlos", "Li", "Fernanda", "Bob", "Mariana"];
+
+// for...of quando você quer o VALOR e não precisa do índice.
+for (const nome of nomes) {
+  if (nome.length &gt; 4) {
+    console.log(nome); // Carlos, Fernanda, Mariana
+  }
+}
+
+// A mesma coisa com filter, que já devolve o array pronto:
+const longos = nomes.filter((nome) =&gt; nome.length &gt; 4);
+console.log(longos); // [ 'Carlos', 'Fernanda', 'Mariana' ]
+
+// ---------------------------------------------------------------
+// Extra — while, e o laço infinito que ele cria quando você esquece
+// ---------------------------------------------------------------
+let contador = 1;
+
+while (contador &lt;= 20) {
+  if (contador % 3 === 0) {
+    console.log(contador);
+  }
+  contador++; // sem esta linha o navegador trava: a condição nunca fica falsa
+}
+
+// ---------------------------------------------------------------
+// Extra — o for...in que parece certo e não é
+// ---------------------------------------------------------------
+// for...in percorre CHAVES, e em array chave é string.
+for (const i in nomes) {
+  console.log(typeof i); // "string", seis vezes
+}
+console.log("0" + 1); // "01" — por isso somar o índice do for...in dá texto</code></pre>
+<p><code>for...in</code> em array entrega o índice como <strong>string</strong>: <code>i + 1</code> vira <code>"01"</code> em vez de <code>1</code>. Para array, use <code>for...of</code> (valor) ou <code>for</code> clássico (índice numérico) — <code>for...in</code> é para objeto.</p>
+</details>
+<p>Escolher o laço costuma se resumir a uma pergunta: você sabe de antemão quantas voltas serão? Sabendo, é <code>for</code> — ou <code>for...of</code>, quando o índice não interessa e só os valores importam. Não sabendo, é <code>while</code>, com o cuidado de garantir que alguma coisa dentro do corpo mude a condição, senão o navegador trava. O <code>do...while</code> fica para quando a primeira execução tem de acontecer de qualquer jeito, e <code>break</code> e <code>continue</code> existem porque sair no meio às vezes é mais claro do que espremer tudo na condição.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li>MDN Web Docs &mdash; for: <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/for" target="_blank" rel="noopener">https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/for</a></li>
+<li>MDN Web Docs &mdash; while: <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/while" target="_blank" rel="noopener">https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/while</a></li>
+<li>MDN Web Docs &mdash; do...while: <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/do...while" target="_blank" rel="noopener">https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/do...while</a></li>
+<li>MDN Web Docs &mdash; for...of: <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/for...of" target="_blank" rel="noopener">https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/for...of</a></li>
+<li>JavaScript.info &mdash; Loops: <a href="https://javascript.info/while-for" target="_blank" rel="noopener">https://javascript.info/while-for</a></li>
+<li><em>Eloquent JavaScript</em>, Cap. 2 &mdash; Marijn Haverbeke: <a href="https://eloquentjavascript.net/02_program_structure.html" target="_blank" rel="noopener">https://eloquentjavascript.net/02_program_structure.html</a></li>
+<li>MDN &mdash; guia de la&ccedil;os e itera&ccedil;&atilde;o: <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Loops_and_iteration" target="_blank" rel="noopener">https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Loops_and_iteration</a></li>
+</ul>
+
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Trocaram um único caractere na condição do laço. Quantas linhas ele imprime agora, e o que aparece na última?</p>
+<pre><code class="language-js">const frutas = ["maçã", "banana", "laranja", "uva"];
+
+for (let i = 0; i &lt;= frutas.length; i++) {
+  console.log(`Fruta ${i + 1}: ${frutas[i]}`);
+}</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Imprime <strong>cinco linhas</strong>, e a última é <code>Fruta 5: undefined</code>. O array tem 4 elementos, então <code>frutas.length</code> é 4 e os índices válidos vão de <strong>0 a 3</strong>. Com <code>&lt;=</code>, o laço dá uma volta a mais e lê <code>frutas[4]</code>, que não existe. Note que o JavaScript <strong>não</strong> reclama: ele devolve <code>undefined</code> e segue. A condição correta é <code>i &lt; frutas.length</code>.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Os dois laços abaixo têm a mesma condição e o mesmo corpo. Quantas linhas cada um imprime?</p>
+<pre><code class="language-js">let a = 10;
+while (a &lt; 5) {
+  console.log(`while: ${a}`);
+  a++;
+}
+
+let b = 10;
+do {
+  console.log(`do...while: ${b}`);
+  b++;
+} while (b &lt; 5);</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O <code>while</code> imprime <strong>nada</strong> — ele testa a condição <em>antes</em> de entrar, e <code>10 &lt; 5</code> já é falso na primeira verificação. O <code>do...while</code> imprime <strong>uma linha</strong>, <code>do...while: 10</code> — ele executa o corpo <em>antes</em> de testar, então roda sempre pelo menos uma vez, mesmo com a condição falsa desde o início. É toda a diferença entre os dois, e é o motivo de o <code>do...while</code> servir para menus: mostre a pergunta primeiro, valide a resposta depois.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>O laço abaixo imprime <code>1, 3, 5, 7, 9</code>. O que passa a ser impresso se a condição virar <code>i % 2 === 1</code>? E se o <code>continue</code> virar <code>break</code>, mantendo a condição original?</p>
+<pre><code class="language-js">for (let i = 1; i &lt;= 10; i++) {
+  if (i % 2 === 0) continue;
+  console.log(i);
+}</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Com <code>i % 2 === 1</code>, ele passa a pular os <strong>ímpares</strong> e imprime <code>2, 4, 6, 8, 10</code> — o teste seleciona quem é <em>descartado</em>, então inverter o teste inverte a saída. Com <code>break</code> no lugar do <code>continue</code>, imprime <strong>apenas <code>1</code></strong>: o <code>continue</code> pula só a volta atual e o laço segue, enquanto o <code>break</code> abandona o laço inteiro — e a primeira volta par é <code>i = 2</code>, logo depois do <code>1</code> ter sido impresso.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Quantas linhas o laço aninhado abaixo imprime, e qual é exatamente a <strong>quinta</strong> delas?</p>
+<pre><code class="language-js">for (let i = 1; i &lt;= 3; i++) {
+  for (let j = 1; j &lt;= 3; j++) {
+    console.log(`${i} x ${j} = ${i * j}`);
+  }
+}</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> São <strong>9 linhas</strong> — o laço interno roda inteiro a cada volta do externo, então o total é 3 × 3. A quinta é <code>2 x 2 = 4</code>: as três primeiras são as do <code>i = 1</code>, a quarta é <code>2 x 1 = 2</code> e a quinta, <code>2 x 2 = 4</code>. Essa multiplicação é a razão do aviso do artigo: acrescentar um terceiro nível faria 27 voltas, e o crescimento não é somado, é multiplicado.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Qual linha, se apagada, faz o laço abaixo travar o navegador? E por que o artigo recomenda um <code>for</code> em lugar dele?</p>
+<pre><code class="language-js">let tentativas = 0;
+const maxTentativas = 3;
+
+while (tentativas &lt; maxTentativas) {
+  console.log(`Tentativa ${tentativas + 1} de ${maxTentativas}`);
+  tentativas++;
+}</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> A linha <code>tentativas++;</code>. Sem ela, <code>tentativas</code> fica em <code>0</code> para sempre, a condição <code>0 &lt; 3</code> nunca fica falsa e o laço não termina — a aba congela. Quanto à escolha do laço: aqui o <strong>número de voltas é conhecido de antemão</strong> (três), e o critério do artigo é claro — <code>for</code> quando se sabe quantas vezes, <code>while</code> quando não se sabe. O <code>for (let i = 0; i &lt; maxTentativas; i++)</code> resolve o mesmo problema mantendo inicialização, condição e incremento na mesma linha, onde é difícil esquecer um deles.</p>
+</div>
+</details>
+

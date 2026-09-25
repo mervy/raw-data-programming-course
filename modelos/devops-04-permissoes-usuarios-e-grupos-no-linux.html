@@ -1,0 +1,153 @@
+<p>Em um servidor de produção, múltiplos serviços rodam simultaneamente. O Nginx não deveria conseguir ler os arquivos de configuração do banco de dados. Um script de deploy não deveria ter acesso às chaves privadas de outro serviço. Um usuário de aplicação não deveria conseguir modificar binários do sistema. Por que permissões importam?</p>
+<p>O sistema de permissões do Linux é o mecanismo que garante esse isolamento. Entendê-lo não é opcional — é uma habilidade de segurança fundamental que aparecerá repetidamente ao longo de toda a carreira em DevOps.</p>
+<h2>Lendo as Permissões</h2>
+<p>Ao executar <code>ls -la</code>, aparece algo como:</p>
+<pre><code>-rwxr-xr--  1  usuario  grupo  4096  Mar 10 10:00  script.sh
+drwxr-xr-x  2  usuario  grupo  4096  Mar 10 09:00  pasta
+</code></pre>
+<p>Aquela sequência de caracteres no início não é aleatória. Cada posição tem um significado preciso.</p>
+<pre><code>- r w x r - x r - -
+│ │─────│ │─────│ │─────│
+│   dono    grupo  outros
+│
+└── tipo: - arquivo, d diretório, l link simbólico
+</code></pre>
+<p>Cada grupo de três caracteres representa as permissões de leitura (<code>r</code>), escrita (<code>w</code>) e execução (<code>x</code>) para três entidades distintas: o <strong>dono</strong> do arquivo, o <strong>grupo</strong> ao qual pertence, e <strong>outros</strong> — todos os demais usuários do sistema. Um hífen no lugar de uma letra significa que aquela permissão não está concedida.</p>
+<h2>Modificando Permissões com <code>chmod</code></h2>
+<p>O <code>chmod</code> altera as permissões de um arquivo ou diretório. Há duas formas de usá-lo.</p>
+<p><strong>Forma simbólica</strong> — mais legível:</p>
+<pre><code class="language-bash">chmod +x script.sh          # Adiciona permissão de execução para todos
+chmod u+w arquivo.txt       # Adiciona escrita para o dono (u = user)
+chmod g-w arquivo.txt       # Remove escrita do grupo (g = group)
+chmod o-r arquivo.txt       # Remove leitura de outros (o = others)
+chmod u+x,g-w script.sh     # Múltiplas alterações de uma vez
+</code></pre>
+<p><strong>Forma octal</strong> — mais usada em scripts e automações:</p>
+<p>Cada permissão tem um valor numérico: <code>r = 4</code>, <code>w = 2</code>, <code>x = 1</code>. Somam-se os valores para cada entidade.</p>
+<pre><code class="language-bash">chmod 755 script.sh    # dono: rwx(7), grupo: r-x(5), outros: r-x(5)
+chmod 644 config.txt   # dono: rw-(6), grupo: r--(4), outros: r--(4)
+chmod 600 chave.pem    # dono: rw-(6), grupo: ---(0), outros: ---(0)
+</code></pre>
+<p>O <code>600</code> para arquivos de chave SSH é especialmente importante — o próprio SSH recusa conexão se a chave privada tiver permissões mais abertas que isso.</p>
+<h2>Modificando Dono e Grupo com <code>chown</code></h2>
+<pre><code class="language-bash"># Muda o dono do arquivo
+sudo chown usuario arquivo.txt
+
+# Muda dono e grupo ao mesmo tempo
+sudo chown usuario:grupo arquivo.txt
+
+# Aplica recursivamente em uma pasta inteira
+sudo chown -R usuario:grupo /var/www/html
+</code></pre>
+<p>O <code>-R</code> aplica a mudança recursivamente a todos os arquivos e subdiretórios. Muito usado ao configurar permissões de diretórios de aplicação em servidores.</p>
+<h2>Usuários e Grupos</h2>
+<p><strong>Criando e gerenciando usuários:</strong></p>
+<pre><code class="language-bash">sudo useradd -m deploy          # Cria usuário 'deploy' com home
+sudo passwd deploy              # Define senha
+sudo usermod -aG sudo deploy    # Adiciona ao grupo sudo
+sudo userdel -r deploy          # Remove usuário e home
+</code></pre>
+<p><strong>Criando e gerenciando grupos:</strong></p>
+<pre><code class="language-bash">sudo groupadd devops
+sudo usermod -aG devops usuario   # Adiciona usuário ao grupo
+groups usuario                     # Lista grupos do usuário
+</code></pre>
+<p><strong>Verificando quem está no sistema:</strong></p>
+<pre><code class="language-bash">cat /etc/passwd     # Lista todos os usuários
+cat /etc/group      # Lista todos os grupos
+whoami              # Usuário atual
+id                  # ID do usuário e grupos aos quais pertence
+</code></pre>
+<h2>Um Cenário Real: Configurando um Usuário de Deploy</h2>
+<p>Em ambientes de produção, é prática comum criar um usuário dedicado para realizar deploys — sem senha, acessado apenas por chave SSH, com permissões restritas ao necessário.</p>
+<pre><code class="language-bash"># Cria o usuário sem senha interativa
+sudo useradd -m -s /bin/bash deploy
+
+# Cria o diretório .ssh para chaves
+sudo mkdir -p /home/deploy/.ssh
+sudo chmod 700 /home/deploy/.ssh
+
+# Adiciona a chave pública autorizada
+sudo nano /home/deploy/.ssh/authorized_keys
+# (colar a chave pública aqui)
+
+# Define permissões corretas para o arquivo de chaves
+sudo chmod 600 /home/deploy/.ssh/authorized_keys
+sudo chown -R deploy:deploy /home/deploy/.ssh
+
+# Permite que deploy escreva apenas no diretório da aplicação
+sudo chown -R deploy:deploy /var/www/minha-aplicacao
+</code></pre>
+<p>A partir desse ponto, o sistema de CI/CD pode conectar via SSH com esse usuário e realizar deploys com escopo limitado — sem acesso root, sem risco de modificar o que não deveria.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<p><strong>Documentação e leitura</strong></p>
+<ul>
+<li><a href="https://www.digitalocean.com/community/tutorials/linux-permissions-basics-and-how-to-use-umask-on-a-vps" target="_blank" rel="noopener">Linux File Permissions Explained — DigitalOcean</a> — Explicação detalhada do sistema de permissões com exemplos práticos.</li>
+<li><a href="https://www.redhat.com/sysadmin/linux-file-permissions-explained" target="_blank" rel="noopener">Understanding Linux File Ownership — Red Hat</a> — Artigo técnico do Red Hat cobrindo <code>chmod</code>, <code>chown</code> e boas práticas.</li>
+<li><a href="https://linuxcommand.org/tlcl.php" target="_blank" rel="noopener">The Linux Command Line — Capítulo 9</a> — Cobre permissões, processos e o ambiente de usuário com profundidade.</li>
+</ul>
+<p><strong>Prática</strong></p>
+<ul>
+<li><a href="https://overthewire.org/wargames/bandit/" target="_blank" rel="noopener">Over The Wire: Bandit — níveis 5 a 10</a> — Esses níveis trabalham permissões e propriedade de arquivos diretamente.</li>
+<li><a href="https://chmod-calculator.com/" target="_blank" rel="noopener">Linux Permissions Calculator</a> — Ferramenta visual para entender a notação octal antes de decorá-la.</li>
+</ul>
+<p><strong>Referência rápida</strong></p>
+<ul>
+<li><a href="https://ss64.com/bash/chmod.html" target="_blank" rel="noopener">chmod Reference — ss64.com</a> — Tabela de referência rápida para todas as opções do <code>chmod</code>. Útil como consulta até que a notação octal se torne natural.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Decomponha a permissão abaixo. O que cada trecho informa, e quem pode fazer o quê com esse arquivo?</p>
+<pre><code>-rwxr-xr--  1  usuario  grupo  4096  Mar 10 10:00  script.sh
+</code></pre>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O primeiro caractere é o tipo: <code>-</code> indica arquivo comum (seria <code>d</code> para diretório e <code>l</code> para link simbólico). Os nove caracteres seguintes são três blocos de três. O dono tem <code>rwx</code>: lê, escreve e executa. O grupo tem <code>r-x</code>: lê e executa, mas não altera. Outros têm <code>r--</code>: apenas leem. Cada hífen no lugar de uma letra é uma permissão não concedida — nesse caso, outros não podem nem escrever nem executar o script.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Como o número da notação octal é formado? Traduza <code>chmod 755</code> e <code>chmod 644</code> para a sequência <code>rwx</code> equivalente e diga em que tipo de arquivo cada um costuma ser usado.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Cada permissão vale um número — <code>r = 4</code>, <code>w = 2</code>, <code>x = 1</code> — e os valores são somados separadamente para dono, grupo e outros. Assim:</p>
+<pre><code>755  ->  rwx r-x r-x    (7 = 4+2+1, 5 = 4+1)
+644  ->  rw- r-- r--    (6 = 4+2, 4 = 4)
+</code></pre>
+<p><code>755</code> é o padrão de script ou diretório executável: o dono altera, os demais apenas usam. <code>644</code> é o padrão de arquivo de conteúdo ou configuração legível: só o dono escreve, o resto lê.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Por que uma chave SSH privada recebe <code>chmod 600</code>? O que acontece se ela estiver com permissões mais abertas?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>600</code> concede leitura e escrita apenas ao dono, e nada a grupo e outros. O próprio SSH verifica esse modo e <strong>recusa a conexão</strong> se a chave privada estiver mais aberta — ele prefere falhar a usar uma credencial que outras contas da máquina poderiam ler. O risco é concreto: em um servidor compartilhado, uma chave em <code>644</code> significa que qualquer usuário do sistema consegue copiar sua identidade sem deixar rastro.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>No cenário do usuário de deploy, por que <code>/home/deploy/.ssh</code> recebe <code>700</code> enquanto <code>authorized_keys</code> recebe <code>600</code>?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> No diretório, <code>700</code> dá ao dono leitura, escrita e o <code>x</code> que permite atravessá-lo; sem esse <code>x</code>, ninguém mais consegue sequer entrar para chegar aos arquivos de dentro. No arquivo, <code>600</code> restringe leitura e escrita ao dono. A razão de fundo é o que o <code>authorized_keys</code> representa: quem consegue escrever nele adiciona a própria chave pública e passa a entrar como <code>deploy</code>. Por isso o SSH também recusa autenticação quando esses modos estão frouxos.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>O que <code>sudo usermod -aG devops usuario</code> faz? E qual o risco concreto de esquecer o <code>-a</code>?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Adiciona <code>usuario</code> ao grupo suplementar <code>devops</code>. O <code>-G</code> define a lista de grupos suplementares e o <code>-a</code> significa <em>append</em>, ou seja, acrescentar à lista existente. Sem o <code>-a</code>, o comando <strong>substitui</strong> a lista inteira: o usuário sai de todos os grupos que não estiverem escritos naquela linha. Na prática, <code>usermod -G devops usuario</code> costuma remover a conta do grupo <code>sudo</code> e derrubar o acesso administrativo — um erro silencioso, que só aparece na próxima vez que alguém tenta elevar privilégio.</p>
+</div>
+</details>
+<h3>Exercício 6</h3>
+<p>Por que criar um usuário <code>deploy</code> dedicado, em vez de deixar o sistema de CI/CD conectar como root?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Por causa do escopo do estrago. O <code>deploy</code> é dono apenas de <code>/var/www/minha-aplicacao</code>, entra somente por chave e não tem senha; se a chave usada pelo CI vazar, o alcance do atacante para no diretório da aplicação. Com root não existe essa fronteira: o mesmo vazamento entrega a máquina inteira, incluindo chaves de outros serviços e binários do sistema. É o princípio do mínimo privilégio aplicado à automação — a diferença entre um incidente contido e um servidor perdido.</p>
+</div>
+</details>
+

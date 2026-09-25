@@ -1,0 +1,101 @@
+<p>Na aula anterior, ao declarar uma variável, fomos obrigados a dizer o seu <em>tipo</em> — escrevemos <code>int</code> para indicar um número inteiro. Talvez você tenha se perguntado por que a linguagem exige isso: não bastaria criar uma gaveta e guardar qualquer coisa nela? A resposta a essa pergunta revela um dos traços mais importantes do C#, e desta aula. Valores têm <em>naturezas diferentes</em> — um número não é a mesma coisa que um texto, que não é a mesma coisa que um "sim ou não" — e o C# faz questão de saber, de antemão, a natureza de cada valor que uma variável guardará. Essa exigência, que pode parecer burocrática no começo, é na verdade uma poderosa aliada, que previne uma classe inteira de erros. Vamos conhecer os tipos fundamentais — os <em>tipos primitivos</em> — e entender por que eles importam.</p>
+<h2>Por que os tipos existem</h2>
+<p>Considere uma pergunta aparentemente boba: quanto é "cinco" mais "casa"? A pergunta não faz sentido, porque somar um número e uma palavra é uma operação sem significado. O computador, que executa tudo ao pé da letra, precisa de alguma forma saber que "cinco" é um número (com o qual se pode fazer contas) e "casa" é um texto (com o qual não). O <em>tipo</em> de um valor é justamente a declaração da sua natureza: ele informa ao C# o que aquele valor <em>é</em> e, por consequência, o que se pode e o que não se pode fazer com ele.</p>
+<p>Ao exigir que você diga o tipo de cada variável, o C# ganha a capacidade de <em>verificar</em>, antes mesmo de rodar o programa, se você não está cometendo um disparate — como tentar somar um número a um texto, ou guardar uma palavra numa gaveta destinada a números. Quando você tenta, o compilador o avisa com um erro, e o problema é corrigido ali, na sua tela, em vez de virar um comportamento estranho durante a execução. Essa é a filosofia do C#, que você reencontrará por todo o curso: <strong>detectar erros o mais cedo possível</strong>, transformando problemas de execução em avisos de compilação. Os tipos são a primeira e mais fundamental linha dessa defesa.</p>
+<h2>Os números inteiros: int</h2>
+<p>Comecemos pelo tipo que já conhecemos. O <strong><code>int</code></strong> guarda números <em>inteiros</em> — isto é, sem casas decimais: <code>0</code>, <code>42</code>, <code>-7</code>, <code>1000</code>. É o tipo que você usará para contar coisas, para índices, para idades, para qualquer quantidade que não tenha fração.</p>
+<pre><code class="language-csharp">int quantidade = 12;
+int temperatura = -5;
+int pontuacao = 0;</code></pre>
+<p>O <code>int</code> tem um limite: ele consegue representar números inteiros dentro de uma faixa ampla, mas finita (aproximadamente de menos dois bilhões a mais dois bilhões). Para a esmagadora maioria dos usos, essa faixa é mais que suficiente. Quando você precisar de inteiros ainda maiores, existe o tipo <strong><code>long</code></strong>, que guarda inteiros de faixa muito maior; por ora, o <code>int</code> basta, e mencionamos o <code>long</code> apenas para você saber que existe.</p>
+<h2>Os números com casas decimais: double e decimal</h2>
+<p>Nem todo número é inteiro. Preços, medidas, médias — muitos valores têm parte fracionária. Para eles, o tipo mais comum é o <strong><code>double</code></strong>, que guarda números com casas decimais:</p>
+<pre><code class="language-csharp">double altura = 1.75;
+double preco = 19.90;
+double media = 7.5;</code></pre>
+<p>Uma observação importante sobre a escrita: em C#, a separação da parte decimal usa <strong>ponto</strong>, não vírgula — escreve-se <code>1.75</code>, e não <code>1,75</code>, independentemente de como se escreve em português. A vírgula tem outro uso na linguagem, então respeite o ponto como separador decimal.</p>
+<p>Há uma sutileza que vale conhecer desde cedo, embora sua compreensão plena venha com o tempo: o <code>double</code> é excelente para medidas científicas e cálculos gerais, mas ele armazena os números de uma forma que pode gerar pequenas imprecisões em certos cálculos — um resquício de como os computadores representam frações internamente. Por isso, para valores <em>monetários</em>, onde cada centavo precisa ser exato, o C# oferece um tipo específico, o <strong><code>decimal</code></strong>, mais preciso para dinheiro:</p>
+<pre><code class="language-csharp">decimal saldo = 1500.75m;   // o &apos;m&apos; ao final marca o valor como decimal</code></pre>
+<p>Note o sufixo <strong><code>m</code></strong> após o número: ele diz ao C# "este é um valor <code>decimal</code>". Por ora, guarde a regra prática: use <code>double</code> para medidas e cálculos gerais, e <code>decimal</code> (com o <code>m</code>) para dinheiro. A razão profunda dessa distinção ficará mais clara adiante; o importante agora é conhecer os dois e saber quando cada um se aplica.</p>
+<h2>O texto: string e char</h2>
+<p>Já usamos texto desde a primeira aula. O tipo que guarda texto — uma sequência de caracteres — é a <strong><code>string</code></strong>, escrita entre aspas duplas:</p>
+<pre><code class="language-csharp">string nome = &quot;Ana&quot;;
+string saudacao = &quot;Bom dia!&quot;;
+string frase = &quot;C# é uma linguagem versátil.&quot;;</code></pre>
+<p>Uma <code>string</code> pode conter qualquer texto: letras, números (tratados como texto, não como valor numérico), espaços, pontuação. É importante perceber que <code>&quot;30&quot;</code> (entre aspas) é <em>texto</em>, não o número 30 — são naturezas diferentes, e essa distinção terá consequências práticas quando, mais adiante, precisarmos converter um do outro.</p>
+<p>Existe também o tipo <strong><code>char</code></strong> (de <em>character</em>), que guarda um <em>único</em> caractere, escrito entre aspas <em>simples</em>:</p>
+<pre><code class="language-csharp">char inicial = &apos;A&apos;;
+char nota = &apos;B&apos;;</code></pre>
+<p>Preste atenção à diferença das aspas: aspas <em>duplas</em> (<code>&quot;...&quot;</code>) fazem uma <code>string</code> (texto de zero, um ou muitos caracteres); aspas <em>simples</em> (<code>&apos;...&apos;</code>) fazem um <code>char</code> (exatamente um caractere). Confundir as duas é um erro comum de iniciante, e o C# reclamará se você trocá-las.</p>
+<h2>O verdadeiro ou falso: bool</h2>
+<p>Por fim, um tipo pequeno mas imensamente importante: o <strong><code>bool</code></strong> (de <em>boolean</em>, em homenagem ao matemático George Boole). Ele guarda apenas um de dois valores possíveis: <strong><code>true</code></strong> (verdadeiro) ou <strong><code>false</code></strong> (falso).</p>
+<pre><code class="language-csharp">bool estaChovendo = true;
+bool maiorDeIdade = false;</code></pre>
+<p>Pode parecer modesto guardar apenas "sim ou não", mas o <code>bool</code> é o coração de toda <em>decisão</em> que um programa toma. Quando, nas próximas aulas, seu programa precisar escolher entre caminhos ("se estiver chovendo, leve o guarda-chuva"), essa escolha se apoiará num valor <code>bool</code>. Por ora, apenas conheça-o; seu poder se revelará na Fase 2.</p>
+<h2>Uma visão de conjunto</h2>
+<p>Recapitulando os tipos primitivos essenciais que você usará com mais frequência: <strong><code>int</code></strong> para números inteiros; <strong><code>double</code></strong> para números com casas decimais em geral, e <strong><code>decimal</code></strong> (com <code>m</code>) para dinheiro; <strong><code>string</code></strong> para texto (aspas duplas) e <strong><code>char</code></strong> para um único caractere (aspas simples); e <strong><code>bool</code></strong> para verdadeiro ou falso. Existem outros tipos primitivos além destes, mas estes cobrem a vasta maioria das necessidades do dia a dia, e dominá-los é suficiente para avançar com segurança. Cada variável que você declarar terá um destes tipos (ou outros que aprenderemos depois), e o C# usará essa informação para protegê-lo de operações sem sentido.</p>
+<p>Cada gaveta agora tem uma natureza declarada. Você conhece os tipos com que a maior parte do código do mundo é escrita: int para números inteiros, double e decimal para valores com casas decimais, string para texto, char para um único caractere e bool para verdadeiro ou falso. E sabe a distinção prática que evita o erro mais caro da lista: decimal para dinheiro, double para medidas e cálculos científicos.</p>
+<p>Mais do que a tabela de tipos, ficou claro por que eles existem. Exigir o tipo de antemão permite ao compilador reservar a memória certa e recusar operações sem sentido antes mesmo do programa rodar — um rigor que parece burocrático no início e se revela uma rede de proteção.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><strong><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/built-in-types" target="_blank" rel="noopener noreferrer">Tipos internos do C#</a></strong> — a referência oficial dos tipos primitivos, com suas faixas e usos; a base desta aula.</li>
+<li><strong><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/integral-numeric-types" target="_blank" rel="noopener noreferrer">Tipos numéricos inteiros</a></strong> — detalhes sobre <code>int</code>, <code>long</code> e os demais tipos inteiros.</li>
+<li><strong><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/floating-point-numeric-types" target="_blank" rel="noopener noreferrer">Tipos numéricos de ponto flutuante</a></strong> — sobre <code>double</code> e <code>decimal</code>, incluindo por que o <code>decimal</code> é indicado para dinheiro.</li>
+<li><strong><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool" target="_blank" rel="noopener noreferrer">O tipo bool</a></strong> — a referência do tipo verdadeiro/falso, base das decisões.</li>
+<li><strong><a href="https://learn.microsoft.com/dotnet/csharp/programming-guide/strings/" target="_blank" rel="noopener noreferrer">Cadeias de caracteres (string)</a></strong> — uma introdução ao tipo texto, que aprofundaremos em aula própria.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Declare uma variável de cada um dos seguintes tipos, com um valor apropriado e um nome descritivo: <code>int</code>, <code>double</code>, <code>decimal</code>, <code>string</code>, <code>char</code>, <code>bool</code>. Exiba todas com <code>Console.WriteLine</code>. Ao escrever o <code>decimal</code>, não esqueça do sufixo <code>m</code>.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Exemplo:</p>
+<pre><code class="language-csharp">int idade = 25;
+double altura = 1.80;
+decimal preco = 49.90m;
+string nome = &quot;Carlos&quot;;
+char inicial = &apos;C&apos;;
+bool ativo = true;
+Console.WriteLine(idade);
+Console.WriteLine(altura);
+Console.WriteLine(preco);
+Console.WriteLine(nome);
+Console.WriteLine(inicial);
+Console.WriteLine(ativo);</code></pre>
+<p>Cada variável usa o tipo apropriado à natureza do valor, e o <code>decimal</code> traz o sufixo <code>m</code>.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Explique, com suas palavras, por que o C# exige que você declare o tipo de cada variável. Que classe de erro essa exigência ajuda a evitar, e em que momento (antes ou durante a execução) o erro é apontado?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O C# exige a declaração de tipo para saber a <em>natureza</em> de cada valor e, com isso, poder verificar se as operações que você faz fazem sentido — por exemplo, impedir somar um número a um texto ou guardar um texto numa variável numérica. Isso ajuda a evitar a classe de erros de uso indevido de tipos. O erro é apontado <em>antes</em> da execução, em tempo de compilação: o compilador recusa o código e avisa na sua tela, em vez de deixar o problema surgir como comportamento estranho durante a execução.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>Explique a diferença entre <code>&quot;A&quot;</code> e <code>&apos;A&apos;</code> em C#: qual é o tipo de cada um e qual a regra das aspas? Depois, explique por que <code>&quot;30&quot;</code> e <code>30</code> são coisas de naturezas diferentes.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>&quot;A&quot;</code>, com aspas duplas, é uma <code>string</code> — um texto que, neste caso, tem um caractere, mas poderia ter muitos. <code>&apos;A&apos;</code>, com aspas simples, é um <code>char</code> — exatamente um único caractere. A regra das aspas: duplas fazem <code>string</code>, simples fazem <code>char</code>. Já <code>&quot;30&quot;</code> e <code>30</code> diferem em natureza porque <code>&quot;30&quot;</code> (com aspas) é <em>texto</em> — uma sequência dos caracteres '3' e '0', com a qual não se faz aritmética diretamente —, enquanto <code>30</code> (sem aspas) é um <em>número</em> inteiro, com o qual se pode calcular. São representações de naturezas distintas, ainda que "pareçam" a mesma coisa aos nossos olhos.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Você precisa guardar: (a) a quantidade de alunos numa turma; (b) o preço de um produto numa loja; (c) a temperatura medida por um sensor científico; (d) se um usuário confirmou seu e-mail; (e) a inicial do nome de alguém. Para cada caso, escolha o tipo primitivo mais apropriado e justifique brevemente.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> (a) Quantidade de alunos: <code>int</code>, pois é uma contagem inteira. (b) Preço de um produto: <code>decimal</code>, pois é valor monetário e exige exatidão de centavos. (c) Temperatura de um sensor científico: <code>double</code>, adequado a medidas com casas decimais em cálculos gerais. (d) Confirmação de e-mail: <code>bool</code>, pois é um sim/não (verdadeiro/falso). (e) Inicial do nome: <code>char</code>, pois é um único caractere.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Tente declarar <code>int preco = 19.90;</code> e execute. O que acontece e por quê? Depois, corrija a declaração escolhendo o tipo adequado para um valor com casas decimais, e explique sua correção.</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> <code>int preco = 19.90;</code> gera um erro de compilação, porque <code>19.90</code> é um número com casas decimais e <code>int</code> só guarda inteiros — o C# recusa guardar um valor fracionário numa gaveta destinada a inteiros, apontando a incompatibilidade de tipos. A correção é usar um tipo que aceite casas decimais: <code>double preco = 19.90;</code> para um valor genérico, ou, tratando-se de um preço (dinheiro), preferencialmente <code>decimal preco = 19.90m;</code>, que é o tipo indicado para valores monetários pela sua exatidão.</p>
+</div>
+</details>
+

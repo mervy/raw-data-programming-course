@@ -1,0 +1,193 @@
+<p>Se vari&aacute;veis s&atilde;o os recipientes que guardam dados, os operadores s&atilde;o as ferramentas que permitem trabalhar com esses dados. Python oferece um conjunto rico e expressivo de operadores &mdash; alguns familiares para quem j&aacute; programou em outra linguagem, outros exclusivos do Python.</p>
+<h2>Operadores Aritm&eacute;ticos</h2>
+<p>Os mais b&aacute;sicos &mdash; realizam c&aacute;lculos matem&aacute;ticos:</p>
+<pre><code class="language-python">a = 10
+b = 3
+
+print(a + b)   # 13  &mdash; adi&ccedil;&atilde;o
+print(a - b)   # 7   &mdash; subtra&ccedil;&atilde;o
+print(a * b)   # 30  &mdash; multiplica&ccedil;&atilde;o
+print(a / b)   # 3.3333...  &mdash; divis&atilde;o real (sempre retorna float)
+print(a // b)  # 3   &mdash; divis&atilde;o inteira (descarta o decimal)
+print(a % b)   # 1   &mdash; m&oacute;dulo (resto da divis&atilde;o)
+print(a ** b)  # 1000 &mdash; potencia&ccedil;&atilde;o
+</code></pre>
+<p>A divis&atilde;o com <code>/</code> sempre retorna <code>float</code> em Python 3 &mdash; isso foi uma das corre&ccedil;&otilde;es feitas em rela&ccedil;&atilde;o ao Python 2, onde <code>10 / 3</code> retornava <code>3</code>.</p>
+<p><strong>Cuidado com a descri&ccedil;&atilde;o de <code>//</code> como "descartar o decimal":</strong> ela s&oacute; vale enquanto os dois n&uacute;meros s&atilde;o positivos. O que o operador faz &eacute; arredondar para <em>baixo</em> &mdash; e para baixo significa na dire&ccedil;&atilde;o do infinito negativo, de modo que <code>-10 // 3</code> n&atilde;o d&aacute; <code>-3</code>, e sim <code>-4</code>. O <code>%</code> acompanha, porque os dois precisam ser coerentes entre si: em Python o resto herda o sinal do <strong>divisor</strong>, e <code>-10 % 3</code> &eacute; <code>2</code>, n&atilde;o <code>-1</code>. Quem vem de C, de Java ou de JavaScript tropeça aqui, porque nessas linguagens a divis&atilde;o trunca e o resto herda o sinal do dividendo. Se a inten&ccedil;&atilde;o &eacute; mesmo truncar, pe&ccedil;a isso explicitamente com <code>int(a / b)</code>.</p>
+<p>O operador <code>**</code> &eacute; especialmente &uacute;til:</p>
+<pre><code class="language-python">raiz_quadrada = 25 ** 0.5
+print(raiz_quadrada)  # 5.0
+
+cubo = 4 ** 3
+print(cubo)  # 64
+</code></pre>
+<h2>Operadores de Compara&ccedil;&atilde;o</h2>
+<p>Retornam sempre <code>True</code> ou <code>False</code>:</p>
+<pre><code class="language-python">x = 10
+y = 20
+
+print(x == y)   # False &mdash; igual a
+print(x != y)   # True  &mdash; diferente de
+print(x &lt; y)    # True  &mdash; menor que
+print(x &gt; y)    # False &mdash; maior que
+print(x &lt;= 10)  # True  &mdash; menor ou igual
+print(x &gt;= 10)  # True  &mdash; maior ou igual
+</code></pre>
+<p>Aten&ccedil;&atilde;o ao erro cl&aacute;ssico de confundir <code>=</code> (atribui&ccedil;&atilde;o) com <code>==</code> (compara&ccedil;&atilde;o):</p>
+<pre><code class="language-python">x = 5       # atribui o valor 5 a x
+x == 5      # compara x com 5, retorna True
+</code></pre>
+<p>E uma facilidade que Python tem e quase nenhuma outra linguagem oferece: as compara&ccedil;&otilde;es podem ser <strong>encadeadas</strong>, do mesmo jeito que na nota&ccedil;&atilde;o matem&aacute;tica.</p>
+<pre><code class="language-python">idade = 25
+
+# em Python, escreve-se como se l&ecirc;
+if 18 &lt;= idade &lt; 65:
+    print("idade de trabalho")
+
+# em vez do que seria preciso em outra linguagem
+if idade &gt;= 18 and idade &lt; 65:
+    print("idade de trabalho")</code></pre>
+<p>N&atilde;o &eacute; s&oacute; economia de escrita: no encadeamento o valor do meio &eacute; avaliado <strong>uma &uacute;nica vez</strong>, o que passa a importar quando ele &eacute; uma chamada de fun&ccedil;&atilde;o.</p>
+<h2>Operadores L&oacute;gicos</h2>
+<p>Combinam express&otilde;es booleanas:</p>
+<pre><code class="language-python">idade = 25
+tem_carteira = True
+
+# and &mdash; verdadeiro se ambos forem verdadeiros
+pode_dirigir = idade &gt;= 18 and tem_carteira
+print(pode_dirigir)  # True
+
+# or &mdash; verdadeiro se pelo menos um for verdadeiro
+tem_acesso = idade &gt;= 18 or tem_carteira
+print(tem_acesso)  # True
+
+# not &mdash; inverte o valor
+nao_pode = not pode_dirigir
+print(nao_pode)  # False
+</code></pre>
+<p>Python avalia express&otilde;es com <strong>curto-circuito</strong>: em um <code>and</code>, se o primeiro operando for <code>False</code>, o segundo nem &eacute; avaliado. Em um <code>or</code>, se o primeiro for <code>True</code>, o segundo &eacute; ignorado. Isso &eacute; importante para evitar erros:</p>
+<pre><code class="language-python">lista = []
+
+# sem curto-circuito, lista[0] causaria IndexError
+if lista and lista[0] == "Python":
+    print("Encontrado")
+</code></pre>
+<p>Do curto-circuito decorre um detalhe que surpreende quase todo mundo: <strong><code>and</code> e <code>or</code> n&atilde;o devolvem <code>True</code> ou <code>False</code></strong> &mdash; devolvem <em>um dos operandos</em>. O <code>or</code> entrega o primeiro que for verdadeiro; o <code>and</code>, o primeiro que for falso, ou o &uacute;ltimo se nenhum for. Por isso <code>0 or "x"</code> resulta em <code>"x"</code>, e <code>"a" and "b"</code> resulta em <code>"b"</code>. Isso se usa de prop&oacute;sito para dar valor padr&atilde;o a uma vari&aacute;vel, no lugar do tern&aacute;rio de outras linguagens &mdash; e vira armadilha quando o valor leg&iacute;timo &eacute; falso: <code>quantidade or 10</code> devolve <code>10</code> quando a quantidade &eacute; <code>0</code>, que era justamente o n&uacute;mero a guardar. Nesse caso o teste certo &eacute; <code>if quantidade is None</code>.</p>
+<h2>Operadores de Atribui&ccedil;&atilde;o</h2>
+<p>Al&eacute;m do <code>=</code> b&aacute;sico, Python oferece formas compactas de atualizar vari&aacute;veis:</p>
+<pre><code class="language-python">x = 10
+
+x += 5   # equivale a x = x + 5  &rarr; 15
+x -= 3   # equivale a x = x - 3  &rarr; 12
+x *= 2   # equivale a x = x * 2  &rarr; 24
+x /= 4   # equivale a x = x / 4  &rarr; 6.0
+x //= 2  # equivale a x = x // 2 &rarr; 3.0
+x **= 3  # equivale a x = x ** 3 &rarr; 27.0
+x %= 5   # equivale a x = x % 5  &rarr; 2.0
+</code></pre>
+<h2>Operadores de Identidade e Pertin&ecirc;ncia</h2>
+<p>Dois operadores que n&atilde;o existem em muitas linguagens, mas s&atilde;o muito usados em Python:</p>
+<p><strong><code>is</code> e <code>is not</code></strong> &mdash; verificam se dois nomes apontam para o <strong>mesmo objeto</strong> na mem&oacute;ria:</p>
+<pre><code class="language-python">a = [1, 2, 3]
+b = a          # b aponta para o mesmo objeto
+c = [1, 2, 3]  # c &eacute; um objeto diferente, mas com o mesmo conte&uacute;do
+
+print(a is b)   # True
+print(a is c)   # False
+print(a == c)   # True &mdash; conte&uacute;do igual, objetos diferentes
+</code></pre>
+<p><strong><code>in</code> e <code>not in</code></strong> &mdash; verificam se um valor est&aacute; contido em uma sequ&ecirc;ncia:</p>
+<pre><code class="language-python">frutas = ["ma&ccedil;&atilde;", "banana", "laranja"]
+
+print("banana" in frutas)      # True
+print("uva" in frutas)         # False
+print("uva" not in frutas)     # True
+
+frase = "Python &eacute; incr&iacute;vel"
+print("Python" in frase)       # True
+</code></pre>
+<h2>Preced&ecirc;ncia de Operadores</h2>
+<p>Quando h&aacute; m&uacute;ltiplos operadores em uma express&atilde;o, Python segue uma ordem de preced&ecirc;ncia. Da mais alta para a mais baixa:</p>
+<pre><code>1. **              (potencia&ccedil;&atilde;o)
+2. +x, -x         (sinais un&aacute;rios)
+3. *, /, //, %    (multiplica&ccedil;&atilde;o, divis&atilde;o)
+4. +, -           (adi&ccedil;&atilde;o, subtra&ccedil;&atilde;o)
+5. ==, !=, &lt;, &gt;   (compara&ccedil;&atilde;o)
+6. not            (nega&ccedil;&atilde;o l&oacute;gica)
+7. and            (e l&oacute;gico)
+8. or             (ou l&oacute;gico)
+</code></pre>
+<p>Exemplos:</p>
+<pre><code class="language-python">print(2 + 3 * 4)      # 14, n&atilde;o 20 &mdash; multiplica&ccedil;&atilde;o primeiro
+print((2 + 3) * 4)    # 20 &mdash; par&ecirc;nteses for&ccedil;am a ordem
+print(2 ** 3 ** 2)    # 512 &mdash; potencia&ccedil;&atilde;o associa da direita: 2 ** (3**2) = 2**9
+</code></pre>
+<p>A recomenda&ccedil;&atilde;o &eacute; sempre usar par&ecirc;nteses quando a express&atilde;o tiver risco de ambiguidade &mdash; o c&oacute;digo fica mais leg&iacute;vel e voc&ecirc; evita surpresas.</p>
+<h2>Express&otilde;es com Strings</h2>
+<p>Strings tamb&eacute;m aceitam alguns operadores:</p>
+<pre><code class="language-python"># Concatena&ccedil;&atilde;o
+primeiro = "Python"
+segundo = " &eacute; incr&iacute;vel"
+print(primeiro + segundo)  # Python &eacute; incr&iacute;vel
+
+# Repeti&ccedil;&atilde;o
+linha = "-" * 40
+print(linha)  # ----------------------------------------
+
+# Compara&ccedil;&atilde;o (ordem lexicogr&aacute;fica)
+print("apple" &lt; "banana")  # True
+print("Z" &lt; "a")           # True &mdash; mai&uacute;sculas t&ecirc;m valor menor
+</code></pre>
+<p>Se houver uma coisa a levar desta parte, que seja a desconfiança com as descrições fáceis. "Divisão inteira descarta o decimal" e "os operadores lógicos devolvem verdadeiro ou falso" são frases que funcionam nos exemplos de sala de aula e falham no primeiro dado real — a primeira quando aparece um número negativo, a segunda quando o valor legítimo é zero ou uma lista vazia. Python tem razões coerentes para ambos os comportamentos, e as duas decisões se sustentam: o piso mantém a identidade entre a divisão e o resto, e o curto-circuito devolvendo o operando é o que permite escrever valor padrão em uma linha.</p>
+<p>O resto é conveniência que vale conhecer de cor. O encadeamento de comparações deixa a condição parecida com a notação matemática e avalia o valor do meio uma vez só. O <code>in</code> transforma uma busca em uma palavra. E a distinção entre <code>is</code> e <code>==</code>, que parece pedantismo enquanto os exemplos são inteiros pequenos, é a diferença entre perguntar se dois nomes apontam para o mesmo objeto e perguntar se dois objetos valem a mesma coisa — duas perguntas que só coincidem por acidente.</p>
+<h2>Fontes e leituras recomendadas</h2>
+<ul>
+<li><strong>Operadores do Python</strong> &mdash; <a href="https://docs.python.org/3/reference/expressions.html#operator-precedence" target="_blank" rel="noopener">https://docs.python.org/3/reference/expressions.html#operator-precedence</a></li>
+<li><strong>Operadores de identidade e pertin&ecirc;ncia</strong> &mdash; <a href="https://docs.python.org/3/library/stdtypes.html#comparisons" target="_blank" rel="noopener">https://docs.python.org/3/library/stdtypes.html#comparisons</a></li>
+<li><strong>PEP 8 sobre express&otilde;es</strong> &mdash; <a href="https://peps.python.org/pep-0008/#programming-recommendations" target="_blank" rel="noopener">https://peps.python.org/pep-0008/#programming-recommendations</a></li>
+<li>MATTHES, Eric. <a href="https://nostarch.com/python-crash-course-3rd-edition" target="_blank" rel="noopener"><em>Python Crash Course</em></a>. 3. ed. No Starch Press, 2023. Cap. 2&ndash;3.</li>
+<li>LUTZ, Mark. <a href="https://learning-python.com/" target="_blank" rel="noopener"><em>Learning Python</em></a>. 5. ed. O'Reilly Media, 2013. Cap. 5.</li>
+<li>RAMALHO, Luciano. <a href="https://github.com/fluentpython/example-code-2e" target="_blank" rel="noopener"><em>Fluent Python</em></a>. 2. ed. O'Reilly Media, 2022. Cap. 1.</li>
+</ul>
+<h2>Exercícios</h2>
+<h3>Exercício 1</h3>
+<p>Você escreve uma função que distribui itens em páginas: <code>paginas = total // por_pagina</code>. Os testes passam. Em produção, um relatório com saldo negativo produz um número de páginas que ninguém consegue explicar. O que aconteceu?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> O <code>//</code> não trunca: ele arredonda <strong>para baixo</strong>, na direção do infinito negativo. Com valores positivos as duas descrições coincidem e o defeito fica invisível — <code>10 // 3</code> é <code>3</code> de qualquer jeito. Com um negativo elas divergem: <code>-10 // 3</code> devolve <code>-4</code>, e não <code>-3</code>, porque menos quatro é o maior inteiro que <em>não passa</em> de menos três e um terço. O <code>%</code> acompanha pela mesma regra, e o resto herda o sinal do <strong>divisor</strong>: <code>-10 % 3</code> é <code>2</code>. Isso não é excentricidade — é o que mantém verdadeira a identidade <code>(a // b) * b + (a % b) == a</code>, que em C e em Java só vale porque lá as duas operações combinam de outro jeito, truncando e herdando o sinal do dividendo. A consequência prática é ótima para um caso muito comum: <code>indice % len(lista)</code> em Python sempre devolve um índice válido, mesmo com índice negativo, enquanto em C o mesmo cálculo devolve um número negativo e estoura o vetor. Para o caso da paginação, se a intenção é truncar, escreva <code>int(total / por_pagina)</code>; se a intenção é arredondar para cima, o idioma é <code>-(-total // por_pagina)</code>, ou <code>math.ceil</code> com a divisão real.</p>
+</div>
+</details>
+<h3>Exercício 2</h3>
+<p>Um formulário tem um campo de quantidade opcional. O código escreve <code>quantidade = entrada or 10</code> para aplicar o padrão quando o campo vem vazio. Funciona quase sempre. Quando falha, e por quê?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Falha quando o usuário digita <strong>zero</strong> — e passa a valer <code>10</code>, apagando em silêncio uma quantidade que ele informou de propósito. A causa é que <code>or</code> não testa "está preenchido": testa <strong>veracidade</strong>, e em Python são falsos o <code>0</code>, o <code>0.0</code>, a string vazia, a lista vazia, o dicionário vazio e o <code>None</code>. Os seis caem no mesmo balde, embora só um deles signifique "não informado". Vale lembrar, de passagem, que o <code>or</code> também <strong>não devolve um booleano</strong>: ele entrega o primeiro operando verdadeiro, ou o último se nenhum for — é por isso que a construção funciona como valor padrão. O conserto é testar exatamente o que se quer saber: <code>quantidade = entrada if entrada is not None else 10</code>. O <code>is not None</code> é literal e não confunde zero com ausência. O mesmo defeito aparece com outra roupa em <code>if not lista:</code> quando se queria perguntar se a lista <em>existe</em>, e não se ela está vazia — uma lista vazia e um <code>None</code> respondem igual ali, e quase sempre significam coisas diferentes no domínio.</p>
+</div>
+</details>
+<h3>Exercício 3</h3>
+<p>O artigo mostra que <code>a is b</code> é <code>True</code> para dois nomes da mesma lista e <code>False</code> para listas iguais mas distintas. Um colega testa com números, escreve <code>a = 257</code> e <code>b = 257</code>, e <code>a is b</code> devolve <code>True</code>. Isso significa que se pode usar <code>is</code> para comparar inteiros?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Não — e o que torna o caso instrutivo é justamente ele ter dado <code>True</code>. O CPython mantém um <em>cache</em> de inteiros pequenos, de <code>-5</code> a <code>256</code>, reaproveitando os mesmos objetos; fora dessa faixa, cada valor deveria ser um objeto novo. Só que há um segundo mecanismo: quando o compilador vê dois literais iguais dentro do <strong>mesmo bloco de código</strong>, ele os unifica numa constante só. Por isso o teste dá <code>True</code> no mesmo arquivo e pode dar <code>False</code> se os valores vierem de lugares diferentes — de uma soma, de uma leitura de arquivo, de uma linha separada do REPL. A conclusão correta não é "funciona até 256": é que <strong>o resultado de <code>is</code> com números é detalhe de implementação, e não faz parte do contrato da linguagem</strong>. Código que depende disso funciona por acidente e quebra sem aviso. A regra prática é curta: <code>is</code> serve para perguntar se dois nomes apontam para o mesmo objeto, e na prática se usa quase só com <code>None</code>, <code>True</code> e <code>False</code> — que são objetos únicos garantidos. Para valor, <code>==</code>. O próprio Python avisa: comparar um literal com <code>is</code> dispara um <code>SyntaxWarning</code>.</p>
+</div>
+</details>
+<h3>Exercício 4</h3>
+<p>Você precisa validar que uma nota está entre 0 e 10. Compare <code>if 0 &lt;= nota &lt;= 10:</code> com <code>if nota &gt;= 0 and nota &lt;= 10:</code>. Há diferença além do estilo?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> Há uma, e ela aparece quando o valor do meio não é uma variável. No encadeamento, <strong>o termo central é avaliado uma única vez</strong>: escrever <code>0 &lt;= calcular_nota() &lt;= 10</code> chama a função uma vez, enquanto <code>calcular_nota() &gt;= 0 and calcular_nota() &lt;= 10</code> chama duas — o que dobra o custo e, pior, pode dar resultados incoerentes se a função não for determinística ou tiver efeito colateral. O encadeamento também preserva o curto-circuito: se a primeira comparação for falsa, a segunda nem acontece. Fora isso, é legibilidade, e vale muito: <code>18 &lt;= idade &lt; 65</code> se lê na ordem em que se pensa, e deixa claro num relance que um limite é inclusivo e o outro não. Um aviso sobre os limites do recurso: o encadeamento é açúcar sintático de conjunção, então <code>a &lt; b &gt; c</code> é sintaticamente válido e quase sempre um erro de digitação — significa <code>a &lt; b and b &gt; c</code>, que não é o que ninguém queria escrever. E cuidado ao encadear <code>in</code> ou <code>is</code> junto de comparações, porque eles entram na mesma regra: <code>x in lista == True</code> não faz o que parece.</p>
+</div>
+</details>
+<h3>Exercício 5</h3>
+<p>Explique por que <code>-2 ** 2</code> devolve <code>-4</code>, e por que <code>2 ** 3 ** 2</code> devolve <code>512</code> e não <code>64</code>. O que essas duas respostas têm em comum?</p>
+<details>
+<summary><strong>Ver resposta</strong></summary>
+<div class="exercise-answer">
+<p><strong>✓ Resposta:</strong> As duas saem da mesma decisão: o <code>**</code> é o operador de maior precedência da tabela, e ele é o único dos aritméticos que associa da <strong>direita para a esquerda</strong>. Em <code>-2 ** 2</code>, o sinal de menos não faz parte do número — é o operador unário de negação, que tem precedência <em>menor</em> que a potenciação. Python calcula primeiro <code>2 ** 2</code> e depois nega o resultado: <code>-(2 ** 2)</code>, ou seja, <code>-4</code>. Quem quer o quadrado de menos dois precisa dos parênteses: <code>(-2) ** 2</code> devolve <code>4</code>. Em <code>2 ** 3 ** 2</code>, a associatividade à direita faz a conta virar <code>2 ** (3 ** 2)</code>, que é <code>2 ** 9</code>, ou <code>512</code> — e não <code>(2 ** 3) ** 2</code>, que daria <code>64</code>. Essa escolha não é arbitrária: é a convenção da notação matemática, onde uma torre de expoentes se resolve de cima para baixo. Há um detalhe fino que confirma a regra: o unário é permitido do <strong>lado direito</strong> do <code>**</code> sem parênteses, e por isso <code>2 ** -1</code> é válido e devolve <code>0.5</code>. O que as duas respostas têm em comum, no fim, é a lição prática: precedência que se precisa lembrar é precedência que se deve escrever com parênteses, porque quem lê o código depois não vai consultar a tabela.</p>
+</div>
+</details>
+
