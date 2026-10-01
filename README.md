@@ -21,7 +21,7 @@ de código.
 
 A ideia de cada série: um "professor com mestrado em Programação" escreve
 ~52 artigos-aula (um por semana), nem longos nem curtos, para quem quer
-dominar a tecnologia em um ano. Nas séries mais recentes (C, C++, C#), cada
+dominar a tecnologia em um ano. Nas séries mais recentes (C, C++, C#, Java), cada
 artigo começa com um delimitador (`C++ — Artigo #0X`) para facilitar fatiar
 o `.md` em arquivos individuais.
 
@@ -32,6 +32,7 @@ o `.md` em arquivos individuais.
 | Linguagem C | ✅ | — | — |
 | Linguagem C++ | ✅ | — | — |
 | Linguagem C# | ✅ | — | — |
+| Linguagem Java | ✅ | ✅ | ✅ |
 | Linguagem JavaScript | ✅ | ✅ | ✅ |
 | Linguagem Python | ✅ | ✅ | ✅ |
 | Linguagem Go | ✅ | ✅ | ✅ |
