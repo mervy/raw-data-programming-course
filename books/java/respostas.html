@@ -133,7 +133,7 @@ String b = new Scanner(System.in).next();   // o usuário digita: java
 IO.println(a == b);        // false
 IO.println(a.equals(b));   // true</code></pre>
 <p>Regra: textos se comparam com <code>equals</code> (ou <code>equalsIgnoreCase</code>).</p>
-<p><strong>Exercícios de código — soluções</strong></p>
+<h3>Exercícios de código — soluções</h3>
 <div class="questao" id="q9">
 <span class="num">Q9</span>
 <div class="corpo">
@@ -570,7 +570,7 @@ recusado: início 9 &gt; fim 1</code></pre>
 </div>
 <p>Uma interface (ou classe) <code>sealed</code> declara a <strong>lista fechada</strong> de subtipos permitidos. Nenhum outro código pode implementá-la, e cada subtipo precisa ser <code>final</code>, <code>sealed</code> ou <code>non-sealed</code>. Assim, o compilador conhece todas as variantes possíveis.</p>
 <p>Isso permite um <code>switch</code> <strong>exaustivo sem </strong><code>default</code>: se todos os subtipos têm um <code>case</code>, o compilador aceita, e se um subtipo novo for acrescentado, todo <code>switch</code> que o esquece deixa de compilar. Com <em>records</em> como subtipos, os <em>record patterns</em> desmontam os dados direto no <code>case</code>: <code>case Circulo(double r) -&gt; Math.PI * r * r</code>.</p>
-<p><strong>Exercícios de código — soluções</strong></p>
+<h3>Exercícios de código — soluções</h3>
 <div class="questao" id="q34">
 <span class="num">Q34</span>
 <div class="corpo">
@@ -857,7 +857,7 @@ Integer i = inteiros.get(0);       // ClassCastException</code></pre>
 </div>
 <p><code>new BigDecimal(0.1)</code> recebe o <code>double</code> 0,1, que já é uma aproximação binária, e a guarda com todas as casas: <code>0.1000000000000000055511151231257827021181583404541015625</code>. <code>BigDecimal.valueOf(0.1)</code> usa a representação em texto do <code>double</code> (<code>"0.1"</code>) e dá exatamente 0,1. O mais seguro é sempre construir a partir de <code>String</code>: <code>new BigDecimal("0.10")</code>.</p>
 <p>O <code>equals</code> do <code>BigDecimal</code> compara valor <strong>e escala</strong>: 2,0 (escala 1) e 2,00 (escala 2) são diferentes. Para comparar só o valor numérico, use <code>compareTo(...) == 0</code>. O mesmo cuidado vale para usar <code>BigDecimal</code> como chave de <code>HashMap</code>.</p>
-<p><strong>Exercícios de código — soluções</strong></p>
+<h3>Exercícios de código — soluções</h3>
 <div class="questao" id="q53">
 <span class="num">Q53</span>
 <div class="corpo">
@@ -1107,7 +1107,7 @@ import java.time.temporal.ChronoUnit;</code></pre>
 </div>
 <ul><li><strong>Perde a checagem do compilador</strong>: nomes de métodos e campos viram <em>strings</em>, e um erro de digitação ou um renomeio só aparece em tempo de execução.</li><li><strong>Quebra o encapsulamento</strong>: <code>setAccessible(true)</code> acessa membros privados, e desde o Java 9 isso é barrado pelo sistema de módulos, a não ser que o pacote seja aberto com <code>opens</code>.</li><li>É mais <strong>lenta</strong> que a chamada direta (o JIT otimiza menos) e atrapalha ferramentas como o GraalVM Native Image, que precisa saber de antemão o que será acessado por reflexão.</li></ul>
 <p>Ela é ótima para <em>frameworks</em> genéricos. Na aplicação, prefira interfaces e <em>lambdas</em>.</p>
-<p><strong>Exercícios de código — soluções</strong></p>
+<h3>Exercícios de código — soluções</h3>
 <div class="questao" id="q70">
 <span class="num">Q70</span>
 <div class="corpo">
@@ -1320,7 +1320,7 @@ import java.lang.reflect.Field;</code></pre>
 </div>
 <ul><li><strong>Stub</strong>: devolve respostas prontas (<code>when(repo.buscar(1)).thenReturn(cliente)</code>). Serve para colocar o código testado num cenário.</li><li><strong>Mock</strong>: além disso, <strong>registra as chamadas</strong>, e o teste verifica a interação (<code>verify(email).enviar(...)</code>). Deve ser usado quando o efeito colateral é o próprio comportamento a testar.</li><li><strong>Spy</strong>: embrulha um objeto <strong>real</strong> e permite sobrescrever alguns métodos e observar as chamadas.</li></ul>
 <p>Um <strong>fake</strong> escrito à mão (um repositório em memória com <code>HashMap</code>, por exemplo) é melhor quando o dublê precisa de comportamento coerente ao longo de várias chamadas (salvar e depois buscar). Os testes ficam mais legíveis, e o mesmo fake serve a dezenas de testes.</p>
-<p><strong>Exercícios de código — soluções</strong></p>
+<h3>Exercícios de código — soluções</h3>
 <div class="questao" id="q83">
 <span class="num">Q83</span>
 <div class="corpo">
@@ -1494,7 +1494,7 @@ java --module-path out -m br.com.exemplo.tarefas.app/br.com.exemplo.tarefas.app.
 </div>
 <ul><li><code>MemorySegment</code>: uma região de memória (dentro ou <strong>fora</strong> do heap) com <strong>limites</strong> e <strong>tempo de vida</strong> conhecidos. Um acesso fora dos limites lança exceção, em vez de corromper a memória.</li><li><code>Arena</code>: controla o tempo de vida dos segmentos. Ao fechar a arena (num <code>try</code> com recursos), toda a memória que ela alocou é liberada de uma vez, e qualquer acesso posterior dá erro, em vez de ler lixo.</li><li><code>Linker</code>: faz a ponte para funções nativas. Com um <code>FunctionDescriptor</code> (a assinatura em termos de C), ele gera um <code>MethodHandle</code> que chama a função C direto do Java.</li></ul>
 <p>Em relação ao JNI: não é preciso escrever nem compilar código C de "cola", os erros de tipo e de limite viram exceções Java, e a memória tem dono. O acesso nativo continua sendo um método "restrito", e por isso o Java 25 avisa, e pede <code>--enable-native-access</code>.</p>
-<p><strong>Exercícios de código — soluções</strong></p>
+<h3>Exercícios de código — soluções</h3>
 <div class="questao" id="q95">
 <span class="num">Q95</span>
 <div class="corpo">
@@ -1665,7 +1665,7 @@ import java.lang.invoke.MethodHandle;</code></pre>
 <p>Um <code>ScopedValue</code> (final no Java 25, JEP 506) guarda um valor <strong>imutável</strong>, visível por todo o código chamado dentro de um escopo: <code>ScopedValue.where(USUARIO, u).run(() -&gt; tratar())</code>. Quando o <code>run</code> termina, o valor some sozinho. Ele é herdado pelas subtarefas de um <code>StructuredTaskScope</code>.</p>
 <p>Em relação ao <code>ThreadLocal</code>:</p>
 <ul><li><strong>não é mutável</strong>: não há <code>set()</code> perdido no meio do código mudando o valor escondido;</li><li><strong>tempo de vida limitado</strong>: não há vazamento por esquecer o <code>remove()</code>, algo comum em <em>pools</em>;</li><li><strong>barato</strong>: com milhões de <em>virtual threads</em>, cada uma com cópias de vários <code>ThreadLocal</code> herdáveis, a memória explode, e o <code>ScopedValue</code> é compartilhado sem cópia.</li></ul>
-<p><strong>Exercícios de código — soluções</strong></p>
+<h3>Exercícios de código — soluções</h3>
 <div class="questao" id="q109">
 <span class="num">Q109</span>
 <div class="corpo">
@@ -1888,7 +1888,7 @@ falhou: serviço de pedidos fora do ar</code></pre>
 </div>
 <p>O <strong>CDS</strong> (<em>Class Data Sharing</em>) grava, num arquivo, as classes já carregadas, verificadas e pré-processadas. Na próxima execução, a JVM mapeia esse arquivo na memória em vez de carregar e verificar tudo de novo, e a <strong>inicialização</strong> fica mais rápida (e, com vários processos, a memória é compartilhada). O <code>jlink --generate-cds-archive</code> gera esse arquivo para o runtime sob medida.</p>
 <p>O Projeto Leyden estende a ideia de guardar trabalho feito numa execução de treino: o <strong>cache AOT</strong> (JEP 483, Java 24) também guarda classes já ligadas, e o Java 25 acrescentou os perfis de métodos (JEP 515), para o JIT aquecer mais cedo. Tudo isso sem abrir mão da JVM completa, ao contrário do Native Image.</p>
-<p><strong>Exercícios de código — soluções</strong></p>
+<h3>Exercícios de código — soluções</h3>
 <div class="questao" id="q120">
 <span class="num">Q120</span>
 <div class="corpo">
@@ -2050,7 +2050,7 @@ jpackage --type deb --name minha-app --app-version 1.0.0 \
 </div>
 </div>
 <ul><li><code>record</code>s, <code>sealed</code> e <em>pattern matching</em> para <code>Requisicao</code>, <code>Conteudo</code> e <code>Busca</code>: <strong>Fase 2</strong> (Objetos).</li><li><code>Semaphore</code>, <em>virtual threads</em> e <em>keep-alive</em> concorrente: <strong>Fase 7</strong> (Concorrência).</li><li><code>Files</code>, <code>Path.toRealPath</code>, <code>try</code> com recursos e <em>streams</em> de bytes: <strong>Fase 3</strong> (Biblioteca padrão).</li><li>Testes unitários do leitor e do roteador, e de integração com <code>java.net.http.HttpClient</code>: <strong>Fase 5</strong> (Projetos e ferramentas).</li><li><code>jlink</code> com <code>--generate-cds-archive</code> e o <code>module-info</code> do servidor: <strong>Fases 5 e 8</strong> (módulos e distribuição).</li></ul>
-<p><strong>Exercícios de código — soluções</strong></p>
+<h3>Exercícios de código — soluções</h3>
 <div class="questao" id="q132">
 <span class="num">Q132</span>
 <div class="corpo">
@@ -2387,7 +2387,7 @@ ORDER BY pontos DESC, t.nome;</code></pre>
 <p>Erradas:</p>
 <ul><li>escritos no <code>application.properties</code> versionado no Git (ficam no histórico para sempre, mesmo depois de apagados);</li><li>embutidos na imagem Docker (qualquer um com a imagem os extrai com <code>docker history</code> ou abrindo as camadas).</li></ul>
 <p>Certas: <strong>variáveis de ambiente</strong> ou <strong>arquivos de segredo</strong> montados no contêiner em tempo de execução (Docker/Compose <em>secrets</em>, um <code>.env</code> fora do repositório e com permissões restritas) ou um cofre de segredos (Vault, os serviços dos provedores de nuvem). O Spring lê <code>SPRING_DATASOURCE_PASSWORD</code> do ambiente sem nenhuma mudança no código. E cada ambiente (desenvolvimento, homologação, produção) tem os seus próprios segredos.</p>
-<p><strong>Exercícios de código — soluções</strong></p>
+<h3>Exercícios de código — soluções</h3>
 <div class="questao" id="q157">
 <span class="num">Q157</span>
 <div class="corpo">
@@ -2423,7 +2423,7 @@ ORDER BY pontos DESC, t.nome;</code></pre>
 }</code></pre>
 <pre class="saida"><code>busca [Pico da Tijuca]: 1 trilha(s)
 busca [' OR '1'='1]: 0 trilha(s)</code></pre>
-<p>Com parâmetro, o banco procura uma trilha <strong>chamada literalmente</strong> <code>' OR '1'='1</code>, que não existe. Todos os recursos JDBC (<code>Connection</code>, <code>Statement</code>, <code>ResultSet</code>) são fechados pelo <code>try</code> com recursos. Execute com o <em>driver</em> no classpath: <code>java -cp sqlite-jdbc.jar TrilhasJdbc.java</code>.</p>
+<p>Com parâmetro, o banco procura uma trilha <strong>chamada literalmente</strong> <code>' OR '1'='1</code>, que não existe. Todos os recursos JDBC (<code>Connection</code>, <code>Statement</code>, <code>ResultSet</code>) são fechados pelo <code>try</code> com recursos. Execute com o <em>driver</em> no classpath: <code>java --enable-native-access=ALL-UNNAMED -cp sqlite-jdbc.jar TrilhasJdbc.java</code> (sem a opção, o Java 25 imprime um aviso quando o <em>driver</em> carrega a sua biblioteca nativa).</p>
 <div class="questao" id="q158">
 <span class="num">Q158</span>
 <div class="corpo">
@@ -2598,7 +2598,7 @@ ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75", "-jar", "app.jar"]</code></pre>
 </div>
 <p>Desde 2019 o Google adota a abordagem "Kotlin primeiro": as bibliotecas novas (Jetpack Compose, corrotinas, as extensões do Jetpack) são projetadas para Kotlin, a documentação e os exemplos vêm em Kotlin, e o Compose, a forma atual de fazer interfaces, exige Kotlin. Além disso, o Android não roda o Java 25 completo: o ART suporta um subconjunto da API, via <em>desugaring</em>.</p>
 <p>O que continua valendo: Kotlin roda na mesma lógica de bytecode, usa <strong>as mesmas bibliotecas Java</strong> (OkHttp, Retrofit, Jackson) e interopera nos dois sentidos. Todo o conhecimento de orientação a objetos, coleções, concorrência e <em>design</em> transfere diretamente, e o código Java continua compilando e rodando em apps existentes.</p>
-<p><strong>Exercícios de código — soluções</strong></p>
+<h3>Exercícios de código — soluções</h3>
 <div class="questao" id="q169">
 <span class="num">Q169</span>
 <div class="corpo">
@@ -2759,20 +2759,20 @@ void buscaPreencheResultados() {
 <span class="num">Q179</span>
 <div class="corpo">
 <p class="titulo">type e class no Tiled</p>
-<p><em>Por que o carregador TMX do libGDX não encontrava objetos marcados no campo </em><em><strong>"Class"</strong></em><em> do Tiled 1.9+? Como o jogo resolveu?</em></p>
+<p><em>Por que o carregador TMX do libGDX não encontrava objetos marcados no campo </em><em><strong>"Class"</strong></em><em> do Tiled 1.9? Como o jogo resolveu?</em></p>
 </div>
 </div>
-<p>Até a versão 1.8, o Tiled gravava o tipo do objeto no atributo XML <code>type</code>. A partir da 1.9 passou a gravar <code>class</code>, e o carregador do libGDX continuou lendo <code>type</code>. Objetos marcados pelo campo novo chegavam sem tipo, e sem erro nenhum. O jogo identifica os objetos pelo <strong>nome</strong> (<code>inicio</code>, <code>moeda</code>, <code>bandeira</code>), que funciona em qualquer versão. A alternativa é uma propriedade personalizada (<code>tipo = moeda</code>), lida com <code>obj.getProperties().get("tipo", String.class)</code>.</p>
+<p>O Tiled grava o tipo do objeto no atributo XML <code>type</code>, menos na versão 1.9, que passou a gravar <code>class</code>; a 1.10 voltou ao <code>type</code>, para ser compatível com as anteriores. O carregador do libGDX só lê <code>type</code>: num mapa salvo pelo Tiled 1.9, os objetos marcados pelo campo "Class" chegam sem tipo, e sem erro nenhum. O jogo identifica os objetos pelo <strong>nome</strong> (<code>inicio</code>, <code>moeda</code>, <code>bandeira</code>), que funciona em qualquer versão. A alternativa é uma propriedade personalizada (<code>tipo = moeda</code>), lida com <code>obj.getProperties().get("tipo", String.class)</code>. Atualizar o Tiled para a 1.10 ou mais nova também resolve, mas as duas primeiras saídas funcionam com qualquer versão.</p>
 <div class="questao" id="q180">
 <span class="num">Q180</span>
 <div class="corpo">
 <p class="titulo">O pior quadro</p>
-<p><em>No teste com 30 mil partículas, a versão com objetos novos teve média de 0,9 ms por quadro, mas um pior quadro de 11 a 12 ms. Por que o </em><em><strong>pior quadro</strong></em><em> importa mais que a média num jogo, e o que as versões com </em><code>Pool</code><em> e com arrays mudaram?</em></p>
+<p><em>No teste com 30 mil partículas, a versão com objetos novos teve média de 0,37 ms por quadro, mas um pior quadro de quase 6 ms, caído numa pausa do coletor. Por que o </em><em><strong>pior quadro</strong></em><em> importa mais que a média num jogo, e o que as versões com </em><code>Pool</code><em> e com arrays mudaram?</em></p>
 </div>
 </div>
-<p>O jogador não percebe a média: percebe o <strong>engasgo</strong>. Um quadro de 12 ms consome três quartos do orçamento de 16,7 ms. Somado ao desenho, estoura o prazo e o jogo "pula" um quadro. Esses quadros ruins coincidiam com as pausas do G1 para coletar as mais de 110 mil bytes alocados por quadro.</p>
-<ul><li><strong>Pool</strong>: reaproveita os objetos. Zero bytes por quadro, nenhuma coleta, média de 0,46 ms e pior quadro de 5,6 ms.</li><li><strong>Arrays por atributo</strong> (o estilo ECS): zero alocação e os dados contíguos na memória, aproveitando o cache do processador. Média de 0,16 ms e pior quadro de 1,1 ms.</li></ul>
-<p>Trocar para o <strong>ZGC</strong> também derrubou o pior quadro da versão com objetos para 3 a 5 ms, com pausas de 0,02 ms.</p>
+<p>O jogador não percebe a média: percebe o <strong>engasgo</strong>. Um quadro de 6 ms gasta mais de um terço do orçamento de 16,7 ms de uma vez. Somado ao desenho e a uma cena mais pesada, estoura o prazo e o jogo "pula" um quadro. Esse pior quadro caiu dentro de uma pausa do G1 nas três execuções medidas: o coletor entrava para limpar os 113.739 bytes alocados por quadro.</p>
+<ul><li><strong>Pool</strong>: reaproveita os objetos. Zero bytes por quadro e nenhuma coleta. A média quase não muda (0,35 ms), mas o pior quadro cai para 1,5 ms: o que o Pool elimina é o engasgo.</li><li><strong>Arrays por atributo</strong> (o estilo ECS): zero alocação e os dados contíguos na memória, aproveitando o cache do processador. Média de 0,14 ms e pior quadro de 0,23 ms.</li></ul>
+<p>Os tempos variam com a máquina; os bytes e as coletas se repetem iguais. Trocar para o <strong>ZGC</strong> derrubou as pausas para 0,02 a 0,03 ms, mas o pior quadro da versão com objetos ficou na mesma faixa (3,9 a 6,5 ms): os engasgos que sobram ali não vêm do coletor.</p>
 <div class="questao" id="q181">
 <span class="num">Q181</span>
 <div class="corpo">
@@ -2801,9 +2801,9 @@ void buscaPreencheResultados() {
 </div>
 </div>
 <p><strong>1.	JAR gordo</strong> (<code>./gradlew lwjgl3:jar</code>): um arquivo com o jogo, o libGDX, o LWJGL, as bibliotecas nativas e os <em>assets</em>. Roda com <code>java -jar</code>, mas <strong>exige Java 25</strong> na máquina do jogador.</p>
-<p><strong>2.	jlink</strong>: um runtime com só os módulos necessários (no teste, <code>java.base</code>, <code>java.desktop</code> e <code>jdk.unsupported</code>, 57 MB).</p>
-<p><strong>3.	jpackage</strong> (ou o <strong>Construo</strong>, que empacota para Windows, macOS e Linux a partir de um único sistema): junta o JAR e o runtime num executável ou instalador nativo (a pasta de 61 MB, ou 38 MB compactada). O jogador abre com dois cliques, sem saber que existe Java por trás.</p>
-<p><strong>Exercícios de código — soluções</strong></p>
+<p><strong>2.	jlink</strong>: um runtime com só os módulos necessários (no teste, <code>java.base</code>, <code>java.desktop</code> e <code>jdk.unsupported</code>, 61 MB, contra algumas centenas de um JDK completo).</p>
+<p><strong>3.	jpackage</strong> (ou o <strong>Construo</strong>, que empacota para Windows, macOS e Linux a partir de um único sistema): junta o JAR e o runtime num executável ou instalador nativo (a pasta de 76 MB, ou 50 MB compactada em <code>.tar.gz</code>). O jogador abre com dois cliques, sem saber que existe Java por trás.</p>
+<h3>Exercícios de código — soluções</h3>
 <div class="questao" id="q184">
 <span class="num">Q184</span>
 <div class="corpo">
