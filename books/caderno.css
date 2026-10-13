@@ -1,0 +1,180 @@
+/* Estilo único dos cadernos de exercícios e respostas (tela e impressão A4). */
+:root {
+  --tinta: #1f2933;
+  --suave: #52606d;
+  --marca: #1b3a5c;
+  --destaque: #d9661a;
+  --resposta: #2e6b3a;
+  --fundo-codigo: #f4f6f8;
+  --fundo-saida: #eef6ee;
+  --fundo-nota: #fdf1e7;
+  --fundo-desafio: #e8eef5;
+  --linha: #c9d2dc;
+  --pauta: 9mm;
+}
+
+@page {
+  size: A4;
+  margin: 18mm 16mm 20mm;
+}
+
+* { box-sizing: border-box; }
+
+body.caderno {
+  margin: 0 auto;
+  max-width: 180mm;
+  padding: 16px;
+  background: #fff;
+  color: var(--tinta);
+  font: 10.5pt/1.5 "Segoe UI", Calibri, "Helvetica Neue", Arial, sans-serif;
+}
+
+body.respostas { --destaque: var(--resposta); }
+
+h1, h2, h3 { line-height: 1.25; }
+
+code, pre {
+  font-family: Consolas, "Cascadia Mono", "DejaVu Sans Mono", monospace;
+  font-size: 9pt;
+}
+
+:not(pre) > code {
+  background: var(--fundo-codigo);
+  border-radius: 3px;
+  padding: 0 3px;
+}
+
+pre {
+  margin: 8px 0;
+  padding: 10px 12px;
+  border-radius: 6px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  break-inside: avoid;
+}
+
+pre.codigo { background: var(--fundo-codigo); border-left: 4px solid var(--linha); }
+
+pre.saida { background: var(--fundo-saida); border-left: 4px solid var(--resposta); }
+pre.saida::before {
+  content: "Saída";
+  display: block;
+  font: 700 8.5pt/1.6 "Segoe UI", Calibri, Arial, sans-serif;
+  color: var(--resposta);
+}
+
+/* capa */
+.capa {
+  margin: 0 0 16px;
+  padding: 28px 24px;
+  border-radius: 8px;
+  background: var(--marca);
+  color: #fff;
+  text-align: center;
+}
+.capa .serie { margin: 0; letter-spacing: .12em; font-weight: 700; font-size: 11pt; }
+.capa h1 { margin: 8px 0; font-size: 26pt; }
+.capa .subtitulo, .capa .autoria { margin: 4px 0 0; opacity: .9; }
+.capa a { color: #fff; }
+
+.ficha { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 12px 0; }
+.ficha span { flex: 1 1 200px; border-bottom: 1px solid var(--linha); padding-bottom: 2px; }
+
+aside.nota, aside.legenda {
+  margin: 12px 0;
+  padding: 10px 14px;
+  border-radius: 6px;
+  background: var(--fundo-nota);
+  break-inside: avoid;
+}
+aside.legenda { background: #f7f9fb; font-size: 9.5pt; }
+aside p { margin: 4px 0; }
+
+/* sumário */
+.sumario-titulo { color: var(--marca); }
+table.sumario { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+table.sumario th { background: var(--marca); color: #fff; text-align: left; padding: 6px 8px; }
+table.sumario td { padding: 5px 8px; border-bottom: 1px solid var(--linha); }
+table.sumario td:first-child { color: var(--destaque); font-weight: 700; white-space: nowrap; }
+
+/* módulos */
+section.modulo { break-before: page; }
+section.modulo > h2 {
+  margin: 0 0 10px;
+  padding: 14px 16px;
+  border-radius: 6px;
+  background: var(--marca);
+  color: #fff;
+  font-size: 16pt;
+}
+section.modulo > h2 .rotulo {
+  display: block;
+  font-size: 9pt;
+  letter-spacing: .1em;
+  opacity: .85;
+}
+.intro { color: var(--suave); }
+h3 { margin: 18px 0 6px; color: var(--marca); font-size: 12pt; border-bottom: 2px solid var(--linha); }
+
+.aulas-titulo { margin: 8px 0 2px; font-weight: 700; color: var(--suave); }
+ul.aulas { margin: 0 0 8px; padding: 0; list-style: none; font-size: 9.5pt; color: var(--suave); }
+ul.aulas .n { display: inline-block; min-width: 3em; font-weight: 700; color: var(--destaque); }
+
+/* questões */
+.questao {
+  display: grid;
+  grid-template-columns: 3.2em 1fr;
+  gap: 0 10px;
+  margin: 14px 0 6px;
+  break-inside: avoid-page;
+}
+.questao .num {
+  align-self: start;
+  padding: 2px 0;
+  border-radius: 4px;
+  background: var(--destaque);
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+}
+.questao .corpo { min-width: 0; }
+.questao .corpo > p:first-child { margin-top: 0; }
+.questao .titulo { font-weight: 700; margin: 0 0 2px; }
+.respostas .questao .corpo > p:not(.titulo) { color: var(--suave); font-style: italic; }
+.questao.desafio .corpo { padding: 8px 12px; border-radius: 6px; background: var(--fundo-desafio); }
+
+/* linhas pautadas para a resposta à mão */
+.linhas {
+  height: calc(var(--n, 4) * var(--pauta));
+  margin: 4px 0 10px 3.6em;
+  background: repeating-linear-gradient(
+    to bottom, transparent 0, transparent calc(var(--pauta) - 1px), var(--linha) calc(var(--pauta) - 1px), var(--linha) var(--pauta)
+  );
+}
+
+footer.fim {
+  margin-top: 24px;
+  padding: 16px;
+  border-radius: 6px;
+  background: var(--marca);
+  color: #fff;
+  text-align: center;
+}
+footer.fim p { margin: 2px 0; }
+footer.fim a { color: #fff; }
+
+@media print {
+  body.caderno { max-width: none; padding: 0; }
+  a { color: inherit; text-decoration: none; }
+  .capa, section.modulo > h2, .questao .num, table.sumario th, footer.fim,
+  pre, aside, .questao.desafio .corpo, .linhas {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+@media (max-width: 600px) {
+  .questao { grid-template-columns: 1fr; }
+  .questao .num { justify-self: start; padding: 2px 8px; margin-bottom: 4px; }
+  .linhas { margin-left: 0; }
+}

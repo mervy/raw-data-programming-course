@@ -1,0 +1,1706 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dominando Java em 1 Ano · Caderno de Exercícios</title>
+<link rel="stylesheet" href="../caderno.css">
+</head>
+<body class="caderno exercicios">
+<header class="capa">
+<p class="serie">DOMINANDO JAVA EM 1 ANO</p>
+<h1>Caderno de Exercícios</h1>
+<p class="subtitulo">79 aulas de prática, do #00 ao #78</p>
+<p class="subtitulo">Java 25 LTS · 9 fases e 3 trilhas · 189 questões · 6 desafios integradores</p>
+<p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</header>
+<div class="ficha"><span>Nome do aluno:</span><span>Início:</span><span>Término:</span></div>
+<aside class="nota">
+<p><strong>Como usar este caderno</strong></p>
+<p>Cada módulo corresponde a uma fase ou trilha do curso, com a lista das aulas que ele cobre. As perguntas conceituais pedem explicações com as suas palavras; os exercícios de código pedem programas completos: escreva, compile e execute cada um.</p>
+<p>Tente sempre resolver sozinho antes de abrir o <strong>Caderno de Respostas</strong>. É no erro que o conhecimento fixa.</p>
+</aside>
+<h2 class="sumario-titulo">Sumário</h2>
+<table class="sumario">
+<thead><tr><th>Módulo</th><th>Tema</th><th>Aulas</th><th>Questões</th></tr></thead>
+<tbody>
+<tr><td>FASE 1</td><td>Primeiros passos na JVM</td><td>#00–#07</td><td>Q1–Q19</td></tr>
+<tr><td>FASE 2</td><td>Objetos</td><td>#08–#15</td><td>Q20–Q38</td></tr>
+<tr><td>FASE 3</td><td>A biblioteca padrão</td><td>#16–#22</td><td>Q39–Q58</td></tr>
+<tr><td>FASE 4</td><td>Java funcional</td><td>#23–#27</td><td>Q59–Q73</td></tr>
+<tr><td>FASE 5</td><td>Projetos e ferramentas</td><td>#28–#32</td><td>Q74–Q85</td></tr>
+<tr><td>FASE 6</td><td>Por dentro da JVM</td><td>#33–#36</td><td>Q86–Q96</td></tr>
+<tr><td>FASE 7</td><td>Concorrência</td><td>#37–#43</td><td>Q97–Q113</td></tr>
+<tr><td>FASE 8</td><td>Qualidade e distribuição</td><td>#44–#46</td><td>Q114–Q121</td></tr>
+<tr><td>FASE 9</td><td>O projeto final: o servidor HTTP Farol</td><td>#47–#52</td><td>Q122–Q134</td></tr>
+<tr><td>TRILHA A</td><td>Web, API e bancos de dados: as Trilhas da Ilha</td><td>#53–#66</td><td>Q135–Q162</td></tr>
+<tr><td>TRILHA B</td><td>Desktop e Android</td><td>#67–#70</td><td>Q163–Q170</td></tr>
+<tr><td>TRILHA C</td><td>Jogos com libGDX</td><td>#71–#77</td><td>Q171–Q186</td></tr>
+<tr><td>ENCERRAMENTO</td><td>O destino e o novo começo</td><td>#78</td><td>Q187–Q189</td></tr>
+<tr><td>DESAFIOS</td><td>Projetos integradores que atravessam várias fases e trilhas</td><td>todas</td><td>D1–D6</td></tr>
+</tbody>
+</table>
+<aside class="legenda">
+<p>Legenda: nas perguntas, <code>assim</code> indica código, nomes de classes e comandos. As linhas pautadas são para a sua resposta; nos exercícios de código, use também o computador: <strong>todo programa deve ser compilado e executado</strong>.</p>
+</aside>
+<section class="modulo" id="fase-1">
+<h2><span class="rotulo">FASE 1</span> Primeiros passos na JVM</h2>
+<p class="aulas-titulo">Artigos 00 a 07</p>
+<ul class="aulas">
+<li><span class="n">#00</span> O Mapa da Jornada — o plano do curso</li>
+<li><span class="n">#01</span> Uma Linguagem para Torradeiras que Conquistou o Mundo — a História do Java</li>
+<li><span class="n">#02</span> Do Código ao Bytecode — JDK, javac, JVM e o Primeiro Programa</li>
+<li><span class="n">#03</span> Cada Valor em sua Caixa — Tipos Primitivos, Variáveis e Conversões</li>
+<li><span class="n">#04</span> Operadores, Texto e Conversa com o Usuário — Expressões, Strings e Entrada</li>
+<li><span class="n">#05</span> O Programa que Escolhe e Repete — if, switch e Laços</li>
+<li><span class="n">#06</span> Dividir para Resolver — Métodos, Parâmetros e Recursão</li>
+<li><span class="n">#07</span> Muitos Valores sob um Nome — Arrays</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q1">
+<span class="num">Q1</span>
+<div class="corpo">
+<p>Onde, quando e por quem o Java foi criado? Qual era o objetivo original do projeto, e por que o fracasso desse objetivo acabou sendo a sorte da linguagem?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q2">
+<span class="num">Q2</span>
+<div class="corpo">
+<p>Explique a diferença entre <strong>JDK</strong>, <strong>JRE</strong> e <strong>JVM</strong>. Qual deles você instala para programar, e por que hoje quase não se fala mais em "instalar o JRE"?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q3">
+<span class="num">Q3</span>
+<div class="corpo">
+<p>O que é <strong>bytecode</strong>? Por que ele permite que o mesmo <code>.class</code> rode em Windows, Linux e macOS? Que ferramenta do JDK mostra o bytecode de uma classe?</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q4">
+<span class="num">Q4</span>
+<div class="corpo">
+<p>Qual é a diferença entre rodar um programa com <code>javac Ola.java</code> seguido de <code>java Ola</code>, e rodar diretamente com <code>java Ola.java</code>? Em que situação cada forma é a mais adequada?</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q5">
+<span class="num">Q5</span>
+<div class="corpo">
+<p>O que significa dizer que um programa Java "aquece"? Relacione a resposta com o interpretador e o compilador JIT.</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q6">
+<span class="num">Q6</span>
+<div class="corpo">
+<p>Liste os oito tipos primitivos do Java com o tamanho de cada um. Qual deles não tem um tamanho fixo definido pela especificação da linguagem?</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q7">
+<span class="num">Q7</span>
+<div class="corpo">
+<p>Em que situações a palavra <code>var</code> pode ser usada? Por que <code>var x;</code> não compila, e qual é o tipo inferido em <code>var lista = new ArrayList&lt;&gt;();</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q8">
+<span class="num">Q8</span>
+<div class="corpo">
+<p>Por que comparar duas <code>String</code>s com <code>==</code> é um erro, mesmo quando às vezes "funciona"? Dê um exemplo em que <code>==</code> devolve <code>false</code> para textos iguais.</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q9">
+<span class="num">Q9</span>
+<div class="corpo">
+<p>Sem executar, diga o que o programa imprime. Depois execute e confira.</p>
+</div>
+</div>
+<pre class="codigo"><code>void main() {
+    int grande = Integer.MAX_VALUE;
+    grande++;
+    IO.println(grande);
+    IO.println((byte) 200);
+    IO.println(0.1 + 0.2);
+    IO.println((int) 3.99);
+    IO.println('a' + 1);
+    IO.println((char) ('a' + 1));
+    IO.println(7 / 2 + " " + 7 % 2 + " " + -7 / 2 + " " + -7 % 2);
+}</code></pre>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q10">
+<span class="num">Q10</span>
+<div class="corpo">
+<p>Escreva um programa que conte quantos passos a sequência de Collatz leva para chegar a 1 a partir de 27. Regra: se <code>n</code> é par, vira <code>n / 2</code>; se é ímpar, vira <code>3n + 1</code>. Use um <code>long</code> e explique por quê.</p>
+</div>
+</div>
+<div class="linhas" style="--n:8"></div>
+<div class="questao" id="q11">
+<span class="num">Q11</span>
+<div class="corpo">
+<p>Reescreva o <code>switch</code> abaixo como uma <strong>switch expression</strong> (com <code>-&gt;</code>), sem <code>break</code>, e garantindo que o compilador reclame se um valor ficar de fora.</p>
+</div>
+</div>
+<pre class="codigo"><code>enum Dia { SEG, TER, QUA, QUI, SEX, SAB, DOM }</code></pre>
+   <pre class="codigo"><code>String tipo;
+switch (dia) {
+    case SAB:
+    case DOM:
+        tipo = "fim de semana";
+        break;
+    default:
+        tipo = "dia útil";
+}</code></pre>
+<div class="linhas" style="--n:8"></div>
+<div class="questao" id="q12">
+<span class="num">Q12</span>
+<div class="corpo">
+<p>Use um <code>break</code> com <strong>rótulo</strong> para encontrar a primeira posição (linha, coluna) de um valor negativo numa matriz, saindo dos dois laços de uma vez.</p>
+</div>
+</div>
+<div class="linhas" style="--n:8"></div>
+<div class="questao" id="q13">
+<span class="num">Q13</span>
+<div class="corpo">
+<p>O que o programa imprime? Explique com a ideia de que <strong>o Java sempre passa parâmetros por valor</strong>.</p>
+</div>
+</div>
+<pre class="codigo"><code>void trocar(int[] v) { v = new int[]{9, 9, 9}; }
+void mexer(int[] v) { v[0] = 42; }
+void dobrar(int x) { x = x * 2; }</code></pre>
+   <pre class="codigo"><code>void main() {
+    int[] a = {1, 2, 3};
+    int n = 5;
+    trocar(a);
+    mexer(a);
+    dobrar(n);
+    IO.println(java.util.Arrays.toString(a) + " " + n);
+}</code></pre>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q14">
+<span class="num">Q14</span>
+<div class="corpo">
+<p>Qual versão de <code>f</code> é chamada em cada linha? Justifique pela ordem em que o compilador procura as sobrecargas.</p>
+</div>
+</div>
+<pre class="codigo"><code>void f(long x)     { IO.println("long"); }
+void f(Integer x)  { IO.println("Integer"); }
+void f(int... x)   { IO.println("varargs"); }</code></pre>
+   <pre class="codigo"><code>void main() {
+    f(5);
+    f(5L);
+    f(Integer.valueOf(5));
+    f();
+}</code></pre>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q15">
+<span class="num">Q15</span>
+<div class="corpo">
+<p>Escreva a versão <strong>recursiva</strong> do máximo divisor comum pelo algoritmo de Euclides (<code>mdc(a, b) = mdc(b, a % b)</code>, com <code>mdc(a, 0) = a</code>). Depois explique o que causa um <code>StackOverflowError</code> numa recursão.</p>
+</div>
+</div>
+<div class="linhas" style="--n:8"></div>
+<div class="questao" id="q16">
+<span class="num">Q16</span>
+<div class="corpo">
+<p>Escreva um método <code>void inverter(int[] v)</code> que inverta o array <strong>no próprio lugar</strong>, sem criar outro array. Mostre o resultado para <code>{1, 2, 3, 4, 5}</code> e para um array vazio.</p>
+</div>
+</div>
+<div class="linhas" style="--n:8"></div>
+<div class="questao" id="q17">
+<span class="num">Q17</span>
+<div class="corpo">
+<p>Por que <code>IO.println(new int[]{1, 2})</code> imprime algo como <code>[I@1b6d3586</code> em vez dos números? Como imprimir um array corretamente? E como copiar um array de modo que alterar a cópia não altere o original?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q18">
+<span class="num">Q18</span>
+<div class="corpo">
+<p>Uma <strong>matriz irregular</strong> (<em>jagged</em>) tem linhas de tamanhos diferentes. Monte o triângulo de Pascal com 5 linhas usando <code>int[][]</code>, em que a linha <code>i</code> tem <code>i + 1</code> elementos, e imprima-o.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q19">
+<span class="num">Q19</span>
+<div class="corpo">
+<p>Escreva um programa que leia números inteiros digitados pelo usuário até ele digitar <code>fim</code>, e mostre a quantidade, a soma e a média. Trate a digitação de algo que não é número sem derrubar o programa.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="fase-2">
+<h2><span class="rotulo">FASE 2</span> Objetos</h2>
+<p class="aulas-titulo">Artigos 08 a 15</p>
+<ul class="aulas">
+<li><span class="n">#08</span> Moldes e Instâncias — Classes, Objetos e Construtores</li>
+<li><span class="n">#09</span> O que Fica Dentro, o que Fica Fora — Encapsulamento e Modificadores de Acesso</li>
+<li><span class="n">#10</span> Do Geral ao Específico — Herança e a Classe Object</li>
+<li><span class="n">#11</span> Contratos sem Implementação — Interfaces e Classes Abstratas</li>
+<li><span class="n">#12</span> Um Tipo, Várias Formas — Polimorfismo na Prática</li>
+<li><span class="n">#13</span> Iguais ou o Mesmo? — equals, hashCode e Identidade</li>
+<li><span class="n">#14</span> Dados sem Cerimônia — Records e Enums de Verdade</li>
+<li><span class="n">#15</span> Hierarquias Fechadas — Sealed Classes e Pattern Matching</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q20">
+<span class="num">Q20</span>
+<div class="corpo">
+<p>Qual é a diferença entre uma <strong>classe</strong> e um <strong>objeto</strong>? Onde ficam, na memória da JVM, o objeto criado com <code>new</code> e a variável local que aponta para ele?</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q21">
+<span class="num">Q21</span>
+<div class="corpo">
+<p>Quais são os quatro níveis de acesso do Java, do mais aberto ao mais fechado? Qual é o nível que se aplica quando nenhum modificador é escrito?</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q22">
+<span class="num">Q22</span>
+<div class="corpo">
+<p>Por que <strong>encapsular</strong> um campo (deixá-lo <code>private</code> e expor métodos) é melhor do que deixá-lo <code>public</code>, se no fim o valor continua podendo ser lido? Use uma conta bancária como exemplo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q23">
+<span class="num">Q23</span>
+<div class="corpo">
+<p>Em que ordem acontecem as etapas quando se executa <code>new ContaCorrente(...)</code>, sendo <code>ContaCorrente</code> subclasse de <code>ContaBancaria</code>? Por que a chamada <code>super(...)</code> precisa ser a primeira instrução do construtor (até o Java 24)?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q24">
+<span class="num">Q24</span>
+<div class="corpo">
+<p>Qual é o perigo de chamar um método que pode ser <strong>sobrescrito</strong> de dentro de um construtor? Dê um exemplo em que o resultado surpreende.</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q25">
+<span class="num">Q25</span>
+<div class="corpo">
+<p>Quando escolher uma <strong>classe abstrata</strong> e quando escolher uma <strong>interface</strong>? Cite duas coisas que só a classe abstrata pode ter.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q26">
+<span class="num">Q26</span>
+<div class="corpo">
+<p>Uma classe implementa duas interfaces que têm o mesmo método <code>default void saudar()</code>. O que o compilador faz? Como resolver chamando a versão de uma delas?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q27">
+<span class="num">Q27</span>
+<div class="corpo">
+<p>O que é <strong>polimorfismo</strong>? Explique a diferença entre o tipo <strong>declarado</strong> de uma variável e o tipo <strong>real</strong> do objeto, e qual deles decide o método executado.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q28">
+<span class="num">Q28</span>
+<div class="corpo">
+<p>Quais são as regras do contrato entre <code>equals</code> e <code>hashCode</code>? O que acontece com um <code>HashSet</code> se uma classe sobrescreve <code>equals</code> e esquece o <code>hashCode</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q29">
+<span class="num">Q29</span>
+<div class="corpo">
+<p>Por que é perigoso usar um objeto <strong>mutável</strong> como chave de um <code>HashMap</code> e depois alterar um campo que entra no <code>hashCode</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q30">
+<span class="num">Q30</span>
+<div class="corpo">
+<p>O que o compilador gera automaticamente num <code>record</code>? E como validar os dados na criação, por exemplo impedindo um <code>Intervalo</code> com início maior que o fim?</p>
+</div>
+</div>
+<div class="linhas" style="--n:7"></div>
+<div class="questao" id="q31">
+<span class="num">Q31</span>
+<div class="corpo">
+<p>Um <code>record</code> com um componente <code>List&lt;String&gt; itens</code> é realmente imutável? O que precisa ser feito para que seja?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q32">
+<span class="num">Q32</span>
+<div class="corpo">
+<p>Cite três coisas que um <code>enum</code> do Java pode ter e que as constantes inteiras (<code>static final int</code>) não podem. Para que serve o <code>EnumMap</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q33">
+<span class="num">Q33</span>
+<div class="corpo">
+<p>O que uma interface <code>sealed</code> com <code>permits</code> garante? Por que ela combina tão bem com <code>switch</code> e <em>record patterns</em>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q34">
+<span class="num">Q34</span>
+<div class="corpo">
+<p>Modele expressões aritméticas com uma interface selada <code>Expr</code> e os <em>records</em> <code>Num</code>, <code>Soma</code> e <code>Mult</code>. Escreva <code>avaliar(Expr)</code> com um <code>switch</code> sobre <em>record patterns</em>, e <code>mostrar(Expr)</code> que produza texto com parênteses. Teste com (2 + 3) × 4.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q35">
+<span class="num">Q35</span>
+<div class="corpo">
+<p>Use um <code>switch</code> com <strong>guarda</strong> (<code>when</code>) para classificar um valor <code>Object</code>: <code>Integer</code> negativo, <code>Integer</code> não negativo, <code>String</code> vazia, <code>String</code> com texto, e "outro". O que acontece se o <code>case Integer i</code> sem guarda vier <strong>antes</strong> do <code>case Integer i when i &lt; 0</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q36">
+<span class="num">Q36</span>
+<div class="corpo">
+<p>Escreva um <code>enum Operacao</code> com as constantes <code>SOMA</code>, <code>SUB</code>, <code>MULT</code> e <code>DIV</code>, cada uma com um símbolo (campo) e implementando o método <code>double aplicar(double a, double b)</code>. Imprima uma tabela aplicando todas a <code>8</code> e <code>2</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q37">
+<span class="num">Q37</span>
+<div class="corpo">
+<p>Encontre e explique o erro de projeto: a classe abaixo quebra a <strong>simetria</strong> do <code>equals</code>. Mostre um caso em que <code>a.equals(b)</code> e <code>b.equals(a)</code> discordam.</p>
+</div>
+</div>
+<pre class="codigo"><code>class Ponto {
+    final int x, y;
+    Ponto(int x, int y) { this.x = x; this.y = y; }
+    @Override public boolean equals(Object o) {
+        return o instanceof Ponto p &amp;&amp; p.x == x &amp;&amp; p.y == y;
+    }
+    @Override public int hashCode() { return 31 * x + y; }
+}</code></pre>
+   <pre class="codigo"><code>class PontoColorido extends Ponto {
+    final String cor;
+    PontoColorido(int x, int y, String cor) { super(x, y); this.cor = cor; }
+    @Override public boolean equals(Object o) {
+        return o instanceof PontoColorido p &amp;&amp; super.equals(p) &amp;&amp; p.cor.equals(cor);
+    }
+}</code></pre>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q38">
+<span class="num">Q38</span>
+<div class="corpo">
+<p>Transforme a classe mutável abaixo numa classe <strong>imutável</strong> correta e explique cada mudança.</p>
+</div>
+</div>
+<pre class="codigo"><code>public class Periodo {
+    public java.util.Date inicio;
+    public java.util.Date fim;
+    public Periodo(java.util.Date inicio, java.util.Date fim) { this.inicio = inicio; this.fim = fim; }
+}</code></pre>
+<div class="linhas" style="--n:8"></div>
+</section>
+<section class="modulo" id="fase-3">
+<h2><span class="rotulo">FASE 3</span> A biblioteca padrão</h2>
+<p class="aulas-titulo">Artigos 16 a 22</p>
+<ul class="aulas">
+<li><span class="n">#16</span> Escreva uma Vez para Todo Tipo — Genéricos</li>
+<li><span class="n">#17</span> O Preço da Compatibilidade — Wildcards e Type Erasure</li>
+<li><span class="n">#18</span> Listas, Conjuntos e Mapas — o Collections Framework</li>
+<li><span class="n">#19</span> Ordem e Critério — Comparable, Comparator e Coleções Ordenadas</li>
+<li><span class="n">#20</span> Quando o Contrato se Quebra — Exceções Verificadas e Não Verificadas</li>
+<li><span class="n">#21</span> Recursos que se Fecham Sozinhos — try-with-resources, Arquivos e NIO.2</li>
+<li><span class="n">#22</span> Tempo, Dinheiro e Padrões — java.time, BigDecimal e Expressões Regulares</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q39">
+<span class="num">Q39</span>
+<div class="corpo">
+<p>Que problema os genéricos resolveram? Compare uma <code>List</code> "crua" (<em>raw type</em>) com uma <code>List&lt;String&gt;</code> quanto ao momento em que um erro de tipo é descoberto.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q40">
+<span class="num">Q40</span>
+<div class="corpo">
+<p>O que é <strong>type erasure</strong>? Cite duas coisas que você <strong>não</strong> consegue fazer com um parâmetro de tipo <code>T</code> por causa dele.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q41">
+<span class="num">Q41</span>
+<div class="corpo">
+<p>Explique a regra <strong>PECS</strong> (<em>Producer Extends, Consumer Super</em>) usando a assinatura de <code>Collections.copy(List&lt;? super T&gt; destino, List&lt;? extends T&gt; origem)</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q42">
+<span class="num">Q42</span>
+<div class="corpo">
+<p>Por que <code>List&lt;Integer&gt;</code> <strong>não</strong> é subtipo de <code>List&lt;Number&gt;</code>, embora <code>Integer</code> seja subtipo de <code>Number</code>? Mostre o que daria errado se fosse.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q43">
+<span class="num">Q43</span>
+<div class="corpo">
+<p>Compare <code>ArrayList</code> e <code>LinkedList</code>: qual é o custo de <code>get(i)</code>, de inserir no fim e de inserir no meio? Qual das duas deve ser a escolha padrão, e por quê?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q44">
+<span class="num">Q44</span>
+<div class="corpo">
+<p>O que é uma <code>ConcurrentModificationException</code>? Por que ela aparece num programa <strong>sem nenhuma thread</strong>, e quais são as formas corretas de remover elementos enquanto se percorre uma lista?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q45">
+<span class="num">Q45</span>
+<div class="corpo">
+<p>Qual é a diferença entre <code>List.of(...)</code>, <code>Collections.unmodifiableList(lista)</code> e <code>List.copyOf(lista)</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q46">
+<span class="num">Q46</span>
+<div class="corpo">
+<p>Para que servem as <strong>Sequenced Collections</strong> (Java 21)? Dê dois métodos novos e duas classes que passaram a implementá-las.</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q47">
+<span class="num">Q47</span>
+<div class="corpo">
+<p>Qual é a diferença entre <code>Comparable</code> e <code>Comparator</code>? Por que escrever <code>return a.idade - b.idade;</code> num comparador é um erro, ainda que funcione quase sempre?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q48">
+<span class="num">Q48</span>
+<div class="corpo">
+<p>Explique a diferença entre exceções <strong>verificadas</strong> e <strong>não verificadas</strong>, e dê a regra de bolso de quando usar cada uma.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q49">
+<span class="num">Q49</span>
+<div class="corpo">
+<p>O que há de errado neste tratamento de exceção? Liste pelo menos três problemas.</p>
+</div>
+</div>
+<pre class="codigo"><code>try {
+    processarPedido(pedido);
+} catch (Exception e) {
+    // TODO
+}</code></pre>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q50">
+<span class="num">Q50</span>
+<div class="corpo">
+<p>O que são <strong>exceções suprimidas</strong> no <code>try</code> com recursos? Em que situação elas aparecem?</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q51">
+<span class="num">Q51</span>
+<div class="corpo">
+<p>Qual é a diferença entre <code>Instant</code>, <code>LocalDateTime</code> e <code>ZonedDateTime</code>? Qual deles usar para gravar <strong>quando</strong> um evento aconteceu?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q52">
+<span class="num">Q52</span>
+<div class="corpo">
+<p>Por que <code>new BigDecimal(0.1)</code> e <code>BigDecimal.valueOf(0.1)</code> dão resultados diferentes? E por que <code>new BigDecimal("2.0").equals(new BigDecimal("2.00"))</code> é <code>false</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q53">
+<span class="num">Q53</span>
+<div class="corpo">
+<p>Escreva um método genérico <code>static &lt;T extends Comparable&lt;? super T&gt;&gt; T maximo(List&lt;? extends T&gt; lista)</code> que devolva o maior elemento e lance <code>NoSuchElementException</code> para lista vazia. Explique cada parte da assinatura.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q54">
+<span class="num">Q54</span>
+<div class="corpo">
+<p>Conte a frequência das palavras de um texto com um <code>Map&lt;String, Integer&gt;</code> usando <code>merge</code>, e imprima as 3 mais frequentes, com empates desempatados por ordem alfabética.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q55">
+<span class="num">Q55</span>
+<div class="corpo">
+<p>Crie a exceção verificada <code>SaldoInsuficienteException</code>, que guarda o saldo e o valor pedido, e use-a num método <code>sacar</code>. Mostre o tratamento no chamador, imprimindo uma mensagem útil.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q56">
+<span class="num">Q56</span>
+<div class="corpo">
+<p>Usando NIO.2 (<code>Files</code> e <code>Path</code>), escreva um programa que crie a pasta <code>saida</code>, grave nela um arquivo <code>diario.txt</code> com três linhas, depois leia o arquivo com <code>Files.lines</code> dentro de um <code>try</code> com recursos, contando as linhas que contêm "Java".</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q57">
+<span class="num">Q57</span>
+<div class="corpo">
+<p>Calcule as datas de vencimento de 3 parcelas mensais a partir de 31/01/2026 e diga quantos dias faltam da primeira até a última. Explique o que o <code>plusMonths</code> faz com o dia 31.</p>
+</div>
+</div>
+<div class="linhas" style="--n:8"></div>
+<div class="questao" id="q58">
+<span class="num">Q58</span>
+<div class="corpo">
+<p>Escreva uma expressão regular com <strong>grupos nomeados</strong> que extraia dia, mês e ano de datas no formato <code>dd/mm/aaaa</code> dentro de um texto, e imprima cada uma no formato ISO (<code>aaaa-mm-dd</code>).</p>
+</div>
+</div>
+<div class="linhas" style="--n:8"></div>
+</section>
+<section class="modulo" id="fase-4">
+<h2><span class="rotulo">FASE 4</span> Java funcional</h2>
+<p class="aulas-titulo">Artigos 23 a 27</p>
+<ul class="aulas">
+<li><span class="n">#23</span> Comportamento como Valor — Lambdas e Interfaces Funcionais</li>
+<li><span class="n">#24</span> Pare de Escrever Laços — a API de Streams</li>
+<li><span class="n">#25</span> Agrupar, Achatar, Reduzir — Collectors e Gatherers</li>
+<li><span class="n">#26</span> Um Valor que Pode Não Existir — Optional e a Guerra contra o null</li>
+<li><span class="n">#27</span> O Programa que se Examina — Anotações e Reflexão</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q59">
+<span class="num">Q59</span>
+<div class="corpo">
+<p>O que é uma <strong>interface funcional</strong>? Associe cada uma destas interfaces à forma da função que ela representa: <code>Supplier&lt;T&gt;</code>, <code>Consumer&lt;T&gt;</code>, <code>Function&lt;T, R&gt;</code>, <code>Predicate&lt;T&gt;</code>, <code>UnaryOperator&lt;T&gt;</code> e <code>BiFunction&lt;T, U, R&gt;</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q60">
+<span class="num">Q60</span>
+<div class="corpo">
+<p>Por que uma <em>lambda</em> só pode usar variáveis locais que sejam <strong>efetivamente finais</strong>? Por que essa restrição não vale para campos?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q61">
+<span class="num">Q61</span>
+<div class="corpo">
+<p>Cite os quatro tipos de <strong>referência de método</strong> e dê um exemplo de cada.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q62">
+<span class="num">Q62</span>
+<div class="corpo">
+<p>Explique a <strong>preguiça</strong> (<em>laziness</em>) dos <em>streams</em>. Quantas vezes o <code>filter</code> é executado no código abaixo, e por quê?</p>
+</div>
+</div>
+<pre class="codigo"><code>var r = Stream.of("ana", "bia", "caio", "davi", "eva")
+        .filter(n -&gt; { IO.println("filtrando " + n); return n.length() == 4; })
+        .findFirst();</code></pre>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q63">
+<span class="num">Q63</span>
+<div class="corpo">
+<p>Por que um <em>stream</em> não pode ser consumido duas vezes? E por que não se deve modificar uma variável externa (por exemplo, somar num campo) de dentro de um <code>forEach</code> ou <code>map</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q64">
+<span class="num">Q64</span>
+<div class="corpo">
+<p>Qual é a diferença entre <code>map</code> e <code>flatMap</code>? Dê um exemplo em que só <code>flatMap</code> resolve.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q65">
+<span class="num">Q65</span>
+<div class="corpo">
+<p>O que são os <strong>Gatherers</strong> (Java 24, JEP 485)? Que tipo de operação eles permitem que antes era difícil com <em>streams</em>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q66">
+<span class="num">Q66</span>
+<div class="corpo">
+<p>Liste três usos <strong>errados</strong> de <code>Optional</code> e diga o que fazer no lugar de cada um.</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q67">
+<span class="num">Q67</span>
+<div class="corpo">
+<p>Qual é a diferença entre <code>orElse(criar())</code> e <code>orElseGet(() -&gt; criar())</code>? Quando essa diferença importa?</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q68">
+<span class="num">Q68</span>
+<div class="corpo">
+<p>O que é <strong>retenção</strong> de uma anotação (<code>SOURCE</code>, <code>CLASS</code>, <code>RUNTIME</code>)? Que retenção é obrigatória para que um <em>framework</em> leia a anotação por reflexão, e em que tipos de elemento ela pode ser posta (<code>@Target</code>)?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q69">
+<span class="num">Q69</span>
+<div class="corpo">
+<p>Cite duas desvantagens da <strong>reflexão</strong> que justificam usá-la com moderação no código de aplicação.</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q70">
+<span class="num">Q70</span>
+<div class="corpo">
+<p>Dada uma lista de vendas (<code>record Venda(String vendedor, String regiao, double valor)</code>), use <em>streams</em> para obter: (a) o total por região, ordenado pelo nome da região; (b) o vendedor com o maior total; (c) as regiões separadas entre "acima" e "abaixo" de 1.000 em total.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q71">
+<span class="num">Q71</span>
+<div class="corpo">
+<p>Use <code>Gatherers.windowSliding</code> para calcular a <strong>média móvel</strong> de 3 dias de uma série de temperaturas, e <code>Gatherers.scan</code> para o total acumulado de uma lista de depósitos.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q72">
+<span class="num">Q72</span>
+<div class="corpo">
+<p>Reescreva o código abaixo usando <code>Optional</code> de forma idiomática, sem nenhum <code>if</code> e sem <code>get()</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>String cidadeDoCliente(long id) {
+    Cliente c = repositorio.buscar(id);          // pode devolver null
+    if (c != null) {
+        Endereco e = c.getEndereco();            // pode ser null
+        if (e != null &amp;&amp; e.getCidade() != null) {
+            return e.getCidade().toUpperCase();
+        }
+    }
+    return "DESCONHECIDA";
+}</code></pre>
+<div class="linhas" style="--n:8"></div>
+<div class="questao" id="q73">
+<span class="num">Q73</span>
+<div class="corpo">
+<p>Crie a anotação <code>@Positivo</code>, aplicável a campos, e um validador que use <strong>reflexão</strong> para conferir, em qualquer objeto, se os campos <code>int</code> anotados são maiores que zero, devolvendo a lista de violações.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="fase-5">
+<h2><span class="rotulo">FASE 5</span> Projetos e ferramentas</h2>
+<p class="aulas-titulo">Artigos 28 a 32</p>
+<ul class="aulas">
+<li><span class="n">#28</span> Do Arquivo Solto ao Projeto — Pacotes, Classpath e JARs</li>
+<li><span class="n">#29</span> Construção Automatizada — Maven e Gradle</li>
+<li><span class="n">#30</span> Fronteiras Explícitas — o Sistema de Módulos</li>
+<li><span class="n">#31</span> Provando que Funciona — Testes com JUnit e AssertJ</li>
+<li><span class="n">#32</span> Dublês e Disciplina — Mockito e Testes que Não Mentem</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q74">
+<span class="num">Q74</span>
+<div class="corpo">
+<p>Qual é a relação entre o nome do <strong>pacote</strong> e a estrutura de pastas? O que é o <strong>classpath</strong>, e o que acontece quando duas bibliotecas no classpath têm uma classe com o mesmo nome completo?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q75">
+<span class="num">Q75</span>
+<div class="corpo">
+<p>O que o arquivo <code>META-INF/MANIFEST.MF</code> de um JAR executável precisa ter? Qual é a diferença entre um JAR comum e um "JAR gordo" (<em>fat jar</em>)?</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q76">
+<span class="num">Q76</span>
+<div class="corpo">
+<p>Explique as <strong>fases</strong> do ciclo de vida padrão do Maven que você mais usa (<code>compile</code>, <code>test</code>, <code>package</code>, <code>verify</code>, <code>install</code>) e o que significa rodar <code>mvn package</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q77">
+<span class="num">Q77</span>
+<div class="corpo">
+<p>Qual é a diferença entre os escopos de dependência <code>compile</code>, <code>test</code>, <code>provided</code> e <code>runtime</code> no Maven (ou <code>implementation</code>, <code>testImplementation</code>, <code>compileOnly</code> e <code>runtimeOnly</code> no Gradle)?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q78">
+<span class="num">Q78</span>
+<div class="corpo">
+<p>No <code>module-info.java</code>, o que fazem as diretivas <code>requires</code>, <code>requires transitive</code>, <code>exports</code> e <code>opens</code>? Por que <em>frameworks</em> como JPA e Jackson precisam de <code>opens</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q79">
+<span class="num">Q79</span>
+<div class="corpo">
+<p>O que é o <strong>encapsulamento forte</strong> que o sistema de módulos trouxe? Por que <code>sun.misc.Unsafe</code> e as classes internas do JDK deixaram de ser acessíveis por padrão?</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q80">
+<span class="num">Q80</span>
+<div class="corpo">
+<p>O que é a pirâmide de testes? Por que testes <strong>unitários</strong> devem ser a maioria, e o que um teste de <strong>integração</strong> verifica que o unitário não verifica?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q81">
+<span class="num">Q81</span>
+<div class="corpo">
+<p>O que torna um teste <strong>"mentiroso"</strong>? Cite três sinais de que um teste passa sem provar nada.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q82">
+<span class="num">Q82</span>
+<div class="corpo">
+<p>Qual é a diferença entre um <em>stub</em>, um <em>mock</em> e um <em>spy</em> no Mockito? Quando é preferível escrever um <strong>fake</strong> à mão?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q83">
+<span class="num">Q83</span>
+<div class="corpo">
+<p>Escreva uma classe <code>Calculadora</code> com o método <code>static int dividir(int a, int b)</code>, e uma classe de testes JUnit 5 que verifique uma divisão normal, a divisão por zero (esperando <code>ArithmeticException</code>) e vários casos com <code>@ParameterizedTest</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q84">
+<span class="num">Q84</span>
+<div class="corpo">
+<p>O serviço abaixo envia um e-mail de boas-vindas ao cadastrar um cliente novo, mas não envia se o e-mail já existir. Escreva os testes com Mockito para os dois cenários.</p>
+</div>
+</div>
+<pre class="codigo"><code>interface Repositorio { boolean existe(String email); void salvar(String email); }
+interface Correio { void enviar(String para, String assunto); }</code></pre>
+   <pre class="codigo"><code>class Cadastro {
+    private final Repositorio repo;
+    private final Correio correio;
+    Cadastro(Repositorio repo, Correio correio) { this.repo = repo; this.correio = correio; }</code></pre>
+   <pre class="codigo"><code>    boolean cadastrar(String email) {
+        if (repo.existe(email)) return false;
+        repo.salvar(email);
+        correio.enviar(email, "Bem-vindo!");
+        return true;
+    }
+}</code></pre>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q85">
+<span class="num">Q85</span>
+<div class="corpo">
+<p>Monte um projeto modular com dois módulos: <code>br.com.exemplo.tarefas</code> (o modelo, com o pacote <code>br.com.exemplo.tarefas</code>) e <code>br.com.exemplo.tarefas.app</code> (a aplicação que usa o modelo). Escreva os dois <code>module-info.java</code> e os comandos <code>javac</code> e <code>java</code> para compilar e executar.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="fase-6">
+<h2><span class="rotulo">FASE 6</span> Por dentro da JVM</h2>
+<p class="aulas-titulo">Artigos 33 a 36</p>
+<ul class="aulas">
+<li><span class="n">#33</span> A Máquina por Trás da Máquina — Class Loading, Pilha, Heap e JIT</li>
+<li><span class="n">#34</span> Quem Recolhe o Lixo — os Coletores G1 e ZGC</li>
+<li><span class="n">#35</span> Medir Antes de Otimizar — JFR, Mission Control e JMH</li>
+<li><span class="n">#36</span> Ponte para o Nativo — a Foreign Function &amp; Memory API</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q86">
+<span class="num">Q86</span>
+<div class="corpo">
+<p>Descreva as três etapas do <strong>carregamento de classes</strong> (carregar, ligar e inicializar). Quando exatamente o bloco <code>static { ... }</code> de uma classe é executado?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q87">
+<span class="num">Q87</span>
+<div class="corpo">
+<p>O que fica na <strong>pilha</strong> de uma <em>thread</em> e o que fica no <strong>heap</strong>? Por que uma variável local nunca tem problema de concorrência, mas o objeto para o qual ela aponta pode ter?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q88">
+<span class="num">Q88</span>
+<div class="corpo">
+<p>O que é <strong>análise de escape</strong> (<em>escape analysis</em>)? Dê um exemplo de objeto que o JIT pode eliminar completamente.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q89">
+<span class="num">Q89</span>
+<div class="corpo">
+<p>Explique a <strong>hipótese geracional</strong> e por que ela torna a coleta de lixo barata para objetos de vida curta.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q90">
+<span class="num">Q90</span>
+<div class="corpo">
+<p>Compare o <strong>G1</strong> e o <strong>ZGC</strong>: como cada um trata as pausas? Em que tipo de aplicação você escolheria cada um?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q91">
+<span class="num">Q91</span>
+<div class="corpo">
+<p>Um programa Java pode ter <strong>vazamento de memória</strong>, mesmo com coletor de lixo? Dê dois exemplos clássicos.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q92">
+<span class="num">Q92</span>
+<div class="corpo">
+<p>Por que um <em>micro-benchmark</em> escrito com <code>System.nanoTime()</code> num laço costuma mentir? Cite três armadilhas que o <strong>JMH</strong> resolve.</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q93">
+<span class="num">Q93</span>
+<div class="corpo">
+<p>O que o <strong>JDK Flight Recorder</strong> (JFR) registra, e por que ele pode ficar ligado em produção? Escreva o comando para gravar 60 segundos de um programa já em execução.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q94">
+<span class="num">Q94</span>
+<div class="corpo">
+<p>Na <strong>FFM API</strong> (Foreign Function &amp; Memory, final no Java 22), para que servem o <code>Arena</code>, o <code>MemorySegment</code> e o <code>Linker</code>? Por que ela é mais segura que o JNI?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q95">
+<span class="num">Q95</span>
+<div class="corpo">
+<p>Use a FFM API para chamar a função <code>strlen</code> da biblioteca C padrão com a <em>string</em> "Olá, FFM!" e explique por que o resultado não é 9.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q96">
+<span class="num">Q96</span>
+<div class="corpo">
+<p>Escreva um programa que provoque um <code>OutOfMemoryError</code> controlado, guardando arrays de 1 MB numa lista estática, e execute-o com <code>-Xmx64m</code>. Depois explique como o <code>-XX:+HeapDumpOnOutOfMemoryError</code> ajudaria a encontrar a causa num sistema real.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+</section>
+<section class="modulo" id="fase-7">
+<h2><span class="rotulo">FASE 7</span> Concorrência</h2>
+<p class="aulas-titulo">Artigos 37 a 43</p>
+<ul class="aulas">
+<li><span class="n">#37</span> Fazendo Duas Coisas ao Mesmo Tempo — Threads</li>
+<li><span class="n">#38</span> O Cadeado e a Memória — synchronized, volatile e o Java Memory Model</li>
+<li><span class="n">#39</span> Não Crie Threads, Entregue Tarefas — ExecutorService e Futures</li>
+<li><span class="n">#40</span> Ferramentas de Precisão — Locks, Atomics e Coleções Concorrentes</li>
+<li><span class="n">#41</span> Encadeando o que Ainda Não Aconteceu — CompletableFuture</li>
+<li><span class="n">#42</span> Um Milhão de Threads — Virtual Threads</li>
+<li><span class="n">#43</span> Tarefas em Família — Structured Concurrency e Scoped Values</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q97">
+<span class="num">Q97</span>
+<div class="corpo">
+<p>Qual é a diferença entre chamar <code>thread.run()</code> e <code>thread.start()</code>? E o que <code>join()</code> faz?</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q98">
+<span class="num">Q98</span>
+<div class="corpo">
+<p>O que é uma <strong>condição de corrida</strong>? Por que <code>contador++</code> não é uma operação atômica, mesmo sendo uma linha só?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q99">
+<span class="num">Q99</span>
+<div class="corpo">
+<p>Explique as duas garantias do <code>synchronized</code>: <strong>exclusão mútua</strong> e <strong>visibilidade</strong>. Por que só <code>volatile</code> não resolve um contador compartilhado?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q100">
+<span class="num">Q100</span>
+<div class="corpo">
+<p>Quais são as quatro condições necessárias para um <strong>deadlock</strong>? Qual delas é a mais prática de quebrar, e como?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q101">
+<span class="num">Q101</span>
+<div class="corpo">
+<p>Por que criar uma <code>new Thread()</code> para cada tarefa é má ideia com <em>threads</em> de plataforma? O que um <code>ExecutorService</code> resolve, e por que ele precisa ser <strong>desligado</strong>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q102">
+<span class="num">Q102</span>
+<div class="corpo">
+<p>Um <code>ThreadPoolExecutor</code> foi configurado com 4 <em>threads</em> e uma fila <strong>limitada</strong> de 100 posições. O que acontece com a tarefa número 105, se todas estão ocupadas? Quais são as políticas de rejeição disponíveis?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q103">
+<span class="num">Q103</span>
+<div class="corpo">
+<p>Quando usar <code>AtomicLong</code> e quando usar <code>LongAdder</code>? E por que <code>ConcurrentHashMap.merge(chave, 1, Integer::sum)</code> é seguro, mas <code>mapa.put(chave, mapa.get(chave) + 1)</code> não é, mesmo num <code>ConcurrentHashMap</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q104">
+<span class="num">Q104</span>
+<div class="corpo">
+<p>Qual é a diferença entre <code>thenApply</code> e <code>thenCompose</code> num <code>CompletableFuture</code>? E como tratar um erro que aconteceu em qualquer etapa da cadeia?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q105">
+<span class="num">Q105</span>
+<div class="corpo">
+<p>O que é uma <strong>virtual thread</strong>? Por que ela permite um milhão de conexões simultâneas? Em que tipo de carga ela <strong>não</strong> traz ganho?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q106">
+<span class="num">Q106</span>
+<div class="corpo">
+<p>O que é o <em>pinning</em> de uma <em>virtual thread</em>? O que mudou no Java 24 em relação ao <code>synchronized</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q107">
+<span class="num">Q107</span>
+<div class="corpo">
+<p>Que problemas a <strong>concorrência estruturada</strong> (<code>StructuredTaskScope</code>) resolve em relação a submeter duas tarefas num <code>ExecutorService</code> e chamar <code>get()</code> nelas?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q108">
+<span class="num">Q108</span>
+<div class="corpo">
+<p>O que é um <code>ScopedValue</code> e por que ele é preferível a um <code>ThreadLocal</code> com <em>virtual threads</em>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q109">
+<span class="num">Q109</span>
+<div class="corpo">
+<p>Demonstre a perda de incrementos: 4 <em>threads</em> somam 1 num <code>int</code> comum 250.000 vezes cada. Depois corrija com <code>AtomicInteger</code> e com <code>LongAdder</code>, e mostre os três totais.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q110">
+<span class="num">Q110</span>
+<div class="corpo">
+<p>Com um <code>ExecutorService</code> de <em>virtual threads</em>, dispare 10.000 tarefas que "esperam a rede" por 100 ms (<code>Thread.sleep</code>) e devolvem o próprio número. Some os resultados e meça o tempo total. Explique por que leva perto de 100 ms, e não 1.000 segundos.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q111">
+<span class="num">Q111</span>
+<div class="corpo">
+<p>Encadeie com <code>CompletableFuture</code>: buscar o preço de um produto (assíncrono), buscar a cotação do dólar (assíncrono, <strong>em paralelo</strong>), combinar os dois para obter o preço em dólares, e cair num valor padrão se qualquer busca falhar.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q112">
+<span class="num">Q112</span>
+<div class="corpo">
+<p>Escreva uma transferência entre contas que <strong>não</strong> entre em <em>deadlock</em> quando duas <em>threads</em> transferem em sentidos opostos ao mesmo tempo (A→B e B→A), usando ordem global de <em>locks</em>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q113">
+<span class="num">Q113</span>
+<div class="corpo">
+<p>Com <code>StructuredTaskScope</code> (<em>preview</em> no Java 25), busque ao mesmo tempo os dados de um usuário e os pedidos dele. Se uma das buscas falhar, a outra deve ser cancelada. Mostre o código e o comando para executá-lo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="fase-8">
+<h2><span class="rotulo">FASE 8</span> Qualidade e distribuição</h2>
+<p class="aulas-titulo">Artigos 44 a 46</p>
+<ul class="aulas">
+<li><span class="n">#44</span> Lições de Quem Veio Antes — Effective Java, Código Limpo e Padrões</li>
+<li><span class="n">#45</span> Contratos à Vista — Imutabilidade, Programação Defensiva e JSpecify</li>
+<li><span class="n">#46</span> Do JAR ao Executável — jlink, jpackage e GraalVM Native Image</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q114">
+<span class="num">Q114</span>
+<div class="corpo">
+<p>Por que <em>Effective Java</em> recomenda "prefira composição a herança"? Dê um exemplo em que herdar de uma classe da biblioteca quebra de forma sutil.</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q115">
+<span class="num">Q115</span>
+<div class="corpo">
+<p>Quando um <strong>builder</strong> é melhor que um construtor? E quando um <em>record</em> com um construtor comum já basta?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q116">
+<span class="num">Q116</span>
+<div class="corpo">
+<p>O que é <strong>programação defensiva</strong>? Explique as cópias defensivas "na entrada" e "na saída" e o princípio <em>fail-fast</em>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q117">
+<span class="num">Q117</span>
+<div class="corpo">
+<p>O que as anotações do <strong>JSpecify</strong> (<code>@NullMarked</code>, <code>@Nullable</code>) acrescentam ao código? Elas mudam o comportamento em tempo de execução?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q118">
+<span class="num">Q118</span>
+<div class="corpo">
+<p>Qual é a diferença entre o resultado do <code>jlink</code>, do <code>jpackage</code> e do <strong>GraalVM Native Image</strong>? Quando cada um é a escolha certa?</p>
+</div>
+</div>
+<div class="linhas" style="--n:7"></div>
+<div class="questao" id="q119">
+<span class="num">Q119</span>
+<div class="corpo">
+<p>O que a opção <code>--generate-cds-archive</code> do <code>jlink</code> faz, e que problema ela ataca? Como o Projeto Leyden continua essa ideia?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q120">
+<span class="num">Q120</span>
+<div class="corpo">
+<p>Implemente um builder para <code>record Pedido(String cliente, List&lt;String&gt; itens, boolean urgente, String observacao)</code>, com cliente obrigatório, pelo menos um item, <code>urgente</code> falso e <code>observacao</code> vazia por padrão, validando tudo no <code>build()</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q121">
+<span class="num">Q121</span>
+<div class="corpo">
+<p>Escreva os comandos para: (1) descobrir os módulos de que o JAR <code>app.jar</code> precisa; (2) gerar com <code>jlink</code> um runtime mínimo, sem cabeçalhos, páginas de manual e informações de depuração; (3) criar com <code>jpackage</code> um instalador <code>.deb</code> usando esse runtime.</p>
+</div>
+</div>
+<div class="linhas" style="--n:8"></div>
+</section>
+<section class="modulo" id="fase-9">
+<h2><span class="rotulo">FASE 9</span> O projeto final: o servidor HTTP Farol</h2>
+<p class="aulas-titulo">Artigos 47 a 52</p>
+<ul class="aulas">
+<li><span class="n">#47</span> O Projeto Final Começa — Arquitetando um Servidor HTTP sobre Sockets</li>
+<li><span class="n">#48</span> A Primeira Pedra — ServerSocket e a Leitura do HTTP/1.1</li>
+<li><span class="n">#49</span> A Segunda Pedra — Requisições e Respostas como Tipos: Records, Sealed e Rotas</li>
+<li><span class="n">#50</span> A Terceira Pedra — Mil Conexões ao Mesmo Tempo: Virtual Threads e Keep-Alive</li>
+<li><span class="n">#51</span> A Pedra de Acabamento — Arquivos Estáticos, Testes e Empacotamento</li>
+<li><span class="n">#52</span> A Jornada Completa — Retrospectiva de Um Ano de Java</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q122">
+<span class="num">Q122</span>
+<div class="corpo">
+<p>Descreva a estrutura de uma requisição HTTP/1.1 como ela chega pelo <em>socket</em>: quais são as partes, como elas se separam, e como o servidor sabe onde o corpo termina?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q123">
+<span class="num">Q123</span>
+<div class="corpo">
+<p>O que é <em>request smuggling</em>, e por que o Farol recusa com 400 uma requisição que traz <strong>ao mesmo tempo</strong> <code>Content-Length</code> e <code>Transfer-Encoding</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q124">
+<span class="num">Q124</span>
+<div class="corpo">
+<p>O que é <em>response splitting</em>? Que validação o <code>EscritorDeResposta</code> precisa fazer nos valores de cabeçalho, e por quê?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q125">
+<span class="num">Q125</span>
+<div class="corpo">
+<p>Como o Farol se protege de clientes lentos ou maliciosos? Cite os limites do <em>record</em> <code>Limites</code> e o código de status de cada um.</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q126">
+<span class="num">Q126</span>
+<div class="corpo">
+<p>Por que o Farol tem <strong>dois</strong> prazos diferentes, o prazo de leitura e o prazo ocioso? O que aconteceria se houvesse um só?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q127">
+<span class="num">Q127</span>
+<div class="corpo">
+<p>No roteador do Farol, as rotas <code>/tarefas/{id}</code> e <code>/tarefas/novas</code> podem casar com o mesmo caminho. Como o <code>Roteador</code> escolhe? E quando ele devolve <strong>405</strong> em vez de <strong>404</strong>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q128">
+<span class="num">Q128</span>
+<div class="corpo">
+<p>Explique as <strong>duas</strong> defesas do Farol contra <em>path traversal</em> em <code>ArquivosEstaticos</code>. Por que só verificar se o caminho contém ".." não basta?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q129">
+<span class="num">Q129</span>
+<div class="corpo">
+<p>Como funcionam <code>ETag</code> e <code>If-None-Match</code>? O que o servidor ganha ao responder <code>304 Not Modified</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q130">
+<span class="num">Q130</span>
+<div class="corpo">
+<p>Como o Farol faz o <strong>desligamento gracioso</strong>? Por que simplesmente encerrar o processo é ruim para os clientes?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q131">
+<span class="num">Q131</span>
+<div class="corpo">
+<p>Na retrospectiva, o Farol usou praticamente todas as fases do curso. Associe cada item a uma fase: <code>record</code>s e <code>sealed</code> para requisição e resposta; <code>Semaphore</code> e <em>virtual threads</em>; <code>toRealPath</code> e <code>Files</code>; testes com <code>HttpClient</code>; <code>jlink</code> com CDS.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q132">
+<span class="num">Q132</span>
+<div class="corpo">
+<p>Escreva um método que interprete a <strong>linha de pedido</strong> HTTP (<code>"GET /tarefas?pagina=2 HTTP/1.1"</code>) num <em>record</em> <code>LinhaDePedido(String metodo, String caminho, String consulta, String versao)</code>, recusando linhas malformadas com <code>IllegalArgumentException</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q133">
+<span class="num">Q133</span>
+<div class="corpo">
+<p>Implemente a decodificação de um corpo <code>Transfer-Encoding: chunked</code> a partir de uma <code>String</code>, respeitando um tamanho máximo de corpo. Cuidado com tamanhos em hexadecimal como <code>ffffffff</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q134">
+<span class="num">Q134</span>
+<div class="corpo">
+<p>Escreva a verificação de <em>path traversal</em> com <code>toRealPath</code>: um método <code>Optional&lt;Path&gt; resolver(Path raiz, String pedido)</code> que devolve o arquivo só se ele existir e estiver <strong>dentro</strong> da raiz. Teste com <code>index.html</code>, <code>../segredo.txt</code> e um <em>link</em> simbólico que aponta para fora.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="trilha-a">
+<h2><span class="rotulo">TRILHA A</span> Web, API e bancos de dados: as Trilhas da Ilha</h2>
+<p class="aulas-titulo">Artigos 53 a 66</p>
+<ul class="aulas">
+<li><span class="n">#53</span> Extensão — Java no Servidor: Servlets, Jakarta EE, Spring e Quarkus</li>
+<li><span class="n">#54</span> Extensão — Dados que Sobrevivem: SQL Essencial e JDBC com SQLite</li>
+<li><span class="n">#55</span> Extensão — Spring Boot pela Primeira Vez: Injeção de Dependência</li>
+<li><span class="n">#56</span> Extensão — Objetos no Banco: JPA e Hibernate</li>
+<li><span class="n">#57</span> Extensão — O Banco que Evolui: Spring Data e Migrations com Flyway</li>
+<li><span class="n">#58</span> Extensão — PostgreSQL: o Banco Servidor, JSONB e Arrays</li>
+<li><span class="n">#59</span> Extensão — MySQL: Driver, Dialeto e as Diferenças que Importam</li>
+<li><span class="n">#60</span> Extensão — MongoDB: Documentos, Agregações e Quando Escolher Cada Modelo</li>
+<li><span class="n">#61</span> Extensão — A API das Trilhas: REST, Validação, Erros e OpenAPI</li>
+<li><span class="n">#62</span> Extensão — Quem É Você? Spring Security e JWT</li>
+<li><span class="n">#63</span> Extensão — Bancos de Verdade nos Testes: Testcontainers</li>
+<li><span class="n">#64</span> Extensão — Páginas Dinâmicas: Thymeleaf e Formulários</li>
+<li><span class="n">#65</span> Extensão — O Site Completo: htmx, Login, Área Administrativa e Upload</li>
+<li><span class="n">#66</span> Extensão — Do Laptop ao Servidor: Docker, nginx e Deploy</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q135">
+<span class="num">Q135</span>
+<div class="corpo">
+<p>Qual é a relação entre a API de <strong>Servlets</strong>, o <strong>Jakarta EE</strong>, o <strong>Spring</strong> e o <strong>Quarkus</strong>? Por que o pacote mudou de <code>javax.*</code> para <code>jakarta.*</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q136">
+<span class="num">Q136</span>
+<div class="corpo">
+<p>Explique a diferença entre <code>INNER JOIN</code> e <code>LEFT JOIN</code> com as tabelas <code>trilha</code> e <code>ponto_de_interesse</code>. Qual delas lista também as trilhas sem nenhum ponto?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q137">
+<span class="num">Q137</span>
+<div class="corpo">
+<p>Por que concatenar texto do usuário numa consulta SQL é perigoso? Mostre o ataque com a entrada <code>' OR '1'='1</code> e explique por que o <code>PreparedStatement</code> o neutraliza.</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q138">
+<span class="num">Q138</span>
+<div class="corpo">
+<p>O que é uma <strong>transação</strong>? Explique o que significa cada letra de <strong>ACID</strong> com o exemplo de uma inscrição numa trilha que decrementa as vagas e grava a inscrição.</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q139">
+<span class="num">Q139</span>
+<div class="corpo">
+<p>O que é <strong>injeção de dependência</strong>? Por que o Spring prefere a injeção pelo <strong>construtor</strong> à injeção em campos com <code>@Autowired</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q140">
+<span class="num">Q140</span>
+<div class="corpo">
+<p>Por que um método anotado com <code>@Transactional</code> que é chamado <strong>por outro método da mesma classe</strong> não abre transação?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q141">
+<span class="num">Q141</span>
+<div class="corpo">
+<p>Quais são os estados de uma entidade JPA (<strong>transient</strong>, <strong>managed</strong>, <strong>detached</strong>, <strong>removed</strong>)? O que é o <em>dirty checking</em>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q142">
+<span class="num">Q142</span>
+<div class="corpo">
+<p>O que é o <strong>problema N+1</strong>? Mostre como ele aparece ao listar trilhas com os seus pontos de interesse, e duas formas de resolver.</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q143">
+<span class="num">Q143</span>
+<div class="corpo">
+<p>Por que <strong>nunca</strong> se deve editar um <em>script</em> de migração do Flyway que já foi aplicado? Como se faz, então, para mudar uma coluna?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q144">
+<span class="num">Q144</span>
+<div class="corpo">
+<p>Cite três recursos do <strong>PostgreSQL</strong> usados nas Trilhas da Ilha que o SQLite não tinha (ou tinha de forma limitada), e para que cada um serviu.</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q145">
+<span class="num">Q145</span>
+<div class="corpo">
+<p>Cite três diferenças práticas entre <strong>MySQL</strong> e <strong>PostgreSQL</strong> que obrigaram a ajustar o esquema ou o código das Trilhas.</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q146">
+<span class="num">Q146</span>
+<div class="corpo">
+<p>Por que os <strong>relatos</strong> dos caminhantes foram para o <strong>MongoDB</strong>, enquanto o cadastro das trilhas ficou no PostgreSQL? Quando o modelo de documentos é a escolha certa?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q147">
+<span class="num">Q147</span>
+<div class="corpo">
+<p>Quais códigos de status HTTP a API das Trilhas devolve para: criar uma trilha com sucesso; buscar uma trilha que não existe; enviar JSON com um campo obrigatório vazio; fazer login com a senha errada; um usuário comum tentar apagar uma trilha; tentar criar uma trilha com um nome que já existe?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q148">
+<span class="num">Q148</span>
+<div class="corpo">
+<p>Descreva as três partes de um <strong>JWT</strong>. O conteúdo de um JWT é secreto? O que impede um usuário de trocar <code>"papel": "USUARIO"</code> por <code>"ADMIN"</code> no próprio <em>token</em>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q149">
+<span class="num">Q149</span>
+<div class="corpo">
+<p>Por que senhas são guardadas com um <em>hash</em> <strong>lento</strong> e com <strong>sal</strong> (BCrypt, PBKDF2, Argon2), e não com SHA-256?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q150">
+<span class="num">Q150</span>
+<div class="corpo">
+<p>O que o <strong>Testcontainers</strong> resolve que um banco em memória (H2) não resolve? Por que o <code>@ServiceConnection</code> simplifica os testes?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q151">
+<span class="num">Q151</span>
+<div class="corpo">
+<p>Por que o <strong>Thymeleaf</strong> escapa o HTML por padrão em <code>th:text</code>? Quando <code>th:utext</code> seria aceitável, e que cuidado exige?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q152">
+<span class="num">Q152</span>
+<div class="corpo">
+<p>O que é <strong>CSRF</strong>? Por que ele afeta o site com login por sessão (<em>cookie</em>) mas não a API com JWT no cabeçalho <code>Authorization</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q153">
+<span class="num">Q153</span>
+<div class="corpo">
+<p>O que o <strong>htmx</strong> muda na forma de fazer páginas interativas? Como ele se encaixa com o Thymeleaf no <em>back-end</em>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q154">
+<span class="num">Q154</span>
+<div class="corpo">
+<p>Na imagem Docker das Trilhas, por que o <code>ENTRYPOINT</code> chama o <code>java</code> diretamente (forma <em>exec</em>, <code>["java", "-jar", "app.jar"]</code>) em vez de passar por um <em>shell</em> (<code>sh -c "java -jar app.jar"</code>)?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q155">
+<span class="num">Q155</span>
+<div class="corpo">
+<p>O que o <strong>nginx</strong> faz na frente da aplicação Spring no servidor? Cite três responsabilidades.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q156">
+<span class="num">Q156</span>
+<div class="corpo">
+<p>Onde devem ficar os <strong>segredos</strong> (senha do banco, chave do JWT) de uma aplicação em produção? Cite duas práticas erradas e uma certa.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q157">
+<span class="num">Q157</span>
+<div class="corpo">
+<p>Com JDBC puro e SQLite, crie a tabela <code>trilha (id, nome, km)</code>, insira três trilhas com <code>PreparedStatement</code> e mostre que a entrada maliciosa <code>' OR '1'='1</code> <strong>não</strong> retorna nada quando usada como parâmetro de busca por nome.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q158">
+<span class="num">Q158</span>
+<div class="corpo">
+<p>Escreva a consulta SQL que devolve, para cada dificuldade, a quantidade de trilhas e a média de quilômetros, mostrando só as dificuldades com pelo menos 2 trilhas. Qual é a diferença entre <code>WHERE</code> e <code>HAVING</code> nessa consulta?</p>
+</div>
+</div>
+<div class="linhas" style="--n:8"></div>
+<div class="questao" id="q159">
+<span class="num">Q159</span>
+<div class="corpo">
+<p>Escreva um controlador REST do Spring para <code>GET /api/trilhas/{id}</code> e <code>POST /api/trilhas</code>, com um <em>record</em> de entrada validado (<code>nome</code> obrigatório, <code>km</code> positivo), devolvendo 201 com <code>Location</code> na criação e 404 quando a trilha não existe.</p>
+</div>
+</div>
+<div class="linhas" style="--n:16"></div>
+<div class="questao" id="q160">
+<span class="num">Q160</span>
+<div class="corpo">
+<p>Escreva a consulta PostgreSQL que encontra as trilhas com a etiqueta <code>cachoeira</code> <strong>e</strong> que aceitam animais (<code>detalhes-&gt;&gt;'pet' = 'true'</code> no JSONB), ordenadas pela relevância de uma busca textual por "mata atlântica". Quais índices ajudam essa consulta?</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q161">
+<span class="num">Q161</span>
+<div class="corpo">
+<p>Escreva uma agregação do MongoDB (no <code>mongosh</code>) que calcule, para cada trilha, a nota média e a quantidade de relatos, só com os relatos de 2026, ordenando pela média e mostrando as 5 melhores.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q162">
+<span class="num">Q162</span>
+<div class="corpo">
+<p>Escreva um <code>Dockerfile</code> em <strong>dois estágios</strong> para a aplicação Spring Boot das Trilhas: um estágio que compila com Maven e outro, mínimo, que só roda. O contêiner não deve rodar como <em>root</em>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="trilha-b">
+<h2><span class="rotulo">TRILHA B</span> Desktop e Android</h2>
+<p class="aulas-titulo">Artigos 67 a 70</p>
+<ul class="aulas">
+<li><span class="n">#67</span> Extensão — Janelas em Java: AWT, Swing e JavaFX</li>
+<li><span class="n">#68</span> Extensão — JavaFX: Cenas, Controles e FXML</li>
+<li><span class="n">#69</span> Extensão — Um App Desktop que Consome a API (MVVM)</li>
+<li><span class="n">#70</span> Extensão — Java no Android: o que Mudou com o Kotlin e um App que Consome a API</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q163">
+<span class="num">Q163</span>
+<div class="corpo">
+<p>O que é a <strong>thread de eventos</strong> de uma interface gráfica (a EDT no Swing, a <em>JavaFX Application Thread</em> no JavaFX)? Quais são as duas regras de ouro para usá-la?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q164">
+<span class="num">Q164</span>
+<div class="corpo">
+<p>Por que o JavaFX deixou de vir no JDK a partir do Java 11, e como ele é usado hoje num projeto?</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q165">
+<span class="num">Q165</span>
+<div class="corpo">
+<p>O que são <strong>propriedades</strong> e <strong>bindings</strong> no JavaFX? Dê um exemplo em que um <em>binding</em> substitui um ouvinte (<em>listener</em>) escrito à mão.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q166">
+<span class="num">Q166</span>
+<div class="corpo">
+<p>Explique o padrão <strong>MVVM</strong> usado no Painel das Trilhas: o que fica no <em>Model</em>, na <em>View</em> e no <em>ViewModel</em>? Por que o <em>ViewModel</em> pode ser testado sem abrir nenhuma janela?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q167">
+<span class="num">Q167</span>
+<div class="corpo">
+<p>Por que um app Android <strong>não</strong> pode chamar a API das Trilhas em <code>http://localhost:8080</code>, e qual endereço usar no emulador?</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q168">
+<span class="num">Q168</span>
+<div class="corpo">
+<p>Por que, em 2026, a recomendação do Google para apps Android novos é Kotlin, e o que continua valendo do Java nesse ecossistema?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q169">
+<span class="num">Q169</span>
+<div class="corpo">
+<p>Escreva um <strong>ViewModel</strong> de busca de trilhas, com as propriedades <code>termo</code>, <code>carregando</code> e <code>mensagem</code>, e a lista <code>resultados</code>, que chama um cliente assíncrono e atualiza tudo na <em>thread</em> da interface. Mostre como seria o teste dele com um cliente <em>fake</em>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:16"></div>
+<div class="questao" id="q170">
+<span class="num">Q170</span>
+<div class="corpo">
+<p>Escreva o cliente HTTP que busca uma página de trilhas na API com o <code>java.net.http.HttpClient</code>, de forma assíncrona e com <em>timeout</em>, e converte o JSON em <em>records</em> com Jackson. O mesmo código funcionaria no Android?</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="trilha-c">
+<h2><span class="rotulo">TRILHA C</span> Jogos com libGDX</h2>
+<p class="aulas-titulo">Artigos 71 a 77</p>
+<ul class="aulas">
+<li><span class="n">#71</span> Um Novo Território — Java nos Jogos, o Game Loop e o Caso Minecraft</li>
+<li><span class="n">#72</span> O Primeiro Sprite — Janela, Desenho e Input com libGDX</li>
+<li><span class="n">#73</span> Quando as Coisas se Tocam — Colisão e o Primeiro Jogo: Asteroids</li>
+<li><span class="n">#74</span> Gravidade de Verdade — Física com Box2D</li>
+<li><span class="n">#75</span> Mundos em Blocos — Mapas de Tiles e um Jogo de Plataforma</li>
+<li><span class="n">#76</span> Sem Lixo no Loop — Pools, ECS e o Coletor nos Jogos</li>
+<li><span class="n">#77</span> O Capstone dos Jogos — o Plataforma Completo e Exportado</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q171">
+<span class="num">Q171</span>
+<div class="corpo">
+<p>O que é o <strong>game loop</strong>? Por que um jogo não pode simplesmente esperar por eventos, como um servidor ou uma janela de formulário?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q172">
+<span class="num">Q172</span>
+<div class="corpo">
+<p>Por que a física do jogo deve avançar em <strong>passo fixo</strong> (1/60 s), com um acumulador, em vez de usar o tempo do quadro diretamente? Para que serve a <strong>interpolação</strong> na hora de desenhar?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q173">
+<span class="num">Q173</span>
+<div class="corpo">
+<p>Por que o libGDX exige que <code>Texture</code>, <code>SpriteBatch</code>, <code>BitmapFont</code> e o <code>World</code> do Box2D recebam <code>dispose()</code>, se o Java tem coletor de lixo?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q174">
+<span class="num">Q174</span>
+<div class="corpo">
+<p>Por que se trabalha em <strong>metros</strong> (unidades do mundo) e não em pixels, e o que o <code>FitViewport</code> faz com uma janela de proporção diferente?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q175">
+<span class="num">Q175</span>
+<div class="corpo">
+<p>Por que o teste de colisão de um tiro rápido com um asteroide pequeno usou <strong>segmento contra círculo</strong> (o caminho do passo inteiro), e não só o ponto final do tiro?</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q176">
+<span class="num">Q176</span>
+<div class="corpo">
+<p>Qual é a diferença entre corpos <strong>estáticos</strong>, <strong>cinemáticos</strong> e <strong>dinâmicos</strong> no Box2D? Dê um exemplo de cada no jogo do cais.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q177">
+<span class="num">Q177</span>
+<div class="corpo">
+<p>Explique o <strong>coyote time</strong> e o <strong>jump buffer</strong> do jogo de plataforma. Por que eles são regras de <em>game design</em>, e não de física?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q178">
+<span class="num">Q178</span>
+<div class="corpo">
+<p>Por que a altura do pulo no jogo foi 2,3333 m e não os 2,45 m da fórmula v₀²/2g? Que consequência isso tem para o <em>level design</em>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q179">
+<span class="num">Q179</span>
+<div class="corpo">
+<p>Por que o carregador TMX do libGDX não encontrava objetos marcados no campo <strong>"Class"</strong> do Tiled 1.9+? Como o jogo resolveu?</p>
+</div>
+</div>
+<div class="linhas" style="--n:4"></div>
+<div class="questao" id="q180">
+<span class="num">Q180</span>
+<div class="corpo">
+<p>No teste com 30 mil partículas, a versão com objetos novos teve média de 0,9 ms por quadro, mas um pior quadro de 11 a 12 ms. Por que o <strong>pior quadro</strong> importa mais que a média num jogo, e o que as versões com <code>Pool</code> e com arrays mudaram?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q181">
+<span class="num">Q181</span>
+<div class="corpo">
+<p>Cite as três armadilhas de um <code>Pool</code> que o curso demonstrou e a regra única que evita todas.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q182">
+<span class="num">Q182</span>
+<div class="corpo">
+<p>No capstone, por que <code>setScreen</code> do <code>Game</code> <strong>não</strong> chama <code>dispose()</code> na tela antiga, e por que a troca de tela precisava ser a <strong>última</strong> linha do <code>render</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q183">
+<span class="num">Q183</span>
+<div class="corpo">
+<p>Quais são os três degraus para distribuir o jogo, do <code>.jar</code> ao programa que roda sem Java instalado? O que cada um resolve?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q184">
+<span class="num">Q184</span>
+<div class="corpo">
+<p>Escreva um game loop de <strong>passo fixo com acumulador</strong> em Java puro (sem libGDX), que simule uma bola caindo sob gravidade de −9,8 m/s² durante 1 segundo "real", recebido em quadros de tamanhos irregulares (0,016 s, 0,033 s, 0,005 s...). Mostre que o resultado depende só do número de passos, e não do tamanho dos quadros.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q185">
+<span class="num">Q185</span>
+<div class="corpo">
+<p>Implemente a resolução de colisão de uma caixa (AABB) contra uma <strong>grade de tiles</strong>, um eixo de cada vez: mova em X, corrija se entrou em bloco sólido, e depois faça o mesmo em Y, marcando <code>noChao</code> quando a correção for para cima.</p>
+</div>
+</div>
+<div class="linhas" style="--n:16"></div>
+<div class="questao" id="q186">
+<span class="num">Q186</span>
+<div class="corpo">
+<p>Escreva um <code>Pool</code> genérico mínimo, com <code>obtain()</code>, <code>free()</code> e um contador de objetos criados. Use-o para simular 1.000 quadros em que 50 balas nascem e 50 morrem por quadro, e mostre quantos objetos foram criados de verdade.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="encerramento">
+<h2><span class="rotulo">ENCERRAMENTO</span> O destino e o novo começo</h2>
+<p><strong>Artigo 78</strong></p>
+<ul class="aulas">
+<li><span class="n">#78</span> O Destino e o Novo Começo — Encerrando a Jornada Completa</li>
+</ul>
+<p><strong>Perguntas de revisão</strong></p>
+<div class="questao" id="q187">
+<span class="num">Q187</span>
+<div class="corpo">
+<p>A última aula listou seis princípios que atravessaram o curso inteiro. Escolha <strong>três</strong> e dê, para cada um, um exemplo concreto de <strong>duas trilhas diferentes</strong> em que ele apareceu.</p>
+</div>
+</div>
+<div class="linhas" style="--n:8"></div>
+<div class="questao" id="q188">
+<span class="num">Q188</span>
+<div class="corpo">
+<p>Por que o Java 25 é a escolha certa para um projeto que vai para produção hoje, mesmo com o JDK 27 já lançado? Qual é o ritmo de lançamentos do Java?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q189">
+<span class="num">Q189</span>
+<div class="corpo">
+<p>Monte um plano de estudos pessoal para os próximos 90 dias com uma meta concreta por mês, escolhendo <strong>um</strong> destino (<em>back-end</em> e nuvem, JVM por dentro, Android, jogos ou código aberto). Para cada mês, diga como você vai saber que cumpriu a meta.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+</section>
+<section class="modulo" id="para-ir-al-m">
+<h2><span class="rotulo">PARA IR ALÉM</span> Desafios integradores</h2>
+<p class="intro">Projetos maiores, que juntam várias fases e trilhas. Não há uma única resposta certa: o gabarito mostra um caminho.</p>
+<div class="questao desafio" id="d1">
+<span class="num">D1</span>
+<div class="corpo">
+<p class="titulo">O Farol com HTTPS e compressão</p>
+<p>Estenda o servidor Farol (Fase 9) para: (a) aceitar conexões TLS com <code>SSLServerSocket</code> e um certificado autoassinado gerado com <code>keytool</code>; (b) comprimir com gzip as respostas de texto quando o cliente enviar <code>Accept-Encoding: gzip</code>, acrescentando <code>Content-Encoding</code> e <code>Vary</code>; (c) não comprimir respostas pequenas (menos de 1 KB) nem imagens; (d) manter os testes existentes passando e acrescentar testes com <code>HttpClient</code> para os dois recursos.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+<div class="questao desafio" id="d2">
+<span class="num">D2</span>
+<div class="corpo">
+<p class="titulo">Inscrições concorrentes sem vender vaga a mais</p>
+<p>Nas Trilhas da Ilha, uma trilha guiada tem 10 vagas. Escreva o serviço de inscrição (Spring + PostgreSQL) e um teste de integração com Testcontainers que dispare 50 inscrições <strong>simultâneas</strong> (com <em>virtual threads</em>) e prove que exatamente 10 são aceitas e 40 recebem <strong>409 Conflict</strong>. Compare três estratégias: <code>SELECT ... FOR UPDATE</code>, um <code>UPDATE</code> atômico condicional e o bloqueio otimista com <code>@Version</code>.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+<div class="questao desafio" id="d3">
+<span class="num">D3</span>
+<div class="corpo">
+<p class="titulo">Painel desktop com atualização ao vivo</p>
+<p>Estenda o Painel JavaFX (Trilha B) para mostrar as inscrições de uma trilha <strong>em tempo real</strong>: a API passa a expor um <em>endpoint</em> de <em>Server-Sent Events</em> (<code>text/event-stream</code>) que emite um evento a cada inscrição, e o Painel consome o fluxo com <code>HttpClient</code> (<code>BodyHandlers.ofLines()</code>), atualizando uma lista e um contador de vagas sem travar a interface. Trate a queda de conexão com reconexão e espera exponencial.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+<div class="questao desafio" id="d4">
+<span class="num">D4</span>
+<div class="corpo">
+<p class="titulo">Uma terceira fase com inimigos</p>
+<p>Acrescente ao jogo <em>A Ilha dos Blocos</em> (Trilha C) uma terceira fase com <strong>inimigos</strong> que andam de um lado para o outro nas plataformas e viram na borda ou numa parede. Encostar num inimigo pela lateral faz o herói voltar ao início, e pular em cima dele o elimina e dá um pequeno impulso para cima. A regra precisa estar na <code>Fase</code>, testada sem GPU, e o piloto automático precisa continuar vencendo <strong>todas</strong> as fases.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+<div class="questao desafio" id="d5">
+<span class="num">D5</span>
+<div class="corpo">
+<p class="titulo">Métricas do Farol com JFR e um painel</p>
+<p>Instrumente o Farol com <strong>eventos JFR personalizados</strong> (<code>jdk.jfr.Event</code>): um evento por requisição com método, rota, status e duração. Grave uma sessão de carga (gerada com um programa de <em>virtual threads</em> fazendo 100 mil requisições) e escreva um analisador, com a API <code>jdk.jfr.consumer.RecordingFile</code>, que produza a tabela de latência p50/p95/p99 por rota e a taxa de erros. Compare os números com o servidor usando o G1 e o ZGC.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+<div class="questao desafio" id="d6">
+<span class="num">D6</span>
+<div class="corpo">
+<p class="titulo">A jornada completa em um só sistema</p>
+<p>Integre as três trilhas: o jogo envia a pontuação de cada fase vencida para a API das Trilhas (autenticado com JWT); a API valida a pontuação contra trapaças (tempo mínimo possível para a fase, moedas no máximo o total da fase, assinatura do jogo), grava no PostgreSQL e mantém um <em>ranking</em>; o site mostra o <em>ranking</em> ao vivo com htmx; e o Painel desktop permite a um administrador anular pontuações suspeitas. Escreva um documento de arquitetura de uma página e implemente pelo menos o caminho jogo → API → site.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+</section>
+<footer class="fim">
+<p><strong>Bom estudo e bons exercícios!</strong></p>
+<p>Dominando Java em 1 Ano · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</footer>
+</body>
+</html>
