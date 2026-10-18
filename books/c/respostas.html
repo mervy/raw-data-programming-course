@@ -1,0 +1,2059 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dominando a Linguagem C em 1 Ano · Caderno de Respostas</title>
+<link rel="stylesheet" href="../caderno.css">
+</head>
+<body class="caderno respostas">
+<header class="capa">
+<p class="serie">DOMINANDO A LINGUAGEM C EM 1 ANO</p>
+<h1>Caderno de Respostas</h1>
+<p class="subtitulo">Gabarito comentado: 52 aulas de prática, do #01 ao #52</p>
+<p class="subtitulo">C17 · gcc ou clang · 9 módulos · 71 questões · 2 desafios integradores</p>
+<p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</header>
+<aside class="nota">
+<p><strong>Consulte este gabarito só depois de tentar.</strong></p>
+<p>As respostas são comentadas para ensinar, não só para conferir. Nos exercícios de código existem outras soluções igualmente válidas: o que importa é entender por que a sua funciona e o que ela troca em relação à mostrada aqui.</p>
+<p>Os programas com um quadro verde de <strong>Saída</strong> foram compilados com clang (-std=c17 -Wall -Wextra) e executados no Linux; com gcc o resultado é o mesmo, e a saída mostrada é a real.</p>
+</aside>
+<h2 class="sumario-titulo">Sumário</h2>
+<table class="sumario">
+<thead><tr><th>Módulo</th><th>Tema</th><th>Aulas</th><th>Questões</th></tr></thead>
+<tbody>
+<tr><td>MÓDULO 1</td><td>Fundamentos da linguagem</td><td>#01–#06</td><td>Q1–Q9</td></tr>
+<tr><td>MÓDULO 2</td><td>Ponteiros e strings</td><td>#07–#10</td><td>Q10–Q16</td></tr>
+<tr><td>MÓDULO 3</td><td>Memória: pilha, heap e vazamentos</td><td>#11–#13</td><td>Q17–Q23</td></tr>
+<tr><td>MÓDULO 4</td><td>Tipos próprios, pré-processador e compilação</td><td>#14–#20</td><td>Q24–Q32</td></tr>
+<tr><td>MÓDULO 5</td><td>Entrada, saída e biblioteca padrão</td><td>#21–#25</td><td>Q33–Q40</td></tr>
+<tr><td>MÓDULO 6</td><td>Ponteiros para função, recursão e bits</td><td>#26–#30</td><td>Q41–Q47</td></tr>
+<tr><td>MÓDULO 7</td><td>Estruturas de dados</td><td>#31–#35</td><td>Q48–Q54</td></tr>
+<tr><td>MÓDULO 8</td><td>Ferramentas, qualidade e comportamento indefinido</td><td>#36–#46</td><td>Q55–Q63</td></tr>
+<tr><td>MÓDULO 9</td><td>Programação de sistemas</td><td>#47–#51</td><td>Q64–Q71</td></tr>
+<tr><td>DESAFIOS</td><td>Desafios integradores</td><td>todas</td><td>D1–D2</td></tr>
+</tbody>
+</table>
+<section class="modulo" id="modulo-1">
+<h2><span class="rotulo">MÓDULO 1</span> Fundamentos da linguagem</h2>
+<p class="intro">Por que C existe, tipos e memória, funções, decisões, laços e o primeiro vetor.</p>
+<p class="aulas-titulo">Artigos 01 a 06</p>
+<ul class="aulas">
+<li><span class="n">#01</span> Por que C existe e o que ele quer de você</li>
+<li><span class="n">#02</span> Variáveis, Tipos e a Memória por Trás Deles</li>
+<li><span class="n">#03</span> Funções, Escopo e Passagem por Valor</li>
+<li><span class="n">#04</span> Quando o Programa Decide: if, else e switch</li>
+<li><span class="n">#05</span> A Arte da Repetição com while, do-while e for</li>
+<li><span class="n">#06</span> Vetores e o Primeiro Contato com a Memória Contígua</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q1">
+<span class="num">Q1</span>
+<div class="corpo">
+<p class="titulo">O que C quer de você</p>
+<p>O artigo #01 diz que C "confia no programador". O que isso significa na prática? Cite duas coisas que a linguagem <strong>não</strong> faz por você e que linguagens como Python ou Java fazem.</p>
+</div>
+</div>
+<p>Significa que o compilador gera exatamente o que foi pedido, sem verificações escondidas no caminho: o custo de cada operação fica visível, e a responsabilidade pelos erros também. Duas coisas que C não faz:</p>
+<ul><li><strong>Verificar limites de vetor</strong>: <code>v[10]</code> num vetor de 10 elementos compila e executa, lendo ou escrevendo memória que não é do vetor (comportamento indefinido).</li><li><strong>Liberar memória</strong>: o que foi alocado com <code>malloc</code> fica alocado até um <code>free</code>; não há coletor de lixo.</li></ul>
+<p>Outras respostas válidas: não inicializa variáveis locais, não detecta estouro de inteiro com sinal, não tem exceções (erros voltam como valor de retorno).</p>
+<div class="questao" id="q2">
+<span class="num">Q2</span>
+<div class="corpo">
+<p class="titulo">Tamanho dos tipos</p>
+<p>Por que o padrão C não fixa que <code>int</code> tem 32 bits? O que ele garante sobre <code>char</code>, <code>short</code>, <code>int</code> e <code>long</code>? Quando usar <code>int32_t</code> de <code>&lt;stdint.h&gt;</code>?</p>
+</div>
+</div>
+<p>Porque C nasceu para rodar em máquinas muito diferentes, e o <code>int</code> deve ser o tamanho "natural" de cada uma. O padrão garante só <strong>mínimos e uma ordem</strong>: <code>char</code> tem pelo menos 8 bits e <code>sizeof(char)</code> é 1 por definição; <code>short</code> e <code>int</code> têm pelo menos 16 bits; <code>long</code> pelo menos 32; e <code>sizeof(short) &lt;= sizeof(int) &lt;= sizeof(long) &lt;= sizeof(long long)</code>.</p>
+<p>Use <code>int32_t</code> (e companhia) quando o tamanho exato importa: formatos de arquivo, protocolos de rede, registradores de hardware. Para contadores e índices comuns, <code>int</code> ou <code>size_t</code> bastam.</p>
+<div class="questao" id="q3">
+<span class="num">Q3</span>
+<div class="corpo">
+<p class="titulo">Passagem por valor</p>
+<p>"Em C, toda passagem de argumento é por valor." Explique a frase e diga como, então, uma função consegue alterar uma variável de quem a chamou.</p>
+</div>
+</div>
+<p>A função recebe <strong>cópias</strong> dos argumentos: alterar o parâmetro dentro dela não muda a variável original. Para alterar a variável de quem chamou, passa-se o <strong>endereço</strong> dela (um ponteiro); o ponteiro também é copiado, mas a cópia aponta para o mesmo lugar, e <code>*p = ...</code> escreve na variável original. É o caso do <code>scanf("%d", &amp;x)</code>.</p>
+<div class="questao" id="q4">
+<span class="num">Q4</span>
+<div class="corpo">
+<p class="titulo">switch e o break esquecido</p>
+<p>O que acontece quando um <code>case</code> de um <code>switch</code> não termina com <code>break</code>? Dê uma situação em que isso é intencional.</p>
+</div>
+</div>
+<p>A execução <strong>continua no case seguinte</strong> (<em>fall-through</em>), sem testar o rótulo dele. É intencional quando vários valores levam à mesma ação:</p>
+<pre class="codigo"><code>switch (c) {
+case 'a': case 'e': case 'i': case 'o': case 'u':
+    vogais++;
+    break;
+default:
+    outras++;
+}</code></pre>
+<p>Quando não é intencional, é bug; o gcc e o clang avisam com <code>-Wimplicit-fallthrough</code>, e o C23 tem o atributo <code>[[fallthrough]]</code> para marcar o caso desejado.</p>
+<div class="questao" id="q5">
+<span class="num">Q5</span>
+<div class="corpo">
+<p class="titulo">Vetor como argumento</p>
+<p>Por que, dentro de uma função <code>void f(int v[])</code>, a expressão <code>sizeof v / sizeof v[0]</code> não dá o número de elementos? Como as funções da biblioteca resolvem isso?</p>
+</div>
+</div>
+<p>Porque um parâmetro declarado como vetor <strong>é um ponteiro</strong>: o vetor "decai" para o endereço do primeiro elemento na chamada. Dentro de <code>f</code>, <code>sizeof v</code> é o tamanho de um ponteiro (8 bytes num sistema de 64 bits), não do vetor. A solução é passar o tamanho junto, como fazem <code>qsort(base, n, tamanho, cmp)</code>, <code>memcpy(dest, orig, n)</code> e <code>fgets(buf, tamanho, arquivo)</code>; strings resolvem de outro jeito, com o <code>'\0'</code> no fim.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q6">
+<span class="num">Q6</span>
+<div class="corpo">
+<p class="titulo">Divisão inteira e conversões</p>
+<p>Sem executar, diga o que o programa imprime. Depois execute e explique cada linha.</p>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int a = 7, b = 2;
+    printf("%d\n", a / b);
+    printf("%d\n", -7 / 2);
+    printf("%d\n", -7 % 2);
+    printf("%.2f\n", a / b * 1.0);
+    printf("%.2f\n", (double) a / b);
+    unsigned int u = 0;
+    printf("%u\n", u - 1);
+    return 0;
+}</code></pre>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int a = 7, b = 2;
+    printf("%d\n", a / b);
+    printf("%d\n", -7 / 2);
+    printf("%d\n", -7 % 2);
+    printf("%.2f\n", a / b * 1.0);
+    printf("%.2f\n", (double) a / b);
+    unsigned int u = 0;
+    printf("%u\n", u - 1);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>3
+-3
+-1
+3.00
+3.50
+4294967295</code></pre>
+<p>Entre inteiros, <code>/</code> descarta a parte fracionária <strong>em direção ao zero</strong> (desde o C99), por isso <code>-7 / 2</code> é <code>-3</code>, e o resto acompanha o sinal do dividendo: <code>-7 % 2</code> é <code>-1</code>. Em <code>a / b * 1.0</code> a divisão inteira acontece primeiro (<code>3</code>) e só depois vira <code>double</code>; com <code>(double) a / b</code> a conversão vem antes da divisão. Por fim, <code>unsigned</code> não tem negativo: <code>0 - 1</code> dá a volta e vira o maior valor do tipo, 4294967295 num <code>unsigned int</code> de 32 bits. Isso é definido pelo padrão; já o estouro de um <code>int</code> com sinal é comportamento indefinido.</p>
+<div class="questao" id="q7">
+<span class="num">Q7</span>
+<div class="corpo">
+<p class="titulo">Troca com ponteiros</p>
+<p>Escreva <code>void troca(int *a, int *b)</code> que troca os valores de duas variáveis e mostre, no mesmo programa, por que uma versão <code>void troca_errada(int a, int b)</code> não funciona.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+
+void troca_errada(int a, int b) {
+    int t = a;
+    a = b;
+    b = t;  /* troca as cópias, que somem ao retornar */
+}
+
+void troca(int *a, int *b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+int main(void) {
+    int x = 1, y = 2;
+    troca_errada(x, y);
+    printf("depois de troca_errada: x=%d y=%d\n", x, y);
+    troca(&amp;x, &amp;y);
+    printf("depois de troca:        x=%d y=%d\n", x, y);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>depois de troca_errada: x=1 y=2
+depois de troca:        x=2 y=1</code></pre>
+<p><code>troca_errada</code> recebe cópias de <code>x</code> e <code>y</code>; <code>troca</code> recebe os endereços, e o <code>*</code> escreve nas variáveis do <code>main</code>.</p>
+<div class="questao" id="q8">
+<span class="num">Q8</span>
+<div class="corpo">
+<p class="titulo">Laços e o do-while</p>
+<p>Escreva um programa que leia números inteiros da entrada até chegar um <code>0</code> e mostre quantos foram lidos (sem contar o zero), a soma e a média com uma casa decimal. Use <code>do-while</code> e trate o caso de nenhum número antes do zero.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int n, quantos = 0;
+    long soma = 0;
+
+    do {
+        if (scanf("%d", &amp;n) != 1)  /* entrada acabou ou não é número */
+            break;
+        if (n != 0) {
+            soma += n;
+            quantos++;
+        }
+    } while (n != 0);
+
+    if (quantos == 0) {
+        printf("nenhum número lido\n");
+        return 0;
+    }
+    printf("lidos: %d, soma: %ld, média: %.1f\n", quantos, soma, (double) soma / quantos);
+    return 0;
+}</code></pre>
+<p class="rotulo-entrada">Entrada digitada:</p>
+<pre class="codigo"><code>8 3 10 4 0</code></pre>
+<pre class="saida"><code>lidos: 4, soma: 25, média: 6.2</code></pre>
+<p>O <code>scanf</code> devolve quantos itens converteu: testar <code>!= 1</code> evita um laço infinito quando a entrada termina ou tem texto. A soma é <code>long</code> e a média converte para <code>double</code> antes de dividir.</p>
+<p>A média é 6,25 e aparece como <code>6.2</code>, não <code>6.3</code>. O valor 6,25 é exato em binário, e o <code>printf</code> desempata arredondando para o dígito par. Já <code>6.35</code> vira <code>6.3</code> por outro motivo: em binário ele é 6,3499999…, então nem chega a ser empate.</p>
+<div class="questao" id="q9">
+<span class="num">Q9</span>
+<div class="corpo">
+<p class="titulo">Busca do maior e do segundo maior</p>
+<p>Escreva uma função <code>void dois_maiores(const int v[], int n, int *maior, int *segundo)</code> que encontra, numa única passada, o maior e o segundo maior valor <strong>distintos</strong> do vetor. Teste com <code>{5, 9, 2, 9, 7}</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+
+void dois_maiores(const int v[], int n, int *maior, int *segundo) {
+    *maior = *segundo = INT_MIN;
+    for (int i = 0; i &lt; n; i++) {
+        if (v[i] &gt; *maior) {
+            *segundo = *maior;
+            *maior = v[i];
+        } else if (v[i] &lt; *maior &amp;&amp; v[i] &gt; *segundo) {
+            *segundo = v[i];  /* "&lt;" e não "!=": repetir o maior não o torna segundo */
+        }
+    }
+}
+
+int main(void) {
+    int v[] = {5, 9, 2, 9, 7};
+    int m, s;
+    dois_maiores(v, sizeof v / sizeof v[0], &amp;m, &amp;s);
+    printf("maior: %d, segundo: %d\n", m, s);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>maior: 9, segundo: 7</code></pre>
+<p>Aqui <code>sizeof v / sizeof v[0]</code> funciona porque <code>v</code> é o vetor de verdade, no <code>main</code>; dentro da função ele já seria só um ponteiro. <code>INT_MIN</code> como valor inicial dispensa tratar o primeiro elemento à parte. Se todos os valores forem iguais, <code>segundo</code> continua <code>INT_MIN</code>, e quem chama precisa tratar esse caso.</p>
+</section>
+<section class="modulo" id="modulo-2">
+<h2><span class="rotulo">MÓDULO 2</span> Ponteiros e strings</h2>
+<p class="intro">Endereços, aritmética de ponteiros, strings e argumentos de linha de comando.</p>
+<p class="aulas-titulo">Artigos 07 a 10</p>
+<ul class="aulas">
+<li><span class="n">#07</span> Ponteiros: O que É um Endereço de Memória</li>
+<li><span class="n">#08</span> Aritmética de Ponteiros e a Ligação Profunda com Vetores</li>
+<li><span class="n">#09</span> Strings: Vetores de Caracteres e a Biblioteca string.h</li>
+<li><span class="n">#10</span> Ponteiro para Ponteiro e Argumentos de Linha de Comando</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q10">
+<span class="num">Q10</span>
+<div class="corpo">
+<p class="titulo">Vetor e ponteiro não são a mesma coisa</p>
+<p><code>int v[5]</code> e <code>int *p = v</code> permitem escrever <code>v[2]</code> e <code>p[2]</code>. Cite duas diferenças reais entre <code>v</code> e <code>p</code>.</p>
+</div>
+</div>
+<ul><li><code>sizeof v</code> é o tamanho do vetor inteiro (20 bytes com <code>int</code> de 4), e <code>sizeof p</code> é o tamanho de um ponteiro.</li><li><code>v</code> não é uma variável que se possa reatribuir: <code>v = outro</code> não compila, enquanto <code>p = outro</code> é normal.</li><li><code>&amp;v</code> tem tipo "ponteiro para vetor de 5 int" (<code>int (*)[5]</code>), e <code>&amp;p</code> é "ponteiro para ponteiro" (<code>int **</code>).</li></ul>
+<p>O que elas têm em comum: na maioria das expressões, <code>v</code> decai para <code>&amp;v[0]</code>, e <code>v[i]</code> é definido como <code>*(v + i)</code>.</p>
+<div class="questao" id="q11">
+<span class="num">Q11</span>
+<div class="corpo">
+<p class="titulo">Aritmética de ponteiros</p>
+<p>Se <code>p</code> é um <code>int *</code> que vale <code>0x1000</code> e <code>int</code> tem 4 bytes, quanto vale <code>p + 3</code>? E se <code>p</code> fosse um <code>char *</code>? O que significa subtrair dois ponteiros?</p>
+</div>
+</div>
+<p><code>p + 3</code> avança 3 <strong>elementos</strong>, não 3 bytes: com <code>int</code> de 4 bytes vale <code>0x100C</code>; com <code>char *</code> valeria <code>0x1003</code>. Subtrair dois ponteiros para o mesmo vetor dá a distância em elementos, do tipo <code>ptrdiff_t</code>; subtrair ponteiros de vetores diferentes é comportamento indefinido.</p>
+<div class="questao" id="q12">
+<span class="num">Q12</span>
+<div class="corpo">
+<p class="titulo">O '\0' e o tamanho da string</p>
+<p>Qual a diferença entre <code>sizeof</code> e <code>strlen</code> aplicados a <code>char s[20] = "casa";</code>? Por que <code>char t[4] = "casa";</code> é perigoso?</p>
+</div>
+</div>
+<p><code>sizeof s</code> é 20 (o tamanho do vetor) e <code>strlen(s)</code> é 4 (os caracteres antes do <code>'\0'</code>). Em <code>char t[4] = "casa";</code> o literal tem 5 caracteres contando o <code>'\0'</code>; C permite a inicialização, mas descarta o terminador. <code>t</code> não é uma string válida, e <code>strlen(t)</code> ou <code>printf("%s", t)</code> continuam lendo memória até achar um zero por acaso.</p>
+<div class="questao" id="q13">
+<span class="num">Q13</span>
+<div class="corpo">
+<p class="titulo">Literal de string</p>
+<p>Por que <code>char *s = "texto"; s[0] = 'T';</code> pode derrubar o programa, enquanto <code>char s[] = "texto"; s[0] = 'T';</code> funciona?</p>
+</div>
+</div>
+<p>No primeiro caso, <code>s</code> aponta para o próprio literal, que costuma ficar numa área somente leitura; modificá-lo é comportamento indefinido e, na prática, dá falha de segmentação. No segundo, <code>s</code> é um vetor local <strong>inicializado com uma cópia</strong> do literal, e a cópia é modificável. Por isso o hábito de declarar <code>const char *s = "texto";</code>: o compilador passa a recusar a escrita.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q14">
+<span class="num">Q14</span>
+<div class="corpo">
+<p class="titulo">Percorrendo com ponteiro</p>
+<p>Escreva <code>size_t meu_strlen(const char *s)</code> sem usar índices, só ponteiros, e <code>void inverte(char *s)</code> que inverte a string no lugar. Teste com "ponteiro".</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+
+size_t meu_strlen(const char *s) {
+    const char *p = s;
+    while (*p)
+        p++;
+    return (size_t) (p - s);  /* distância em elementos */
+}
+
+void inverte(char *s) {
+    char *fim = s + meu_strlen(s);
+    while (s &lt; --fim) {
+        char t = *s;
+        *s++ = *fim;
+        *fim = t;
+    }
+}
+
+int main(void) {
+    char palavra[] = "ponteiro";
+    printf("%zu\n", meu_strlen(palavra));
+    inverte(palavra);
+    printf("%s\n", palavra);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>8
+orietnop</code></pre>
+<p><code>palavra</code> é um vetor (cópia modificável do literal); com <code>char *palavra = "ponteiro"</code> o <code>inverte</code> tentaria escrever num literal. O <code>%zu</code> é o formato de <code>size_t</code>.</p>
+<div class="questao" id="q15">
+<span class="num">Q15</span>
+<div class="corpo">
+<p class="titulo">Contando palavras</p>
+<p>Escreva <code>int conta_palavras(const char *s)</code> que conta palavras separadas por um ou mais espaços, tabs ou quebras de linha, usando <code>isspace</code> de <code>&lt;ctype.h&gt;</code>. Teste com <code>"  uma   frase\tcom\n cinco palavras "</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+int conta_palavras(const char *s) {
+    int n = 0, dentro = 0;
+    for (; *s; s++) {
+        if (isspace((unsigned char) *s)) {
+            dentro = 0;
+        } else if (!dentro) {
+            dentro = 1;  /* início de uma palavra */
+            n++;
+        }
+    }
+    return n;
+}
+
+int main(void) {
+    printf("%d\n", conta_palavras("  uma   frase\tcom\n cinco palavras "));
+    printf("%d\n", conta_palavras(""));
+    return 0;
+}</code></pre>
+<pre class="saida"><code>5
+0</code></pre>
+<p>O cast para <code>unsigned char</code> não é enfeite: as funções de <code>&lt;ctype.h&gt;</code> só aceitam valores de <code>unsigned char</code> ou <code>EOF</code>, e um <code>char</code> com sinal negativo (letras acentuadas em Latin-1, por exemplo) é comportamento indefinido.</p>
+<div class="questao" id="q16">
+<span class="num">Q16</span>
+<div class="corpo">
+<p class="titulo">Argumentos de linha de comando</p>
+<p>Escreva um programa que receba números pela linha de comando e imprima a soma. Argumentos que não forem números inteiros devem ser avisados em <code>stderr</code> e ignorados. Use <code>strtol</code>, não <code>atoi</code>, e diga por quê.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;errno.h&gt;
+
+int main(int argc, char *argv[]) {
+    long soma = 0;
+    for (int i = 1; i &lt; argc; i++) {
+        char *fim;
+        errno = 0;
+        long n = strtol(argv[i], &amp;fim, 10);
+        if (fim == argv[i] || *fim != '\0' || errno == ERANGE) {
+            fprintf(stderr, "ignorado: %s\n", argv[i]);
+            continue;
+        }
+        soma += n;
+    }
+    printf("soma: %ld\n", soma);
+    return 0;
+}</code></pre>
+<p>Executado sem argumentos, o programa imprime:</p>
+<pre class="saida"><code>soma: 0</code></pre>
+<p>Com <code>./soma 10 abc 5 7x 20</code>, a saída é <code>ignorado: abc</code>, <code>ignorado: 7x</code> e <code>soma: 35</code>. O <code>atoi</code> devolve <code>0</code> tanto para <code>"0"</code> quanto para <code>"abc"</code> e não tem como avisar o erro; o <code>strtol</code> informa onde parou (<code>fim</code>) e sinaliza estouro em <code>errno</code>. Testar <code>*fim != '\0'</code> recusa <code>"7x"</code>, que o <code>atoi</code> aceitaria como 7.</p>
+</section>
+<section class="modulo" id="modulo-3">
+<h2><span class="rotulo">MÓDULO 3</span> Memória: pilha, heap e vazamentos</h2>
+<p class="intro">Onde cada coisa vive, alocação dinâmica e a caça aos vazamentos.</p>
+<p class="aulas-titulo">Artigos 11 a 13</p>
+<ul class="aulas">
+<li><span class="n">#11</span> A Pilha e o Heap: Onde Cada Coisa Vive</li>
+<li><span class="n">#12</span> Alocação Dinâmica: malloc, calloc, realloc e free</li>
+<li><span class="n">#13</span> Vazamentos de Memória e Como Caçá-los</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q17">
+<span class="num">Q17</span>
+<div class="corpo">
+<p class="titulo">Pilha ou heap</p>
+<p>Para cada variável, diga onde ela vive e quando deixa de existir: (a) um <code>int</code> local de uma função; (b) uma variável <code>static</code> dentro de uma função; (c) o bloco devolvido por <code>malloc</code>; (d) uma variável global.</p>
+</div>
+</div>
+<ul><li>(a) Na <strong>pilha</strong>: nasce na entrada da função e some no retorno. Devolver o endereço dela é bug.</li><li>(b) Na área de dados estáticos: existe do início ao fim do programa e mantém o valor entre chamadas.</li><li>(c) No <strong>heap</strong>: existe até um <code>free</code>, independentemente da função que alocou.</li><li>(d) Também na área estática, durante toda a execução.</li></ul>
+<div class="questao" id="q18">
+<span class="num">Q18</span>
+<div class="corpo">
+<p class="titulo">realloc sem perder memória</p>
+<p>Por que <code>p = realloc(p, novo_tamanho);</code> é um padrão perigoso? Escreva a forma correta.</p>
+</div>
+</div>
+<p>Se o <code>realloc</code> falhar, ele devolve <code>NULL</code> <strong>e o bloco antigo continua alocado</strong>. Atribuindo direto a <code>p</code>, o único ponteiro para o bloco é sobrescrito: vazamento, e os dados antigos ficam inacessíveis. O certo é usar um temporário:</p>
+<pre class="codigo"><code>int *tmp = realloc(p, novo * sizeof *tmp);
+if (tmp == NULL) {
+    /* p ainda é válido: trate o erro e libere quando for o caso */
+} else {
+    p = tmp;
+}</code></pre>
+<div class="questao" id="q19">
+<span class="num">Q19</span>
+<div class="corpo">
+<p class="titulo">calloc e malloc</p>
+<p>Quais as duas diferenças entre <code>malloc(n * sizeof(int))</code> e <code>calloc(n, sizeof(int))</code>?</p>
+</div>
+</div>
+<p>O <code>calloc</code> <strong>zera</strong> a memória (o <code>malloc</code> a entrega com lixo) e recebe quantidade e tamanho separados, o que permite detectar o estouro da multiplicação <code>n * tamanho</code> e devolver <code>NULL</code> em vez de alocar um bloco menor do que o pedido.</p>
+<div class="questao" id="q20">
+<span class="num">Q20</span>
+<div class="corpo">
+<p class="titulo">Dangling pointer</p>
+<p>O que é um <em>dangling pointer</em>? Dê dois jeitos de criar um e um hábito que reduz o estrago.</p>
+</div>
+</div>
+<p>É um ponteiro que aponta para memória que não é mais válida. Dois jeitos: usar um ponteiro depois do <code>free</code> do bloco (<em>use-after-free</em>) e devolver o endereço de uma variável local. O hábito de fazer <code>p = NULL;</code> logo depois do <code>free(p)</code> transforma um uso posterior num erro imediato e previsível (desreferenciar <code>NULL</code> derruba o programa na hora), em vez de corromper memória silenciosamente. O AddressSanitizer (<code>-fsanitize=address</code>) detecta os dois casos.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q21">
+<span class="num">Q21</span>
+<div class="corpo">
+<p class="titulo">Vetor que cresce</p>
+<p>Implemente um vetor dinâmico de <code>int</code> com <code>push</code> que dobra a capacidade quando enche (comece com capacidade 2). Insira os números de 1 a 10 e mostre a capacidade a cada realocação. Libere tudo no fim.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct {
+    int *dados;
+    size_t tam, cap;
+} Vetor;
+
+int push(Vetor *v, int x) {
+    if (v-&gt;tam == v-&gt;cap) {
+        size_t nova = v-&gt;cap ? v-&gt;cap * 2 : 2;
+        int *tmp = realloc(v-&gt;dados, nova * sizeof *tmp);
+        if (tmp == NULL)
+            return -1;  /* v continua válido */
+        v-&gt;dados = tmp;
+        v-&gt;cap = nova;
+        printf("capacidade: %zu\n", v-&gt;cap);
+    }
+    v-&gt;dados[v-&gt;tam++] = x;
+    return 0;
+}
+
+int main(void) {
+    Vetor v = {0};
+    for (int i = 1; i &lt;= 10; i++)
+        if (push(&amp;v, i) != 0) {
+            fprintf(stderr, "sem memória\n");
+            free(v.dados);
+            return 1;
+        }
+    for (size_t i = 0; i &lt; v.tam; i++)
+        printf("%d ", v.dados[i]);
+    printf("\n");
+    free(v.dados);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>capacidade: 2
+capacidade: 4
+capacidade: 8
+capacidade: 16
+1 2 3 4 5 6 7 8 9 10</code></pre>
+<p>Dobrar a capacidade faz o custo médio de cada <code>push</code> ser constante: as 10 inserções custaram só 4 realocações. <code>realloc(NULL, n)</code> funciona como <code>malloc(n)</code>, por isso o vetor começa zerado (<code>{0}</code>) e não precisa de caso especial.</p>
+<div class="questao" id="q22">
+<span class="num">Q22</span>
+<div class="corpo">
+<p class="titulo">Duplicando uma string</p>
+<p>Escreva <code>char *duplica(const char *s)</code>, equivalente ao <code>strdup</code> (que só entrou no padrão no C23), e um programa que duplica, modifica a cópia e mostra que o original não mudou.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+char *duplica(const char *s) {
+    size_t n = strlen(s) + 1;  /* +1 para o '\0' */
+    char *copia = malloc(n);
+    if (copia != NULL)
+        memcpy(copia, s, n);
+    return copia;
+}
+
+int main(void) {
+    const char *original = "memória";
+    char *copia = duplica(original);
+    if (copia == NULL)
+        return 1;
+    copia[0] = 'M';
+    printf("%s / %s\n", original, copia);
+    free(copia);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>memória / Memória</code></pre>
+<p>O erro clássico é <code>malloc(strlen(s))</code>, sem o <code>+1</code>: a cópia do <code>'\0'</code> escreve um byte fora do bloco. Quem recebe o ponteiro passa a ser dono da memória e precisa fazer o <code>free</code>.</p>
+<div class="questao" id="q23">
+<span class="num">Q23</span>
+<div class="corpo">
+<p class="titulo">Achando o vazamento</p>
+<p>O programa abaixo vaza memória. Encontre os dois vazamentos, corrija e diga qual ferramenta do curso confirmaria a correção.</p>
+<pre class="codigo"><code>#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+char *saudacao(const char *nome) {
+    char *s = malloc(strlen(nome) + 7);
+    strcpy(s, "Olá, ");
+    strcat(s, nome);
+    return s;
+}
+
+int main(void) {
+    for (int i = 0; i &lt; 3; i++) {
+        char *msg = saudacao("Ana");
+        msg = saudacao("Bia");
+        free(msg);
+    }
+    return 0;
+}</code></pre>
+</div>
+</div>
+<p>Os dois vazamentos: em cada volta, o resultado de <code>saudacao("Ana")</code> é perdido quando <code>msg</code> recebe <code>saudacao("Bia")</code>; e o tamanho também está errado, porque <code>"Olá, "</code> tem 6 bytes em UTF-8 (o <code>á</code> ocupa 2) e, somando o <code>'\0'</code>, o <code>+ 7</code> só cabe por sorte. Corrigido:</p>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+char *saudacao(const char *nome) {
+    const char *prefixo = "Olá, ";
+    char *s = malloc(strlen(prefixo) + strlen(nome) + 1);
+    if (s == NULL)
+        return NULL;
+    strcpy(s, prefixo);
+    strcat(s, nome);
+    return s;
+}
+
+int main(void) {
+    for (int i = 0; i &lt; 3; i++) {
+        char *msg = saudacao("Ana");
+        printf("%s\n", msg ? msg : "(sem memória)");
+        free(msg);
+        msg = saudacao("Bia");
+        printf("%s\n", msg ? msg : "(sem memória)");
+        free(msg);
+    }
+    return 0;
+}</code></pre>
+<pre class="saida"><code>Olá, Ana
+Olá, Bia
+Olá, Ana
+Olá, Bia
+Olá, Ana
+Olá, Bia</code></pre>
+<p>Para confirmar: <code>valgrind --leak-check=full ./prog</code> deve terminar com "All heap blocks were freed", ou compilar com <code>-fsanitize=address</code>, cujo LeakSanitizer reporta os blocos perdidos ao fim da execução. Calcular o tamanho com <code>strlen</code> do próprio prefixo evita contar bytes à mão.</p>
+</section>
+<section class="modulo" id="modulo-4">
+<h2><span class="rotulo">MÓDULO 4</span> Tipos próprios, pré-processador e compilação</h2>
+<p class="intro">Structs, unions, enums, typedef, macros, cabeçalhos e classes de armazenamento.</p>
+<p class="aulas-titulo">Artigos 14 a 20</p>
+<ul class="aulas">
+<li><span class="n">#14</span> Structs: Criando Seus Próprios Tipos</li>
+<li><span class="n">#15</span> Ponteiros para Struct e o Operador Seta</li>
+<li><span class="n">#16</span> Unions e Enums: Economia e Clareza</li>
+<li><span class="n">#17</span> typedef e o Design de Tipos Legíveis</li>
+<li><span class="n">#18</span> O Pré-processador: #define, Macros e Inclusões</li>
+<li><span class="n">#19</span> Compilação Separada: Cabeçalhos e Múltiplos Arquivos</li>
+<li><span class="n">#20</span> Classes de Armazenamento: static, extern e o Tempo de Vida</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q24">
+<span class="num">Q24</span>
+<div class="corpo">
+<p class="titulo">Padding em structs</p>
+<p>Por que <code>sizeof</code> de <code>struct { char c; int i; char d; }</code> costuma ser 12 e não 6? Como reordenar os campos para gastar menos?</p>
+</div>
+</div>
+<p>Por <strong>alinhamento</strong>: o processador acessa um <code>int</code> de 4 bytes mais rápido (e algumas arquiteturas só conseguem) num endereço múltiplo de 4. O compilador insere 3 bytes de preenchimento depois de <code>c</code> e mais 3 no fim (para que um vetor dessas structs mantenha cada <code>i</code> alinhado): 1 + 3 + 4 + 1 + 3 = 12. Colocando os campos do maior para o menor, <code>struct { int i; char c; char d; }</code> ocupa 8.</p>
+<div class="questao" id="q25">
+<span class="num">Q25</span>
+<div class="corpo">
+<p class="titulo">union</p>
+<p>O que é uma <code>union</code> e qual o perigo de ler um campo diferente do último escrito? Dê um uso legítimo.</p>
+</div>
+</div>
+<p>Numa <code>union</code> todos os campos ocupam <strong>o mesmo endereço</strong>, e o tamanho é o do maior campo. Só o último campo escrito tem valor significativo; ler outro reinterpreta os bytes (em C isso é permitido para ver a representação, mas o resultado depende da plataforma). O uso legítimo mais comum é a <strong>união etiquetada</strong>: uma <code>struct</code> com um <code>enum</code> dizendo qual campo da <code>union</code> está valendo, como num valor que pode ser número ou texto.</p>
+<div class="questao" id="q26">
+<span class="num">Q26</span>
+<div class="corpo">
+<p class="titulo">Macros com efeito colateral</p>
+<p>Por que <code>#define QUADRADO(x) x * x</code> está errado duas vezes? Corrija e mostre um caso que nem a versão corrigida resolve.</p>
+</div>
+</div>
+<p>Primeiro, falta parêntese: <code>QUADRADO(1 + 2)</code> vira <code>1 + 2 * 1 + 2</code>, que dá 5. Segundo, <code>QUADRADO(a) / QUADRADO(b)</code> também se desarranja sem o parêntese externo. A versão correta é <code>#define QUADRADO(x) ((x) * (x))</code>. Mesmo assim, <code>QUADRADO(i++)</code> incrementa <code>i</code> duas vezes (e sem ponto de sequência entre elas: comportamento indefinido), porque a macro copia o texto do argumento. Uma função <code>static inline</code> não tem esse problema.</p>
+<div class="questao" id="q27">
+<span class="num">Q27</span>
+<div class="corpo">
+<p class="titulo">static e extern</p>
+<p>Explique os dois significados de <code>static</code>: numa variável dentro de uma função e numa função ou variável no escopo do arquivo. E para que serve <code>extern</code>?</p>
+</div>
+</div>
+<p>Dentro de uma função, <code>static</code> muda a <strong>duração</strong>: a variável existe durante todo o programa e guarda o valor entre chamadas. No escopo do arquivo, muda a <strong>ligação</strong>: a função ou variável fica visível só naquele <code>.c</code> (ligação interna), o que evita colisão de nomes entre arquivos. <code>extern</code> declara que uma variável global <strong>existe em outro lugar</strong>; aparece no cabeçalho (<code>extern int contador;</code>), enquanto um único <code>.c</code> faz a definição (<code>int contador = 0;</code>).</p>
+<div class="questao" id="q28">
+<span class="num">Q28</span>
+<div class="corpo">
+<p class="titulo">Include guard</p>
+<p>Para que serve o trecho <code>#ifndef PILHA_H / #define PILHA_H / ... / #endif</code> num cabeçalho? O que acontece sem ele?</p>
+</div>
+</div>
+<p>Impede que o conteúdo do cabeçalho seja processado duas vezes no mesmo arquivo <code>.c</code>, o que acontece quando dois cabeçalhos incluem um terceiro. Sem a guarda, definições como a de uma <code>struct</code> ou de um <code>typedef</code> aparecem duplicadas e a compilação falha com "redefinition". <code>#pragma once</code> faz o mesmo e é aceito por todos os compiladores populares, mas não é padrão.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q29">
+<span class="num">Q29</span>
+<div class="corpo">
+<p class="titulo">Ponto e retângulo</p>
+<p>Defina <code>typedef struct { double x, y; } Ponto;</code> e <code>typedef struct { Ponto canto; double largura, altura; } Retangulo;</code>. Escreva <code>int contem(const Retangulo *r, Ponto p)</code> e teste três pontos, usando o operador seta.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+
+typedef struct { double x, y; } Ponto;
+typedef struct { Ponto canto; double largura, altura; } Retangulo;
+
+int contem(const Retangulo *r, Ponto p) {
+    return p.x &gt;= r-&gt;canto.x &amp;&amp; p.x &lt;= r-&gt;canto.x + r-&gt;largura
+        &amp;&amp; p.y &gt;= r-&gt;canto.y &amp;&amp; p.y &lt;= r-&gt;canto.y + r-&gt;altura;
+}
+
+int main(void) {
+    Retangulo r = { .canto = {0, 0}, .largura = 4, .altura = 2 };
+    Ponto testes[] = { {1, 1}, {4, 2}, {5, 1} };
+    for (int i = 0; i &lt; 3; i++)
+        printf("(%.0f, %.0f): %s\n", testes[i].x, testes[i].y,
+               contem(&amp;r, testes[i]) ? "dentro" : "fora");
+    return 0;
+}</code></pre>
+<pre class="saida"><code>(1, 1): dentro
+(4, 2): dentro
+(5, 1): fora</code></pre>
+<p>A função recebe o retângulo por ponteiro (<code>const</code>, porque só lê) para não copiar a struct a cada chamada, e <code>r-&gt;canto.x</code> é o mesmo que <code>(*r).canto.x</code>. Os inicializadores designados (<code>.largura = 4</code>) deixam claro qual campo recebe qual valor.</p>
+<div class="questao" id="q30">
+<span class="num">Q30</span>
+<div class="corpo">
+<p class="titulo">União etiquetada</p>
+<p>Escreva um tipo <code>Valor</code> que guarda um inteiro <strong>ou</strong> um texto (até 31 caracteres), com um <code>enum</code> dizendo qual. Escreva <code>void imprime(const Valor *v)</code> e teste os dois casos. Mostre também o <code>sizeof</code> do tipo.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+typedef enum { INTEIRO, TEXTO } Tipo;
+
+typedef struct {
+    Tipo tipo;
+    union {
+        long inteiro;
+        char texto[32];
+    };  /* union anônima (C11): acesso direto por v.inteiro */
+} Valor;
+
+void imprime(const Valor *v) {
+    switch (v-&gt;tipo) {
+    case INTEIRO: printf("inteiro: %ld\n", v-&gt;inteiro); break;
+    case TEXTO:   printf("texto: %s\n", v-&gt;texto);      break;
+    }
+}
+
+int main(void) {
+    Valor a = { .tipo = INTEIRO, .inteiro = 42 };
+    Valor b = { .tipo = TEXTO };
+    strncpy(b.texto, "quarenta e dois", sizeof b.texto - 1);
+    imprime(&amp;a);
+    imprime(&amp;b);
+    printf("sizeof(Valor) = %zu\n", sizeof(Valor));
+    return 0;
+}</code></pre>
+<pre class="saida"><code>inteiro: 42
+texto: quarenta e dois
+sizeof(Valor) = 40</code></pre>
+<p>O tamanho é o do <code>enum</code> (4 bytes) mais o maior campo da union (32), já alinhado: 36 não seria múltiplo de 8 (o alinhamento do <code>long</code>), então o compilador arredonda para 40. Sem o <code>switch</code> cobrindo todos os casos do <code>enum</code>, o <code>-Wall</code> avisa (<code>-Wswitch</code>).</p>
+<div class="questao" id="q31">
+<span class="num">Q31</span>
+<div class="corpo">
+<p class="titulo">Contador com static</p>
+<p>Escreva uma função <code>int proximo_id(void)</code> que devolve 1, 2, 3… a cada chamada, sem variável global. Depois explique por que ela não serve, como está, para um programa com várias threads.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+
+int proximo_id(void) {
+    static int ultimo = 0;  /* inicializado uma única vez, vive até o fim do programa */
+    return ++ultimo;
+}
+
+int main(void) {
+    for (int i = 0; i &lt; 3; i++)
+        printf("id %d\n", proximo_id());
+    return 0;
+}</code></pre>
+<pre class="saida"><code>id 1
+id 2
+id 3</code></pre>
+<p>Com threads, duas chamadas simultâneas podem ler o mesmo <code>ultimo</code> antes de qualquer uma gravar e devolver o mesmo id: é uma condição de corrida. A correção é proteger o incremento com um mutex ou usar <code>atomic_int</code> de <code>&lt;stdatomic.h&gt;</code> com <code>atomic_fetch_add</code>.</p>
+<div class="questao" id="q32">
+<span class="num">Q32</span>
+<div class="corpo">
+<p class="titulo">Macro de depuração</p>
+<p>Escreva uma macro <code>LOG(fmt, ...)</code> que imprime em <code>stderr</code> o arquivo, a linha e a mensagem formatada, e que some completamente quando o programa é compilado com <code>-DNDEBUG</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+
+#ifdef NDEBUG
+#define LOG(...) ((void) 0)
+#else
+#define LOG(fmt, ...) fprintf(stderr, "[%s:%d] " fmt "\n", __FILE__, __LINE__ __VA_OPT__(,) __VA_ARGS__)
+#endif
+
+int main(void) {
+    int x = 42;
+    LOG("começou");
+    LOG("x vale %d", x);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>[main.c:11] começou
+[main.c:12] x vale 42</code></pre>
+<p><code>__FILE__</code> e <code>__LINE__</code> são preenchidos pelo pré-processador no ponto de uso, por isso precisa ser macro e não função. O <code>__VA_OPT__(,)</code> (padronizado no C23, aceito por gcc e clang antes disso) só coloca a vírgula quando há argumentos, o que permite <code>LOG("começou")</code>. O <code>((void) 0)</code> mantém <code>LOG(...);</code> válido como comando quando a macro é desligada.</p>
+</section>
+<section class="modulo" id="modulo-5">
+<h2><span class="rotulo">MÓDULO 5</span> Entrada, saída e biblioteca padrão</h2>
+<p class="intro">printf e scanf a fundo, arquivos de texto e binários, stdlib, math, ctype, time e strings.</p>
+<p class="aulas-titulo">Artigos 21 a 25</p>
+<ul class="aulas">
+<li><span class="n">#21</span> Entrada e Saída Formatada: printf e scanf a Fundo</li>
+<li><span class="n">#22</span> Lendo e Gravando Arquivos de Texto</li>
+<li><span class="n">#23</span> Arquivos Binários e Posicionamento no Disco</li>
+<li><span class="n">#24</span> Explorando a Biblioteca Padrão: stdlib, math, ctype, time</li>
+<li><span class="n">#25</span> Manipulação de Strings sem Sofrimento</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q33">
+<span class="num">Q33</span>
+<div class="corpo">
+<p class="titulo">scanf e o '\n' que sobra</p>
+<p>Por que, depois de <code>scanf("%d", &amp;idade);</code>, um <code>fgets(nome, sizeof nome, stdin);</code> parece "pular" a leitura? Como resolver?</p>
+</div>
+</div>
+<p>O <code>scanf("%d")</code> lê o número e para <strong>antes</strong> do <code>'\n'</code> que o usuário digitou com o Enter. O <code>fgets</code> seguinte encontra esse <code>'\n'</code> no buffer e termina na hora, com uma linha vazia. Soluções: ler tudo com <code>fgets</code> e converter com <code>sscanf</code>/<code>strtol</code> (o caminho mais robusto), ou descartar o resto da linha depois do <code>scanf</code> com <code>int c; while ((c = getchar()) != '\n' &amp;&amp; c != EOF);</code>.</p>
+<div class="questao" id="q34">
+<span class="num">Q34</span>
+<div class="corpo">
+<p class="titulo">Modo texto e binário</p>
+<p>Qual a diferença entre abrir um arquivo com <code>"r"</code> e com <code>"rb"</code>? Em que sistema ela aparece de verdade?</p>
+</div>
+</div>
+<p>Em modo texto a biblioteca pode <strong>traduzir</strong> o fim de linha: no Windows, <code>"\r\n"</code> vira <code>'\n'</code> na leitura e o contrário na escrita, e um byte <code>0x1A</code> pode ser tratado como fim de arquivo. Em modo binário os bytes passam sem alteração. No Linux e no macOS os dois modos são idênticos; no Windows, ler um arquivo binário (imagem, struct gravada com <code>fwrite</code>) em modo texto corrompe os dados.</p>
+<div class="questao" id="q35">
+<span class="num">Q35</span>
+<div class="corpo">
+<p class="titulo">feof no lugar errado</p>
+<p>Por que o laço <code>while (!feof(f)) { fgets(linha, sizeof linha, f); ... }</code> costuma processar a última linha duas vezes?</p>
+</div>
+</div>
+<p>Porque <code>feof</code> só fica verdadeiro <strong>depois</strong> que uma leitura tenta passar do fim. Após ler a última linha, <code>feof</code> ainda é falso; o laço roda de novo, o <code>fgets</code> falha (devolve <code>NULL</code> e não altera <code>linha</code>) e o corpo processa o conteúdo antigo outra vez. O certo é testar o retorno da própria leitura: <code>while (fgets(linha, sizeof linha, f) != NULL) { ... }</code>.</p>
+<div class="questao" id="q36">
+<span class="num">Q36</span>
+<div class="corpo">
+<p class="titulo">rand e a semente</p>
+<p>O que faz <code>srand(time(NULL))</code>? Por que chamá-lo dentro de um laço, antes de cada <code>rand()</code>, é um erro?</p>
+</div>
+</div>
+<p>Define a semente do gerador pseudoaleatório a partir do relógio, para que cada execução produza uma sequência diferente. Chamado dentro do laço, ele reinicia o gerador várias vezes no mesmo segundo (<code>time</code> tem resolução de segundos) com a mesma semente, e <code>rand()</code> devolve o mesmo número repetidamente. A semente deve ser definida uma vez, no início do programa. E <code>rand()</code> não serve para nada de segurança, como senhas ou tokens.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q37">
+<span class="num">Q37</span>
+<div class="corpo">
+<p class="titulo">Gravando e lendo texto</p>
+<p>Escreva um programa que grava três linhas <code>nome;nota</code> num arquivo <code>notas.txt</code>, fecha, reabre para leitura e imprime a média, tratando a falha de <code>fopen</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    FILE *f = fopen("notas.txt", "w");
+    if (f == NULL) {
+        perror("notas.txt");
+        return 1;
+    }
+    fprintf(f, "Ana;9.5\nBruno;7.0\nCarla;8.0\n");
+    fclose(f);
+
+    f = fopen("notas.txt", "r");
+    if (f == NULL) {
+        perror("notas.txt");
+        return 1;
+    }
+    char nome[64];
+    double nota, soma = 0;
+    int n = 0;
+    while (fscanf(f, "%63[^;];%lf\n", nome, &amp;nota) == 2) {
+        printf("%-6s %4.1f\n", nome, nota);
+        soma += nota;
+        n++;
+    }
+    fclose(f);
+    if (n &gt; 0)
+        printf("média: %.2f\n", soma / n);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>Ana     9.5
+Bruno   7.0
+Carla   8.0
+média: 8.17</code></pre>
+<p><code>%63[^;]</code> lê até 63 caracteres que não sejam <code>;</code>: o limite impede estourar <code>nome[64]</code>, e o conjunto <code>[^;]</code> é o separador. O laço para quando <code>fscanf</code> não converte os dois campos, o que inclui o fim do arquivo. <code>perror</code> mostra o motivo da falha (<code>No such file or directory</code>, <code>Permission denied</code>).</p>
+<div class="questao" id="q38">
+<span class="num">Q38</span>
+<div class="corpo">
+<p class="titulo">Arquivo binário com fseek</p>
+<p>Grave 5 structs <code>{int id; double preco;}</code> com <code>fwrite</code>, depois leia <strong>só a quarta</strong> usando <code>fseek</code>, sem ler as anteriores. Mostre também o tamanho do arquivo com <code>ftell</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+
+typedef struct { int id; double preco; } Produto;
+
+int main(void) {
+    FILE *f = fopen("produtos.bin", "w+b");
+    if (f == NULL) {
+        perror("produtos.bin");
+        return 1;
+    }
+    for (int i = 1; i &lt;= 5; i++) {
+        Produto p = { i, i * 10.5 };
+        fwrite(&amp;p, sizeof p, 1, f);
+    }
+
+    fseek(f, 0, SEEK_END);
+    printf("tamanho: %ld bytes (%zu por registro)\n", ftell(f), sizeof(Produto));
+
+    Produto quarto;
+    fseek(f, 3 * (long) sizeof(Produto), SEEK_SET);  /* pula 3 registros */
+    if (fread(&amp;quarto, sizeof quarto, 1, f) == 1)
+        printf("quarto: id=%d preço=%.2f\n", quarto.id, quarto.preco);
+    fclose(f);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>tamanho: 80 bytes (16 por registro)
+quarto: id=4 preço=42.00</code></pre>
+<p>Cada registro ocupa 16 bytes, não 12, por causa do alinhamento do <code>double</code>; por isso o deslocamento usa <code>sizeof(Produto)</code>. Um arquivo assim só é lido corretamente por um programa compilado com o mesmo layout de struct e a mesma ordem de bytes: para trocar dados entre máquinas, use um formato de texto ou serialize campo a campo.</p>
+<div class="questao" id="q39">
+<span class="num">Q39</span>
+<div class="corpo">
+<p class="titulo">Estatísticas com math.h</p>
+<p>Escreva um programa que calcula média, desvio padrão (populacional) e mediana do vetor <code>{4, 8, 15, 16, 23, 42}</code>, usando <code>qsort</code> para a mediana e <code>sqrt</code> de <code>&lt;math.h&gt;</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;math.h&gt;
+
+static int compara(const void *a, const void *b) {
+    double x = *(const double *) a, y = *(const double *) b;
+    return (x &gt; y) - (x &lt; y);  /* -1, 0 ou 1, sem o risco de subtrair */
+}
+
+int main(void) {
+    double v[] = {4, 8, 15, 16, 23, 42};
+    size_t n = sizeof v / sizeof v[0];
+
+    double soma = 0;
+    for (size_t i = 0; i &lt; n; i++)
+        soma += v[i];
+    double media = soma / n;
+
+    double quad = 0;
+    for (size_t i = 0; i &lt; n; i++)
+        quad += (v[i] - media) * (v[i] - media);
+    double desvio = sqrt(quad / n);
+
+    qsort(v, n, sizeof v[0], compara);
+    double mediana = n % 2 ? v[n / 2] : (v[n / 2 - 1] + v[n / 2]) / 2;
+
+    printf("média %.2f, desvio %.2f, mediana %.2f\n", media, desvio, mediana);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>média 18.00, desvio 12.32, mediana 15.50</code></pre>
+<p>No Linux, as funções de <code>&lt;math.h&gt;</code> ficam na <code>libm</code>, por isso o <code>-lm</code> no fim da linha do gcc. A comparação <code>(x &gt; y) - (x &lt; y)</code> evita o <code>return x - y</code>, que com <code>double</code> seria convertido para <code>int</code> e daria resultados errados para diferenças menores que 1.</p>
+<div class="questao" id="q40">
+<span class="num">Q40</span>
+<div class="corpo">
+<p class="titulo">Texto em maiúsculas e sem espaços duplicados</p>
+<p>Escreva <code>void normaliza(char *s)</code> que, no próprio vetor, converte para maiúsculas, remove espaços do início e do fim e reduz espaços repetidos a um só. Teste com <code>"   olá   mundo  em  C   "</code> e explique o que acontece com o <code>á</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+void normaliza(char *s) {
+    char *escrita = s;
+    int espaco = 0;
+    for (char *leitura = s; *leitura; leitura++) {
+        unsigned char c = (unsigned char) *leitura;
+        if (isspace(c)) {
+            espaco = (escrita != s);  /* ignora espaços antes da primeira palavra */
+            continue;
+        }
+        if (espaco) {
+            *escrita++ = ' ';
+            espaco = 0;
+        }
+        *escrita++ = (char) toupper(c);
+    }
+    *escrita = '\0';  /* espaços do fim nunca são escritos */
+}
+
+int main(void) {
+    char s[] = "   olá   mundo  em  C   ";
+    normaliza(s);
+    printf("[%s]\n", s);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>[OLá MUNDO EM C]</code></pre>
+<p>A técnica de dois ponteiros (um lê, outro escreve) faz tudo numa passada, sem vetor auxiliar. O <code>á</code> não vira <code>Á</code>: em UTF-8 ele ocupa dois bytes, e <code>toupper</code> trabalha byte a byte no locale "C", que só conhece ASCII. Converter acentos exige tratar o texto como caracteres largos (<code>wchar_t</code>, <code>towupper</code>) com um locale UTF-8 configurado por <code>setlocale</code>.</p>
+</section>
+<section class="modulo" id="modulo-6">
+<h2><span class="rotulo">MÓDULO 6</span> Ponteiros para função, recursão e bits</h2>
+<p class="intro">Comportamento como argumento, qsort e bsearch, recursão, máscaras e campos de bits.</p>
+<p class="aulas-titulo">Artigos 26 a 30</p>
+<ul class="aulas">
+<li><span class="n">#26</span> Ponteiros para Função: Passando Comportamento como Argumento</li>
+<li><span class="n">#27</span> qsort e bsearch: Ordenando e Buscando com a Biblioteca</li>
+<li><span class="n">#28</span> Recursão: Quando uma Função Chama a Si Mesma</li>
+<li><span class="n">#29</span> Manipulação de Bits e Máscaras</li>
+<li><span class="n">#30</span> Campos de Bits e Estruturas Compactas</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q41">
+<span class="num">Q41</span>
+<div class="corpo">
+<p class="titulo">Lendo declarações</p>
+<p>Explique em palavras o que declara cada linha: (a) <code>int (*f)(int, int);</code> (b) <code>int *g(int, int);</code> (c) <code>void (*tabela[3])(void);</code></p>
+</div>
+</div>
+<ul><li>(a) <code>f</code> é um <strong>ponteiro para função</strong> que recebe dois <code>int</code> e devolve <code>int</code>.</li><li>(b) <code>g</code> é uma <strong>função</strong> que recebe dois <code>int</code> e devolve um ponteiro para <code>int</code>.</li><li>(c) <code>tabela</code> é um vetor de 3 ponteiros para funções sem parâmetros e sem retorno: uma tabela de despacho.</li></ul>
+<p>Os parênteses em (a) mudam tudo: sem eles, o <code>*</code> se prende ao tipo de retorno, como em (b). Um <code>typedef int (*Operacao)(int, int);</code> deixa esse tipo de código muito mais legível.</p>
+<div class="questao" id="q42">
+<span class="num">Q42</span>
+<div class="corpo">
+<p class="titulo">Recursão e a pilha</p>
+<p>O que é estouro de pilha (<em>stack overflow</em>) numa função recursiva? O que é recursão de cauda e por que o padrão C não garante que ela economize pilha?</p>
+</div>
+</div>
+<p>Cada chamada guarda parâmetros, variáveis locais e o endereço de retorno num quadro da pilha; uma recursão profunda demais (ou sem caso base) esgota a pilha, de alguns megabytes, e o sistema derruba o programa. Na recursão de cauda, a chamada recursiva é a <strong>última</strong> coisa que a função faz, e o compilador <strong>pode</strong> reaproveitar o quadro atual, transformando a recursão num laço. O padrão C não obriga essa otimização: o gcc e o clang a fazem com <code>-O2</code>, mas não sem otimização. Código que depende dela para não estourar a pilha deve virar laço explícito.</p>
+<div class="questao" id="q43">
+<span class="num">Q43</span>
+<div class="corpo">
+<p class="titulo">Operações com bits</p>
+<p>Escreva as expressões para, num <code>unsigned</code> chamado <code>flags</code>: ligar o bit 3, desligar o bit 5, inverter o bit 0 e testar se o bit 7 está ligado. Por que usar tipos sem sinal para isso?</p>
+</div>
+</div>
+<ul><li>Ligar o bit 3: <code>flags |= 1u &lt;&lt; 3;</code></li><li>Desligar o bit 5: <code>flags &amp;= ~(1u &lt;&lt; 5);</code></li><li>Inverter o bit 0: <code>flags ^= 1u &lt;&lt; 0;</code></li><li>Testar o bit 7: <code>if (flags &amp; (1u &lt;&lt; 7))</code></li></ul>
+<p>Com tipos sem sinal, os deslocamentos e o <code>~</code> têm comportamento totalmente definido. Com sinal, deslocar um 1 para o bit de sinal (<code>1 &lt;&lt; 31</code> num <code>int</code> de 32 bits) é comportamento indefinido, e deslocar negativos para a direita depende da implementação. Por isso o sufixo <code>u</code> em <code>1u</code>.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q44">
+<span class="num">Q44</span>
+<div class="corpo">
+<p class="titulo">Ordenando structs com qsort</p>
+<p>Ordene um vetor de alunos <code>{nome, nota}</code> por nota decrescente e, em caso de empate, por nome em ordem alfabética. Depois use <code>bsearch</code> num vetor de inteiros ordenado para achar o 23.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+typedef struct { const char *nome; double nota; } Aluno;
+
+static int por_nota(const void *a, const void *b) {
+    const Aluno *x = a, *y = b;
+    if (x-&gt;nota != y-&gt;nota)
+        return (y-&gt;nota &gt; x-&gt;nota) - (y-&gt;nota &lt; x-&gt;nota);  /* decrescente */
+    return strcmp(x-&gt;nome, y-&gt;nome);
+}
+
+static int por_int(const void *a, const void *b) {
+    int x = *(const int *) a, y = *(const int *) b;
+    return (x &gt; y) - (x &lt; y);
+}
+
+int main(void) {
+    Aluno turma[] = { {"Davi", 8.5}, {"Ana", 9.0}, {"Caio", 8.5}, {"Bia", 7.0} };
+    size_t n = sizeof turma / sizeof turma[0];
+    qsort(turma, n, sizeof turma[0], por_nota);
+    for (size_t i = 0; i &lt; n; i++)
+        printf("%-5s %.1f\n", turma[i].nome, turma[i].nota);
+
+    int v[] = {4, 8, 15, 16, 23, 42};
+    int chave = 23;
+    int *achou = bsearch(&amp;chave, v, 6, sizeof v[0], por_int);
+    if (achou)
+        printf("23 está no índice %td\n", achou - v);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>Ana   9.0
+Caio  8.5
+Davi  8.5
+Bia   7.0
+23 está no índice 4</code></pre>
+<p>O <code>qsort</code> não sabe nada sobre <code>Aluno</code>: recebe a função de comparação como argumento e a chama com ponteiros genéricos (<code>const void *</code>). O <code>bsearch</code> só funciona num vetor já ordenado pelo mesmo critério da comparação; <code>%td</code> é o formato de <code>ptrdiff_t</code>, o tipo da subtração de ponteiros.</p>
+<div class="questao" id="q45">
+<span class="num">Q45</span>
+<div class="corpo">
+<p class="titulo">Calculadora com tabela de funções</p>
+<p>Escreva uma tabela que associa os caracteres <code>+ - * /</code> a funções <code>double f(double, double)</code> e um laço que aplica cada operação a 12 e 4, procurando a função pelo símbolo.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+
+typedef double (*Operacao)(double, double);
+
+static double soma(double a, double b) { return a + b; }
+static double sub(double a, double b)  { return a - b; }
+static double mul(double a, double b)  { return a * b; }
+static double divi(double a, double b) { return a / b; }
+
+static const struct { char simbolo; Operacao f; } tabela[] = {
+    {'+', soma}, {'-', sub}, {'*', mul}, {'/', divi},
+};
+
+static Operacao busca(char simbolo) {
+    for (size_t i = 0; i &lt; sizeof tabela / sizeof tabela[0]; i++)
+        if (tabela[i].simbolo == simbolo)
+            return tabela[i].f;
+    return NULL;
+}
+
+int main(void) {
+    const char *ops = "+-*/%";
+    for (const char *p = ops; *p; p++) {
+        Operacao f = busca(*p);
+        if (f)
+            printf("12 %c 4 = %g\n", *p, f(12, 4));
+        else
+            printf("operação %c desconhecida\n", *p);
+    }
+    return 0;
+}</code></pre>
+<pre class="saida"><code>12 + 4 = 16
+12 - 4 = 8
+12 * 4 = 48
+12 / 4 = 3
+operação % desconhecida</code></pre>
+<p>Acrescentar uma operação é acrescentar uma linha na tabela, sem mexer na lógica de busca nem num <code>switch</code>. O <code>typedef</code> dá nome ao tipo "ponteiro para função de dois <code>double</code>", que de outro modo apareceria escrito por extenso em três lugares.</p>
+<div class="questao" id="q46">
+<span class="num">Q46</span>
+<div class="corpo">
+<p class="titulo">Torres de Hanói</p>
+<p>Escreva a solução recursiva das Torres de Hanói que imprime os movimentos para 3 discos e conta quantos foram. Quantos movimentos são necessários para n discos?</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+
+static int movimentos = 0;
+
+void hanoi(int n, char origem, char destino, char auxiliar) {
+    if (n == 0)
+        return;  /* caso base */
+    hanoi(n - 1, origem, auxiliar, destino);
+    printf("disco %d: %c -&gt; %c\n", n, origem, destino);
+    movimentos++;
+    hanoi(n - 1, auxiliar, destino, origem);
+}
+
+int main(void) {
+    hanoi(3, 'A', 'C', 'B');
+    printf("total: %d movimentos\n", movimentos);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>disco 1: A -&gt; C
+disco 2: A -&gt; B
+disco 1: C -&gt; B
+disco 3: A -&gt; C
+disco 1: B -&gt; A
+disco 2: B -&gt; C
+disco 1: A -&gt; C
+total: 7 movimentos</code></pre>
+<p>Para mover n discos é preciso mover n−1 para o pino auxiliar, mover o maior e trazer os n−1 de volta: M(n) = 2·M(n−1) + 1, o que dá <strong>2ⁿ − 1</strong> movimentos. Com 64 discos, seriam mais de 18 quintilhões.</p>
+<div class="questao" id="q47">
+<span class="num">Q47</span>
+<div class="corpo">
+<p class="titulo">Contando bits e testando potência de 2</p>
+<p>Escreva <code>int conta_bits(unsigned x)</code> com o truque <code>x &amp;= x - 1</code> e <code>int potencia_de_2(unsigned x)</code>. Mostre os resultados para 0, 1, 12, 64 e 255, e explique o truque.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+
+int conta_bits(unsigned x) {
+    int n = 0;
+    while (x) {
+        x &amp;= x - 1;  /* apaga o bit 1 mais baixo */
+        n++;
+    }
+    return n;
+}
+
+int potencia_de_2(unsigned x) {
+    return x != 0 &amp;&amp; (x &amp; (x - 1)) == 0;
+}
+
+int main(void) {
+    unsigned testes[] = {0, 1, 12, 64, 255};
+    for (int i = 0; i &lt; 5; i++)
+        printf("%3u: %d bits ligados, %s\n", testes[i], conta_bits(testes[i]),
+               potencia_de_2(testes[i]) ? "potência de 2" : "não é potência de 2");
+    return 0;
+}</code></pre>
+<pre class="saida"><code>  0: 0 bits ligados, não é potência de 2
+  1: 1 bits ligados, potência de 2
+ 12: 2 bits ligados, não é potência de 2
+ 64: 1 bits ligados, potência de 2
+255: 8 bits ligados, não é potência de 2</code></pre>
+<p>Subtrair 1 troca o bit 1 mais baixo por 0 e todos os zeros abaixo dele por 1; o <code>&amp;</code> com o valor original apaga exatamente esse bit. O laço roda uma vez por bit ligado, não por bit do tipo. Uma potência de 2 tem um único bit ligado, então <code>x &amp; (x - 1)</code> dá zero. O gcc e o clang oferecem <code>__builtin_popcount</code>, que vira uma única instrução nos processadores modernos.</p>
+</section>
+<section class="modulo" id="modulo-7">
+<h2><span class="rotulo">MÓDULO 7</span> Estruturas de dados</h2>
+<p class="intro">Listas simples, duplas e circulares, pilhas, filas, árvores de busca e tabelas hash.</p>
+<p class="aulas-titulo">Artigos 31 a 35</p>
+<ul class="aulas">
+<li><span class="n">#31</span> Listas Encadeadas: A Estrutura que Só Existe com Ponteiros</li>
+<li><span class="n">#32</span> Listas Duplamente Encadeadas e Circulares</li>
+<li><span class="n">#33</span> Pilhas e Filas na Prática</li>
+<li><span class="n">#34</span> Árvores Binárias de Busca</li>
+<li><span class="n">#35</span> Tabelas Hash: Busca em Tempo Constante</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q48">
+<span class="num">Q48</span>
+<div class="corpo">
+<p class="titulo">Lista ou vetor</p>
+<p>Compare lista encadeada e vetor dinâmico em: acesso ao i-ésimo elemento, inserção no início, uso de memória e aproveitamento do cache do processador. Quando a lista ganha?</p>
+</div>
+</div>
+<ul><li><strong>Acesso por índice</strong>: vetor O(1); lista O(n), porque precisa percorrer os nós.</li><li><strong>Inserção no início</strong>: lista O(1) (só ajusta ponteiros); vetor O(n), porque desloca todos os elementos.</li><li><strong>Memória</strong>: a lista gasta um ou dois ponteiros por nó, além do custo de cada <code>malloc</code>.</li><li><strong>Cache</strong>: o vetor é contíguo e muito mais rápido de percorrer; os nós da lista ficam espalhados pelo heap.</li></ul>
+<p>A lista ganha quando há muitas inserções e remoções no meio <strong>a partir de um nó que já se tem em mãos</strong>, ou quando os elementos não podem mudar de endereço. Na maioria dos outros casos, o vetor é mais rápido mesmo nas operações em que a teoria favorece a lista.</p>
+<div class="questao" id="q49">
+<span class="num">Q49</span>
+<div class="corpo">
+<p class="titulo">Árvore desbalanceada</p>
+<p>Em que ordem de inserção uma árvore binária de busca vira uma "lista"? Qual o custo da busca nesse caso e que tipos de árvore evitam o problema?</p>
+</div>
+</div>
+<p>Inserindo os valores <strong>já ordenados</strong> (1, 2, 3, 4…) ou em ordem decrescente: cada novo nó vira filho direito (ou esquerdo) do anterior, e a altura passa a ser n. A busca cai de O(log n) para O(n). Árvores autobalanceadas, como a AVL e a rubro-negra, fazem rotações a cada inserção e remoção para manter a altura em O(log n).</p>
+<div class="questao" id="q50">
+<span class="num">Q50</span>
+<div class="corpo">
+<p class="titulo">Colisões numa tabela hash</p>
+<p>O que é uma colisão numa tabela hash? Explique o encadeamento separado e diga o que é o fator de carga e por que ele importa.</p>
+</div>
+</div>
+<p>Colisão é quando duas chaves diferentes caem no mesmo índice da tabela. No <strong>encadeamento separado</strong>, cada posição guarda uma lista com todas as chaves daquele índice. O <strong>fator de carga</strong> é o número de elementos dividido pelo número de posições: quanto maior, mais longas as listas e mais lenta a busca. Por isso as implementações redimensionam a tabela (dobram o tamanho e reinserem tudo) quando o fator passa de um limite, em torno de 0,75.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q51">
+<span class="num">Q51</span>
+<div class="corpo">
+<p class="titulo">Lista encadeada com inversão</p>
+<p>Implemente uma lista simplesmente encadeada de <code>int</code> com <code>insere_inicio</code>, <code>imprime</code>, <code>inverte</code> (no lugar, sem alocar nós) e <code>libera</code>. Teste inserindo 1, 2, 3 e 4.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct No {
+    int valor;
+    struct No *prox;
+} No;
+
+int insere_inicio(No **lista, int valor) {
+    No *novo = malloc(sizeof *novo);
+    if (novo == NULL)
+        return -1;
+    novo-&gt;valor = valor;
+    novo-&gt;prox = *lista;
+    *lista = novo;  /* ponteiro para ponteiro: muda a cabeça da lista de quem chamou */
+    return 0;
+}
+
+void imprime(const No *p) {
+    for (; p; p = p-&gt;prox)
+        printf("%d -&gt; ", p-&gt;valor);
+    printf("NULL\n");
+}
+
+No *inverte(No *p) {
+    No *anterior = NULL;
+    while (p) {
+        No *prox = p-&gt;prox;
+        p-&gt;prox = anterior;
+        anterior = p;
+        p = prox;
+    }
+    return anterior;
+}
+
+void libera(No *p) {
+    while (p) {
+        No *prox = p-&gt;prox;  /* guarda antes do free */
+        free(p);
+        p = prox;
+    }
+}
+
+int main(void) {
+    No *lista = NULL;
+    for (int i = 1; i &lt;= 4; i++)
+        insere_inicio(&amp;lista, i);
+    imprime(lista);
+    lista = inverte(lista);
+    imprime(lista);
+    libera(lista);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>4 -&gt; 3 -&gt; 2 -&gt; 1 -&gt; NULL
+1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; NULL</code></pre>
+<p><code>insere_inicio</code> recebe <code>No **</code> porque precisa alterar o ponteiro da cabeça que pertence ao <code>main</code>. Em <code>libera</code>, ler <code>p-&gt;prox</code> depois do <code>free(p)</code> seria <em>use-after-free</em>; por isso o próximo é guardado antes.</p>
+<div class="questao" id="q52">
+<span class="num">Q52</span>
+<div class="corpo">
+<p class="titulo">Verificando expressões com uma pilha</p>
+<p>Usando uma pilha (vetor e índice de topo), escreva <code>int balanceado(const char *s)</code> que verifica se <code>()</code>, <code>[]</code> e <code>{}</code> estão corretamente aninhados. Teste com quatro expressões.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+
+int balanceado(const char *s) {
+    char pilha[256];
+    int topo = 0;
+    for (; *s; s++) {
+        switch (*s) {
+        case '(': case '[': case '{':
+            if (topo == (int) sizeof pilha)
+                return 0;  /* aninhamento fundo demais para a pilha */
+            pilha[topo++] = *s;
+            break;
+        case ')': case ']': case '}': {
+            char esperado = *s == ')' ? '(' : *s == ']' ? '[' : '{';
+            if (topo == 0 || pilha[--topo] != esperado)
+                return 0;
+            break;
+        }
+        }
+    }
+    return topo == 0;  /* sobrou abertura sem fechamento? */
+}
+
+int main(void) {
+    const char *testes[] = { "{a[b(c)d]e}", "(a[b)c]", "((x)", "x + y" };
+    for (int i = 0; i &lt; 4; i++)
+        printf("%-16s %s\n", testes[i], balanceado(testes[i]) ? "ok" : "desbalanceado");
+    return 0;
+}</code></pre>
+<pre class="saida"><code>{a[b(c)d]e}      ok
+(a[b)c]          desbalanceado
+((x)             desbalanceado
+x + y            ok</code></pre>
+<p>Cada fechamento precisa casar com a abertura <strong>mais recente</strong>, que é exatamente o topo da pilha. Os três casos de falha são: fechar com a pilha vazia, fechar com o tipo errado e terminar com aberturas pendentes.</p>
+<div class="questao" id="q53">
+<span class="num">Q53</span>
+<div class="corpo">
+<p class="titulo">Árvore binária de busca</p>
+<p>Implemente uma BST de inteiros com <code>insere</code>, <code>busca</code>, percurso em ordem e <code>altura</code>. Insira 50, 30, 70, 20, 40, 60, 80 e mostre a altura; depois mostre a altura inserindo de 1 a 7 em ordem.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct No { int v; struct No *esq, *dir; } No;
+
+No *insere(No *r, int v) {
+    if (r == NULL) {
+        No *n = calloc(1, sizeof *n);
+        if (n)
+            n-&gt;v = v;
+        return n;
+    }
+    if (v &lt; r-&gt;v)
+        r-&gt;esq = insere(r-&gt;esq, v);
+    else if (v &gt; r-&gt;v)
+        r-&gt;dir = insere(r-&gt;dir, v);
+    return r;  /* valor repetido: ignorado */
+}
+
+int busca(const No *r, int v) {
+    while (r &amp;&amp; r-&gt;v != v)
+        r = v &lt; r-&gt;v ? r-&gt;esq : r-&gt;dir;
+    return r != NULL;
+}
+
+void em_ordem(const No *r) {
+    if (!r) return;
+    em_ordem(r-&gt;esq);
+    printf("%d ", r-&gt;v);
+    em_ordem(r-&gt;dir);
+}
+
+int altura(const No *r) {
+    if (!r) return 0;
+    int e = altura(r-&gt;esq), d = altura(r-&gt;dir);
+    return 1 + (e &gt; d ? e : d);
+}
+
+void libera(No *r) {
+    if (!r) return;
+    libera(r-&gt;esq);
+    libera(r-&gt;dir);
+    free(r);
+}
+
+int main(void) {
+    int valores[] = {50, 30, 70, 20, 40, 60, 80};
+    No *a = NULL, *b = NULL;
+    for (int i = 0; i &lt; 7; i++) {
+        a = insere(a, valores[i]);
+        b = insere(b, i + 1);
+    }
+    em_ordem(a);
+    printf("\nbusca 60: %d, busca 65: %d\n", busca(a, 60), busca(a, 65));
+    printf("altura (ordem misturada): %d\n", altura(a));
+    printf("altura (1 a 7 em ordem):  %d\n", altura(b));
+    libera(a);
+    libera(b);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>20 30 40 50 60 70 80
+busca 60: 1, busca 65: 0
+altura (ordem misturada): 3
+altura (1 a 7 em ordem):  7</code></pre>
+<p>O percurso em ordem sai ordenado pela própria definição da BST. Com os mesmos 7 valores, a árvore pode ter altura 3 (balanceada) ou 7 (uma lista), e a busca custa proporcionalmente à altura.</p>
+<div class="questao" id="q54">
+<span class="num">Q54</span>
+<div class="corpo">
+<p class="titulo">Tabela hash de contagem de palavras</p>
+<p>Implemente uma tabela hash com encadeamento (31 posições, função djb2) que conta quantas vezes cada palavra aparece em "o rato roeu a roupa do rei de roma e o rei riu do rato". Imprima as palavras que aparecem mais de uma vez.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define TAM 31
+
+typedef struct Entrada {
+    char *palavra;
+    int conta;
+    struct Entrada *prox;
+} Entrada;
+
+static unsigned long djb2(const char *s) {
+    unsigned long h = 5381;
+    for (; *s; s++)
+        h = h * 33 + (unsigned char) *s;
+    return h;
+}
+
+static int conta(Entrada *tabela[], const char *palavra) {
+    unsigned long i = djb2(palavra) % TAM;
+    for (Entrada *e = tabela[i]; e; e = e-&gt;prox)
+        if (strcmp(e-&gt;palavra, palavra) == 0)
+            return ++e-&gt;conta;
+    Entrada *nova = malloc(sizeof *nova);
+    if (!nova || !(nova-&gt;palavra = malloc(strlen(palavra) + 1))) {
+        free(nova);
+        return -1;
+    }
+    strcpy(nova-&gt;palavra, palavra);
+    nova-&gt;conta = 1;
+    nova-&gt;prox = tabela[i];
+    tabela[i] = nova;
+    return 1;
+}
+
+int main(void) {
+    char texto[] = "o rato roeu a roupa do rei de roma e o rei riu do rato";
+    Entrada *tabela[TAM] = {0};
+    for (char *p = strtok(texto, " "); p; p = strtok(NULL, " "))
+        if (conta(tabela, p) &lt; 0)
+            return 1;
+
+    for (int i = 0; i &lt; TAM; i++)
+        for (Entrada *e = tabela[i]; e; e = e-&gt;prox)
+            if (e-&gt;conta &gt; 1)
+                printf("%s: %d\n", e-&gt;palavra, e-&gt;conta);
+
+    for (int i = 0; i &lt; TAM; i++)
+        for (Entrada *e = tabela[i], *prox; e; e = prox) {
+            prox = e-&gt;prox;
+            free(e-&gt;palavra);
+            free(e);
+        }
+    return 0;
+}</code></pre>
+<pre class="saida"><code>rei: 2
+rato: 2
+do: 2
+o: 2</code></pre>
+<p>A ordem da saída é a ordem dos índices da tabela, não a alfabética nem a de aparição: uma tabela hash não guarda ordem. O <code>strtok</code> modifica a string (troca os espaços por <code>'\0'</code>), por isso <code>texto</code> é um vetor e não um ponteiro para literal; ele também não é seguro com threads (há <code>strtok_r</code> no POSIX).</p>
+</section>
+<section class="modulo" id="modulo-8">
+<h2><span class="rotulo">MÓDULO 8</span> Ferramentas, qualidade e comportamento indefinido</h2>
+<p class="intro">GDB, Valgrind, sanitizers, Make, CMake, UB, errno, testes, código limpo e desempenho.</p>
+<p class="aulas-titulo">Artigos 36 a 46</p>
+<ul class="aulas">
+<li><span class="n">#36</span> Depurando de Verdade com o GDB</li>
+<li><span class="n">#37</span> Caçando Bugs de Memória com Valgrind e Sanitizers</li>
+<li><span class="n">#38</span> Automação de Build com Make</li>
+<li><span class="n">#39</span> Projetos Maiores com CMake</li>
+<li><span class="n">#40</span> Undefined Behavior: O Território Perigoso do C</li>
+<li><span class="n">#41</span> Tratamento de Erros Idiomático: errno e Códigos de Retorno</li>
+<li><span class="n">#42</span> Testes Automatizados em C</li>
+<li><span class="n">#43</span> Código Limpo em C: Nomes, Funções e Legibilidade</li>
+<li><span class="n">#44</span> Programação Defensiva e Contratos</li>
+<li><span class="n">#45</span> Organização de Projetos e Convenções da Comunidade</li>
+<li><span class="n">#46</span> Otimização Consciente e Noções de Desempenho</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q55">
+<span class="num">Q55</span>
+<div class="corpo">
+<p class="titulo">Comportamento indefinido</p>
+<p>O que é comportamento indefinido (UB)? Por que "no meu computador funciona" não prova nada? Cite três exemplos.</p>
+</div>
+</div>
+<p>É uma construção para a qual o padrão <strong>não impõe nenhum requisito</strong>: o programa pode funcionar, travar, dar resultado errado ou mudar de comportamento com outro compilador, outra flag de otimização ou outra versão. O otimizador parte do princípio de que UB nunca acontece e pode remover código com base nisso, então o mesmo programa que "funciona" com <code>-O0</code> quebra com <code>-O2</code>. Exemplos: estouro de <code>int</code> com sinal, acesso fora dos limites de um vetor, desreferenciar <code>NULL</code> ou um ponteiro liberado, ler variável não inicializada, modificar a mesma variável duas vezes sem ponto de sequência (<code>i = i++</code>).</p>
+<div class="questao" id="q56">
+<span class="num">Q56</span>
+<div class="corpo">
+<p class="titulo">Sanitizers ou Valgrind</p>
+<p>Qual a diferença de funcionamento entre o AddressSanitizer e o Valgrind? Cite uma vantagem de cada.</p>
+</div>
+</div>
+<p>O <strong>AddressSanitizer</strong> é ativado na compilação (<code>-fsanitize=address</code>): o compilador instrumenta cada acesso à memória. É rápido (o programa fica cerca de 2 vezes mais lento) e pega estouros na pilha e em variáveis globais. O <strong>Valgrind</strong> executa o binário já pronto numa máquina virtual que observa cada instrução: não exige recompilar e detecta leitura de memória não inicializada (no sanitizer isso é o MemorySanitizer, só no clang), mas deixa o programa de 20 a 50 vezes mais lento. Os dois não devem ser usados juntos no mesmo binário.</p>
+<div class="questao" id="q57">
+<span class="num">Q57</span>
+<div class="corpo">
+<p class="titulo">O que o make sabe</p>
+<p>Como o <code>make</code> decide o que recompilar? O que acontece se o <code>Makefile</code> não declarar que <code>main.o</code> depende de <code>pilha.h</code>?</p>
+</div>
+</div>
+<p>Pela <strong>data de modificação</strong>: um alvo é refeito se não existir ou se algum pré-requisito listado for mais novo que ele. Se <code>pilha.h</code> não estiver entre os pré-requisitos de <code>main.o</code>, mudar o cabeçalho não recompila <code>main.c</code>, e o executável pode misturar um <code>main.o</code> com o layout antigo de uma struct e um <code>pilha.o</code> com o novo: um bug difícil de entender. As flags <code>-MMD -MP</code> fazem o compilador gerar essas dependências automaticamente.</p>
+<div class="questao" id="q58">
+<span class="num">Q58</span>
+<div class="corpo">
+<p class="titulo">errno</p>
+<p>Como funciona o <code>errno</code>? Por que é errado testar <code>errno</code> sem antes verificar o valor de retorno da função?</p>
+</div>
+</div>
+<p><code>errno</code> é um valor por thread que as funções da biblioteca ajustam quando <strong>falham</strong>, com códigos como <code>ENOENT</code> ou <code>EACCES</code> (<code>strerror(errno)</code> e <code>perror</code> dão a mensagem). Mas uma função bem-sucedida pode deixar <code>errno</code> com qualquer valor, inclusive o de uma falha interna já resolvida. Por isso o protocolo é: primeiro olhar o retorno (<code>NULL</code>, <code>-1</code>, <code>EOF</code>), só então consultar <code>errno</code>. A exceção são funções como <code>strtol</code>, que não têm valor de retorno de erro: nelas se zera o <code>errno</code> antes da chamada e se testa depois.</p>
+<div class="questao" id="q59">
+<span class="num">Q59</span>
+<div class="corpo">
+<p class="titulo">assert não é tratamento de erro</p>
+<p>Para que serve o <code>assert</code>? Por que é errado usá-lo para validar a entrada do usuário ou o retorno de <code>malloc</code>?</p>
+</div>
+</div>
+<p><code>assert(condicao)</code> documenta e verifica uma <strong>premissa do programador</strong>, algo que só falha se houver bug: um índice dentro dos limites, um ponteiro que nunca deveria ser <code>NULL</code>. Se a condição for falsa, o programa aborta mostrando arquivo e linha. Só que compilar com <code>-DNDEBUG</code>, como se faz em versões de produção, <strong>remove</strong> todos os <code>assert</code>. Entrada inválida e falta de memória são situações esperadas em produção; precisam de um <code>if</code> com tratamento de verdade, senão a validação some exatamente quando é mais necessária.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q60">
+<span class="num">Q60</span>
+<div class="corpo">
+<p class="titulo">Estouro detectado</p>
+<p>O código abaixo calcula a média de dois <code>int</code> e falha para valores grandes. Explique o problema e escreva uma versão que nunca estoura. Teste com <code>INT_MAX</code> e <code>INT_MAX - 2</code>.</p>
+<pre class="codigo"><code>int media(int a, int b) { return (a + b) / 2; }</code></pre>
+</div>
+</div>
+<p><code>a + b</code> pode passar de <code>INT_MAX</code>, e estouro de <code>int</code> com sinal é comportamento indefinido; na prática costuma dar a volta e virar negativo. Duas saídas: fazer a soma num tipo maior ou somar a metade da diferença ao menor.</p>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+
+int media(int a, int b) {
+    return (int) (((long long) a + b) / 2);  /* a soma cabe com folga em long long */
+}
+
+int media_sem_tipo_maior(int a, int b) {
+    if (a &gt; b) { int t = a; a = b; b = t; }
+    return a + (b - a) / 2;  /* b - a não estoura quando a &lt;= b e os dois têm o mesmo sinal */
+}
+
+int main(void) {
+    printf("%d\n", media(INT_MAX, INT_MAX - 2));
+    printf("%d\n", media_sem_tipo_maior(INT_MAX, INT_MAX - 2));
+    printf("%d\n", media(-7, 2));
+    return 0;
+}</code></pre>
+<pre class="saida"><code>2147483646
+2147483646
+-2</code></pre>
+<p>A segunda versão tem uma restrição: com sinais opostos e valores extremos (<code>INT_MIN</code> e <code>INT_MAX</code>), <code>b - a</code> estoura. A versão com <code>long long</code> é a mais simples de acertar. Compilar com <code>-fsanitize=undefined</code> faz o programa avisar, em tempo de execução, quando um estouro de verdade acontece.</p>
+<div class="questao" id="q61">
+<span class="num">Q61</span>
+<div class="corpo">
+<p class="titulo">Erros por código de retorno</p>
+<p>Escreva <code>int le_inteiro(const char *texto, int *saida)</code> que devolve 0 em caso de sucesso e códigos de erro distintos para "vazio", "não é número", "sobra texto" e "fora do intervalo de int". Escreva um <code>main</code> que testa cinco entradas e mostra a mensagem de cada erro.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;limits.h&gt;
+
+enum { OK, ERRO_VAZIO, ERRO_NAO_NUMERO, ERRO_SOBRA, ERRO_INTERVALO };
+
+static const char *mensagem[] = {
+    "ok", "texto vazio", "não é número", "sobra texto depois do número", "fora do intervalo de int",
+};
+
+int le_inteiro(const char *texto, int *saida) {
+    if (texto == NULL || *texto == '\0')
+        return ERRO_VAZIO;
+    char *fim;
+    errno = 0;
+    long v = strtol(texto, &amp;fim, 10);
+    if (fim == texto)
+        return ERRO_NAO_NUMERO;
+    if (*fim != '\0')
+        return ERRO_SOBRA;
+    if (errno == ERANGE || v &lt; INT_MIN || v &gt; INT_MAX)
+        return ERRO_INTERVALO;
+    *saida = (int) v;  /* só escreve na saída em caso de sucesso */
+    return OK;
+}
+
+int main(void) {
+    const char *testes[] = { "42", "", "abc", "12kg", "99999999999" };
+    for (int i = 0; i &lt; 5; i++) {
+        int v = 0;
+        int erro = le_inteiro(testes[i], &amp;v);
+        if (erro == OK)
+            printf("\"%s\" -&gt; %d\n", testes[i], v);
+        else
+            printf("\"%s\" -&gt; erro: %s\n", testes[i], mensagem[erro]);
+    }
+    return 0;
+}</code></pre>
+<pre class="saida"><code>"42" -&gt; 42
+"" -&gt; erro: texto vazio
+"abc" -&gt; erro: não é número
+"12kg" -&gt; erro: sobra texto depois do número
+"99999999999" -&gt; erro: fora do intervalo de int</code></pre>
+<p>O padrão do curso: o retorno diz se deu certo, e o resultado útil sai por um parâmetro ponteiro. Como <code>saida</code> só é escrita no sucesso, quem chama não corre o risco de usar um valor parcial.</p>
+<div class="questao" id="q62">
+<span class="num">Q62</span>
+<div class="corpo">
+<p class="titulo">Um teste automatizado mínimo</p>
+<p>Sem biblioteca externa, escreva uma macro <code>CHECA(cond)</code> que conta testes executados e falhos, mostrando a linha de cada falha. Use-a para testar uma função <code>int fatorial(int n)</code> (com o caso n = 0) e mostre o resumo. Inclua de propósito um teste errado para ver a falha.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+
+static int executados, falhos;
+
+#define CHECA(cond) do {                                          \
+        executados++;                                             \
+        if (!(cond)) {                                            \
+            falhos++;                                             \
+            printf("FALHOU (linha %d): %s\n", __LINE__, #cond);   \
+        }                                                         \
+    } while (0)
+
+long fatorial(int n) {
+    long r = 1;
+    for (int i = 2; i &lt;= n; i++)
+        r *= i;
+    return r;
+}
+
+int main(void) {
+    CHECA(fatorial(0) == 1);
+    CHECA(fatorial(1) == 1);
+    CHECA(fatorial(5) == 120);
+    CHECA(fatorial(10) == 3628800);
+    CHECA(fatorial(3) == 7);  /* errado de propósito */
+    printf("%d testes, %d falhas\n", executados, falhos);
+    return falhos ? 1 : 0;
+}</code></pre>
+<pre class="saida"><code>FALHOU (linha 25): fatorial(3) == 7
+5 testes, 1 falhas</code></pre>
+<p>O <code>#cond</code> transforma a expressão em texto, e o <code>do { ... } while (0)</code> faz a macro se comportar como um único comando (funciona até num <code>if</code> sem chaves). Sair com código diferente de zero quando há falha permite que o <code>make test</code> ou o CI detectem o problema. Frameworks como Unity e CMocka seguem a mesma ideia, com mais recursos.</p>
+<div class="questao" id="q63">
+<span class="num">Q63</span>
+<div class="corpo">
+<p class="titulo">Makefile com dependências automáticas</p>
+<p>Escreva um <code>Makefile</code> para um projeto com <code>main.c</code>, <code>pilha.c</code> e <code>pilha.h</code> que: compila com <code>-Wall -Wextra -g</code>, gera as dependências de cabeçalhos automaticamente, tem os alvos <code>all</code> e <code>clean</code> e não confunde <code>clean</code> com um arquivo.</p>
+</div>
+</div>
+<pre class="codigo"><code>CC      := cc
+CFLAGS  := -Wall -Wextra -g -MMD -MP
+OBJS    := main.o pilha.o
+PROG    := app
+
+all: $(PROG)
+
+$(PROG): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^
+
+	$(CC) $(CFLAGS) -c -o $@ $&lt;
+
+clean:
+	rm -f $(PROG) $(OBJS) $(OBJS:.o=.d)
+
+-include $(OBJS:.o=.d)
+
+.PHONY: all clean</code></pre>
+<ul><li><code>-MMD -MP</code> fazem o compilador gravar, ao lado de cada <code>.o</code>, um arquivo <code>.d</code> com os cabeçalhos que ele incluiu; o <code>-include</code> traz essas regras para o make (o <code>-</code> ignora os <code>.d</code> que ainda não existem, na primeira compilação).</li><li><code>$@</code> é o alvo, <code>$^</code> todos os pré-requisitos e <code>$&lt;</code> o primeiro.</li><li><code>.PHONY</code> diz que <code>all</code> e <code>clean</code> não são arquivos: sem isso, um arquivo chamado <code>clean</code> na pasta faria o make achar que o alvo já está atualizado.</li><li>As linhas de comando começam com <strong>TAB</strong>, não espaços; com espaços, o make reclama de "missing separator".</li></ul>
+</section>
+<section class="modulo" id="modulo-9">
+<h2><span class="rotulo">MÓDULO 9</span> Programação de sistemas</h2>
+<p class="intro">Processos, threads, sincronização, sockets e sinais no Unix.</p>
+<p class="aulas-titulo">Artigos 47 a 51</p>
+<ul class="aulas">
+<li><span class="n">#47</span> Processos: fork, exec e wait</li>
+<li><span class="n">#48</span> Threads com pthreads</li>
+<li><span class="n">#49</span> Sincronização: Mutexes e Variáveis de Condição</li>
+<li><span class="n">#50</span> Comunicação em Rede com Sockets</li>
+<li><span class="n">#51</span> Sinais Unix e Eventos do Sistema Operacional</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q64">
+<span class="num">Q64</span>
+<div class="corpo">
+<p class="titulo">fork</p>
+<p>O que <code>fork()</code> devolve no processo pai, no filho e em caso de erro? Por que um <code>printf("oi")</code> sem <code>\n</code> antes do <code>fork</code> pode aparecer duas vezes?</p>
+</div>
+</div>
+<p>No pai, devolve o <strong>PID do filho</strong>; no filho, devolve <strong>0</strong>; em caso de erro, <code>-1</code> (e nenhum filho é criado). O <code>printf</code> sem <code>\n</code> deixa o texto no buffer de saída da biblioteca, ainda não escrito. O <code>fork</code> copia o processo inteiro, buffer incluído, e cada processo descarrega a sua cópia ao terminar. Por isso se faz <code>fflush(stdout)</code> antes do <code>fork</code>, ou se termina a linha com <code>\n</code> quando a saída é um terminal.</p>
+<div class="questao" id="q65">
+<span class="num">Q65</span>
+<div class="corpo">
+<p class="titulo">Zumbis</p>
+<p>O que é um processo zumbi e como evitá-lo? E um processo órfão?</p>
+</div>
+</div>
+<p>Um <strong>zumbi</strong> é um filho que já terminou mas cujo pai ainda não leu o código de saída com <code>wait</code>/<code>waitpid</code>; ele não consome CPU nem memória, mas ocupa uma entrada na tabela de processos. Evita-se chamando <code>wait</code> (ou tratando <code>SIGCHLD</code>). Um <strong>órfão</strong> é um filho cujo pai terminou antes dele; ele é adotado pelo <code>init</code> (PID 1) ou por um processo <em>subreaper</em>, que faz o <code>wait</code> por ele.</p>
+<div class="questao" id="q66">
+<span class="num">Q66</span>
+<div class="corpo">
+<p class="titulo">Mutex e variável de condição</p>
+<p>Por que o <code>pthread_cond_wait</code> precisa receber o mutex? E por que a condição é testada num <code>while</code>, não num <code>if</code>?</p>
+</div>
+</div>
+<p>O <code>pthread_cond_wait</code> <strong>libera o mutex e dorme</strong> numa única operação atômica e, ao acordar, readquire o mutex antes de retornar. Se fossem dois passos, um sinal emitido entre liberar e dormir se perderia. O <code>while</code> existe porque a thread pode acordar e encontrar a condição falsa: outra thread pode ter chegado antes e consumido o item, e o padrão permite despertares espúrios, sem nenhum sinal. Por isso se testa de novo depois de acordar.</p>
+<div class="questao" id="q67">
+<span class="num">Q67</span>
+<div class="corpo">
+<p class="titulo">O que fazer num tratador de sinal</p>
+<p>Por que é errado chamar <code>printf</code> ou <code>malloc</code> dentro de um tratador de sinal? Qual o padrão recomendado?</p>
+</div>
+</div>
+<p>O sinal pode chegar no meio de qualquer instrução, inclusive dentro de um <code>printf</code> ou <code>malloc</code> que o próprio programa estava executando. Chamá-los de novo no tratador pode corromper as estruturas internas da biblioteca ou causar um impasse num lock interno. Só funções <strong>async-signal-safe</strong> (como <code>write</code> e <code>_exit</code>) são permitidas. O padrão é o tratador apenas ligar uma variável <code>volatile sig_atomic_t</code> e o laço principal verificá-la e fazer o trabalho de verdade.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q68">
+<span class="num">Q68</span>
+<div class="corpo">
+<p class="titulo">fork, exec e wait</p>
+<p>Escreva um programa que cria um processo filho para executar <code>echo</code> com os argumentos <code>"olá do filho"</code>, espera o filho terminar e mostra o código de saída dele.</p>
+</div>
+</div>
+<pre class="codigo"><code>#define _POSIX_C_SOURCE 200809L
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/wait.h&gt;
+
+int main(void) {
+    fflush(stdout);  /* nada pendente no buffer para ser duplicado pelo fork */
+    pid_t pid = fork();
+    if (pid &lt; 0) {
+        perror("fork");
+        return 1;
+    }
+    if (pid == 0) {
+        execlp("echo", "echo", "olá do filho", (char *) NULL);
+        perror("execlp");  /* só chega aqui se o exec falhar */
+        _exit(127);
+    }
+    int status;
+    if (waitpid(pid, &amp;status, 0) &lt; 0) {
+        perror("waitpid");
+        return 1;
+    }
+    if (WIFEXITED(status))
+        printf("filho terminou com código %d\n", WEXITSTATUS(status));
+    return 0;
+}</code></pre>
+<pre class="saida"><code>olá do filho
+filho terminou com código 0</code></pre>
+<p>O <code>exec</code> <strong>substitui</strong> o programa do processo filho pelo <code>echo</code>: se der certo, nada depois dele executa. Por isso o tratamento de erro vem logo em seguida, com <code>_exit</code> (e não <code>exit</code>, que descarregaria buffers copiados do pai). Com <code>-std=c17</code>, o <code>#define _POSIX_C_SOURCE</code> é necessário para expor as funções POSIX nos cabeçalhos.</p>
+<div class="questao" id="q69">
+<span class="num">Q69</span>
+<div class="corpo">
+<p class="titulo">Somando em paralelo com threads</p>
+<p>Some os números de 1 a 10.000.000 dividindo o trabalho entre 4 threads, cada uma com o seu intervalo e o seu resultado parcial, sem nenhum mutex. Explique por que não é preciso mutex.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+#include &lt;pthread.h&gt;
+
+#define N 10000000L
+#define THREADS 4
+
+typedef struct { long inicio, fim, parcial; } Tarefa;
+
+static void *soma(void *arg) {
+    Tarefa *t = arg;
+    t-&gt;parcial = 0;
+    for (long i = t-&gt;inicio; i &lt;= t-&gt;fim; i++)
+        t-&gt;parcial += i;
+    return NULL;
+}
+
+int main(void) {
+    pthread_t th[THREADS];
+    Tarefa tarefas[THREADS];
+    long bloco = N / THREADS;
+
+    for (int i = 0; i &lt; THREADS; i++) {
+        tarefas[i].inicio = i * bloco + 1;
+        tarefas[i].fim = (i == THREADS - 1) ? N : (i + 1) * bloco;
+        if (pthread_create(&amp;th[i], NULL, soma, &amp;tarefas[i]) != 0) {
+            fprintf(stderr, "falha ao criar thread\n");
+            return 1;
+        }
+    }
+    long total = 0;
+    for (int i = 0; i &lt; THREADS; i++) {
+        pthread_join(th[i], NULL);  /* espera e garante que o parcial já foi escrito */
+        total += tarefas[i].parcial;
+    }
+    printf("total: %ld (esperado %ld)\n", total, N * (N + 1) / 2);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>total: 50000005000000 (esperado 50000005000000)</code></pre>
+<p>Cada thread escreve só na própria <code>Tarefa</code>, e o <code>main</code> só lê os parciais depois do <code>pthread_join</code>, que garante que a escrita terminou e está visível. Não há dado compartilhado sendo escrito por duas threads ao mesmo tempo, então não há condição de corrida. Compile com <code>-pthread</code>.</p>
+<div class="questao" id="q70">
+<span class="num">Q70</span>
+<div class="corpo">
+<p class="titulo">Contador compartilhado com mutex</p>
+<p>Crie 4 threads que incrementam um contador global 100.000 vezes cada. Mostre o resultado com o mutex protegendo o incremento e explique o que muda sem ele.</p>
+</div>
+</div>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+#include &lt;pthread.h&gt;
+
+static long contador = 0;
+static pthread_mutex_t trava = PTHREAD_MUTEX_INITIALIZER;
+
+static void *incrementa(void *arg) {
+    (void) arg;
+    for (int i = 0; i &lt; 100000; i++) {
+        pthread_mutex_lock(&amp;trava);
+        contador++;  /* ler, somar e gravar: só uma thread por vez */
+        pthread_mutex_unlock(&amp;trava);
+    }
+    return NULL;
+}
+
+int main(void) {
+    pthread_t th[4];
+    for (int i = 0; i &lt; 4; i++)
+        pthread_create(&amp;th[i], NULL, incrementa, NULL);
+    for (int i = 0; i &lt; 4; i++)
+        pthread_join(th[i], NULL);
+    printf("contador: %ld\n", contador);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>contador: 400000</code></pre>
+<p>Sem o mutex, <code>contador++</code> vira "ler, somar 1, gravar", e duas threads podem ler o mesmo valor e gravar o mesmo resultado: incrementos se perdem e o total fica abaixo de 400.000, variando a cada execução. Travar e destravar 400 mil vezes custa caro; num caso real, cada thread somaria num contador local e travaria uma única vez no fim, ou usaria <code>atomic_long</code> de <code>&lt;stdatomic.h&gt;</code>.</p>
+<div class="questao" id="q71">
+<span class="num">Q71</span>
+<div class="corpo">
+<p class="titulo">Encerrando com Ctrl+C</p>
+<p>Escreva um programa que fica num laço "trabalhando" e, ao receber <code>SIGINT</code>, termina o laço de forma limpa e imprime quantas voltas deu. Para o teste ser automático, o próprio programa envia o sinal a si mesmo depois de 3 voltas com <code>raise(SIGINT)</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>#define _POSIX_C_SOURCE 200809L
+#include &lt;stdio.h&gt;
+#include &lt;signal.h&gt;
+
+static volatile sig_atomic_t parar = 0;
+
+static void ao_interromper(int sinal) {
+    (void) sinal;
+    parar = 1;  /* só isso: o trabalho de verdade fica no laço principal */
+}
+
+int main(void) {
+    struct sigaction sa = {0};
+    sa.sa_handler = ao_interromper;
+    sigemptyset(&amp;sa.sa_mask);
+    if (sigaction(SIGINT, &amp;sa, NULL) &lt; 0) {
+        perror("sigaction");
+        return 1;
+    }
+
+    long voltas = 0;
+    while (!parar) {
+        voltas++;  /* aqui entraria o trabalho real */
+        if (voltas == 3)
+            raise(SIGINT);  /* simula o Ctrl+C do usuário */
+    }
+    printf("encerrado com limpeza depois de %ld voltas\n", voltas);
+    return 0;
+}</code></pre>
+<pre class="saida"><code>encerrado com limpeza depois de 3 voltas</code></pre>
+<p><code>sigaction</code> é preferível ao <code>signal</code> antigo, cujo comportamento varia entre sistemas. <code>volatile sig_atomic_t</code> garante que a escrita no tratador e a leitura no laço não sejam otimizadas nem divididas ao meio. Rodando de verdade no terminal, basta tirar o <code>raise</code> e apertar Ctrl+C.</p>
+</section>
+<section class="modulo" id="desafios">
+<h2><span class="rotulo">PARA IR ALÉM</span> Desafios integradores</h2>
+<p class="intro">Projetos maiores, que juntam vários módulos. Não há uma única resposta certa: o gabarito mostra um caminho.</p>
+<div class="questao desafio" id="d1">
+<span class="num">D1</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora de terminal</p>
+<p>Escreva uma calculadora de terminal com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada (<code>raiz 2</code>). Ela deve: (a) aceitar vírgula ou ponto como separador decimal; (b) guardar o último resultado em <code>ans</code>, utilizável na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário e texto que não é número com uma mensagem clara, <strong>sem encerrar o programa</strong>; (d) ter os comandos <code>hist</code> (histórico) e <code>sair</code>. Separe o núcleo (<code>calc.c</code> e <code>calc.h</code>, que não fazem entrada nem saída) da interface (<code>main.c</code>).</p>
+</div>
+</div>
+<p><strong>Caminho da solução</strong></p>
+<ul><li><strong>Núcleo</strong>: <code>calc_avaliar</code> recebe a linha e devolve um código de erro, com o resultado num parâmetro ponteiro (o padrão do módulo 8). As operações ficam numa tabela de símbolos, como no exercício de ponteiros para função.</li><li><strong>Números</strong>: o <code>strtod</code> só entende ponto no locale padrão, então o núcleo troca a vírgula por ponto numa cópia do texto antes de converter. Os resultados são <code>double</code>, com os limites que isso traz (veja a nota depois da saída).</li><li><strong>Interface</strong>: lê linhas com <code>fgets</code>, nunca com <code>scanf</code>, guarda o histórico num vetor dinâmico que cresce com <code>realloc</code> e libera tudo ao sair.</li></ul>
+<p><code>calc.h</code>:</p>
+<pre class="codigo"><code>#ifndef CALC_H
+#define CALC_H
+
+typedef enum {
+    CALC_OK,
+    CALC_FORMATO,       /* linha que não é "a op b" nem "raiz a" */
+    CALC_NUMERO,        /* operando que não é número */
+    CALC_OPERACAO,      /* símbolo desconhecido */
+    CALC_DIV_ZERO,
+    CALC_RAIZ_NEGATIVA,
+    CALC_EXPOENTE,
+} CalcErro;
+
+typedef struct {
+    double ans;  /* último resultado */
+} Calculadora;
+
+/* Avalia "12,5 + 3", "2 ^ 10", "15 % 200" ou "raiz 2"; "ans" é o último resultado. */
+CalcErro calc_avaliar(Calculadora *c, const char *linha, double *resultado);
+const char *calc_mensagem(CalcErro e);
+
+#endif</code></pre>
+<p><code>calc.c</code>:</p>
+<pre class="codigo"><code>#include "calc.h"
+
+#include &lt;ctype.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;math.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+static CalcErro numero(const Calculadora *c, const char *texto, double *v) {
+    if (strcmp(texto, "ans") == 0) {
+        *v = c-&gt;ans;
+        return CALC_OK;
+    }
+    char copia[64];
+    if (strlen(texto) &gt;= sizeof copia)
+        return CALC_NUMERO;
+    strcpy(copia, texto);
+    char *virgula = strchr(copia, ',');
+    if (virgula)
+        *virgula = '.';  /* strtod segue o locale "C": só entende ponto */
+    char *fim;
+    errno = 0;
+    *v = strtod(copia, &amp;fim);
+    if (fim == copia || *fim != '\0' || errno == ERANGE || !isfinite(*v))
+        return CALC_NUMERO;
+    return CALC_OK;
+}
+
+static CalcErro operar(char op, double a, double b, double *r) {
+    switch (op) {
+    case '+': *r = a + b; return CALC_OK;
+    case '-': *r = a - b; return CALC_OK;
+    case '*': *r = a * b; return CALC_OK;
+    case '/':
+        if (b == 0) return CALC_DIV_ZERO;
+        *r = a / b;
+        return CALC_OK;
+    case '%': *r = a * b / 100; return CALC_OK;
+    case '^':
+        if (b != floor(b) || fabs(b) &gt; 999) return CALC_EXPOENTE;
+        if (a == 0 &amp;&amp; b &lt; 0) return CALC_DIV_ZERO;
+        *r = pow(a, b);
+        return CALC_OK;
+    }
+    return CALC_OPERACAO;
+}
+
+CalcErro calc_avaliar(Calculadora *c, const char *linha, double *resultado) {
+    char t[3][64];
+    int n = sscanf(linha, "%63s %63s %63s", t[0], t[1], t[2]);
+    double a, b, r;
+    CalcErro e;
+
+    if (n == 2 &amp;&amp; strcmp(t[0], "raiz") == 0) {
+        if ((e = numero(c, t[1], &amp;a)) != CALC_OK) return e;
+        if (a &lt; 0) return CALC_RAIZ_NEGATIVA;
+        r = sqrt(a);
+    } else if (n == 3 &amp;&amp; strlen(t[1]) == 1) {
+        if ((e = numero(c, t[0], &amp;a)) != CALC_OK) return e;
+        if ((e = numero(c, t[2], &amp;b)) != CALC_OK) return e;
+        if ((e = operar(t[1][0], a, b, &amp;r)) != CALC_OK) return e;
+    } else {
+        return n == 3 ? CALC_OPERACAO : CALC_FORMATO;
+    }
+    if (!isfinite(r)) return CALC_NUMERO;  /* resultado grande demais para um double */
+    c-&gt;ans = *resultado = r;
+    return CALC_OK;
+}
+
+const char *calc_mensagem(CalcErro e) {
+    static const char *m[] = {
+        [CALC_OK] = "ok",
+        [CALC_FORMATO] = "use: número operação número, ou raiz número",
+        [CALC_NUMERO] = "não é um número válido",
+        [CALC_OPERACAO] = "operação desconhecida",
+        [CALC_DIV_ZERO] = "divisão por zero",
+        [CALC_RAIZ_NEGATIVA] = "raiz de número negativo",
+        [CALC_EXPOENTE] = "o expoente precisa ser inteiro, de -999 a 999",
+    };
+    return m[e];
+}</code></pre>
+<p><code>main.c</code>:</p>
+<pre class="codigo"><code>#include "calc.h"
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+/* 16 dígitos significativos, vírgula decimal e sem zeros à direita */
+static void formata(double v, char *saida, size_t tam) {
+    snprintf(saida, tam, "%.16g", v);
+    char *ponto = strchr(saida, '.');
+    if (ponto)
+        *ponto = ',';
+}
+
+int main(void) {
+    Calculadora calc = {0};
+    char **historico = NULL;
+    size_t n_hist = 0;
+    char linha[256];
+
+    puts("Calculadora: + - * / ^ % raiz  |  ans, hist, sair");
+    for (printf("&gt; "); fgets(linha, sizeof linha, stdin); printf("&gt; ")) {
+        linha[strcspn(linha, "\n")] = '\0';
+        if (strcmp(linha, "sair") == 0)
+            break;
+        if (strcmp(linha, "hist") == 0) {
+            for (size_t i = 0; i &lt; n_hist; i++)
+                puts(historico[i]);
+            continue;
+        }
+        if (linha[0] == '\0')
+            continue;
+
+        double r;
+        CalcErro e = calc_avaliar(&amp;calc, linha, &amp;r);
+        if (e != CALC_OK) {
+            printf("erro: %s\n", calc_mensagem(e));  /* a conta errada não derruba o programa */
+            continue;
+        }
+        char num[64], conta[sizeof linha + 80];
+        formata(r, num, sizeof num);
+        snprintf(conta, sizeof conta, "%s = %s", linha, num);
+        puts(conta);
+
+        char **tmp = realloc(historico, (n_hist + 1) * sizeof *tmp);
+        char *copia = malloc(strlen(conta) + 1);
+        if (tmp == NULL || copia == NULL) {
+            free(copia);
+            historico = tmp ? tmp : historico;
+            fputs("sem memória para o histórico\n", stderr);
+            continue;
+        }
+        historico = tmp;
+        historico[n_hist++] = strcpy(copia, conta);
+    }
+    for (size_t i = 0; i &lt; n_hist; i++)
+        free(historico[i]);
+    free(historico);
+    return 0;
+}</code></pre>
+<p class="rotulo-entrada">Entrada digitada:</p>
+<pre class="codigo"><code>0,1 + 0,2
+10 / 3
+ans * 3
+1 / 0
+2 ^ 100
+raiz 2
+ans * ans
+15 % 200
+2 ^ 0,5
+raiz -4
+abc + 1
+hist
+sair</code></pre>
+<pre class="saida"><code>Calculadora: + - * / ^ % raiz  |  ans, hist, sair
+&gt; 0,1 + 0,2 = 0,3
+&gt; 10 / 3 = 3,333333333333333
+&gt; ans * 3 = 10
+&gt; erro: divisão por zero
+&gt; 2 ^ 100 = 1,267650600228229e+30
+&gt; raiz 2 = 1,414213562373095
+&gt; ans * ans = 2
+&gt; 15 % 200 = 30
+&gt; erro: o expoente precisa ser inteiro, de -999 a 999
+&gt; erro: raiz de número negativo
+&gt; erro: não é um número válido
+&gt; 0,1 + 0,2 = 0,3
+10 / 3 = 3,333333333333333
+ans * 3 = 10
+2 ^ 100 = 1,267650600228229e+30
+raiz 2 = 1,414213562373095
+ans * ans = 2
+15 % 200 = 30
+&gt;</code></pre>
+<p>Compile os três arquivos juntos: <code>gcc -Wall -Wextra calc.c main.c -o calc -lm</code>. Com a entrada redirecionada, o terminal não ecoa o que foi digitado, e cada resultado aparece logo depois do <code>&gt;</code>.</p>
+<p>A saída parece perfeita, mas o <code>double</code> está escondendo erros. <code>0,1 + 0,2</code> guarda 0,30000000000000004, e <code>ans * ans</code> depois de <code>raiz 2</code> guarda 2,0000000000000004: os dois só aparecem como <code>0,3</code> e <code>2</code> porque o <code>%.16g</code> arredonda para 16 dígitos. Troque por <code>%.17g</code> e eles surgem. <code>10 / 3</code> seguido de <code>ans * 3</code> dá 10 por sorte, porque os erros de arredondamento se cancelam. Calculadoras de verdade usam aritmética decimal (como o <code>_Decimal64</code> do C23, ainda pouco suportado) ou trabalham com dígitos a mais do que mostram. Uma boa extensão é guardar os números como frações de inteiros, o que torna exatas as quatro operações e a potência inteira.</p>
+<p>Uma versão gráfica fica como extensão: com GTK ou raylib, a janela só monta o texto da conta com botões e chama o mesmo <code>calc_avaliar</code>, sem mudar uma linha do núcleo.</p>
+<div class="questao desafio" id="d2">
+<span class="num">D2</span>
+<div class="corpo">
+<p class="titulo">Um mini-shell</p>
+<p>Escreva um mini-shell que mostra um prompt, lê um comando com argumentos, executa-o num processo filho e espera o fim, e tem três comandos internos: <code>cd</code>, <code>historico</code> (os últimos 10 comandos, numa lista circular) e <code>sair</code>. Comandos inexistentes devem mostrar uma mensagem e devolver o prompt. Como extensão, implemente o redirecionamento <code>&gt; arquivo</code>.</p>
+</div>
+</div>
+<p><strong>Caminho da solução</strong></p>
+<ul><li><strong>Leitura</strong>: <code>fgets</code> numa linha de até 1024 caracteres, separada em palavras com <code>strtok</code> num vetor <code>char *argv[64]</code> terminado em <code>NULL</code>, o formato que o <code>execvp</code> espera.</li><li><strong>Comandos internos</strong>: precisam rodar no próprio shell. Um <code>cd</code> executado num filho mudaria o diretório do filho, que morre em seguida; por isso o shell testa <code>argv[0]</code> antes do <code>fork</code> e chama <code>chdir</code> diretamente.</li><li><strong>Execução</strong>: <code>fork</code>; no filho, <code>execvp(argv[0], argv)</code> e, se ele voltar, <code>perror</code> e <code>_exit(127)</code>; no pai, <code>waitpid</code> e o código de saída guardado para mostrar no prompt.</li><li><strong>Histórico</strong>: um vetor de 10 <code>char *</code> com um índice que avança módulo 10 (a fila circular do módulo 7); ao sobrescrever uma posição, o <code>free</code> da string antiga vem antes.</li><li><strong>Redirecionamento</strong>: no filho, antes do <code>exec</code>, <code>open(arquivo, O_WRONLY | O_CREAT | O_TRUNC, 0644)</code> e <code>dup2(fd, STDOUT_FILENO)</code>; o <code>&gt;</code> e o nome do arquivo saem do <code>argv</code>.</li><li><strong>Sinais</strong>: o shell ignora <code>SIGINT</code> (Ctrl+C não deve matá-lo), e o filho restaura o comportamento padrão com <code>signal(SIGINT, SIG_DFL)</code> antes do <code>exec</code>, para que Ctrl+C interrompa só o comando em execução.</li></ul>
+<p>Teste com Valgrind ou <code>-fsanitize=address</code>: ao digitar <code>sair</code> depois de mais de 10 comandos, nenhuma string do histórico pode ter vazado.</p>
+</section>
+<footer class="fim">
+<p><strong>Fim do gabarito.</strong></p>
+<p>Dominando a Linguagem C em 1 Ano · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</footer>
+</body>
+</html>

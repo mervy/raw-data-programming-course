@@ -30,7 +30,7 @@ o `.md` em arquivos individuais.
 
 | Curso | Conversa | Caderno de Exercícios | Caderno de Respostas |
 |---|:-:|:-:|:-:|
-| Linguagem C | ✅ | — | — |
+| Linguagem C | ✅ | ✅ | ✅ |
 | Linguagem C++ | ✅ | — | — |
 | Linguagem C# | ✅ | — | — |
 | Linguagem Java | ✅ | ✅ | ✅ |
