@@ -2717,11 +2717,11 @@ class CriarProjeto {
 <span class="num">D1</span>
 <div class="corpo">
 <p class="titulo">Uma calculadora, duas interfaces</p>
-<p>Escreva uma calculadora com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada. Ela deve: (a) acertar <code>0,1 + 0,2 = 0,3</code>, o que o <code>Number</code> do JavaScript não faz sozinho, aceitando vírgula ou ponto e mostrando até 16 dígitos significativos; (b) guardar o último resultado em <code>ans</code>, que pode ser usado na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário e texto que não é número com uma classe de erro própria e uma mensagem clara, <strong>sem encerrar o programa</strong>. Escreva o núcleo num módulo ES que não sabe nada de entrada e saída, e reaproveite-o em duas interfaces: uma de <strong>terminal</strong> com Node.js (comandos <code>hist</code> e <code>sair</code>) e uma página <strong>no navegador</strong>, com teclado na tela, visor e histórico. O artigo #10, "Mini Projeto: Calculadora no Console", é o ponto de partida.</p>
+<p>Escreva uma calculadora com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada. Ela deve: (a) acertar <code>0,1 + 0,2 = 0,3</code>, o que o <code>Number</code> do JavaScript não faz sozinho, aceitando vírgula ou ponto e mostrando até 16 dígitos significativos; (b) guardar o último resultado em <code>ans</code>, que pode ser usado na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário e texto que não é número com um erro próprio (de <code>name</code> <code>"ErroDeConta"</code>) e uma mensagem clara, <strong>sem encerrar o programa</strong>. Escreva o núcleo num módulo ES que não sabe nada de entrada e saída, e reaproveite-o em duas interfaces: uma de <strong>terminal</strong> com Node.js (comandos <code>hist</code> e <code>sair</code>) e uma página <strong>no navegador</strong>, com teclado na tela, visor e histórico. O artigo #10, "Mini Projeto: Calculadora no Console", é o ponto de partida.</p>
 </div>
 </div>
 <p><em><strong>Caminho da solução</strong></em></p>
-<ul><li><strong>Núcleo</strong>: <code>Number</code> é ponto flutuante binário, e <code>0.1 + 0.2</code> dá <code>0.30000000000000004</code>. Em vez de uma biblioteca, o núcleo guarda cada número como uma fração de dois <code>BigInt</code> (numerador e denominador), sempre simplificada. Soma, subtração, multiplicação, divisão, porcentagem e potência inteira ficam exatas; a raiz é calculada com 40 casas pelo método de Newton, e só a exibição arredonda para 16 dígitos.</li><li><strong>Erros</strong>: tudo o que o usuário pode errar vira <code>ErroDeConta</code>. As interfaces capturam só essa classe e relançam o resto: um bug de verdade não pode ser confundido com uma conta mal digitada.</li><li><strong>Interfaces</strong>: o terminal lê linha a linha com <code>for await</code> sobre o <code>readline</code>; a página monta o mesmo texto com os botões e chama o mesmo <code>avaliar</code>. Um único listener no contêiner atende os 20 botões (delegação de eventos, exercício 1.10).</li></ul>
+<ul><li><strong>Núcleo</strong>: <code>Number</code> é ponto flutuante binário, e <code>0.1 + 0.2</code> dá <code>0.30000000000000004</code>. Em vez de uma biblioteca, o núcleo guarda cada número como uma fração de dois <code>BigInt</code> (numerador e denominador), sempre simplificada, num objeto congelado. A calculadora é uma closure, como o <code>criarContador</code> do exercício 1.5: <code>ans</code> fica guardado dentro dela, sem classe e sem variável global. Soma, subtração, multiplicação, divisão, porcentagem e potência inteira ficam exatas; a raiz é calculada com 40 casas pelo método de Newton, e só a exibição arredonda para 16 dígitos.</li><li><strong>Erros</strong>: tudo o que o usuário pode errar vira um <code>Error</code> de <code>name</code> <code>"ErroDeConta"</code>, criado por <code>erroDeConta()</code>. As interfaces tratam só esse erro (<code>ehErroDeConta</code>) e relançam o resto: um bug de verdade não pode ser confundido com uma conta mal digitada.</li><li><strong>Interfaces</strong>: o terminal lê linha a linha com <code>for await</code> sobre o <code>readline</code>; a página monta o mesmo texto com os botões e chama o mesmo <code>avaliar</code>. Um único listener no contêiner atende os 20 botões (delegação de eventos, exercício 1.10).</li></ul>
 <p><code>calculadora.mjs</code>, o núcleo:</p>
 <pre class="codigo"><code>// O núcleo da calculadora: não sabe nada de terminal nem de navegador.
 // Number é ponto flutuante binário (0.1 + 0.2 = 0.30000000000000004), então as contas
@@ -2729,29 +2729,32 @@ class CriarProjeto {
 
 const DIGITOS = 16; // dígitos significativos no visor
 
-export class ErroDeConta extends Error {
-  name = "ErroDeConta";
+// Erro de conta: o usuário digitou algo impossível ou mal escrito; a interface mostra e segue.
+export function erroDeConta(mensagem) {
+  return Object.assign(new Error(mensagem), { name: "ErroDeConta" });
 }
 
-class Fracao {
-  constructor(num, den = 1n) {
-    if (den &lt; 0n) [num, den] = [-num, -den];
-    const m = mdc(num &lt; 0n ? -num : num, den);
-    this.num = num / m;
-    this.den = den / m;
-  }
-  static de(texto) {
-    const m = /^([+-]?)(\d+)(?:[.,](\d+))?$/.exec(texto);
-    if (!m) throw new ErroDeConta(`não é um número: ${texto}`);
-    const casas = m[3] ?? "";
-    const num = BigInt(m[2] + casas) * (m[1] === "-" ? -1n : 1n);
-    return new Fracao(num, 10n ** BigInt(casas.length));
-  }
-  mais(o) { return new Fracao(this.num * o.den + o.num * this.den, this.den * o.den); }
-  menos(o) { return new Fracao(this.num * o.den - o.num * this.den, this.den * o.den); }
-  vezes(o) { return new Fracao(this.num * o.num, this.den * o.den); }
-  dividido(o) { return new Fracao(this.num * o.den, this.den * o.num); }
+export const ehErroDeConta = (e) =&gt; e instanceof Error &amp;&amp; e.name === "ErroDeConta";
+
+// Fração sempre simplificada e com o sinal no numerador.
+function fracao(num, den = 1n) {
+  if (den &lt; 0n) [num, den] = [-num, -den];
+  const m = mdc(num &lt; 0n ? -num : num, den);
+  return Object.freeze({ num: num / m, den: den / m });
 }
+
+function lerNumero(texto) {
+  const m = /^([+-]?)(\d+)(?:[.,](\d+))?$/.exec(texto);
+  if (!m) throw erroDeConta(`não é um número: ${texto}`);
+  const casas = m[3] ?? "";
+  const num = BigInt(m[2] + casas) * (m[1] === "-" ? -1n : 1n);
+  return fracao(num, 10n ** BigInt(casas.length));
+}
+
+const mais = (a, b) =&gt; fracao(a.num * b.den + b.num * a.den, a.den * b.den);
+const menos = (a, b) =&gt; fracao(a.num * b.den - b.num * a.den, a.den * b.den);
+const vezes = (a, b) =&gt; fracao(a.num * b.num, a.den * b.den);
+const dividido = (a, b) =&gt; fracao(a.num * b.den, a.den * b.num);
 
 function mdc(a, b) {
   while (b) [a, b] = [b, a % b];
@@ -2765,50 +2768,46 @@ function raizInteira(n) { // maior r com r*r &lt;= n (método de Newton)
   return x;
 }
 
-export class Calculadora {
-  ans = new Fracao(0n); // o último resultado, exato
+function calcular(op, a, b) {
+  switch (op) {
+    case "+": return mais(a, b);
+    case "-": return menos(a, b);
+    case "*": return vezes(a, b);
+    case "/":
+      if (b.num === 0n) throw erroDeConta("divisão por zero");
+      return dividido(a, b);
+    case "%": return dividido(vezes(a, b), fracao(100n)); // "15 % 200" = 15% de 200
+    case "^": {
+      if (b.den !== 1n || b.num &gt; 999n || b.num &lt; -999n)
+        throw erroDeConta("o expoente precisa ser inteiro, de -999 a 999");
+      if (a.num === 0n &amp;&amp; b.num &lt; 0n) throw erroDeConta("divisão por zero");
+      const e = b.num &lt; 0n ? -b.num : b.num;
+      return b.num &lt; 0n ? fracao(a.den ** e, a.num ** e) : fracao(a.num ** e, a.den ** e);
+    }
+  }
+  throw erroDeConta(`operação desconhecida: ${op}`);
+}
+
+function raiz(a) {
+  if (a.num &lt; 0n) throw erroDeConta("raiz de número negativo");
+  const escala = 10n ** 40n; // 40 casas: sobra precisão para os 16 dígitos do visor
+  return fracao(raizInteira(a.num * a.den * escala * escala), a.den * escala);
+}
+
+// A calculadora é uma closure: ans fica guardado aqui dentro, sem variável global.
+export function criarCalculadora() {
+  let ans = fracao(0n); // o último resultado, exato
+  const numero = (texto) =&gt; (texto === "ans" ? ans : lerNumero(texto));
 
   // Resolve "12,5 + 3", "2 ^ 10", "15 % 200" ou "raiz 2"; "ans" é o último resultado.
-  avaliar(linha) {
+  function avaliar(linha) {
     const t = linha.trim().split(/\s+/);
-    let r;
-    if (t.length === 2 &amp;&amp; t[0] === "raiz") r = this.#raiz(this.#numero(t[1]));
-    else if (t.length === 3) r = this.#calcular(t[1], this.#numero(t[0]), this.#numero(t[2]));
-    else throw new ErroDeConta("use: número operação número, ou raiz número");
-    this.ans = r;
-    return r;
+    if (t.length === 2 &amp;&amp; t[0] === "raiz") ans = raiz(numero(t[1]));
+    else if (t.length === 3) ans = calcular(t[1], numero(t[0]), numero(t[2]));
+    else throw erroDeConta("use: número operação número, ou raiz número");
+    return ans;
   }
-
-  #calcular(op, a, b) {
-    switch (op) {
-      case "+": return a.mais(b);
-      case "-": return a.menos(b);
-      case "*": return a.vezes(b);
-      case "/":
-        if (b.num === 0n) throw new ErroDeConta("divisão por zero");
-        return a.dividido(b);
-      case "%": return a.vezes(b).dividido(new Fracao(100n)); // "15 % 200" = 15% de 200
-      case "^": {
-        if (b.den !== 1n || b.num &gt; 999n || b.num &lt; -999n)
-          throw new ErroDeConta("o expoente precisa ser inteiro, de -999 a 999");
-        if (a.num === 0n &amp;&amp; b.num &lt; 0n) throw new ErroDeConta("divisão por zero");
-        const e = b.num &lt; 0n ? -b.num : b.num;
-        const p = new Fracao(a.num ** e, a.den ** e);
-        return b.num &lt; 0n ? new Fracao(p.den, p.num) : p;
-      }
-    }
-    throw new ErroDeConta(`operação desconhecida: ${op}`);
-  }
-
-  #raiz(a) {
-    if (a.num &lt; 0n) throw new ErroDeConta("raiz de número negativo");
-    const escala = 10n ** 40n; // 40 casas: sobra precisão para os 16 dígitos do visor
-    return new Fracao(raizInteira(a.num * a.den * escala * escala), a.den * escala);
-  }
-
-  #numero(texto) {
-    return texto === "ans" ? this.ans : Fracao.de(texto);
-  }
+  return { avaliar };
 }
 
 // Até 16 dígitos significativos, vírgula decimal, notação científica para números enormes ou minúsculos.
@@ -2830,9 +2829,9 @@ export function formatar(f) {
 }</code></pre>
 <p><code>calculadora-terminal.mjs</code>:</p>
 <pre class="codigo"><code>import { createInterface } from "node:readline";
-import { Calculadora, ErroDeConta, formatar } from "./calculadora.mjs";
+import { criarCalculadora, ehErroDeConta, formatar } from "./calculadora.mjs";
 
-const calc = new Calculadora();
+const calc = criarCalculadora();
 const historico = [];
 const entrada = createInterface({ input: process.stdin });
 
@@ -2848,7 +2847,7 @@ for await (const bruta of entrada) {
       historico.push(conta);
       console.log(conta);
     } catch (e) {
-      if (!(e instanceof ErroDeConta)) throw e; // bug de verdade não é engolido
+      if (!ehErroDeConta(e)) throw e; // bug de verdade não é engolido
       console.log(`erro: ${e.message}`); // a conta errada não derruba o programa
     }
   }
@@ -2900,9 +2899,9 @@ ans * ans = 2
 &lt;button id="igual"&gt;=&lt;/button&gt;
 &lt;ol id="historico" reversed&gt;&lt;/ol&gt;
 &lt;script type="module"&gt;
-  import { Calculadora, ErroDeConta, formatar } from "./calculadora.mjs";
+  import { criarCalculadora, ehErroDeConta, formatar } from "./calculadora.mjs";
 
-  const calc = new Calculadora(); // o mesmo núcleo do terminal
+  const calc = criarCalculadora(); // o mesmo núcleo do terminal
   const visor = document.querySelector("#visor");
   const erro = document.querySelector("#erro");
   const historico = document.querySelector("#historico");
@@ -2934,7 +2933,7 @@ ans * ans = 2
       visor.value = resultado; // a próxima conta continua dele
       erro.textContent = "";
     } catch (e) {
-      if (!(e instanceof ErroDeConta)) throw e;
+      if (!ehErroDeConta(e)) throw e;
       erro.textContent = `erro: ${e.message}`; // a página continua funcionando
     }
   }
