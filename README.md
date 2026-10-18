@@ -68,8 +68,15 @@ Padrões que aparecem nos modelos:
 
 Cada curso tem uma pasta com `exercicios.html` e `respostas.html`, no mesmo
 formato: capa, sumário, um `<section class="modulo">` por fase ou trilha e
-cada questão em `<div class="questao" id="qN">`. As linhas pautadas para a
-resposta à mão são `<div class="linhas" style="--n:5">` (5 linhas).
+cada questão em `<div class="questao" id="qN">` (no JavaScript, numerado por
+módulo: `id="q3-2"` é o exercício 3.2). As linhas pautadas para a resposta à mão
+são `<div class="linhas" style="--n:5">` (5 linhas).
+
+Todo caderno termina com o desafio **"Uma calculadora, duas interfaces"**: o mesmo
+núcleo (sete operações, `ans`, erros que não derrubam o programa) usado por uma
+versão de terminal e por uma gráfica (JavaFX, página web servida em Go, tkinter,
+navegador). O código dos gabaritos que traz quadro de **Saída** foi executado, e a
+saída mostrada é a real; as capturas das janelas ficam em `books/<curso>/img/`.
 
 O PDF que vai para download no site é gerado do HTML, com o Chrome em modo
 headless (no WSL, usa o Chrome do Windows):
