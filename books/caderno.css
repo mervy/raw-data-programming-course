@@ -152,6 +152,9 @@ ul.aulas .n { display: inline-block; min-width: 3em; font-weight: 700; color: va
   );
 }
 
+/* dica do enunciado (cadernos de Python) */
+.questao .dica { color: var(--suave); font-size: .92em; }
+
 /* captura de tela de um programa (a janela da calculadora) */
 figure.captura { margin: 12px 0; text-align: center; break-inside: avoid; }
 figure.captura img { max-width: 100%; height: auto; border: 1px solid var(--linha); border-radius: 4px; }
