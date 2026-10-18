@@ -11,7 +11,7 @@
 <p class="serie">DOMINANDO JAVA EM 1 ANO</p>
 <h1>Caderno de Respostas</h1>
 <p class="subtitulo">Gabarito comentado das 79 aulas, do #00 ao #78</p>
-<p class="subtitulo">Java 25 LTS · 9 fases e 3 trilhas · 189 questões · 6 desafios integradores</p>
+<p class="subtitulo">Java 25 LTS · 9 fases e 3 trilhas · 189 questões · 7 desafios integradores</p>
 <p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
 </header>
 <aside class="nota">
@@ -36,7 +36,7 @@
 <tr><td>TRILHA B</td><td>Desktop e Android</td><td>#67–#70</td><td>Q163–Q170</td></tr>
 <tr><td>TRILHA C</td><td>Jogos com libGDX</td><td>#71–#77</td><td>Q171–Q186</td></tr>
 <tr><td>ENCERRAMENTO</td><td>O destino e o novo começo</td><td>#78</td><td>Q187–Q189</td></tr>
-<tr><td>DESAFIOS</td><td>Projetos integradores que atravessam várias fases e trilhas</td><td>todas</td><td>D1–D6</td></tr>
+<tr><td>DESAFIOS</td><td>Projetos integradores que atravessam várias fases e trilhas</td><td>todas</td><td>D1–D7</td></tr>
 </tbody>
 </table>
 <aside class="legenda">
@@ -3009,6 +3009,233 @@ encostado na parede: x=3.30</code></pre>
 </div>
 <p><em><strong>Caminho da solução</strong></em></p>
 <ul><li><strong>Contrato</strong>: <code>POST /api/pontuacoes</code> com <code>{fase, tempo, moedas, versaoDoJogo}</code> e <code>Authorization: Bearer &lt;jwt&gt;</code>. Resposta 201, ou 422 se a validação anti-trapaça recusar.</li><li><strong>Anti-trapaça</strong> (sem ilusões: o cliente está na mão do jogador): (1) regras de plausibilidade do lado do servidor, como o tempo não ser menor que o do piloto automático menos uma margem e as moedas não passarem do total do mapa; (2) limite de envios por usuário; (3) para quem quiser ir além, o jogo grava a sequência de comandos, e o servidor <strong>reexecuta a fase</strong>, com a mesma <code>Fase</code> determinística de passo fixo (o mesmo código, num módulo compartilhado), e confere o resultado. É aqui que o passo fixo da Trilha C paga o investimento.</li><li><strong>Ranking</strong>: uma tabela <code>pontuacao</code>, um índice por <code>(fase, tempo)</code> e uma <em>view</em> com <code>ROW_NUMBER() OVER (PARTITION BY fase ORDER BY tempo)</code> para o melhor tempo de cada jogador.</li><li><strong>Site</strong>: um fragmento Thymeleaf com <code>hx-get="/ranking/1" hx-trigger="every 5s"</code>, ou SSE, como no D3.</li><li><strong>Painel</strong>: uma tela de administração que lista as pontuações com a menor margem de plausibilidade e chama <code>DELETE /api/pontuacoes/{id}</code> (papel ADMIN, 403 para os outros).</li><li><strong>Documento</strong>: um diagrama com os componentes, o fluxo de uma pontuação, as decisões (e o que foi trocado por elas) e os riscos conhecidos.</li></ul>
+<div class="questao desafio" id="d7">
+<span class="num">D7</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora, duas interfaces</p>
+<p>Escreva uma calculadora com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada. Ela deve: (a) fazer as contas com <code>BigDecimal</code>, para que <code>0,1 + 0,2</code> dê exatamente <code>0,3</code>, aceitando vírgula ou ponto e limitando o resultado a 16 dígitos significativos; (b) guardar o último resultado em <code>ans</code>, que pode ser usado na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário e texto que não é número com uma mensagem clara, <strong>sem encerrar o programa</strong>. Escreva o núcleo numa classe que não sabe nada de entrada e saída, e reaproveite-o em duas interfaces: uma de <strong>terminal</strong> (com os comandos <code>hist</code> e <code>sair</code>) e uma <strong>gráfica</strong> em JavaFX, com teclado na tela, visor e histórico.</p>
+</div>
+</div>
+<p><em><strong>Caminho da solução</strong></em></p>
+<ul><li><strong>Núcleo</strong>: um <code>enum Operacao</code> com o símbolo de cada operação e uma classe <code>Calculadora</code> que só calcula. O <code>switch</code> sobre o <code>enum</code> é exaustivo: se alguém acrescentar uma oitava operação e esquecer de tratá-la, o código não compila.</li><li><strong>Precisão</strong>: <code>MathContext.DECIMAL64</code> (16 dígitos) na divisão, na potência negativa e na raiz, que são as operações capazes de gerar dízimas. O resultado guardado em <code>ans</code> já sai arredondado, como no visor de uma calculadora de mesa.</li><li><strong>Erros</strong>: o núcleo lança <code>ArithmeticException</code> (conta impossível) ou <code>IllegalArgumentException</code> (entrada mal escrita). As duas interfaces capturam essas exceções, mostram a mensagem e seguem funcionando.</li><li><strong>Interfaces</strong>: o terminal lê linha a linha com <code>IO.readln</code>, e a janela JavaFX monta o mesmo texto ("12,5 + 3") com os botões e entrega a <code>avaliar</code>. Nenhuma regra de conta aparece fora da <code>Calculadora</code>.</li></ul>
+<p><code>Calculadora.java</code>, o núcleo:</p>
+<pre class="codigo"><code>import java.math.BigDecimal;
+import java.math.MathContext;
+
+enum Operacao {
+    SOMA("+"), SUBTRACAO("-"), MULTIPLICACAO("*"), DIVISAO("/"),
+    POTENCIA("^"), PORCENTAGEM("%"), RAIZ("raiz");
+
+    final String simbolo;
+
+    Operacao(String simbolo) { this.simbolo = simbolo; }
+
+    static Operacao de(String simbolo) {
+        for (var op : values()) if (op.simbolo.equals(simbolo)) return op;
+        throw new IllegalArgumentException("operação desconhecida: " + simbolo);
+    }
+}
+
+/** O núcleo: não sabe nada de terminal nem de janela, e por isso as duas interfaces o reaproveitam. */
+final class Calculadora {
+    private static final MathContext PRECISAO = MathContext.DECIMAL64;   // 16 dígitos significativos
+    private static final BigDecimal CEM = BigDecimal.valueOf(100);
+
+    private BigDecimal ultimo = BigDecimal.ZERO;                          // o "ans" das calculadoras
+
+    BigDecimal calcular(Operacao op, BigDecimal a, BigDecimal b) {
+        return switch (op) {
+            case SOMA -&gt; a.add(b);
+            case SUBTRACAO -&gt; a.subtract(b);
+            case MULTIPLICACAO -&gt; a.multiply(b);
+            case DIVISAO -&gt; {
+                if (b.signum() == 0) throw new ArithmeticException("divisão por zero");
+                yield a.divide(b, PRECISAO);
+            }
+            case POTENCIA -&gt; {
+                if (b.stripTrailingZeros().scale() &gt; 0) throw new ArithmeticException("o expoente precisa ser inteiro");
+                int expoente = b.intValue();
+                if (Math.abs(expoente) &gt; 999) throw new ArithmeticException("expoente fora de -999 a 999");
+                if (a.signum() == 0 &amp;&amp; expoente &lt; 0) throw new ArithmeticException("divisão por zero");
+                yield a.pow(expoente, PRECISAO);
+            }
+            case PORCENTAGEM -&gt; a.multiply(b).divide(CEM, PRECISAO);       // "15 % 200" = 15% de 200
+            case RAIZ -&gt; {
+                if (a.signum() &lt; 0) throw new ArithmeticException("raiz de número negativo");
+                yield a.sqrt(PRECISAO);
+            }
+        };
+    }
+
+    /** Avalia "12,5 + 3", "2 ^ 10", "15 % 200" ou "raiz 2"; "ans" é o último resultado. */
+    BigDecimal avaliar(String linha) {
+        String[] t = linha.trim().split("\\s+");
+        BigDecimal resultado = switch (t.length) {
+            case 2 -&gt; calcular(Operacao.de(t[0]), numero(t[1]), BigDecimal.ZERO);
+            case 3 -&gt; calcular(Operacao.de(t[1]), numero(t[0]), numero(t[2]));
+            default -&gt; throw new IllegalArgumentException("use: número operação número, ou raiz número");
+        };
+        if (t.length == 2 &amp;&amp; Operacao.de(t[0]) != Operacao.RAIZ)
+            throw new IllegalArgumentException("só a raiz tem um operando");
+        ultimo = resultado.round(PRECISAO);                                // como no visor: 16 dígitos
+        return ultimo;
+    }
+
+    private BigDecimal numero(String texto) {
+        if (texto.equalsIgnoreCase("ans")) return ultimo;
+        try {
+            return new BigDecimal(texto.replace(',', '.'));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("não é um número: " + texto);
+        }
+    }
+
+    static String formatar(BigDecimal valor) {
+        BigDecimal v = valor.stripTrailingZeros();
+        boolean enorme = v.precision() - v.scale() &gt; 16;                  // mais de 16 dígitos inteiros
+        return (enorme ? v.toString() : v.toPlainString()).replace('.', ',');
+    }
+}</code></pre>
+<p><code>CalculadoraTerminal.java</code>:</p>
+<pre class="codigo"><code>import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+public class CalculadoraTerminal {
+    public static void main(String[] args) {
+        var calc = new Calculadora();
+        List&lt;String&gt; historico = new ArrayList&lt;&gt;();
+        IO.println("Calculadora: + - * / ^ % raiz  |  ans, hist, sair");
+        String linha;
+        while ((linha = IO.readln("&gt; ")) != null) {            // null: fim da entrada (Ctrl+D)
+            linha = linha.trim();
+            if (linha.isEmpty()) continue;
+            if (linha.equals("sair")) break;
+            if (linha.equals("hist")) {
+                historico.forEach(IO::println);
+                continue;
+            }
+            try {
+                BigDecimal r = calc.avaliar(linha);
+                String conta = linha + " = " + Calculadora.formatar(r);
+                historico.add(conta);
+                IO.println(conta);
+            } catch (ArithmeticException | IllegalArgumentException e) {
+                IO.println("erro: " + e.getMessage());          // a conta errada não derruba o programa
+            }
+        }
+    }
+}</code></pre>
+<p>Com a entrada redirecionada, o terminal não ecoa o que foi digitado e cada resultado aparece logo depois do <code>&gt;</code>:</p>
+<pre class="codigo"><code>printf '0,1 + 0,2\n10 / 3\nans * 3\n1 / 0\n2 ^ 100\nraiz 2\nans * ans\n15 %% 200\n2 ^ 0,5\nraiz -4\nabc + 1\nhist\nsair\n' | java CalculadoraTerminal.java</code></pre>
+<pre class="saida"><code>Calculadora: + - * / ^ % raiz  |  ans, hist, sair
+&gt; 0,1 + 0,2 = 0,3
+&gt; 10 / 3 = 3,333333333333333
+&gt; ans * 3 = 9,999999999999999
+&gt; erro: divisão por zero
+&gt; 2 ^ 100 = 1,267650600228229E+30
+&gt; raiz 2 = 1,414213562373095
+&gt; ans * ans = 2
+&gt; 15 % 200 = 30
+&gt; erro: o expoente precisa ser inteiro
+&gt; erro: raiz de número negativo
+&gt; erro: não é um número: abc
+&gt; 0,1 + 0,2 = 0,3
+10 / 3 = 3,333333333333333
+ans * 3 = 9,999999999999999
+2 ^ 100 = 1,267650600228229E+30
+raiz 2 = 1,414213562373095
+ans * ans = 2
+15 % 200 = 30
+&gt;</code></pre>
+<p>Repare em <code>10 / 3</code> seguido de <code>ans * 3</code>: o resultado é <code>9,999999999999999</code>, e não <code>10</code>, porque <code>ans</code> guardou a dízima cortada em 16 dígitos. As calculadoras de bolso escondem isso trabalhando internamente com alguns dígitos a mais do que mostram no visor. Fazer o mesmo aqui é uma boa extensão.</p>
+<p><code>CalculadoraFX.java</code>, a versão gráfica. O JavaFX não vem com o JDK: baixe os módulos <code>javafx-base</code>, <code>javafx-graphics</code> e <code>javafx-controls</code> (ou o SDK do openjfx.io) e aponte o <code>--module-path</code> para eles:</p>
+<pre class="codigo"><code>import java.math.BigDecimal;
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+public class CalculadoraFX extends Application {
+    private final Calculadora calc = new Calculadora();           // o mesmo núcleo do terminal
+    private final TextField visor = new TextField();
+    private final Label erro = new Label();
+    private final ListView&lt;String&gt; historico = new ListView&lt;&gt;();
+
+    // Cada botão só escreve no visor; quem entende a conta é o Calculadora.avaliar.
+    private static final String[][] TECLAS = {
+        {"7", "8", "9", " / ", "C"},
+        {"4", "5", "6", " * ", "raiz "},
+        {"1", "2", "3", " - ", " ^ "},
+        {"0", ",", "ans", " + ", " % "},
+    };
+
+    @Override
+    public void start(Stage palco) {
+        visor.setPromptText("12,5 + 3   ou   raiz 2");
+        visor.setStyle("-fx-font-size: 20px; -fx-alignment: center-right;");
+        visor.setOnAction(e -&gt; calcular());                         // Enter também calcula
+        erro.setStyle("-fx-text-fill: firebrick;");
+
+        var grade = new GridPane(6, 6);
+        for (int lin = 0; lin &lt; TECLAS.length; lin++)
+            for (int col = 0; col &lt; TECLAS[lin].length; col++)
+                grade.add(botao(TECLAS[lin][col]), col, lin);
+        var igual = new Button("=");
+        igual.setMaxWidth(Double.MAX_VALUE);
+        igual.setOnAction(e -&gt; calcular());
+        grade.add(igual, 0, TECLAS.length, TECLAS[0].length, 1);
+
+        var raiz = new BorderPane(new VBox(8, visor, erro, grade), null, null, historico, null);
+        historico.setPrefHeight(140);
+        BorderPane.setMargin(historico, new Insets(8, 0, 0, 0));
+        raiz.setPadding(new Insets(12));
+
+        palco.setTitle("Calculadora");
+        palco.setScene(new Scene(raiz));
+        palco.show();
+    }
+
+    private Button botao(String tecla) {
+        var b = new Button(tecla.trim());
+        b.setPrefSize(64, 44);
+        b.setOnAction(e -&gt; {
+            if (tecla.equals("C")) visor.clear();
+            else visor.appendText(tecla);
+            visor.requestFocus();
+            visor.end();
+        });
+        return b;
+    }
+
+    private void calcular() {
+        String conta = visor.getText().trim();
+        if (conta.isEmpty()) return;
+        try {
+            BigDecimal r = calc.avaliar(conta);
+            historico.getItems().addFirst(conta + " = " + Calculadora.formatar(r));
+            visor.setText(Calculadora.formatar(r));  // a próxima conta continua dele
+            erro.setText("");
+        } catch (ArithmeticException | IllegalArgumentException e) {
+            erro.setText("erro: " + e.getMessage());  // a janela continua aberta
+        }
+        visor.end();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}</code></pre>
+<pre class="codigo"><code>javac --module-path javafx/lib --add-modules javafx.controls Calculadora.java CalculadoraFX.java
+java --module-path javafx/lib --add-modules javafx.controls CalculadoraFX</code></pre>
+<figure class="captura"><img src="img/calculadora-fx.png" alt="Janela da calculadora JavaFX com o visor mostrando 1 / 0, a mensagem de erro divisão por zero, o teclado de 21 botões e o histórico de quatro contas" width="368" height="467"><figcaption>A janela depois de <code>10 / 3</code>, <code>* 3</code>, <code>2 ^ 100</code>, <code>raiz 2</code> e uma tentativa de <code>1 / 0</code>.</figcaption></figure>
 </section>
 <footer class="fim">
 <p><strong>Fim do gabarito.</strong></p>

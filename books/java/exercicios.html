@@ -11,7 +11,7 @@
 <p class="serie">DOMINANDO JAVA EM 1 ANO</p>
 <h1>Caderno de Exercícios</h1>
 <p class="subtitulo">79 aulas de prática, do #00 ao #78</p>
-<p class="subtitulo">Java 25 LTS · 9 fases e 3 trilhas · 189 questões · 6 desafios integradores</p>
+<p class="subtitulo">Java 25 LTS · 9 fases e 3 trilhas · 189 questões · 7 desafios integradores</p>
 <p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
 </header>
 <div class="ficha"><span>Nome do aluno:</span><span>Início:</span><span>Término:</span></div>
@@ -37,7 +37,7 @@
 <tr><td>TRILHA B</td><td>Desktop e Android</td><td>#67–#70</td><td>Q163–Q170</td></tr>
 <tr><td>TRILHA C</td><td>Jogos com libGDX</td><td>#71–#77</td><td>Q171–Q186</td></tr>
 <tr><td>ENCERRAMENTO</td><td>O destino e o novo começo</td><td>#78</td><td>Q187–Q189</td></tr>
-<tr><td>DESAFIOS</td><td>Projetos integradores que atravessam várias fases e trilhas</td><td>todas</td><td>D1–D6</td></tr>
+<tr><td>DESAFIOS</td><td>Projetos integradores que atravessam várias fases e trilhas</td><td>todas</td><td>D1–D7</td></tr>
 </tbody>
 </table>
 <aside class="legenda">
@@ -1693,6 +1693,15 @@ interface Correio { void enviar(String para, String assunto); }</code></pre>
 <div class="corpo">
 <p class="titulo">A jornada completa em um só sistema</p>
 <p>Integre as três trilhas: o jogo envia a pontuação de cada fase vencida para a API das Trilhas (autenticado com JWT); a API valida a pontuação contra trapaças (tempo mínimo possível para a fase, moedas no máximo o total da fase, assinatura do jogo), grava no PostgreSQL e mantém um <em>ranking</em>; o site mostra o <em>ranking</em> ao vivo com htmx; e o Painel desktop permite a um administrador anular pontuações suspeitas. Escreva um documento de arquitetura de uma página e implemente pelo menos o caminho jogo → API → site.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+<div class="questao desafio" id="d7">
+<span class="num">D7</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora, duas interfaces</p>
+<p>Escreva uma calculadora com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada. Ela deve: (a) fazer as contas com <code>BigDecimal</code>, para que <code>0,1 + 0,2</code> dê exatamente <code>0,3</code>, aceitando vírgula ou ponto e limitando o resultado a 16 dígitos significativos; (b) guardar o último resultado em <code>ans</code>, que pode ser usado na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário e texto que não é número com uma mensagem clara, <strong>sem encerrar o programa</strong>. Escreva o núcleo numa classe que não sabe nada de entrada e saída, e reaproveite-o em duas interfaces: uma de <strong>terminal</strong> (com os comandos <code>hist</code> e <code>sair</code>) e uma <strong>gráfica</strong> em JavaFX, com teclado na tela, visor e histórico.</p>
 </div>
 </div>
 <p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
