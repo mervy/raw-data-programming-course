@@ -1,0 +1,2229 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dominando Rust em 1 Ano · Caderno de Respostas</title>
+<link rel="stylesheet" href="../caderno.css">
+</head>
+<body class="caderno respostas">
+<header class="capa">
+<p class="serie">DOMINANDO RUST EM 1 ANO</p>
+<h1>Caderno de Respostas</h1>
+<p class="subtitulo">Gabarito comentado: 53 aulas de prática, do #01 ao #53</p>
+<p class="subtitulo">Rust 1.98 · edição 2024 · Cargo · 11 módulos · 67 questões · 2 desafios integradores</p>
+<p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</header>
+<aside class="nota">
+<p><strong>Consulte este gabarito só depois de tentar.</strong></p>
+<p>As respostas são comentadas para ensinar, não só para conferir. Nos exercícios de código existem outras soluções igualmente válidas: o que importa é entender por que a sua funciona e o que ela troca em relação à mostrada aqui.</p>
+<p>Os programas com um quadro verde de <strong>Saída</strong> foram compilados com rustc 1.98 (edição 2024, -O) e executados no Linux, e a saída mostrada é a real.</p>
+</aside>
+<h2 class="sumario-titulo">Sumário</h2>
+<table class="sumario">
+<thead><tr><th>Módulo</th><th>Tema</th><th>Aulas</th><th>Questões</th></tr></thead>
+<tbody>
+<tr><td>MÓDULO 1</td><td>Fundamentos da linguagem</td><td>#01–#04</td><td>Q1–Q6</td></tr>
+<tr><td>MÓDULO 2</td><td>Ownership e borrowing</td><td>#05–#06</td><td>Q7–Q11</td></tr>
+<tr><td>MÓDULO 3</td><td>Tipos próprios e erros</td><td>#07–#09</td><td>Q12–Q17</td></tr>
+<tr><td>MÓDULO 4</td><td>Coleções, iteradores e closures</td><td>#10–#11</td><td>Q18–Q23</td></tr>
+<tr><td>MÓDULO 5</td><td>Traits, generics e lifetimes</td><td>#12–#14</td><td>Q24–Q29</td></tr>
+<tr><td>MÓDULO 6</td><td>Módulos e testes</td><td>#15–#16</td><td>Q30–Q32</td></tr>
+<tr><td>MÓDULO 7</td><td>Recursos avançados</td><td>#17–#21</td><td>Q33–Q42</td></tr>
+<tr><td>MÓDULO 8</td><td>Ecossistema e web</td><td>#22–#26</td><td>Q43–Q48</td></tr>
+<tr><td>MÓDULO 9</td><td>Sistemas e baixo nível</td><td>#27–#36</td><td>Q49–Q56</td></tr>
+<tr><td>MÓDULO 10</td><td>Engenharia de projetos</td><td>#37–#41</td><td>Q57–Q61</td></tr>
+<tr><td>MÓDULO 11</td><td>Rust em domínios específicos e o futuro</td><td>#42–#53</td><td>Q62–Q67</td></tr>
+<tr><td>DESAFIOS</td><td>Desafios integradores</td><td>todas</td><td>D1–D2</td></tr>
+</tbody>
+</table>
+<section class="modulo" id="modulo-1">
+<h2><span class="rotulo">MÓDULO 1</span> Fundamentos da linguagem</h2>
+<p class="intro">Por que Rust existe, variáveis e imutabilidade, funções e expressões, e o controle de fluxo.</p>
+<p class="aulas-titulo">Artigos 01 a 04</p>
+<ul class="aulas">
+<li><span class="n">#01</span> Por que Rust existe e o que ele quer de você</li>
+<li><span class="n">#02</span> Variáveis, Tipos e a Arte da Imutabilidade</li>
+<li><span class="n">#03</span> Funções, Expressões e Como Rust Pensa Diferente sobre Retorno de Valores</li>
+<li><span class="n">#04</span> Controle de Fluxo — if, loop, while e for como você nunca viu antes</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q1">
+<span class="num">Q1</span>
+<div class="corpo">
+<p class="titulo">O que Rust quer de você</p>
+<p>O artigo #01 diz que Rust oferece segurança de memória sem coletor de lixo. Que duas classes de <em>bugs</em> comuns em C e C++ o compilador do Rust impede, e qual é o preço que o programador paga por isso?</p>
+</div>
+</div>
+<ul><li><strong>Uso de memória inválida</strong>: ponteiro solto (<em>use after free</em>), liberação dupla e leitura fora dos limites. O sistema de posse e empréstimo garante, em tempo de compilação, que nenhuma referência sobrevive ao valor que ela aponta; o acesso a vetores é verificado.</li><li><strong>Corridas de dados</strong>: duas threads acessando o mesmo dado, ao menos uma escrevendo, sem sincronização. As regras de empréstimo e os <em>traits</em> <code>Send</code> e <code>Sync</code> tornam isso erro de compilação.</li></ul>
+<p>O preço é uma curva de aprendizado mais íngreme: o compilador recusa programas que <strong>talvez</strong> fossem corretos, e é preciso aprender a estruturar o código do jeito que ele consegue provar seguro. Em troca, uma classe inteira de falhas, que em C só aparece em produção, nem chega a compilar.</p>
+<div class="questao" id="q2">
+<span class="num">Q2</span>
+<div class="corpo">
+<p class="titulo">Imutável por padrão</p>
+<p>Por que <code>let x = 5; x = 6;</code> não compila em Rust? Qual a diferença entre <code>let mut</code>, <em>shadowing</em> (<code>let x = x + 1;</code>) e <code>const</code>?</p>
+</div>
+</div>
+<p>Variáveis são <strong>imutáveis por padrão</strong>: a mutação precisa ser pedida com <code>mut</code>, o que deixa visível, na declaração, quais valores mudam. O <code>let mut x</code> cria uma variável que pode receber novos valores <strong>do mesmo tipo</strong>. O <em>shadowing</em> cria uma variável <strong>nova</strong> com o mesmo nome, que esconde a anterior; ela pode até ter outro tipo (<code>let espacos = "   "; let espacos = espacos.len();</code>), e a anterior continua imutável. O <code>const</code> é um valor conhecido em tempo de compilação, com tipo obrigatório, que pode ser global e é copiado onde é usado (<code>const MAX_JOGADORES: u32 = 4;</code>).</p>
+<div class="questao" id="q3">
+<span class="num">Q3</span>
+<div class="corpo">
+<p class="titulo">Expressão ou instrução</p>
+<p>Por que a função abaixo não compila, e como corrigi-la com uma mudança de um caractere?</p>
+<pre class="codigo"><code>fn dobro(x: i32) -&gt; i32 {
+    x * 2;
+}</code></pre>
+</div>
+</div>
+<p>Em Rust, quase tudo é <strong>expressão</strong> (produz um valor), e um bloco <code>{ ... }</code> vale a sua última expressão, <strong>se ela não terminar em ponto e vírgula</strong>. O <code>;</code> transforma <code>x * 2</code> numa <strong>instrução</strong>, que vale <code>()</code> (a unidade); a função promete <code>i32</code> e devolve <code>()</code>, e o compilador acusa "<em>mismatched types</em>". A correção é tirar o ponto e vírgula: <code>x * 2</code>. O mesmo princípio permite <code>let nota = if pontos &gt; 90 { 'A' } else { 'B' };</code> e <code>let r = loop { ... break valor; };</code>.</p>
+<div class="questao" id="q4">
+<span class="num">Q4</span>
+<div class="corpo">
+<p class="titulo">Estouro de inteiro</p>
+<p>O que acontece em <code>let x: u8 = 255; let y = x + 1;</code> no modo <em>debug</em> e no modo <em>release</em>? Que métodos tornam a intenção explícita?</p>
+</div>
+</div>
+<p>Em <strong><em>debug</strong></em>, o estouro aritmético faz o programa entrar em <strong>pânico</strong> ("<em>attempt to add with overflow</em>"); em <strong><em>release</strong></em> (<code>-O</code>), por padrão, o valor <strong>dá a volta</strong> (<em>wrap</em>) e <code>y</code> vale 0, sem aviso. (Quando o valor é uma constante conhecida, como aqui, o compilador já recusa na compilação.) Para não depender do modo, os inteiros têm métodos explícitos: <code>checked_add</code> devolve <code>Option</code> (<code>None</code> no estouro), <code>wrapping_add</code> dá a volta de propósito, <code>saturating_add</code> para no limite (255) e <code>overflowing_add</code> devolve o resultado e um <code>bool</code>.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q5">
+<span class="num">Q5</span>
+<div class="corpo">
+<p class="titulo">Tipos e conversões</p>
+<p>Escreva um programa que mostre: o maior <code>u8</code> e o menor <code>i16</code>; a conversão com <code>as</code> de <code>300_i32</code> para <code>u8</code> e de <code>-1_i32</code> para <code>u32</code>; a conversão segura com <code>u8::try_from</code>; e as quatro formas de somar <code>250_u8 + 10</code> (<code>checked</code>, <code>wrapping</code>, <code>saturating</code> e <code>overflowing</code>).</p>
+</div>
+</div>
+<pre class="codigo"><code>fn main() {
+    println!("u8::MAX = {}, i16::MIN = {}", u8::MAX, i16::MIN);
+    println!("300 as u8 = {} | -1 as u32 = {}", 300_i32 as u8, -1_i32 as u32);
+
+    for v in [42_i32, 300, -5] {
+        match u8::try_from(v) {
+            Ok(b) =&gt; println!("try_from({v}) = Ok({b})"),
+            Err(e) =&gt; println!("try_from({v}) = Err({e})"),
+        }
+    }
+
+    let x: u8 = 250;
+    println!("checked:     {:?}", x.checked_add(10));
+    println!("wrapping:    {}", x.wrapping_add(10));
+    println!("saturating:  {}", x.saturating_add(10));
+    println!("overflowing: {:?}", x.overflowing_add(10));
+}</code></pre>
+<pre class="saida"><code>u8::MAX = 255, i16::MIN = -32768
+300 as u8 = 44 | -1 as u32 = 4294967295
+try_from(42) = Ok(42)
+try_from(300) = Err(out of range integral type conversion attempted)
+try_from(-5) = Err(out of range integral type conversion attempted)
+checked:     None
+wrapping:    4
+saturating:  255
+overflowing: (4, true)</code></pre>
+<p>O <code>as</code> entre inteiros <strong>nunca falha</strong>: trunca os bits que não cabem (300 é 0x12C, e sobra 0x2C = 44) e reinterpreta o sinal (-1 vira o maior <code>u32</code>). Por isso é a escolha errada para dados vindos de fora; o <code>try_from</code> devolve um <code>Result</code> e obriga a tratar o caso que não cabe.</p>
+<div class="questao" id="q6">
+<span class="num">Q6</span>
+<div class="corpo">
+<p class="titulo">Expressões que devolvem valores</p>
+<p>Escreva <code>fn classificar(nota: u32) -&gt; &amp;'static str</code> usando <code>match</code> com faixas (<code>90..=100</code>), uma função <code>fn primeiro_divisor(n: u32) -&gt; u32</code> que use <code>loop</code> com <code>break valor</code>, e um laço com rótulo (<code>'externo</code>) que pare os dois laços quando achar o primeiro par <code>(a, b)</code> com <code>a * b == 42</code> e <code>a &lt; b</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>fn classificar(nota: u32) -&gt; &amp;'static str {
+    match nota {
+        90..=100 =&gt; "A",
+        70..=89 =&gt; "B",
+        50..=69 =&gt; "C",
+        0..=49 =&gt; "D",
+        _ =&gt; "nota inválida",
+    }
+}
+
+fn primeiro_divisor(n: u32) -&gt; u32 {
+    let mut d = 2;
+    loop {
+        if n % d == 0 {
+            break d; // o loop "vale" d
+        }
+        d += 1;
+    }
+}
+
+fn main() {
+    for n in [95, 72, 40, 120] {
+        println!("{n}: {}", classificar(n));
+    }
+    println!("primeiro divisor de 91: {}", primeiro_divisor(91));
+
+    let mut achado = None;
+    'externo: for a in 1..=42 {
+        for b in a + 1..=42 {
+            if a * b == 42 {
+                achado = Some((a, b));
+                break 'externo;
+            }
+        }
+    }
+    println!("primeiro par: {achado:?}");
+}</code></pre>
+<pre class="saida"><code>95: A
+72: B
+40: D
+120: nota inválida
+primeiro divisor de 91: 7
+primeiro par: Some((1, 42))</code></pre>
+<p>O <code>match</code> sobre um <code>u32</code> precisa ser <strong>exaustivo</strong>: sem o braço <code>_</code>, o compilador recusa, porque valores acima de 100 não estariam cobertos. O <code>loop</code> é o único laço que pode devolver valor com <code>break</code>, porque é o único que o compilador sabe que só termina pelo <code>break</code>. O rótulo evita a variável "achei" e o segundo <code>break</code> que o C exigiria.</p>
+</section>
+<section class="modulo" id="modulo-2">
+<h2><span class="rotulo">MÓDULO 2</span> Ownership e borrowing</h2>
+<p class="intro">Posse, movimento e cópia; referências, empréstimos mutáveis e imutáveis, e slices.</p>
+<p class="aulas-titulo">Artigos 05 a 06</p>
+<ul class="aulas">
+<li><span class="n">#05</span> Ownership — A Ideia que Muda Tudo</li>
+<li><span class="n">#06</span> Borrowing e Referências — Usando sem Possuir</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q7">
+<span class="num">Q7</span>
+<div class="corpo">
+<p class="titulo">As três regras da posse</p>
+<p>Enuncie as regras de <em>ownership</em> e explique por que <code>let s1 = String::from("oi"); let s2 = s1; println!("{s1}");</code> não compila, enquanto o mesmo código com <code>i32</code> compila.</p>
+</div>
+</div>
+<ol><li>Cada valor tem <strong>um único dono</strong> (uma variável).</li><li>Só pode haver um dono por vez.</li><li>Quando o dono sai de escopo, o valor é <strong>liberado</strong> (<code>drop</code>).</li></ol>
+<p>A <code>String</code> guarda os caracteres no <em>heap</em>. <code>let s2 = s1;</code> <strong>move</strong> a posse: copia o ponteiro, o tamanho e a capacidade, e invalida <code>s1</code>, para que o <em>heap</em> não seja liberado duas vezes quando as duas saírem de escopo. Usar <code>s1</code> depois é "<em>borrow of moved value</em>". O <code>i32</code> vive todo na pilha e implementa o <em>trait</em> <code>Copy</code>: a atribuição copia os bits, e as duas variáveis continuam válidas. Para duplicar uma <code>String</code>, pede-se explicitamente: <code>s1.clone()</code>, e a cópia cara fica visível no código.</p>
+<div class="questao" id="q8">
+<span class="num">Q8</span>
+<div class="corpo">
+<p class="titulo">Uma mutável ou várias imutáveis</p>
+<p>Qual é a regra dos empréstimos, e que <em>bug</em> clássico de C++ ela impede no código abaixo?</p>
+<pre class="codigo"><code>let mut v = vec![1, 2, 3];
+let primeiro = &amp;v[0];
+v.push(4);
+println!("{primeiro}");</code></pre>
+</div>
+</div>
+<p>Em qualquer momento, pode haver <strong>várias referências imutáveis</strong> (<code>&amp;T</code>) <strong>ou</strong> <strong>uma única mutável</strong> (<code>&amp;mut T</code>), nunca as duas ao mesmo tempo. Aqui, <code>primeiro</code> é um empréstimo imutável de <code>v</code>, ainda usado no <code>println!</code>, e o <code>push</code> precisa de um empréstimo mutável: o compilador recusa. O motivo é concreto: o <code>push</code> pode <strong>realocar</strong> o vetor, e <code>primeiro</code> apontaria para memória liberada, exatamente a invalidação de iteradores do <code>std::vector</code> em C++, que lá compila e falha em execução. Graças às <em>non-lexical lifetimes</em>, se <code>primeiro</code> não fosse usado depois do <code>push</code>, o código compilaria: o empréstimo acaba no último uso.</p>
+<div class="questao" id="q9">
+<span class="num">Q9</span>
+<div class="corpo">
+<p class="titulo">String e &amp;str</p>
+<p>Qual a diferença entre <code>String</code> e <code>&amp;str</code>? Por que uma função que só lê um texto deve receber <code>&amp;str</code>?</p>
+</div>
+</div>
+<p>A <code>String</code> é <strong>dona</strong> de um texto UTF-8 no <em>heap</em>, que pode crescer e mudar. O <code>&amp;str</code> é uma <strong>fatia emprestada</strong> (um ponteiro e um tamanho) de um texto que pertence a outro: uma <code>String</code>, um literal (que vive no binário, <code>&amp;'static str</code>) ou parte de outro texto. Uma função que só lê deve receber <code>&amp;str</code> porque aceita os três casos: uma <code>&amp;String</code> converte sozinha para <code>&amp;str</code> (<em>deref coercion</em>), e um literal já é <code>&amp;str</code>. Receber <code>String</code> obrigaria quem chama a entregar a posse ou a clonar; receber <code>&amp;String</code> recusaria literais sem uma conversão.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q10">
+<span class="num">Q10</span>
+<div class="corpo">
+<p class="titulo">Movimento, cópia e empréstimo</p>
+<p>Escreva um programa que mostre: (a) uma <code>String</code> movida para uma função e devolvida no retorno; (b) a mesma função reescrita para receber <code>&amp;str</code>; (c) uma função que recebe <code>&amp;mut String</code> e acrescenta texto; (d) um <code>struct</code> com <code>#[derive(Clone, Copy)]</code> sendo copiado.</p>
+</div>
+</div>
+<pre class="codigo"><code>fn consome(s: String) -&gt; String {
+    format!("{s}!") // recebe a posse e devolve uma String nova
+}
+
+fn tamanho(s: &amp;str) -&gt; usize {
+    s.chars().count()
+}
+
+fn exclamar(s: &amp;mut String) {
+    s.push_str("!!");
+}
+
+#[derive(Debug, Clone, Copy)]
+struct Ponto {
+    x: i32,
+    y: i32,
+}
+
+fn main() {
+    let s = String::from("ação");
+    let s = consome(s); // s foi movida e recebemos outra de volta
+    println!("(a) {s}");
+
+    println!("(b) {} caracteres, {} bytes", tamanho(&amp;s), s.len());
+
+    let mut grito = String::from("socorro");
+    exclamar(&amp;mut grito);
+    println!("(c) {grito}");
+
+    let p = Ponto { x: 1, y: 2 };
+    let mut q = p; // cópia: Ponto é Copy
+    q.x = 10;
+    println!("(d) p = ({}, {}), q = ({}, {})", p.x, p.y, q.x, q.y);
+}</code></pre>
+<pre class="saida"><code>(a) ação!
+(b) 5 caracteres, 7 bytes
+(c) socorro!!
+(d) p = (1, 2), q = (10, 2)</code></pre>
+<p>O <code>len()</code> conta <strong>bytes</strong> (UTF-8), e o <code>chars().count()</code>, caracteres: "ação!" tem 5 caracteres e 7 bytes. Um <code>struct</code> só pode ser <code>Copy</code> se todos os campos forem <code>Copy</code>; com um campo <code>String</code>, o <code>derive(Copy)</code> não compila, porque copiar os bits duplicaria o dono do <em>heap</em>.</p>
+<div class="questao" id="q11">
+<span class="num">Q11</span>
+<div class="corpo">
+<p class="titulo">Slices e a primeira palavra</p>
+<p>Escreva <code>fn primeira_palavra(s: &amp;str) -&gt; &amp;str</code> que devolva a primeira palavra (até o primeiro espaço) como uma fatia do texto original, sem alocar. Mostre que tentar esvaziar a <code>String</code> (<code>clear</code>) enquanto a fatia ainda está em uso não compila (em comentário), e use a função com um literal e com uma <code>String</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>fn primeira_palavra(s: &amp;str) -&gt; &amp;str {
+    match s.find(' ') {
+        Some(i) =&gt; &amp;s[..i],
+        None =&gt; s,
+    }
+}
+
+fn main() {
+    let mut frase = String::from("Ferris é o caranguejo");
+    let p = primeira_palavra(&amp;frase);
+    // frase.clear(); // erro: frase está emprestada (imutável) para p, que é usada abaixo
+    println!("primeira palavra: {p}");
+
+    frase.clear(); // aqui pode: o empréstimo de p já terminou
+    println!("frase vazia? {}", frase.is_empty());
+
+    println!("de um literal: {}", primeira_palavra("Rust"));
+
+    let numeros = [10, 20, 30, 40, 50];
+    let meio: &amp;[i32] = &amp;numeros[1..4];
+    println!("fatia de array: {meio:?}, soma {}", meio.iter().sum::&lt;i32&gt;());
+}</code></pre>
+<pre class="saida"><code>primeira palavra: Ferris
+frase vazia? true
+de um literal: Rust
+fatia de array: [20, 30, 40], soma 90</code></pre>
+<p>A fatia devolvida carrega um vínculo com a <code>String</code> original (um <em>lifetime</em>, que o compilador deduziu sozinho aqui): enquanto ela for usada, a <code>String</code> não pode ser alterada nem liberada. Em C, a função devolveria um <code>char*</code> para dentro do texto, e um <code>clear</code> antes do uso produziria lixo sem nenhum aviso. Cuidado com fatias de texto: <code>&amp;s[..i]</code> com <code>i</code> no meio de um caractere de dois bytes (como o "é") <strong>entra em pânico</strong>; o <code>find</code> devolve sempre um índice de início de caractere, por isso aqui é seguro.</p>
+</section>
+<section class="modulo" id="modulo-3">
+<h2><span class="rotulo">MÓDULO 3</span> Tipos próprios e erros</h2>
+<p class="intro">Structs e métodos, enums e pattern matching, e o tratamento de erros com Result.</p>
+<p class="aulas-titulo">Artigos 07 a 09</p>
+<ul class="aulas">
+<li><span class="n">#07</span> Structs — Criando seus próprios tipos de dados</li>
+<li><span class="n">#08</span> Enums e Pattern Matching — O Sistema Mais Expressivo que Você Já Viu</li>
+<li><span class="n">#09</span> Tratamento de Erros com Result — Erros como Valores, não Exceções</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q12">
+<span class="num">Q12</span>
+<div class="corpo">
+<p class="titulo">Option no lugar de null</p>
+<p>Por que Rust não tem <code>null</code>? O que o <code>Option&lt;T&gt;</code> obriga o programador a fazer que um ponteiro nulo não obriga?</p>
+</div>
+</div>
+<p>Tony Hoare, o criador da referência nula, a chamou de "erro de um bilhão de dólares": qualquer referência pode ser nula, e o tipo não diz quais. Em Rust, uma referência <strong>sempre</strong> aponta para algo válido, e a ausência é um tipo próprio: <code>Option&lt;T&gt;</code>, com os casos <code>Some(valor)</code> e <code>None</code>. Um <code>Option&lt;String&gt;</code> <strong>não é</strong> uma <code>String</code>: para usar o valor, é preciso tratá-lo (com <code>match</code>, <code>if let</code>, <code>?</code>, <code>unwrap_or</code> e afins), e o compilador não deixa esquecer o caso <code>None</code>. A ausência deixa de ser uma surpresa em execução e passa a ser uma informação no tipo. E não custa memória a mais: um <code>Option&lt;&amp;T&gt;</code> ou <code>Option&lt;Box&lt;T&gt;&gt;</code> ocupa o mesmo que o ponteiro, porque o <code>None</code> é representado pelo endereço zero, que uma referência nunca tem.</p>
+<div class="questao" id="q13">
+<span class="num">Q13</span>
+<div class="corpo">
+<p class="titulo">O operador ?</p>
+<p>O que o operador <code>?</code> faz numa função que devolve <code>Result&lt;T, E&gt;</code>? Por que <code>unwrap()</code> é aceitável num exemplo e perigoso numa biblioteca?</p>
+</div>
+</div>
+<p>Aplicado a um <code>Result</code>, o <code>?</code> devolve o valor se for <code>Ok</code>, ou <strong>retorna imediatamente</strong> da função com o <code>Err</code>, convertendo o tipo do erro com <code>From</code> se for preciso. Substitui o <code>match</code> repetido a cada chamada que pode falhar, mantendo a propagação explícita (cada ponto de falha tem o seu <code>?</code> visível). O <code>unwrap()</code> extrai o valor ou <strong>entra em pânico</strong>: num exemplo ou num teste, ele encurta o código e a falha é aceitável; numa biblioteca, derruba o programa de quem a usa por um erro que ele poderia ter tratado. Fora de testes, prefira <code>?</code>, ou <code>expect("motivo")</code> quando a falha realmente for um <em>bug</em> impossível, com a explicação de por quê.</p>
+<div class="questao" id="q14">
+<span class="num">Q14</span>
+<div class="corpo">
+<p class="titulo">Enum com dados</p>
+<p>Como um <code>enum</code> do Rust difere de um <code>enum</code> do C? Mostre um <code>enum Mensagem</code> com quatro variantes de formatos diferentes.</p>
+</div>
+</div>
+<p>No C, um <code>enum</code> é só um conjunto de inteiros com nome. No Rust, cada variante pode <strong>carregar dados próprios</strong>, com formatos diferentes, e o compilador sabe sempre qual variante está guardada (é a união etiquetada, segura):</p>
+<pre class="codigo"><code>enum Mensagem {
+    Sair,                        // sem dados
+    Mover { x: i32, y: i32 },    // campos nomeados
+    Escrever(String),            // um valor
+    MudarCor(u8, u8, u8),        // uma tupla
+}</code></pre>
+<p>Um <code>match</code> sobre uma <code>Mensagem</code> precisa tratar as quatro variantes, e cada braço extrai os dados da sua (<code>Mensagem::Mover { x, y } =&gt; ...</code>). Acrescentar uma variante faz o compilador apontar cada <code>match</code> que ficou incompleto. <code>Option</code> e <code>Result</code> são <em>enums</em> comuns da biblioteca padrão, definidos assim.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q15">
+<span class="num">Q15</span>
+<div class="corpo">
+<p class="titulo">Uma struct com métodos</p>
+<p>Escreva <code>struct Retangulo { largura: f64, altura: f64 }</code> com um construtor associado <code>quadrado(lado)</code>, os métodos <code>area(&amp;self)</code>, <code>escalar(&amp;mut self, fator)</code> e <code>cabe_em(&amp;self, outro: &amp;Retangulo) -&gt; bool</code>, e implemente o <em>trait</em> <code>Display</code> para imprimi-lo como <code>3x4</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>use std::fmt;
+
+#[derive(Debug, Clone, PartialEq)]
+struct Retangulo {
+    largura: f64,
+    altura: f64,
+}
+
+impl Retangulo {
+    fn quadrado(lado: f64) -&gt; Self {
+        Self { largura: lado, altura: lado }
+    }
+    fn area(&amp;self) -&gt; f64 {
+        self.largura * self.altura
+    }
+    fn escalar(&amp;mut self, fator: f64) {
+        self.largura *= fator;
+        self.altura *= fator;
+    }
+    fn cabe_em(&amp;self, outro: &amp;Retangulo) -&gt; bool {
+        self.largura &lt;= outro.largura &amp;&amp; self.altura &lt;= outro.altura
+    }
+}
+
+impl fmt::Display for Retangulo {
+    fn fmt(&amp;self, f: &amp;mut fmt::Formatter) -&gt; fmt::Result {
+        write!(f, "{}x{}", self.largura, self.altura)
+    }
+}
+
+fn main() {
+    let mut r = Retangulo { largura: 3.0, altura: 4.0 };
+    let q = Retangulo::quadrado(5.0);
+    println!("{r} tem área {}; cabe em {q}? {}", r.area(), r.cabe_em(&amp;q));
+    r.escalar(2.0);
+    println!("escalado: {r} (Debug: {r:?}); cabe agora? {}", r.cabe_em(&amp;q));
+    println!("igual a 6x8? {}", r == Retangulo { largura: 6.0, altura: 8.0 });
+}</code></pre>
+<pre class="saida"><code>3x4 tem área 12; cabe em 5x5? true
+escalado: 6x8 (Debug: Retangulo { largura: 6.0, altura: 8.0 }); cabe agora? false
+igual a 6x8? true</code></pre>
+<p>O primeiro parâmetro diz o que o método faz com o objeto: <code>&amp;self</code> só lê, <code>&amp;mut self</code> altera, e <code>self</code> consumiria o valor. A chamada <code>r.escalar(2.0)</code> empresta <code>r</code> como mutável sozinha (<em>auto-referencing</em>), o que exige <code>let mut r</code>. O <code>Display</code> é para pessoas; o <code>Debug</code> (derivado) é para o programador. O <code>PartialEq</code> derivado compara campo a campo.</p>
+<div class="questao" id="q16">
+<span class="num">Q16</span>
+<div class="corpo">
+<p class="titulo">Uma máquina de estados com enum</p>
+<p>Modele um pedido com <code>enum Estado { Novo, Pago { valor: u32 }, Enviado { codigo: String }, Cancelado { motivo: String } }</code> e escreva <code>fn avancar(estado: Estado, evento: Evento) -&gt; Result&lt;Estado, String&gt;</code> com <code>match</code> sobre a tupla <code>(estado, evento)</code>. Rode uma sequência válida e duas inválidas.</p>
+</div>
+</div>
+<pre class="codigo"><code>#[derive(Debug)]
+enum Estado {
+    Novo,
+    Pago { valor: u32 },
+    Enviado { codigo: String },
+    Cancelado { motivo: String },
+}
+
+#[derive(Debug)]
+enum Evento {
+    Pagar(u32),
+    Enviar(String),
+    Cancelar(String),
+}
+
+fn avancar(estado: Estado, evento: Evento) -&gt; Result&lt;Estado, String&gt; {
+    match (estado, evento) {
+        (Estado::Novo, Evento::Pagar(valor)) if valor &gt; 0 =&gt; Ok(Estado::Pago { valor }),
+        (Estado::Pago { .. }, Evento::Enviar(codigo)) =&gt; Ok(Estado::Enviado { codigo }),
+        (Estado::Novo | Estado::Pago { .. }, Evento::Cancelar(motivo)) =&gt; Ok(Estado::Cancelado { motivo }),
+        (e, ev) =&gt; Err(format!("não dá para {ev:?} no estado {e:?}")),
+    }
+}
+
+fn descrever(e: &amp;Estado) -&gt; String {
+    match e {
+        Estado::Novo =&gt; "novo".to_string(),
+        Estado::Pago { valor } =&gt; format!("pago (R$ {},{:02})", valor / 100, valor % 100),
+        Estado::Enviado { codigo } =&gt; format!("enviado, rastreio {codigo}"),
+        Estado::Cancelado { motivo } =&gt; format!("cancelado: {motivo}"),
+    }
+}
+
+fn main() {
+    let mut estado = Estado::Novo;
+    for ev in [Evento::Pagar(4990), Evento::Enviar("BR123".into())] {
+        estado = avancar(estado, ev).expect("sequência válida");
+        println!("-&gt; {}", descrever(&amp;estado));
+    }
+    println!("{}", avancar(estado, Evento::Cancelar("desisti".into())).unwrap_err());
+    println!("{}", avancar(Estado::Novo, Evento::Pagar(0)).unwrap_err());
+    let pago = avancar(Estado::Novo, Evento::Pagar(2500)).unwrap();
+    println!("-&gt; {}", descrever(&amp;avancar(pago, Evento::Cancelar("endereço errado".into())).unwrap()));
+}</code></pre>
+<pre class="saida"><code>-&gt; pago (R$ 49,90)
+-&gt; enviado, rastreio BR123
+não dá para Cancelar("desisti") no estado Enviado { codigo: "BR123" }
+não dá para Pagar(0) no estado Novo
+-&gt; cancelado: endereço errado</code></pre>
+<p>Cada estado carrega só os dados que fazem sentido nele: um pedido <code>Novo</code> não tem código de rastreio, e não existe um campo <code>codigo</code> vazio esperando ser preenchido. A guarda <code>if valor &gt; 0</code> refina o padrão. Como <code>avancar</code> recebe o estado <strong>por valor</strong>, o estado antigo é consumido e não pode ser usado por engano depois da transição.</p>
+<div class="questao" id="q17">
+<span class="num">Q17</span>
+<div class="corpo">
+<p class="titulo">Erros próprios e o operador ?</p>
+<p>Escreva <code>fn ler_config(texto: &amp;str) -&gt; Result&lt;Config, ErroConfig&gt;</code> que leia linhas <code>chave=valor</code> com as chaves <code>porta</code> (número de 1 a 65535) e <code>host</code> (obrigatório). Defina <code>enum ErroConfig</code> com as variantes <code>LinhaInvalida(usize)</code>, <code>Faltando(&amp;'static str)</code> e <code>Porta(std::num::ParseIntError)</code>, implemente <code>Display</code> e <code>From&lt;ParseIntError&gt;</code>, e use o <code>?</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>use std::fmt;
+use std::num::ParseIntError;
+
+#[derive(Debug)]
+struct Config {
+    host: String,
+    porta: u16,
+}
+
+#[derive(Debug)]
+enum ErroConfig {
+    LinhaInvalida(usize),
+    Faltando(&amp;'static str),
+    Porta(ParseIntError),
+}
+
+impl fmt::Display for ErroConfig {
+    fn fmt(&amp;self, f: &amp;mut fmt::Formatter) -&gt; fmt::Result {
+        match self {
+            ErroConfig::LinhaInvalida(n) =&gt; write!(f, "linha {n} não está no formato chave=valor"),
+            ErroConfig::Faltando(chave) =&gt; write!(f, "falta a chave '{chave}'"),
+            ErroConfig::Porta(e) =&gt; write!(f, "porta inválida: {e}"),
+        }
+    }
+}
+
+impl From&lt;ParseIntError&gt; for ErroConfig {
+    fn from(e: ParseIntError) -&gt; Self {
+        ErroConfig::Porta(e)
+    }
+}
+
+fn ler_config(texto: &amp;str) -&gt; Result&lt;Config, ErroConfig&gt; {
+    let (mut host, mut porta) = (None, 8080);
+    for (i, linha) in texto.lines().enumerate().filter(|(_, l)| !l.trim().is_empty()) {
+        let (chave, valor) = linha.split_once('=').ok_or(ErroConfig::LinhaInvalida(i + 1))?;
+        match chave.trim() {
+            "host" =&gt; host = Some(valor.trim().to_string()),
+            "porta" =&gt; porta = valor.trim().parse::&lt;u16&gt;()?, // ParseIntError vira ErroConfig pelo From
+            _ =&gt; {} // chaves desconhecidas são ignoradas
+        }
+    }
+    let host = host.ok_or(ErroConfig::Faltando("host"))?;
+    if porta == 0 {
+        return Err(ErroConfig::LinhaInvalida(0));
+    }
+    Ok(Config { host, porta })
+}
+
+fn main() {
+    let casos = [
+        "host = livraria.local\nporta = 3000",
+        "porta = 3000",
+        "host = x\nporta = 70000",
+        "host = x\nisto não é config",
+    ];
+    for c in casos {
+        match ler_config(c) {
+            Ok(cfg) =&gt; println!("ok: {}:{}", cfg.host, cfg.porta),
+            Err(e) =&gt; println!("erro: {e}"),
+        }
+    }
+}</code></pre>
+<pre class="saida"><code>ok: livraria.local:3000
+erro: falta a chave 'host'
+erro: porta inválida: number too large to fit in target type
+erro: linha 2 não está no formato chave=valor</code></pre>
+<p>O <code>parse::&lt;u16&gt;()</code> já recusa 70000 ("<em>number too large to fit in target type</em>"), por isso o tipo certo dispensa a verificação manual do limite superior. A linha <code>if porta == 0</code> é a única regra que o tipo não cobre; reaproveitar <code>LinhaInvalida(0)</code> para ela é um atalho preguiçoso, e uma variante <code>PortaZero</code> seria mais honesta. Em projetos reais, a <em>crate</em> <code>thiserror</code> gera o <code>Display</code> e o <code>From</code> a partir de atributos, e a <code>anyhow</code> simplifica os erros em aplicações.</p>
+</section>
+<section class="modulo" id="modulo-4">
+<h2><span class="rotulo">MÓDULO 4</span> Coleções, iteradores e closures</h2>
+<p class="intro">Vec, HashMap e HashSet, iteradores, adaptadores e closures.</p>
+<p class="aulas-titulo">Artigos 10 a 11</p>
+<ul class="aulas">
+<li><span class="n">#10</span> Coleções — Vec, HashMap e HashSet na Prática</li>
+<li><span class="n">#11</span> Iteradores e Closures — O Estilo Funcional de Rust</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q18">
+<span class="num">Q18</span>
+<div class="corpo">
+<p class="titulo">iter, iter_mut e into_iter</p>
+<p>Qual a diferença entre percorrer um <code>Vec&lt;String&gt;</code> com <code>v.iter()</code>, <code>v.iter_mut()</code> e <code>v.into_iter()</code> (ou <code>for x in v</code>)? O que acontece com <code>v</code> depois do último?</p>
+</div>
+</div>
+<ul><li><code>iter()</code> empresta os elementos: cada item é <code>&amp;String</code>. O vetor continua intacto.</li><li><code>iter_mut()</code> empresta mutavelmente: cada item é <code>&amp;mut String</code>, e pode ser alterado no lugar.</li><li><code>into_iter()</code> <strong>consome</strong> o vetor: cada item é a <code>String</code> em si, com a posse. Depois dele, <code>v</code> foi movido e não pode mais ser usado.</li></ul>
+<p>O <code>for x in &amp;v</code> equivale ao <code>iter()</code>, o <code>for x in &amp;mut v</code> ao <code>iter_mut()</code>, e o <code>for x in v</code> ao <code>into_iter()</code>. Escolher o certo é dizer, no código, se você só olha, se altera ou se fica com os elementos.</p>
+<div class="questao" id="q19">
+<span class="num">Q19</span>
+<div class="corpo">
+<p class="titulo">Iteradores preguiçosos e de custo zero</p>
+<p>Por que <code>v.iter().map(|x| x * 2);</code> sozinho não faz nada (e o compilador avisa)? O que significa dizer que os iteradores do Rust são uma "abstração de custo zero"?</p>
+</div>
+</div>
+<p>Os adaptadores (<code>map</code>, <code>filter</code>, <code>take</code>...) são <strong>preguiçosos</strong>: só montam a cadeia. Nada é calculado até que um consumidor (<code>collect</code>, <code>sum</code>, <code>for</code>, <code>count</code>) peça os itens, e o compilador avisa "*unused <code>Map</code> that must be used*". "Custo zero" quer dizer que a cadeia <code>v.iter().filter(...).map(...).sum()</code> compila, depois das otimizações, para um código de máquina tão rápido quanto o laço escrito à mão: o compilador funde os passos, elimina as verificações de limite que sabe desnecessárias e, muitas vezes, vetoriza. A abstração é para quem lê; o processador não paga por ela.</p>
+<div class="questao" id="q20">
+<span class="num">Q20</span>
+<div class="corpo">
+<p class="titulo">Fn, FnMut e FnOnce</p>
+<p>Qual a diferença entre os <em>traits</em> <code>Fn</code>, <code>FnMut</code> e <code>FnOnce</code>? Dê uma closure de cada tipo.</p>
+</div>
+</div>
+<p>Eles dizem o que a closure faz com o que capturou:</p>
+<ul><li>**<code>Fn</code><strong>: só </strong>lê** as capturas; pode ser chamada várias vezes, inclusive em paralelo. <code>let soma = |x| x + base;</code></li><li>**<code>FnMut</code><strong>: </strong>altera** as capturas; pode ser chamada várias vezes, mas exige acesso exclusivo. <code>let mut conta = || { contador += 1; };</code></li><li>**<code>FnOnce</code><strong>: </strong>consome** algo capturado; só pode ser chamada uma vez. <code>let entrega = move || nome;</code> (devolve a <code>String</code>, que deixa de existir na closure).</li></ul>
+<p>Toda <code>Fn</code> é também <code>FnMut</code> e <code>FnOnce</code>. Uma função que recebe closures pede o <em>trait</em> menos exigente que lhe basta: <code>thread::spawn</code> pede <code>FnOnce</code>, porque a closure roda uma vez; <code>sort_by</code> pede <code>FnMut</code>.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q21">
+<span class="num">Q21</span>
+<div class="corpo">
+<p class="titulo">Contando palavras com HashMap</p>
+<p>Conte a frequência das palavras de um texto (minúsculas, sem pontuação) com um <code>HashMap&lt;String, usize&gt;</code> e a API <code>entry</code>, mostre as três mais frequentes desempatando em ordem alfabética, e use um <code>HashSet</code> para listar as palavras que aparecem só uma vez, em ordem.</p>
+</div>
+</div>
+<pre class="codigo"><code>use std::collections::{BTreeSet, HashMap};
+
+fn main() {
+    let texto = "O rato roeu a roupa do rei. O rei riu, o rato fugiu e a roupa ficou.";
+    let mut freq: HashMap&lt;String, usize&gt; = HashMap::new();
+    for palavra in texto.split_whitespace() {
+        let limpa: String = palavra.chars().filter(|c| c.is_alphabetic()).flat_map(char::to_lowercase).collect();
+        if !limpa.is_empty() {
+            *freq.entry(limpa).or_insert(0) += 1;
+        }
+    }
+
+    let mut ranking: Vec&lt;(&amp;String, &amp;usize)&gt; = freq.iter().collect();
+    ranking.sort_by(|a, b| b.1.cmp(a.1).then(a.0.cmp(b.0)));
+    for (p, n) in ranking.iter().take(3) {
+        println!("{p}: {n}");
+    }
+
+    let unicas: BTreeSet&lt;&amp;str&gt; = freq.iter().filter(|(_, n)| **n == 1).map(|(p, _)| p.as_str()).collect();
+    println!("aparecem uma vez: {unicas:?}");
+}</code></pre>
+<pre class="saida"><code>o: 3
+a: 2
+rato: 2
+aparecem uma vez: {"do", "e", "ficou", "fugiu", "riu", "roeu"}</code></pre>
+<p>O <code>entry(chave).or_insert(0)</code> busca a chave uma vez só e devolve uma referência mutável ao valor, existente ou recém-inserido. O <code>then</code> encadeia o critério de desempate. Usei <code>BTreeSet</code> em vez de <code>HashSet</code> para as palavras únicas porque ele mantém a ordem: a de um <code>HashSet</code> muda a cada execução, já que o <code>HashMap</code> do Rust usa uma semente aleatória para se proteger de ataques de colisão.</p>
+<div class="questao" id="q22">
+<span class="num">Q22</span>
+<div class="corpo">
+<p class="titulo">Uma cadeia de iteradores</p>
+<p>Dado um vetor de pedidos (<code>cliente</code>, <code>valor</code> em centavos, <code>pago</code>), use só iteradores, sem laços explícitos, para obter: o total pago; o maior pedido pago (com <code>max_by_key</code>); os clientes com pedido pago, sem repetição e em ordem; os pedidos em lotes de 2 (<code>chunks</code>); e se algum pedido passa de R$ 150 (<code>any</code>).</p>
+</div>
+</div>
+<pre class="codigo"><code>use std::collections::BTreeSet;
+
+struct Pedido {
+    cliente: &amp;'static str,
+    valor: u32,
+    pago: bool,
+}
+
+fn main() {
+    let pedidos = vec![
+        Pedido { cliente: "Carla", valor: 12_000, pago: true },
+        Pedido { cliente: "Ana", valor: 8_000, pago: false },
+        Pedido { cliente: "Bruno", valor: 20_000, pago: true },
+        Pedido { cliente: "Ana", valor: 4_550, pago: true },
+    ];
+
+    let pagos = || pedidos.iter().filter(|p| p.pago);
+    let total: u32 = pagos().map(|p| p.valor).sum();
+    println!("total pago: R$ {},{:02}", total / 100, total % 100);
+
+    if let Some(maior) = pagos().max_by_key(|p| p.valor) {
+        println!("maior pago: {} ({})", maior.cliente, maior.valor);
+    }
+
+    let clientes: BTreeSet&lt;_&gt; = pagos().map(|p| p.cliente).collect();
+    println!("clientes: {clientes:?}");
+
+    for (i, lote) in pedidos.chunks(2).enumerate() {
+        let nomes: Vec&lt;_&gt; = lote.iter().map(|p| p.cliente).collect();
+        println!("lote {}: {nomes:?}", i + 1);
+    }
+    println!("algum acima de R$ 150? {}", pedidos.iter().any(|p| p.valor &gt; 15_000));
+}</code></pre>
+<pre class="saida"><code>total pago: R$ 365,50
+maior pago: Bruno (20000)
+clientes: {"Ana", "Bruno", "Carla"}
+lote 1: ["Carla", "Ana"]
+lote 2: ["Bruno", "Ana"]
+algum acima de R$ 150? true</code></pre>
+<p>A closure <code>pagos</code> devolve um iterador novo a cada chamada: como os iteradores são preguiçosos e de uso único, guardar um só e consumi-lo três vezes não funcionaria (o primeiro <code>sum</code> o esgotaria). Dinheiro em centavos inteiros (<code>u32</code>), formatado só na saída, evita os erros de <code>f64</code>. O <code>collect</code> decide o tipo do resultado pela anotação: o mesmo iterador vira <code>Vec</code>, <code>BTreeSet</code>, <code>HashMap</code> ou <code>String</code>.</p>
+<div class="questao" id="q23">
+<span class="num">Q23</span>
+<div class="corpo">
+<p class="titulo">Closures que capturam</p>
+<p>Escreva <code>fn criar_contador(inicio: i32, passo: i32) -&gt; impl FnMut() -&gt; i32</code>, que devolve uma closure com estado próprio; uma função genérica <code>fn aplicar_duas_vezes&lt;F: Fn(i32) -&gt; i32&gt;(f: F, x: i32) -&gt; i32</code>; e mostre o <code>move</code> necessário para devolver uma closure que captura uma variável local.</p>
+</div>
+</div>
+<pre class="codigo"><code>fn criar_contador(inicio: i32, passo: i32) -&gt; impl FnMut() -&gt; i32 {
+    let mut atual = inicio;
+    move || {
+        let r = atual;
+        atual += passo;
+        r
+    }
+}
+
+fn aplicar_duas_vezes&lt;F: Fn(i32) -&gt; i32&gt;(f: F, x: i32) -&gt; i32 {
+    f(f(x))
+}
+
+fn somador(n: i32) -&gt; impl Fn(i32) -&gt; i32 {
+    move |x| x + n // sem move, a closure tentaria emprestar n, que morre no fim da função
+}
+
+fn main() {
+    let mut de2 = criar_contador(0, 2);
+    let mut de10 = criar_contador(100, -10);
+    let seq: Vec&lt;_&gt; = (0..4).map(|_| (de2(), de10())).collect();
+    println!("{seq:?}");
+
+    let mais5 = somador(5);
+    println!("aplicar_duas_vezes(+5, 1) = {}", aplicar_duas_vezes(&amp;mais5, 1));
+    println!("aplicar_duas_vezes(x*3, 2) = {}", aplicar_duas_vezes(|x| x * 3, 2));
+}</code></pre>
+<pre class="saida"><code>[(0, 100), (2, 90), (4, 80), (6, 70)]
+aplicar_duas_vezes(+5, 1) = 11
+aplicar_duas_vezes(x*3, 2) = 18</code></pre>
+<p>Cada closure é um tipo anônimo próprio: <code>de2</code> e <code>de10</code> têm estados independentes, como dois objetos. O <code>impl FnMut() -&gt; i32</code> no retorno diz "algum tipo que implementa isso", sem alocação; para guardar closures de tipos diferentes no mesmo vetor, seria preciso <code>Box&lt;dyn Fn(i32) -&gt; i32&gt;</code>. O <code>&amp;mais5</code> funciona como argumento porque uma referência a um <code>Fn</code> também implementa <code>Fn</code>.</p>
+</section>
+<section class="modulo" id="modulo-5">
+<h2><span class="rotulo">MÓDULO 5</span> Traits, generics e lifetimes</h2>
+<p class="intro">Comportamento compartilhado com traits, código genérico e a anotação de lifetimes.</p>
+<p class="aulas-titulo">Artigos 12 a 14</p>
+<ul class="aulas">
+<li><span class="n">#12</span> Traits — Definindo Comportamento Compartilhado</li>
+<li><span class="n">#13</span> Generics — Código que Funciona para Qualquer Tipo</li>
+<li><span class="n">#14</span> Lifetimes — Quando o Compilador Precisa de Mais Informação</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q24">
+<span class="num">Q24</span>
+<div class="corpo">
+<p class="titulo">Genérico ou dyn Trait</p>
+<p>Compare <code>fn desenhar&lt;T: Forma&gt;(f: &amp;T)</code> e <code>fn desenhar(f: &amp;dyn Forma)</code>. Quando usar cada um?</p>
+</div>
+</div>
+<ul><li><strong>Genérico</strong> (<code>T: Forma</code>, ou <code>impl Forma</code>): <strong>despacho estático</strong>. O compilador gera uma cópia da função para cada tipo usado (monomorfização), e cada chamada é direta e pode ser embutida (<em>inlining</em>). Mais rápido; executável maior; e um <code>Vec&lt;T&gt;</code> só guarda <strong>um</strong> tipo.</li><li>**<code>dyn Forma</code><strong>: </strong>despacho dinâmico**, por uma tabela de métodos (<em>vtable</em>), como as funções virtuais do C++. Uma cópia só da função, e um <code>Vec&lt;Box&lt;dyn Forma&gt;&gt;</code> guarda círculos e quadrados juntos; cada chamada passa por um ponteiro.</li></ul>
+<p>Use genéricos por padrão, em bibliotecas e caminhos críticos; use <code>dyn</code> quando a coleção é heterogênea, quando o tipo é escolhido em execução (um <em>plugin</em>, uma configuração) ou para reduzir o tamanho do binário e o tempo de compilação.</p>
+<div class="questao" id="q25">
+<span class="num">Q25</span>
+<div class="corpo">
+<p class="titulo">A regra do órfão</p>
+<p>Por que você pode implementar o seu <em>trait</em> <code>Resumo</code> para <code>Vec&lt;i32&gt;</code>, e o <em>trait</em> <code>Display</code> para o seu <code>struct Livro</code>, mas não pode implementar <code>Display</code> para <code>Vec&lt;i32&gt;</code>? Como contornar?</p>
+</div>
+</div>
+<p>É a <strong>regra do órfão</strong> (<em>coherence</em>): uma implementação de <em>trait</em> para um tipo só é permitida se o <em>trait</em> <strong>ou</strong> o tipo for definido na sua <em>crate</em>. <code>Display</code> e <code>Vec</code> são da biblioteca padrão; se qualquer <em>crate</em> pudesse implementar <code>Display for Vec&lt;i32&gt;</code>, duas dependências poderiam fazê-lo de formas diferentes, e o compilador não teria como escolher. O contorno é o padrão <strong><em>newtype</strong></em>: <code>struct Lista(Vec&lt;i32&gt;);</code>, um tipo seu que envolve o outro, sem custo em execução, para o qual você implementa o que quiser.</p>
+<div class="questao" id="q26">
+<span class="num">Q26</span>
+<div class="corpo">
+<p class="titulo">Por que lifetimes</p>
+<p>Por que esta função não compila sem a anotação de <em>lifetime</em>? O que <code>'a</code> promete?</p>
+<pre class="codigo"><code>fn maior(a: &amp;str, b: &amp;str) -&gt; &amp;str {
+    if a.len() &gt;= b.len() { a } else { b }
+}</code></pre>
+</div>
+</div>
+<p>O retorno é uma referência, e o compilador precisa saber <strong>a qual dos parâmetros</strong> ela está ligada, para garantir que ela não sobreviva ao valor emprestado. Como ela pode vir de <code>a</code> ou de <code>b</code>, ele não consegue deduzir sozinho e pede a anotação: <code>fn maior&lt;'a&gt;(a: &amp;'a str, b: &amp;'a str) -&gt; &amp;'a str</code>. O <code>'a</code> promete que o resultado vive <strong>no máximo tanto quanto o menor</strong> dos dois empréstimos. Ele não muda quanto tempo nada vive: só descreve a relação, para que o compilador recuse um uso do resultado depois que uma das origens morreu. Nas funções com uma só referência de entrada, as regras de <strong>elisão</strong> fazem a dedução, e a anotação não é necessária.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q27">
+<span class="num">Q27</span>
+<div class="corpo">
+<p class="titulo">Um trait com método padrão</p>
+<p>Defina <code>trait Descrevivel</code> com <code>fn nome(&amp;self) -&gt; String</code> e um método <strong>padrão</strong> <code>fn descricao(&amp;self) -&gt; String</code> que use o <code>nome</code>. Implemente para <code>Livro</code> (sobrescrevendo a descrição) e para <code>Revista</code> (usando o padrão). Escreva uma função com <code>impl Descrevivel</code> e outra que percorra um <code>Vec&lt;Box&lt;dyn Descrevivel&gt;&gt;</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>trait Descrevivel {
+    fn nome(&amp;self) -&gt; String;
+    fn descricao(&amp;self) -&gt; String {
+        format!("[{}]", self.nome())
+    }
+}
+
+struct Livro {
+    titulo: String,
+    autor: String,
+}
+
+struct Revista {
+    titulo: String,
+    edicao: u32,
+}
+
+impl Descrevivel for Livro {
+    fn nome(&amp;self) -&gt; String {
+        self.titulo.clone()
+    }
+    fn descricao(&amp;self) -&gt; String {
+        format!("{}, de {}", self.titulo, self.autor)
+    }
+}
+
+impl Descrevivel for Revista {
+    fn nome(&amp;self) -&gt; String {
+        format!("{} nº {}", self.titulo, self.edicao)
+    }
+}
+
+fn anunciar(item: &amp;impl Descrevivel) {
+    println!("Novidade: {}", item.descricao());
+}
+
+fn main() {
+    let l = Livro { titulo: "Vidas Secas".into(), autor: "Graciliano Ramos".into() };
+    anunciar(&amp;l);
+
+    let estante: Vec&lt;Box&lt;dyn Descrevivel&gt;&gt; = vec![
+        Box::new(l),
+        Box::new(Revista { titulo: "Ciência Hoje".into(), edicao: 412 }),
+    ];
+    for item in &amp;estante {
+        println!("- {}", item.descricao());
+    }
+}</code></pre>
+<pre class="saida"><code>Novidade: Vidas Secas, de Graciliano Ramos
+- Vidas Secas, de Graciliano Ramos
+- [Ciência Hoje nº 412]</code></pre>
+<p>A <code>Revista</code> não escreveu <code>descricao</code> e herdou a versão padrão, que chama o <code>nome</code> dela. O <code>anunciar</code> é genérico (despacho estático), e a estante usa <code>dyn</code> (despacho dinâmico) porque mistura tipos. O <code>Box</code> é necessário porque <code>Livro</code> e <code>Revista</code> têm tamanhos diferentes, e um vetor precisa de elementos de tamanho fixo: cada <code>Box</code> é um ponteiro.</p>
+<div class="questao" id="q28">
+<span class="num">Q28</span>
+<div class="corpo">
+<p class="titulo">Uma função genérica com restrições</p>
+<p>Escreva <code>fn maior_e_menor&lt;T: PartialOrd + Copy&gt;(itens: &amp;[T]) -&gt; Option&lt;(T, T)&gt;</code> e uma <code>struct Par&lt;T&gt;</code> com um método <code>maior(&amp;self) -&gt; &amp;T</code> disponível só quando <code>T: PartialOrd</code>. Teste com inteiros, <code>f64</code> e caracteres, e com um slice vazio.</p>
+</div>
+</div>
+<pre class="codigo"><code>fn maior_e_menor&lt;T: PartialOrd + Copy&gt;(itens: &amp;[T]) -&gt; Option&lt;(T, T)&gt; {
+    let (&amp;primeiro, resto) = itens.split_first()?;
+    let mut menor = primeiro;
+    let mut maior = primeiro;
+    for &amp;x in resto {
+        if x &lt; menor {
+            menor = x;
+        }
+        if x &gt; maior {
+            maior = x;
+        }
+    }
+    Some((maior, menor))
+}
+
+struct Par&lt;T&gt; {
+    a: T,
+    b: T,
+}
+
+impl&lt;T: PartialOrd&gt; Par&lt;T&gt; {
+    fn maior(&amp;self) -&gt; &amp;T {
+        if self.a &gt;= self.b { &amp;self.a } else { &amp;self.b }
+    }
+}
+
+fn main() {
+    println!("{:?}", maior_e_menor(&amp;[3, 9, -2, 7]));
+    println!("{:?}", maior_e_menor(&amp;[2.5, -0.5, 1.0]));
+    println!("{:?}", maior_e_menor(&amp;['r', 'u', 's', 't']));
+    println!("{:?}", maior_e_menor::&lt;i32&gt;(&amp;[]));
+    println!("maior do par: {}", Par { a: "pera", b: "uva" }.maior());
+}</code></pre>
+<pre class="saida"><code>Some((9, -2))
+Some((2.5, -0.5))
+Some(('u', 'r'))
+None
+maior do par: uva</code></pre>
+<p>O <code>?</code> também funciona com <code>Option</code>: o <code>split_first()</code> devolve <code>None</code> para o slice vazio, e a função devolve <code>None</code> sem mais código. O <code>PartialOrd</code> (e não o <code>Ord</code>) admite <code>f64</code>, que tem NaN e por isso não é totalmente ordenado; o <code>Copy</code> permite devolver os valores sem clonar. O método <code>maior</code> só existe para <code>Par&lt;T&gt;</code> cujo <code>T</code> seja comparável: um <code>Par</code> de um tipo sem ordem continua podendo ser criado, só não tem esse método.</p>
+<div class="questao" id="q29">
+<span class="num">Q29</span>
+<div class="corpo">
+<p class="titulo">Uma struct que empresta</p>
+<p>Escreva <code>struct Analisador&lt;'a&gt; { texto: &amp;'a str }</code> com um método <code>palavras_longas(&amp;self, minimo: usize) -&gt; Vec&lt;&amp;'a str&gt;</code> que devolva fatias do texto original, e uma função <code>fn maior&lt;'a&gt;(a: &amp;'a str, b: &amp;'a str) -&gt; &amp;'a str</code>. Mostre (em comentário) o uso que o compilador recusa.</p>
+</div>
+</div>
+<pre class="codigo"><code>struct Analisador&lt;'a&gt; {
+    texto: &amp;'a str,
+}
+
+impl&lt;'a&gt; Analisador&lt;'a&gt; {
+    fn palavras_longas(&amp;self, minimo: usize) -&gt; Vec&lt;&amp;'a str&gt; {
+        self.texto.split_whitespace().filter(|p| p.chars().count() &gt;= minimo).collect()
+    }
+}
+
+fn maior&lt;'a&gt;(a: &amp;'a str, b: &amp;'a str) -&gt; &amp;'a str {
+    if a.len() &gt;= b.len() { a } else { b }
+}
+
+fn main() {
+    let texto = String::from("o compilador garante que nenhuma referência sobrevive ao dono");
+    let longas;
+    {
+        let an = Analisador { texto: &amp;texto };
+        longas = an.palavras_longas(9);
+    } // o Analisador morre aqui, mas as fatias pertencem ao texto, que continua vivo
+    println!("{longas:?}");
+
+    let a = String::from("curta");
+    let resultado;
+    {
+        let b = String::from("bem mais longa");
+        resultado = maior(&amp;a, &amp;b);
+        println!("maior: {resultado}");
+    }
+    // println!("{resultado}"); // erro: b não vive o bastante (resultado pode ser b)
+}</code></pre>
+<pre class="saida"><code>["compilador", "referência", "sobrevive"]
+maior: bem mais longa</code></pre>
+<p>O método devolve <code>Vec&lt;&amp;'a str&gt;</code>, ligado ao <em>lifetime</em> do <strong>texto</strong>, e não ao do <code>&amp;self</code>: por isso as fatias sobrevivem ao <code>Analisador</code>. Se o retorno fosse <code>Vec&lt;&amp;str&gt;</code> sem anotação, a elisão o ligaria ao <code>&amp;self</code>, e o código acima não compilaria. No segundo bloco, o compilador não sabe qual referência o <code>maior</code> devolveu (isso depende dos dados, em execução) e assume o pior caso: o resultado vive tanto quanto a menor das duas, <code>b</code>.</p>
+</section>
+<section class="modulo" id="modulo-6">
+<h2><span class="rotulo">MÓDULO 6</span> Módulos e testes</h2>
+<p class="intro">Módulos, visibilidade e organização de projetos; testes unitários, de integração e de documentação.</p>
+<p class="aulas-titulo">Artigos 15 a 16</p>
+<ul class="aulas">
+<li><span class="n">#15</span> Módulos e Organização de Código — Estruturando Projetos Reais</li>
+<li><span class="n">#16</span> Testes — Escrevendo Código que Prova que Seu Código Funciona</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q30">
+<span class="num">Q30</span>
+<div class="corpo">
+<p class="titulo">Crate, módulo e visibilidade</p>
+<p>Qual a diferença entre <em>crate</em>, <em>package</em> e módulo? O que <code>pub</code>, <code>pub(crate)</code> e a ausência de modificador significam para uma função dentro de <code>mod banco</code>?</p>
+</div>
+</div>
+<p>Uma <strong><em>crate</strong></em> é a unidade de compilação: uma biblioteca (<code>lib.rs</code>) ou um executável (<code>main.rs</code>). Um <strong><em>package</strong></em> é o que o <code>Cargo.toml</code> descreve: uma ou mais <em>crates</em> (no máximo uma biblioteca). Os <strong>módulos</strong> organizam o código dentro de uma <em>crate</em>, como pastas de <em>namespaces</em>, e cada arquivo é um módulo. Sem modificador, um item é <strong>privado</strong> ao módulo em que foi declarado (e visível nos filhos dele); <code>pub(crate)</code> o torna visível em toda a <em>crate</em>, mas não para quem a usa como dependência; <code>pub</code> o torna público, inclusive fora da <em>crate</em>, desde que o caminho até ele também seja público. O padrão privado faz da API pública uma decisão explícita.</p>
+<div class="questao" id="q31">
+<span class="num">Q31</span>
+<div class="corpo">
+<p class="titulo">Onde ficam os testes</p>
+<p>No Rust, por que os testes unitários ficam no mesmo arquivo do código (<code>#[cfg(test)] mod tests</code>), e os de integração na pasta <code>tests/</code>? O que um teste de integração não consegue acessar?</p>
+</div>
+</div>
+<p>Os <strong>testes unitários</strong> ficam junto do código para testarem também funções <strong>privadas</strong>: como <code>mod tests</code> é um módulo filho, enxerga tudo o que o pai tem. O <code>#[cfg(test)]</code> faz o módulo ser compilado só no <code>cargo test</code>, sem entrar no binário final. Os <strong>testes de integração</strong>, na pasta <code>tests/</code>, são compilados como <em>crates</em> separadas que usam a sua biblioteca <strong>como um usuário externo</strong>: só enxergam a API pública. Eles verificam que as partes funcionam juntas pela porta da frente, e não conseguem acessar nada privado. Há ainda os <strong>testes de documentação</strong>: os exemplos dos comentários <code>///</code> são compilados e executados pelo <code>cargo test</code>, o que garante que a documentação não mente.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q32">
+<span class="num">Q32</span>
+<div class="corpo">
+<p class="titulo">Módulos e testes num arquivo só</p>
+<p>Num único <code>main.rs</code>, crie o módulo <code>carrinho</code> com a <code>struct Carrinho</code> pública, um campo privado com os itens, os métodos públicos <code>novo</code>, <code>adicionar</code> e <code>total</code>, e uma função privada <code>aplicar_desconto</code> (10% a partir de 3 itens). Escreva, dentro do módulo, um <code>mod tests</code> com três testes, inclusive um da função privada e um com <code>#[should_panic]</code>. Rode o programa e, separadamente, os testes com <code>rustc --test</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>mod carrinho {
+    pub struct Carrinho {
+        itens: Vec&lt;(String, u32)&gt;, // privado: só o módulo mexe
+    }
+
+    impl Carrinho {
+        pub fn novo() -&gt; Self {
+            Carrinho { itens: Vec::new() }
+        }
+
+        pub fn adicionar(&amp;mut self, titulo: &amp;str, centavos: u32) {
+            assert!(centavos &gt; 0, "preço deve ser positivo");
+            self.itens.push((titulo.to_string(), centavos));
+        }
+
+        pub fn total(&amp;self) -&gt; u32 {
+            let bruto = self.itens.iter().map(|(_, c)| c).sum();
+            aplicar_desconto(bruto, self.itens.len())
+        }
+    }
+
+    fn aplicar_desconto(bruto: u32, qtd: usize) -&gt; u32 {
+        if qtd &gt;= 3 { bruto - bruto / 10 } else { bruto }
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        #[test]
+        fn sem_desconto_com_dois_itens() {
+            let mut c = Carrinho::novo();
+            c.adicionar("A", 1000);
+            c.adicionar("B", 2000);
+            assert_eq!(c.total(), 3000);
+        }
+
+        #[test]
+        fn desconto_privado_a_partir_de_tres() {
+            assert_eq!(aplicar_desconto(10_000, 3), 9_000);
+            assert_eq!(aplicar_desconto(10_000, 2), 10_000);
+        }
+
+        #[test]
+        #[should_panic(expected = "preço deve ser positivo")]
+        fn preco_zero_e_recusado() {
+            Carrinho::novo().adicionar("grátis", 0);
+        }
+    }
+}
+
+use carrinho::Carrinho;
+
+fn main() {
+    let mut c = Carrinho::novo();
+    for (t, p) in [("Vidas Secas", 4990), ("Iracema", 2500), ("Dom Casmurro", 3500)] {
+        c.adicionar(t, p);
+    }
+    println!("total com desconto: {}", c.total());
+    // c.itens.clear();              // erro: campo privado
+    // carrinho::aplicar_desconto(1, 1); // erro: função privada
+}</code></pre>
+<pre class="saida"><code>total com desconto: 9891</code></pre>
+<p><code>testar.sh</code>:</p>
+<pre class="codigo"><code>rustc --edition 2024 --test main.rs -o testes 2&gt;&amp;1 &amp;&amp; ./testes 2&gt;&amp;1 | grep -E '^(test |test result)' | sed -E 's/ finished in [0-9.]+s//' | sort</code></pre>
+<pre class="saida"><code>test carrinho::tests::desconto_privado_a_partir_de_tres ... ok
+test carrinho::tests::preco_zero_e_recusado - should panic ... ok
+test carrinho::tests::sem_desconto_com_dois_itens ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;</code></pre>
+<p>O <code>use super::*</code> traz para o módulo de testes tudo o que o pai tem, inclusive o privado. O <code>rustc --test</code> (ou o <code>cargo test</code>, num projeto) compila um executável que roda cada <code>#[test]</code> em paralelo e informa os que passaram; o <code>sort</code> do exemplo só deixa a ordem previsível, porque a dos testes paralelos varia. O <code>assert!</code> com mensagem no <code>adicionar</code> é uma <strong>pré-condição</strong>: um preço zero é erro de programação de quem chama, e entrar em pânico é a resposta certa; para dados vindos do usuário, o certo seria devolver um <code>Result</code>.</p>
+</section>
+<section class="modulo" id="modulo-7">
+<h2><span class="rotulo">MÓDULO 7</span> Recursos avançados</h2>
+<p class="intro">Closures avançadas, smart pointers (Box, Rc e RefCell), concorrência com threads e canais, async/await com Tokio e macros.</p>
+<p class="aulas-titulo">Artigos 17 a 21</p>
+<ul class="aulas">
+<li><span class="n">#17</span> Closures Avançadas e Programação Funcional — Indo Além do map e filter</li>
+<li><span class="n">#18</span> Smart Pointers — Box, Rc e RefCell</li>
+<li><span class="n">#19</span> Concorrência — Threads, Canais e a Promessa de Rust de Concorrência Sem Medo</li>
+<li><span class="n">#20</span> Async/Await — Concorrência sem Threads com Tokio</li>
+<li><span class="n">#21</span> Macros — Escrevendo Código que Escreve Código</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q33">
+<span class="num">Q33</span>
+<div class="corpo">
+<p class="titulo">Box, Rc e RefCell</p>
+<p>Para que serve cada um: <code>Box&lt;T&gt;</code>, <code>Rc&lt;T&gt;</code> e <code>RefCell&lt;T&gt;</code>? Por que <code>Rc&lt;RefCell&lt;T&gt;&gt;</code> é uma combinação comum, e qual é o risco dela?</p>
+</div>
+</div>
+<ul><li>**<code>Box&lt;T&gt;</code><strong>: um valor no <em>heap</em> com </strong>um** dono. Serve para tipos recursivos (uma lista ou uma árvore precisa de tamanho conhecido), para objetos grandes que se movem barato e para <code>dyn Trait</code>.</li><li>**<code>Rc&lt;T&gt;</code><strong>: posse </strong>compartilhada** com contagem de referências, numa thread só. O valor vive enquanto houver um <code>Rc</code> apontando para ele. Só dá acesso de leitura.</li><li>**<code>RefCell&lt;T&gt;</code><strong>: </strong>mutabilidade interior<strong>. Permite alterar o valor por uma referência imutável, verificando as regras de empréstimo </strong>em execução**: dois <code>borrow_mut()</code> ativos ao mesmo tempo causam pânico.</li></ul>
+<p>O <code>Rc&lt;RefCell&lt;T&gt;&gt;</code> dá "vários donos que podem alterar", como num grafo de objetos. O risco é duplo: as violações de empréstimo, que antes eram erro de compilação, viram pânico em execução; e dois <code>Rc</code> que se apontam formam um <strong>ciclo</strong> que nunca é liberado. O <code>Weak&lt;T&gt;</code> quebra o ciclo, como o <code>weak_ptr</code> do C++.</p>
+<div class="questao" id="q34">
+<span class="num">Q34</span>
+<div class="corpo">
+<p class="titulo">Send e Sync</p>
+<p>O que significam os <em>traits</em> <code>Send</code> e <code>Sync</code>? Por que <code>thread::spawn</code> recusa uma closure que captura um <code>Rc&lt;T&gt;</code>, e aceita uma com <code>Arc&lt;T&gt;</code>?</p>
+</div>
+</div>
+<p>Um tipo é **<code>Send</code><strong> se pode ser </strong>transferido<strong> para outra thread, e </strong><code>Sync</code><strong> se pode ser </strong>compartilhado** entre threads por referência (<code>&amp;T</code> é <code>Send</code>). O compilador os implementa sozinho para os tipos cujas partes também os implementam. O <code>Rc&lt;T&gt;</code> atualiza o contador com operações comuns, não atômicas: duas threads clonando o mesmo <code>Rc</code> corromperiam a contagem. Por isso ele <strong>não</strong> é <code>Send</code>, e o <code>spawn</code>, que exige <code>Send</code> na closure, recusa. O <code>Arc&lt;T&gt;</code> (<em>atomic</em> <code>Rc</code>) usa operações atômicas no contador e é <code>Send</code> e <code>Sync</code> quando <code>T</code> é. Para alterar o dado compartilhado, combina-se com <code>Mutex</code> ou <code>RwLock</code>: <code>Arc&lt;Mutex&lt;T&gt;&gt;</code>. É assim que a corrida de dados vira erro de compilação.</p>
+<div class="questao" id="q35">
+<span class="num">Q35</span>
+<div class="corpo">
+<p class="titulo">Thread ou async</p>
+<p>Quando usar threads e quando usar <code>async</code> com Tokio? Por que chamar uma função bloqueante (<code>std::thread::sleep</code>, leitura síncrona de arquivo grande) dentro de uma tarefa <code>async</code> é um erro?</p>
+</div>
+</div>
+<p><strong>Threads</strong> servem para trabalho de <strong>CPU</strong> em paralelo e para poucas tarefas concorrentes: cada uma tem a sua pilha e é agendada pelo sistema operacional. <strong><em>Async</strong></em> serve para <strong>muitas</strong> tarefas que passam a maior parte do tempo <strong>esperando E/S</strong> (milhares de conexões de rede): cada tarefa é uma máquina de estados pequena, e um punhado de threads do <em>runtime</em> alterna entre elas a cada <code>.await</code>. A troca é <strong>cooperativa</strong>: uma tarefa só cede a thread num <code>.await</code>. Uma chamada bloqueante prende a thread do <em>runtime</em>, e todas as outras tarefas agendadas nela param junto. O certo é usar as versões assíncronas (<code>tokio::time::sleep</code>, <code>tokio::fs</code>) ou mandar o trabalho bloqueante para <code>tokio::task::spawn_blocking</code>.</p>
+<div class="questao" id="q36">
+<span class="num">Q36</span>
+<div class="corpo">
+<p class="titulo">macro_rules ou função</p>
+<p>Quando uma macro declarativa (<code>macro_rules!</code>) é justificada, e quando uma função resolve? Por que <code>println!</code> e <code>vec!</code> precisam ser macros?</p>
+</div>
+</div>
+<p>Uma macro opera sobre <strong>código</strong>, na compilação: pode receber um número <strong>variável</strong> de argumentos, de tipos diferentes, gerar itens (funções, <code>impl</code>) e receber trechos de sintaxe. O <code>println!</code> precisa ser macro porque recebe uma quantidade variável de argumentos e <strong>verifica a string de formato contra eles na compilação</strong>; o <code>vec![1, 2, 3]</code> também aceita quantos elementos houver. Quando uma função genérica resolve, ela é melhor: tem tipos claros, mensagens de erro legíveis, aparece na documentação e não surpreende quem lê. As macros procedurais (<code>#[derive(...)]</code>) vão além e geram implementações a partir da definição de um tipo.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q37">
+<span class="num">Q37</span>
+<div class="corpo">
+<p class="titulo">Uma expressão recursiva com Box</p>
+<p>Defina <code>enum Expr { Num(f64), Soma(Box&lt;Expr&gt;, Box&lt;Expr&gt;), Mult(Box&lt;Expr&gt;, Box&lt;Expr&gt;), Neg(Box&lt;Expr&gt;) }</code>, uma função <code>avaliar(&amp;Expr) -&gt; f64</code> e uma <code>mostrar(&amp;Expr) -&gt; String</code> que imprima com parênteses. Monte e avalie <code>-(2 + 3) * 4</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>enum Expr {
+    Num(f64),
+    Soma(Box&lt;Expr&gt;, Box&lt;Expr&gt;),
+    Mult(Box&lt;Expr&gt;, Box&lt;Expr&gt;),
+    Neg(Box&lt;Expr&gt;),
+}
+
+use Expr::*;
+
+fn avaliar(e: &amp;Expr) -&gt; f64 {
+    match e {
+        Num(n) =&gt; *n,
+        Soma(a, b) =&gt; avaliar(a) + avaliar(b),
+        Mult(a, b) =&gt; avaliar(a) * avaliar(b),
+        Neg(a) =&gt; -avaliar(a),
+    }
+}
+
+fn mostrar(e: &amp;Expr) -&gt; String {
+    match e {
+        Num(n) =&gt; n.to_string(),
+        Soma(a, b) =&gt; format!("({} + {})", mostrar(a), mostrar(b)),
+        Mult(a, b) =&gt; format!("{} * {}", mostrar(a), mostrar(b)),
+        Neg(a) =&gt; format!("-{}", mostrar(a)),
+    }
+}
+
+fn main() {
+    let e = Mult(Box::new(Neg(Box::new(Soma(Box::new(Num(2.0)), Box::new(Num(3.0)))))), Box::new(Num(4.0)));
+    println!("{} = {}", mostrar(&amp;e), avaliar(&amp;e));
+    println!("tamanho de Expr: {} bytes", std::mem::size_of::&lt;Expr&gt;());
+}</code></pre>
+<pre class="saida"><code>-(2 + 3) * 4 = -20
+tamanho de Expr: 24 bytes</code></pre>
+<p>Sem o <code>Box</code>, o tipo <code>Expr</code> conteria a si mesmo diretamente, e o compilador não conseguiria calcular o tamanho ("<em>recursive type has infinite size</em>"). Com o <code>Box</code>, cada filho é um ponteiro: o <code>enum</code> inteiro ocupa o tamanho da maior variante (dois ponteiros) mais a etiqueta. As árvores do módulo 7 do caderno de C, que exigiam <code>malloc</code> e <code>free</code> à mão, aqui são liberadas sozinhas quando a raiz sai de escopo.</p>
+<div class="questao" id="q38">
+<span class="num">Q38</span>
+<div class="corpo">
+<p class="titulo">Uma árvore com Rc, RefCell e Weak</p>
+<p>Monte uma árvore de categorias (<code>Livros → Ficção → Romance</code>) em que cada nó tem <code>filhos: RefCell&lt;Vec&lt;Rc&lt;No&gt;&gt;&gt;</code> e <code>pai: RefCell&lt;Weak&lt;No&gt;&gt;</code>. Mostre o caminho de um nó até a raiz, as contagens forte e fraca, e que todos os nós são liberados no fim (com um <code>Drop</code> que imprime).</p>
+</div>
+</div>
+<pre class="codigo"><code>use std::cell::RefCell;
+use std::rc::{Rc, Weak};
+
+struct No {
+    nome: String,
+    filhos: RefCell&lt;Vec&lt;Rc&lt;No&gt;&gt;&gt;,
+    pai: RefCell&lt;Weak&lt;No&gt;&gt;,
+}
+
+impl Drop for No {
+    fn drop(&amp;mut self) {
+        println!("liberado: {}", self.nome);
+    }
+}
+
+fn novo(nome: &amp;str) -&gt; Rc&lt;No&gt; {
+    Rc::new(No { nome: nome.into(), filhos: RefCell::new(vec![]), pai: RefCell::new(Weak::new()) })
+}
+
+fn ligar(pai: &amp;Rc&lt;No&gt;, filho: &amp;Rc&lt;No&gt;) {
+    *filho.pai.borrow_mut() = Rc::downgrade(pai);
+    pai.filhos.borrow_mut().push(Rc::clone(filho));
+}
+
+fn main() {
+    let raiz = novo("Livros");
+    {
+        let ficcao = novo("Ficção");
+        let romance = novo("Romance");
+        ligar(&amp;raiz, &amp;ficcao);
+        ligar(&amp;ficcao, &amp;romance);
+
+        let mut caminho = vec![romance.nome.clone()];
+        let mut atual = romance.pai.borrow().upgrade();
+        while let Some(no) = atual {
+            caminho.push(no.nome.clone());
+            atual = no.pai.borrow().upgrade();
+        }
+        println!("caminho: {}", caminho.join(" &lt;- "));
+        println!("Ficção: {} fortes, {} fraca(s)", Rc::strong_count(&amp;ficcao), Rc::weak_count(&amp;ficcao));
+    }
+    println!("fim do bloco: os nós continuam vivos pela raiz ({} filho)", raiz.filhos.borrow().len());
+}</code></pre>
+<pre class="saida"><code>caminho: Romance &lt;- Ficção &lt;- Livros
+Ficção: 2 fortes, 1 fraca(s)
+fim do bloco: os nós continuam vivos pela raiz (1 filho)
+liberado: Livros
+liberado: Ficção
+liberado: Romance</code></pre>
+<p>"Ficção" tem dois donos fortes (a variável local e o vetor de filhos da raiz) e uma referência fraca (a do "Romance" para o pai). As referências <strong>fracas</strong> para o pai são o que permite a liberação: se o pai fosse <code>Rc</code>, pai e filho se manteriam vivos para sempre, e nenhuma linha "liberado" apareceria. O <code>upgrade()</code> devolve <code>Option&lt;Rc&lt;No&gt;&gt;</code>: <code>None</code> se o pai já tiver sido liberado. A ordem da liberação é de cima para baixo: quando a raiz morre, o vetor dela solta o último dono da "Ficção", e assim por diante.</p>
+<div class="questao" id="q39">
+<span class="num">Q39</span>
+<div class="corpo">
+<p class="titulo">Soma em paralelo com scoped threads</p>
+<p>Some os números de 1 a 10 milhões dividindo o intervalo entre 4 threads com <code>std::thread::scope</code>, que permite às threads emprestar dados da pilha do <code>main</code> sem <code>Arc</code>. Depois faça um contador compartilhado com <code>Arc&lt;Mutex&lt;u64&gt;&gt;</code> e outro com <code>AtomicU64</code>, e confira os três resultados.</p>
+</div>
+</div>
+<pre class="codigo"><code>use std::sync::atomic::{AtomicU64, Ordering};
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+fn main() {
+    let numeros: Vec&lt;u64&gt; = (1..=10_000_000).collect();
+    let partes = 4;
+    let tamanho = numeros.len().div_ceil(partes);
+
+    let soma: u64 = thread::scope(|s| {
+        let tarefas: Vec&lt;_&gt; = numeros.chunks(tamanho).map(|c| s.spawn(move || c.iter().sum::&lt;u64&gt;())).collect();
+        tarefas.into_iter().map(|t| t.join().unwrap()).sum()
+    });
+    println!("scope:  {soma}");
+
+    let protegido = Arc::new(Mutex::new(0u64));
+    let atomico = Arc::new(AtomicU64::new(0));
+    let mut threads = vec![];
+    for _ in 0..4 {
+        let (p, a) = (Arc::clone(&amp;protegido), Arc::clone(&amp;atomico));
+        threads.push(thread::spawn(move || {
+            for _ in 0..100_000 {
+                *p.lock().unwrap() += 1;
+                a.fetch_add(1, Ordering::Relaxed);
+            }
+        }));
+    }
+    for t in threads {
+        t.join().unwrap();
+    }
+    println!("mutex:  {}", protegido.lock().unwrap());
+    println!("atomic: {}", atomico.load(Ordering::Relaxed));
+    println!("fórmula: {}", 10_000_000u64 * 10_000_001 / 2);
+}</code></pre>
+<pre class="saida"><code>scope:  50000005000000
+mutex:  400000
+atomic: 400000
+fórmula: 50000005000000</code></pre>
+<p>O <code>thread::scope</code> garante que todas as threads terminam antes de ele retornar, e por isso elas podem receber fatias (<code>&amp;[u64]</code>) do vetor do <code>main</code>: o compilador sabe que o empréstimo não sobrevive aos dados. Com <code>thread::spawn</code> comum, a closure precisa ser <code>'static</code>, e o vetor teria de ir num <code>Arc</code>. O <code>lock()</code> devolve um <em>guard</em> que destrava o mutex ao sair de escopo, o RAII do Rust; e não há como acessar o dado sem travá-lo, porque ele fica <strong>dentro</strong> do <code>Mutex</code>. O <code>Ordering::Relaxed</code> basta para um contador; para publicar dados entre threads, é preciso <code>Release</code> e <code>Acquire</code>.</p>
+<div class="questao" id="q40">
+<span class="num">Q40</span>
+<div class="corpo">
+<p class="titulo">Produtor e consumidor com canais</p>
+<p>Use <code>std::sync::mpsc</code> para que três produtores enviem pedidos (<code>(produtor, número)</code>) a um consumidor, que os processa até todos os produtores terminarem. Mostre como o consumidor sabe que acabou e por que o <code>drop</code> do transmissor original é necessário.</p>
+</div>
+</div>
+<pre class="codigo"><code>use std::sync::mpsc;
+use std::thread;
+
+fn main() {
+    let (tx, rx) = mpsc::channel::&lt;(u32, u32)&gt;();
+
+    for produtor in 1..=3 {
+        let tx = tx.clone();
+        thread::spawn(move || {
+            for n in 1..=2 {
+                tx.send((produtor, n)).unwrap();
+            }
+        }); // o clone de tx é liberado aqui
+    }
+    drop(tx); // sem isso, o rx esperaria para sempre pelo tx original
+
+    let mut recebidos: Vec&lt;_&gt; = rx.iter().collect(); // termina quando todos os tx morrem
+    recebidos.sort();
+    println!("{} pedidos: {recebidos:?}", recebidos.len());
+}</code></pre>
+<pre class="saida"><code>6 pedidos: [(1, 1), (1, 2), (2, 1), (2, 2), (3, 1), (3, 2)]</code></pre>
+<p>O <code>rx.iter()</code> bloqueia esperando mensagens e só termina quando <strong>todos</strong> os transmissores foram liberados: é assim que o consumidor sabe que acabou, sem sentinela. Cada produtor tem o seu clone, mas o <code>tx</code> original, criado no <code>main</code>, ainda existe até o <code>drop</code> explícito. O <code>sort</code> é só para a saída ficar previsível, porque a ordem de chegada depende do agendamento das threads. O <code>send</code> <strong>move</strong> o valor para o canal: depois de enviado, o produtor não tem mais acesso a ele, e a corrida de dados é impossível por construção. "Não se comunique compartilhando memória; compartilhe memória comunicando-se."</p>
+<div class="questao" id="q41">
+<span class="num">Q41</span>
+<div class="corpo">
+<p class="titulo">Tarefas assíncronas com Tokio</p>
+<p>Num projeto Cargo com <code>tokio = { version = "1", features = ["full"] }</code>, escreva um programa que dispare três "consultas" a fornecedores com tempos diferentes (<code>tokio::time::sleep</code>), espere todas com <code>join!</code>, e outra rodada em que só vale a primeira que responder (<code>select!</code>), com um tempo limite (<code>timeout</code>) para a mais lenta.</p>
+</div>
+</div>
+<pre class="codigo"><code>use std::time::Duration;
+use tokio::time::{sleep, timeout};
+
+async fn consultar(fornecedor: &amp;str, ms: u64, preco: u32) -&gt; (String, u32) {
+    sleep(Duration::from_millis(ms)).await;
+    (fornecedor.to_string(), preco)
+}
+
+#[tokio::main]
+async fn main() {
+    let (a, b, c) = tokio::join!(
+        consultar("A", 300, 4750),
+        consultar("B", 100, 4990),
+        consultar("C", 200, 4500),
+    );
+    let melhor = [a, b, c].into_iter().min_by_key(|(_, p)| *p).unwrap();
+    println!("todas responderam; menor preço: {} ({})", melhor.0, melhor.1);
+
+    tokio::select! {
+        r = consultar("rápido", 50, 5000) =&gt; println!("primeiro a responder: {}", r.0),
+        r = consultar("lento", 500, 4000) =&gt; println!("primeiro a responder: {}", r.0),
+    }
+
+    match timeout(Duration::from_millis(150), consultar("muito lento", 1000, 3000)).await {
+        Ok((f, _)) =&gt; println!("{f} respondeu"),
+        Err(_) =&gt; println!("tempo esgotado: consulta cancelada"),
+    }
+}</code></pre>
+<p>Saída (conferida com o Tokio 1.54):</p>
+<pre class="codigo"><code>todas responderam; menor preço: C (4500)
+primeiro a responder: rápido
+tempo esgotado: consulta cancelada</code></pre>
+<p>O <code>join!</code> roda as três consultas <strong>ao mesmo tempo</strong> na mesma tarefa: o tempo total é o da mais lenta (300 ms), e não a soma. O <code>select!</code> espera a primeira que terminar e <strong>cancela</strong> as outras, simplesmente parando de fazer o <em>poll</em> delas: um <em>future</em> do Rust não faz nada sozinho, só avança quando alguém o aguarda. Por isso o cancelamento é gratuito, e por isso um <code>async fn</code> chamado sem <code>.await</code> não executa nada (o compilador avisa).</p>
+<div class="questao" id="q42">
+<span class="num">Q42</span>
+<div class="corpo">
+<p class="titulo">Uma macro declarativa</p>
+<p>Escreva <code>macro_rules! mapa</code> que crie um <code>HashMap</code> a partir de <code>mapa!{ "a" =&gt; 1, "b" =&gt; 2 }</code>, aceitando vírgula final, e uma macro <code>contar!</code> que conte quantos argumentos recebeu, em tempo de compilação. Use as duas.</p>
+</div>
+</div>
+<pre class="codigo"><code>use std::collections::HashMap;
+
+macro_rules! mapa {
+    ($($chave:expr =&gt; $valor:expr),* $(,)?) =&gt; {{
+        let mut m = HashMap::new();
+        $( m.insert($chave, $valor); )*
+        m
+    }};
+}
+
+macro_rules! contar {
+    () =&gt; { 0usize };
+    ($primeiro:tt $($resto:tt)*) =&gt; { 1usize + contar!($($resto)*) };
+}
+
+fn main() {
+    let precos = mapa! {
+        "Vidas Secas" =&gt; 4990,
+        "Iracema" =&gt; 2500,
+    };
+    let mut titulos: Vec&lt;_&gt; = precos.keys().collect();
+    titulos.sort();
+    println!("{} livros: {titulos:?}", precos.len());
+
+    const N: usize = contar!(a b c d e);
+    println!("contar!(a b c d e) = {N}");
+}</code></pre>
+<pre class="saida"><code>2 livros: ["Iracema", "Vidas Secas"]
+contar!(a b c d e) = 5</code></pre>
+<p>O <code>$(...),*</code> repete o padrão para cada par separado por vírgula, e o <code>$(,)?</code> aceita uma vírgula opcional no fim, como o <code>vec!</code>. As chaves duplas <code>{{ }}</code> fazem a macro expandir para <strong>um bloco</strong>, que vale o <code>m</code> final. O <code>contar!</code> é recursivo: cada nível consome um <em>token</em> e soma 1, e como o resultado é uma expressão constante, ele pode inicializar um <code>const</code>. O <code>cargo expand</code> (uma ferramenta externa) mostra o código que uma macro gerou.</p>
+</section>
+<section class="modulo" id="modulo-8">
+<h2><span class="rotulo">MÓDULO 8</span> Ecossistema e web</h2>
+<p class="intro">Cargo e as crates essenciais, uma API REST com Axum, banco de dados com SQLx, autenticação JWT e testes avançados.</p>
+<p class="aulas-titulo">Artigos 22 a 26</p>
+<ul class="aulas">
+<li><span class="n">#22</span> O Ecossistema Rust — Cargo, crates.io e as Bibliotecas Essenciais</li>
+<li><span class="n">#23</span> Construindo uma API REST com Axum</li>
+<li><span class="n">#24</span> Banco de Dados com SQLx — Persistência Real para sua API</li>
+<li><span class="n">#25</span> Autenticação JWT — Protegendo sua API com Tokens</li>
+<li><span class="n">#26</span> Testes Avançados — Propriedades, Mocks e Benchmarks</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q43">
+<span class="num">Q43</span>
+<div class="corpo">
+<p class="titulo">Cargo.toml e Cargo.lock</p>
+<p>O que significa <code>serde = "1.0"</code> no <code>Cargo.toml</code>? Por que o <code>Cargo.lock</code> é versionado num executável e, tradicionalmente, não era numa biblioteca?</p>
+</div>
+</div>
+<p>Uma versão sem operador no Cargo é um <strong>requisito compatível</strong> (como o <code>^</code> do npm): <code>"1.0"</code> aceita qualquer versão <code>&gt;= 1.0.0</code> e <code>&lt; 2.0.0</code>. O <code>Cargo.lock</code> registra as versões <strong>exatas</strong> resolvidas, com os <em>checksums</em>, e garante que todos compilam o mesmo código. Num <strong>executável</strong>, ele é versionado sempre: o que foi testado é o que vai para produção. Numa <strong>biblioteca</strong>, o <em>lockfile</em> dela é ignorado por quem a usa (vale o do projeto final), e por isso a recomendação antiga era não versioná-lo; desde 2023, a orientação do Cargo é versionar também nas bibliotecas, para que o CI delas seja reprodutível.</p>
+<div class="questao" id="q44">
+<span class="num">Q44</span>
+<div class="corpo">
+<p class="titulo">Extractors do Axum</p>
+<p>No Axum, um <em>handler</em> como <code>async fn criar(State(db): State&lt;Pool&gt;, Json(novo): Json&lt;NovoLivro&gt;) -&gt; impl IntoResponse</code> não lê a requisição manualmente. Como os parâmetros são preenchidos, e o que acontece quando o JSON do corpo é inválido?</p>
+</div>
+</div>
+<p>Cada parâmetro é um <strong><em>extractor</strong></em>: um tipo que implementa <code>FromRequestParts</code> ou <code>FromRequest</code>, e o Axum chama a extração de cada um antes de chamar o <em>handler</em>. <code>State</code> entrega o estado compartilhado registrado no roteador; <code>Json&lt;T&gt;</code> lê o corpo, confere o <code>Content-Type</code> e desserializa com o <code>serde</code>; <code>Path</code>, <code>Query</code> e <code>HeaderMap</code> funcionam igual. Se um <em>extractor</em> falha (JSON malformado, campo faltando, tipo errado), o <em>handler</em> <strong>nem é chamado</strong>, e a resposta de erro do próprio <em>extractor</em> é devolvida (400, 415 ou 422, conforme o caso). O <em>handler</em> recebe dados já validados quanto ao formato e só cuida das regras de negócio.</p>
+<div class="questao" id="q45">
+<span class="num">Q45</span>
+<div class="corpo">
+<p class="titulo">Consultas verificadas na compilação</p>
+<p>O que a macro <code>sqlx::query_as!</code> faz de diferente de uma consulta montada em texto? Qual a exigência dela para compilar?</p>
+</div>
+</div>
+<p>O <code>query_as!(Livro, "SELECT id, titulo FROM livros WHERE id = $1", id)</code> <strong>conecta ao banco na compilação</strong> (ou lê um cache gerado com <code>cargo sqlx prepare</code>), pede ao banco que analise o SQL e confere: que a consulta é válida, que as colunas existem, que os tipos delas casam com os campos de <code>Livro</code> e com os parâmetros, e se cada coluna pode ser nula (o que exige <code>Option</code> no campo). Um nome de coluna errado vira erro de <strong>compilação</strong>, não de execução. E os parâmetros são sempre separados do texto, sem injeção possível. A exigência é ter um banco acessível pela <code>DATABASE_URL</code> no momento da compilação, ou o cache <code>.sqlx/</code> versionado, que é o que se usa no CI.</p>
+<div class="questao" id="q46">
+<span class="num">Q46</span>
+<div class="corpo">
+<p class="titulo">Testes de propriedade</p>
+<p>O que é um teste baseado em propriedades (com <code>proptest</code> ou <code>quickcheck</code>), e que propriedade testaria uma função que codifica e decodifica Base64?</p>
+</div>
+</div>
+<p>Em vez de escrever exemplos (<code>codificar("oi") == "b2k="</code>), descreve-se uma <strong>propriedade</strong> que deve valer para <strong>qualquer</strong> entrada, e a ferramenta gera centenas de entradas aleatórias, inclusive casos extremos (vazio, bytes zero, tamanhos que não são múltiplos de 3), procurando um contraexemplo. Quando acha um, ela o <strong>reduz</strong> (<em>shrinking</em>) ao menor caso que ainda falha. Para Base64, a propriedade central é a ida e volta: <code>decodificar(codificar(bytes)) == bytes</code> para todo <code>bytes</code>; e também que o tamanho da saída é <code>4 * teto(n / 3)</code> e que ela só tem caracteres do alfabeto. É uma ótima forma de achar os casos de borda que ninguém pensou em escrever.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q47">
+<span class="num">Q47</span>
+<div class="corpo">
+<p class="titulo">Uma API com Axum</p>
+<p>Escreva uma API Axum com <code>GET /livros</code>, <code>GET /livros/{id}</code> (404 quando não existe) e <code>POST /livros</code> (201 com o livro criado, ou 422 se o título estiver vazio), guardando os livros num <code>Arc&lt;Mutex&lt;Vec&lt;Livro&gt;&gt;&gt;</code> como estado. Use <code>serde</code> para o JSON.</p>
+</div>
+</div>
+<pre class="codigo"><code>use axum::{
+    Json, Router,
+    extract::{Path, State},
+    http::StatusCode,
+    routing::get,
+};
+use serde::{Deserialize, Serialize};
+use std::sync::{Arc, Mutex};
+
+#[derive(Clone, Serialize)]
+struct Livro {
+    id: u32,
+    titulo: String,
+    preco_centavos: u32,
+}
+
+#[derive(Deserialize)]
+struct NovoLivro {
+    titulo: String,
+    preco_centavos: u32,
+}
+
+type Estado = Arc&lt;Mutex&lt;Vec&lt;Livro&gt;&gt;&gt;;
+
+async fn listar(State(livros): State&lt;Estado&gt;) -&gt; Json&lt;Vec&lt;Livro&gt;&gt; {
+    Json(livros.lock().unwrap().clone())
+}
+
+async fn buscar(State(livros): State&lt;Estado&gt;, Path(id): Path&lt;u32&gt;) -&gt; Result&lt;Json&lt;Livro&gt;, StatusCode&gt; {
+    livros.lock().unwrap().iter().find(|l| l.id == id).cloned().map(Json).ok_or(StatusCode::NOT_FOUND)
+}
+
+async fn criar(
+    State(livros): State&lt;Estado&gt;,
+    Json(novo): Json&lt;NovoLivro&gt;,
+) -&gt; Result&lt;(StatusCode, Json&lt;Livro&gt;), (StatusCode, &amp;'static str)&gt; {
+    if novo.titulo.trim().is_empty() {
+        return Err((StatusCode::UNPROCESSABLE_ENTITY, "título obrigatório"));
+    }
+    let mut lista = livros.lock().unwrap();
+    let livro = Livro { id: lista.len() as u32 + 1, titulo: novo.titulo, preco_centavos: novo.preco_centavos };
+    lista.push(livro.clone());
+    Ok((StatusCode::CREATED, Json(livro)))
+}
+
+#[tokio::main]
+async fn main() {
+    let estado: Estado = Arc::new(Mutex::new(Vec::new()));
+    let app = Router::new()
+        .route("/livros", get(listar).post(criar))
+        .route("/livros/{id}", get(buscar))
+        .with_state(estado);
+    let ouvinte = tokio::net::TcpListener::bind("127.0.0.1:3000").await.unwrap();
+    axum::serve(ouvinte, app).await.unwrap();
+}</code></pre>
+<p>Dependências: <code>axum = "0.8"</code>, <code>tokio</code> com <code>full</code> e <code>serde</code> com <code>derive</code>. O Axum 0.8 usa <code>{id}</code> nas rotas (antes era <code>:id</code>). O <code>std::sync::Mutex</code> serve aqui porque nenhuma trava é mantida durante um <code>.await</code>; se fosse, seria preciso o <code>tokio::sync::Mutex</code>. Um JSON sem o campo <code>titulo</code> nem chega ao <em>handler</em>: o <em>extractor</em> <code>Json</code> devolve 422 com a explicação. Num serviço real, o vetor vira um <em>pool</em> do SQLx no estado, e o <code>id</code> vem do banco. Para este caderno, o código foi compilado com o Axum 0.8.9, sem avisos, mas o servidor não foi executado.</p>
+<div class="questao" id="q48">
+<span class="num">Q48</span>
+<div class="corpo">
+<p class="titulo">Um teste de propriedade feito à mão</p>
+<p>Sem bibliotecas, escreva um gerador pseudoaleatório simples (<em>xorshift</em>), uma função <code>codificar_rle(&amp;str) -&gt; String</code> e <code>decodificar_rle(&amp;str) -&gt; String</code> (codificação por repetição: "aaab" vira "3a1b"), e teste a propriedade de ida e volta em 1000 textos aleatórios feitos das letras <code>a</code>, <code>b</code> e <code>c</code>. Mostre o que acontece com um texto que contém dígitos, e por quê.</p>
+</div>
+</div>
+<pre class="codigo"><code>struct Xorshift(u64);
+
+impl Xorshift {
+    fn proximo(&amp;mut self) -&gt; u64 {
+        self.0 ^= self.0 &lt;&lt; 13;
+        self.0 ^= self.0 &gt;&gt; 7;
+        self.0 ^= self.0 &lt;&lt; 17;
+        self.0
+    }
+}
+
+fn codificar_rle(s: &amp;str) -&gt; String {
+    let mut saida = String::new();
+    let mut chars = s.chars().peekable();
+    while let Some(c) = chars.next() {
+        let mut n = 1;
+        while chars.peek() == Some(&amp;c) {
+            chars.next();
+            n += 1;
+        }
+        saida.push_str(&amp;format!("{n}{c}"));
+    }
+    saida
+}
+
+fn decodificar_rle(s: &amp;str) -&gt; String {
+    let mut saida = String::new();
+    let mut n = 0;
+    for c in s.chars() {
+        if let Some(d) = c.to_digit(10) {
+            n = n * 10 + d as usize;
+        } else {
+            saida.push_str(&amp;c.to_string().repeat(n));
+            n = 0;
+        }
+    }
+    saida
+}
+
+fn main() {
+    let mut rng = Xorshift(2026);
+    let mut falhas = 0;
+    for _ in 0..1000 {
+        let tamanho = (rng.proximo() % 30) as usize;
+        let texto: String = (0..tamanho).map(|_| ['a', 'b', 'c'][(rng.proximo() % 3) as usize]).collect();
+        if decodificar_rle(&amp;codificar_rle(&amp;texto)) != texto {
+            falhas += 1;
+        }
+    }
+    println!("1000 textos de a, b e c: {falhas} falha(s)");
+    println!("exemplo: {:?} -&gt; {:?}", "aaabccccccccccccd", codificar_rle("aaabccccccccccccd"));
+
+    let com_digito = "a11";
+    let ida_e_volta = decodificar_rle(&amp;codificar_rle(com_digito));
+    println!("com dígitos: {com_digito:?} -&gt; {:?} -&gt; {ida_e_volta:?}", codificar_rle(com_digito));
+}</code></pre>
+<pre class="saida"><code>1000 textos de a, b e c: 0 falha(s)
+exemplo: "aaabccccccccccccd" -&gt; "3a1b12c1d"
+com dígitos: "a11" -&gt; "1a21" -&gt; "a"</code></pre>
+<p>A propriedade vale para o alfabeto testado, inclusive para repetições de dois dígitos (os 12 "c" do exemplo). Com um texto que <strong>contém dígitos</strong>, ela quebra: "a11" vira "1a21", que o decodificador lê como "1 a" e "21 vezes nada". É exatamente o tipo de falha que um teste de propriedade com um gerador mais amplo encontraria sozinho, e que exemplos escritos à mão costumam não cobrir. O gerador com semente fixa torna o teste reprodutível; o <code>proptest</code> faz o mesmo e ainda reduz a entrada que falhou ao menor exemplo possível.</p>
+</section>
+<section class="modulo" id="modulo-9">
+<h2><span class="rotulo">MÓDULO 9</span> Sistemas e baixo nível</h2>
+<p class="intro">WebAssembly, programação de sistemas e de redes, parsing, criptografia, embarcados, unsafe, desempenho, FFI e macros procedurais.</p>
+<p class="aulas-titulo">Artigos 27 a 36</p>
+<ul class="aulas">
+<li><span class="n">#27</span> WebAssembly com Rust — Executando Rust no Navegador</li>
+<li><span class="n">#28</span> Programação de Sistemas — Arquivos, Processos e Sinais</li>
+<li><span class="n">#29</span> Programação de Redes — TCP, UDP e Sockets</li>
+<li><span class="n">#30</span> Parsing e Processamento de Texto — nom, pest e Expressões Regulares</li>
+<li><span class="n">#31</span> Criptografia e Segurança — Hashing, Criptografia Simétrica e TLS</li>
+<li><span class="n">#32</span> Embarcados e Bare Metal — Rust sem Sistema Operacional</li>
+<li><span class="n">#33</span> Unsafe Rust — Quando e Como Usar Código Inseguro com Responsabilidade</li>
+<li><span class="n">#34</span> Performance e Otimização — Profiling, SIMD e Técnicas Avançadas</li>
+<li><span class="n">#35</span> FFI — Integrando Rust com C e Outras Linguagens</li>
+<li><span class="n">#36</span> Macros Procedurais — Criando Derive Macros e Atributos Customizados</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q49">
+<span class="num">Q49</span>
+<div class="corpo">
+<p class="titulo">Quando unsafe</p>
+<p>O que um bloco <code>unsafe</code> permite que o Rust seguro não permite? Ele desliga o <em>borrow checker</em>? Qual a responsabilidade de quem escreve uma função segura que usa <code>unsafe</code> por dentro?</p>
+</div>
+</div>
+<p>O <code>unsafe</code> libera <strong>cinco</strong> operações: desreferenciar ponteiros crus, chamar funções <code>unsafe</code> (inclusive as de FFI), acessar ou alterar variáveis <code>static mut</code>, implementar <em>traits</em> <code>unsafe</code> (como <code>Send</code> e <code>Sync</code> à mão) e acessar campos de <code>union</code>. Ele <strong>não</strong> desliga o <em>borrow checker</em> nem as outras verificações: referências comuns continuam verificadas dentro do bloco. Quem escreve uma função <strong>segura</strong> que usa <code>unsafe</code> por dentro garante que <strong>nenhuma</strong> forma de chamá-la, com quaisquer argumentos válidos, causa comportamento indefinido: a função é uma fronteira, e a responsabilidade é de quem a escreve, não de quem chama. Por isso o costume é um comentário <code>// SAFETY:</code> explicando por que cada bloco está correto, e manter os blocos pequenos e encapsulados.</p>
+<div class="questao" id="q50">
+<span class="num">Q50</span>
+<div class="corpo">
+<p class="titulo">no_std</p>
+<p>O que muda num programa <code>#![no_std]</code> para um microcontrolador? O que deixa de existir, e o que continua disponível?</p>
+</div>
+</div>
+<p>Sem o sistema operacional, deixa de existir a biblioteca <code>std</code>, que depende dele: alocação no <em>heap</em> (<code>Vec</code>, <code>String</code>, <code>Box</code>), arquivos, threads, rede, <code>println!</code>. Continua disponível a <code>core</code>: tipos primitivos, <code>Option</code>, <code>Result</code>, iteradores, <em>traits</em>, <code>slice</code>, formatação (sem destino de saída) e as operações atômicas. Com um alocador fornecido, volta também a <code>alloc</code> (<code>Vec</code>, <code>String</code>, <code>Box</code>). O programa precisa definir o próprio <code>#[panic_handler]</code> (o que fazer num pânico: parar, reiniciar, piscar um LED) e o ponto de entrada (com o <code>cortex-m-rt</code>, <code>#[entry]</code>). O <em>borrow checker</em> e o sistema de tipos continuam valendo, e é isso que torna o Rust atraente para embarcados: os registradores de periféricos viram tipos que só podem ser usados do jeito certo.</p>
+<div class="questao" id="q51">
+<span class="num">Q51</span>
+<div class="corpo">
+<p class="titulo">Um protocolo sobre TCP</p>
+<p>Por que um servidor TCP não pode assumir que um <code>read</code> traz uma mensagem completa? Que duas formas de delimitar mensagens são comuns?</p>
+</div>
+</div>
+<p>O TCP entrega um <strong>fluxo de bytes</strong>, sem fronteiras: uma mensagem pode chegar partida em vários <code>read</code>, e duas mensagens podem chegar juntas num só. O protocolo da aplicação é que define onde cada mensagem termina. As duas formas comuns são: um <strong>delimitador</strong> (uma quebra de linha, como em HTTP/1, SMTP e Redis em parte), lido com um <code>BufReader</code> e <code>read_line</code>; ou um <strong>prefixo de tamanho</strong> (os primeiros 4 bytes dizem quantos vêm a seguir, como no gRPC e em muitos protocolos binários), lido com <code>read_exact</code>. O delimitador é simples e legível; o prefixo de tamanho suporta dados binários arbitrários e permite alocar o <em>buffer</em> certo de uma vez (com um limite máximo, para não aceitar um "tamanho" de 4 GB enviado por um atacante).</p>
+<div class="questao" id="q52">
+<span class="num">Q52</span>
+<div class="corpo">
+<p class="titulo">Medir antes de otimizar</p>
+<p>Que ferramentas o curso usa para achar o gargalo de um programa Rust lento, e por que olhar o código e "adivinhar" costuma falhar?</p>
+</div>
+</div>
+<p>Primeiro, compilar em <strong>release</strong> (<code>cargo build --release</code>): a diferença para o <em>debug</em> chega a dezenas de vezes, e muitos "problemas de desempenho" são só isso. Depois, <strong>medir</strong>: o <code>criterion</code> para comparar versões de uma função com estatística (aquecimento, várias amostras, detecção de regressão), e um <em>profiler</em> de amostragem (<code>perf</code> com o <code>cargo flamegraph</code>) para ver <strong>onde</strong> o tempo realmente vai, num gráfico de chamas. Adivinhar falha porque a intuição aponta para o código "complicado", enquanto o tempo costuma estar em lugares inesperados: alocações repetidas num laço, uma cópia de <code>String</code> escondida num <code>clone()</code>, um <code>HashMap</code> com o <em>hasher</em> padrão (seguro contra ataques, mas não o mais rápido) ou E/S sem <em>buffer</em>.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q53">
+<span class="num">Q53</span>
+<div class="corpo">
+<p class="titulo">Arquivos com buffer e processos</p>
+<p>Escreva um programa que grave 10 mil linhas num arquivo com <code>BufWriter</code>, releia contando as linhas e as que contêm "7" com <code>BufReader</code>, e execute um processo externo (<code>wc -l</code>) com <code>std::process::Command</code>, conferindo que a contagem bate. Trate os erros com <code>?</code> e <code>Box&lt;dyn Error&gt;</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>use std::error::Error;
+use std::fs::File;
+use std::io::{BufRead, BufReader, BufWriter, Write};
+use std::process::Command;
+
+fn main() -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
+    {
+        let mut saida = BufWriter::new(File::create("dados.txt")?);
+        for i in 1..=10_000 {
+            writeln!(saida, "linha {i}")?;
+        }
+    } // o BufWriter descarrega o buffer ao ser liberado
+
+    let mut total = 0;
+    let mut com_sete = 0;
+    for linha in BufReader::new(File::open("dados.txt")?).lines() {
+        let linha = linha?;
+        total += 1;
+        if linha.contains('7') {
+            com_sete += 1;
+        }
+    }
+    println!("lidas: {total}, com o dígito 7: {com_sete}");
+
+    let saida = Command::new("wc").args(["-l", "dados.txt"]).output()?;
+    let contagem: usize = String::from_utf8(saida.stdout)?.split_whitespace().next().ok_or("saída vazia")?.parse()?;
+    println!("wc -l: {contagem} -&gt; {}", if contagem == total { "confere" } else { "diferente!" });
+
+    match File::open("nao-existe.txt") {
+        Ok(_) =&gt; println!("abriu?"),
+        Err(e) =&gt; println!("erro esperado: {} ({:?})", e, e.kind()),
+    }
+    Ok(())
+}</code></pre>
+<pre class="saida"><code>lidas: 10000, com o dígito 7: 3439
+wc -l: 10000 -&gt; confere
+erro esperado: No such file or directory (os error 2) (NotFound)</code></pre>
+<p>Sem o <code>BufWriter</code>, cada <code>writeln!</code> seria uma chamada ao sistema operacional: 10 mil chamadas em vez de algumas dezenas. O <code>Box&lt;dyn Error&gt;</code> aceita qualquer tipo de erro (E/S, UTF-8, conversão de número), e o <code>?</code> converte cada um sozinho: é a forma prática para um <code>main</code> ou um <em>script</em>. O <code>main</code> que devolve <code>Result</code> imprime o erro e sai com código 1 se algo falhar. A mensagem do erro de arquivo vem do sistema operacional ("<em>No such file or directory</em>"); o <code>kind()</code> dá a categoria portátil, para o código decidir o que fazer.</p>
+<div class="questao" id="q54">
+<span class="num">Q54</span>
+<div class="corpo">
+<p class="titulo">Um servidor TCP de eco por linhas</p>
+<p>Com <code>std::net</code>, suba um servidor TCP numa porta escolhida pelo sistema (<code>127.0.0.1:0</code>), que atenda cada conexão numa thread e responda cada linha recebida em maiúsculas, encerrando a conexão com a linha <code>sair</code>. No mesmo programa, conecte dois clientes e mostre as respostas.</p>
+</div>
+</div>
+<pre class="codigo"><code>use std::io::{BufRead, BufReader, Write};
+use std::net::{TcpListener, TcpStream};
+use std::thread;
+
+fn atender(conexao: TcpStream) -&gt; std::io::Result&lt;()&gt; {
+    let mut escrita = conexao.try_clone()?;
+    for linha in BufReader::new(conexao).lines() {
+        let linha = linha?;
+        if linha == "sair" {
+            writeln!(escrita, "até mais")?;
+            break;
+        }
+        writeln!(escrita, "{}", linha.to_uppercase())?;
+    }
+    Ok(())
+}
+
+fn cliente(endereco: std::net::SocketAddr, nome: &amp;str, mensagens: &amp;[&amp;str]) -&gt; std::io::Result&lt;Vec&lt;String&gt;&gt; {
+    let mut conexao = TcpStream::connect(endereco)?;
+    for m in mensagens {
+        writeln!(conexao, "{m}")?;
+    }
+    writeln!(conexao, "sair")?;
+    let respostas = BufReader::new(conexao).lines().collect::&lt;Result&lt;Vec&lt;_&gt;, _&gt;&gt;()?;
+    Ok(respostas.into_iter().map(|r| format!("[{nome}] {r}")).collect())
+}
+
+fn main() -&gt; std::io::Result&lt;()&gt; {
+    let ouvinte = TcpListener::bind("127.0.0.1:0")?;
+    let endereco = ouvinte.local_addr()?;
+    thread::spawn(move || {
+        for conexao in ouvinte.incoming().flatten() {
+            thread::spawn(move || atender(conexao));
+        }
+    });
+
+    for r in cliente(endereco, "ana", &amp;["olá, servidor", "ação"])? {
+        println!("{r}");
+    }
+    for r in cliente(endereco, "bruno", &amp;["rust"])? {
+        println!("{r}");
+    }
+    Ok(())
+}</code></pre>
+<pre class="saida"><code>[ana] OLÁ, SERVIDOR
+[ana] AÇÃO
+[ana] até mais
+[bruno] RUST
+[bruno] até mais</code></pre>
+<p>A porta 0 pede ao sistema uma porta livre, e o <code>local_addr()</code> diz qual foi: o exemplo nunca colide com outro programa. O <code>to_uppercase</code> do Rust trata Unicode corretamente ("ação" vira "AÇÃO"), ao contrário do <code>strtoupper</code> do PHP visto no outro caderno. O protocolo é delimitado por linha, e o <code>BufReader</code> cuida de juntar os pedaços que o TCP entregar. Uma thread por conexão é simples e funciona bem para dezenas de clientes; para milhares, o caminho é o <code>tokio</code>, com uma tarefa por conexão.</p>
+<div class="questao" id="q55">
+<span class="num">Q55</span>
+<div class="corpo">
+<p class="titulo">split_at_mut com unsafe</p>
+<p>A biblioteca padrão implementa <code>split_at_mut</code>, que divide um slice mutável em duas partes mutáveis. Escreva a sua versão, <code>dividir_mut(v: &amp;mut [i32], meio: usize) -&gt; (&amp;mut [i32], &amp;mut [i32])</code>, mostrando por que a versão segura não compila (em comentário) e usando <code>unsafe</code> com ponteiros crus e um comentário <code>SAFETY</code>. Use-a para alterar as duas metades.</p>
+</div>
+</div>
+<pre class="codigo"><code>fn dividir_mut(v: &amp;mut [i32], meio: usize) -&gt; (&amp;mut [i32], &amp;mut [i32]) {
+    let len = v.len();
+    assert!(meio &lt;= len, "meio fora do slice");
+    // Versão segura, recusada: dois empréstimos mutáveis do mesmo v ao mesmo tempo.
+    // (&amp;mut v[..meio], &amp;mut v[meio..])
+    let p = v.as_mut_ptr();
+    // SAFETY: as faixas [0, meio) e [meio, len) não se sobrepõem, ficam dentro do slice
+    // (garantido pelo assert) e herdam o lifetime de v, então ninguém mais acessa esses
+    // elementos enquanto as duas fatias existirem.
+    unsafe { (std::slice::from_raw_parts_mut(p, meio), std::slice::from_raw_parts_mut(p.add(meio), len - meio)) }
+}
+
+fn main() {
+    let mut v = [1, 2, 3, 4, 5, 6];
+    let (esq, dir) = dividir_mut(&amp;mut v, 2);
+    esq[0] = 100;
+    dir.iter_mut().for_each(|x| *x *= 10);
+    println!("{v:?}");
+}</code></pre>
+<pre class="saida"><code>[100, 2, 30, 40, 50, 60]</code></pre>
+<p>O compilador recusa a versão segura porque não sabe que as duas faixas são <strong>disjuntas</strong>: para ele, são dois empréstimos mutáveis do mesmo <code>v</code>. O programador sabe, e o <code>unsafe</code> é a forma de afirmar isso, ficando responsável pela prova. O <code>assert!</code> é parte essencial da segurança: sem ele, um <code>meio</code> maior que o tamanho criaria fatias fora do <em>array</em>, e a função "segura" causaria comportamento indefinido. A ferramenta <code>cargo miri</code> executa o código num interpretador que detecta essas violações e é o teste certo para todo código <code>unsafe</code>.</p>
+<div class="questao" id="q56">
+<span class="num">Q56</span>
+<div class="corpo">
+<p class="titulo">Chamando C com FFI</p>
+<p>Declare as funções <code>strlen</code> e <code>abs</code> da biblioteca C num bloco <code>unsafe extern "C"</code> (a sintaxe da edição 2024) e chame-as a partir do Rust, convertendo uma <code>&amp;str</code> com <code>CString</code>. Mostre o que acontece ao tentar criar uma <code>CString</code> com um <code>\0</code> no meio.</p>
+</div>
+</div>
+<pre class="codigo"><code>use std::ffi::{CString, c_char, c_int};
+
+unsafe extern "C" {
+    fn strlen(s: *const c_char) -&gt; usize;
+    safe fn abs(x: c_int) -&gt; c_int; // declarada segura: não recebe ponteiro, não há como usá-la errado
+}
+
+fn main() {
+    let texto = "ação";
+    let c = CString::new(texto).expect("sem \\0 no meio");
+    // SAFETY: c é uma string C válida, terminada em \0, e vive até o fim da chamada.
+    let n = unsafe { strlen(c.as_ptr()) };
+    println!("strlen(\"{texto}\") = {n} bytes; chars = {}", texto.chars().count());
+    println!("abs(-42) = {}", abs(-42));
+
+    match CString::new("meio\0quebrado") {
+        Ok(_) =&gt; println!("aceitou"),
+        Err(e) =&gt; println!("recusado: \\0 na posição {}", e.nul_position()),
+    }
+}</code></pre>
+<pre class="saida"><code>strlen("ação") = 6 bytes; chars = 4
+abs(-42) = 42
+recusado: \0 na posição 4</code></pre>
+<p>Na edição 2024, os blocos <code>extern</code> precisam ser marcados <code>unsafe</code>, porque o compilador não tem como conferir se a assinatura declarada bate com a função real: declarar o tipo errado é comportamento indefinido. Cada item pode então ser marcado <code>safe</code> quando chamá-lo nunca é perigoso, como o <code>abs</code>. A <code>CString</code> garante o terminador <code>\0</code> e recusa um <code>\0</code> no meio, que faria o C enxergar uma string mais curta. O <code>strlen</code> conta bytes: os mesmos 6 de "ação" que o caderno de C# mostrou.</p>
+</section>
+<section class="modulo" id="modulo-10">
+<h2><span class="rotulo">MÓDULO 10</span> Engenharia de projetos</h2>
+<p class="intro">Padrões de projeto em Rust, compilação condicional e features, documentação e doc tests, publicação de crates e ferramentas de linha de comando.</p>
+<p class="aulas-titulo">Artigos 37 a 41</p>
+<ul class="aulas">
+<li><span class="n">#37</span> Design Patterns em Rust — Adaptando Padrões Clássicos à Linguagem</li>
+<li><span class="n">#38</span> Compilação Condicional e Feature Flags — Gerenciando Variações do Código</li>
+<li><span class="n">#39</span> Documentação e Doc Tests — Escrevendo Documentação que Não Fica Desatualizada</li>
+<li><span class="n">#40</span> Gerenciamento de Dependências e Publicação de Crates — Do Projeto Local ao crates.io</li>
+<li><span class="n">#41</span> Rust para CLI — Construindo Ferramentas de Linha de Comando Profissionais com clap</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q57">
+<span class="num">Q57</span>
+<div class="corpo">
+<p class="titulo">Padrões que mudam em Rust</p>
+<p>Por que alguns padrões clássicos da orientação a objetos mudam de forma em Rust? Dê o exemplo do Builder e do State (<em>typestate</em>).</p>
+</div>
+</div>
+<p>O Rust não tem herança de implementação, nem <code>null</code>, e tem um sistema de tipos forte com posse: muitos padrões que existem para contornar limitações de outras linguagens ficam diferentes ou desnecessários. O <strong>Builder</strong> é muito usado, porque o Rust não tem argumentos nomeados nem opcionais: <code>Requisicao::builder().url("...").timeout(5).build()</code>, com métodos que consomem e devolvem <code>self</code>. O <strong>State</strong> ganha uma versão em tempo de compilação, o <strong><em>typestate</strong></em>: cada estado é um <strong>tipo</strong> (<code>Pedido&lt;Novo&gt;</code>, <code>Pedido&lt;Pago&gt;</code>), e os métodos só existem nos estados em que fazem sentido (<code>enviar()</code> só em <code>Pedido&lt;Pago&gt;</code>). Uma transição inválida deixa de ser um erro em execução e passa a ser um programa que não compila. O <strong>Visitor</strong> costuma dar lugar a um <code>match</code> sobre um <code>enum</code>, e o <strong>Strategy</strong>, a uma closure.</p>
+<div class="questao" id="q58">
+<span class="num">Q58</span>
+<div class="corpo">
+<p class="titulo">Features no Cargo</p>
+<p>O que são <em>features</em> no <code>Cargo.toml</code>, e por que elas devem ser <strong>aditivas</strong>? Dê um exemplo de <em>feature</em> bem e mal projetada.</p>
+</div>
+</div>
+<p>São opções de compilação nomeadas: <code>[features] json = ["dep:serde_json"]</code> liga uma dependência opcional e o código marcado com <code>#[cfg(feature = "json")]</code>. O Cargo <strong>unifica</strong> as <em>features</em>: se duas dependências do seu projeto usam a mesma <em>crate</em>, uma com <code>json</code> e outra sem, ela é compilada <strong>uma vez, com a união</strong> das duas. Por isso uma <em>feature</em> só pode <strong>acrescentar</strong> funcionalidade, nunca remover nem mudar o comportamento de algo que já existe. Bem projetada: <code>json</code>, que acrescenta funções de serialização. Mal projetada: <code>sem-std</code> (que remove coisas) ou <code>algoritmo-rapido</code> que troca o resultado de uma função existente; ligada por uma dependência distante, ela quebraria outra parte do programa que contava com o comportamento padrão.</p>
+<div class="questao" id="q59">
+<span class="num">Q59</span>
+<div class="corpo">
+<p class="titulo">Documentação que não mente</p>
+<p>O que são os <em>doc tests</em>, e por que eles evitam que a documentação fique desatualizada?</p>
+</div>
+</div>
+<p>Os exemplos em blocos de código dentro dos comentários de documentação (<code>///</code>) são <strong>compilados e executados</strong> pelo <code>cargo test</code>, como testes. Se a API muda e o exemplo deixa de compilar ou de produzir o resultado afirmado num <code>assert_eq!</code>, o teste falha. A documentação passa a ter a mesma garantia que o código: um exemplo errado é um teste vermelho. Linhas que começam com <code># </code> ficam ocultas na documentação renderizada, mas são compiladas, o que permite esconder a preparação (os <code>use</code>, a criação de objetos) e mostrar só o essencial. O <code>cargo doc --open</code> gera o site da documentação, o mesmo formato do docs.rs.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q60">
+<span class="num">Q60</span>
+<div class="corpo">
+<p class="titulo">Typestate: transições que não compilam</p>
+<p>Implemente um pedido com <em>typestate</em>: <code>struct Pedido&lt;E&gt; { id: u32, estado: E }</code> com os estados <code>Novo</code>, <code>Pago { valor: u32 }</code> e <code>Enviado { codigo: String }</code> como tipos, e os métodos <code>pagar</code> (só em <code>Pedido&lt;Novo&gt;</code>), <code>enviar</code> (só em <code>Pedido&lt;Pago&gt;</code>) e <code>rastreio</code> (só em <code>Pedido&lt;Enviado&gt;</code>). Mostre em comentários as chamadas que o compilador recusa.</p>
+</div>
+</div>
+<pre class="codigo"><code>struct Novo;
+struct Pago {
+    valor: u32,
+}
+struct Enviado {
+    codigo: String,
+}
+
+struct Pedido&lt;E&gt; {
+    id: u32,
+    estado: E,
+}
+
+impl Pedido&lt;Novo&gt; {
+    fn novo(id: u32) -&gt; Self {
+        Pedido { id, estado: Novo }
+    }
+    fn pagar(self, valor: u32) -&gt; Pedido&lt;Pago&gt; {
+        Pedido { id: self.id, estado: Pago { valor } }
+    }
+}
+
+impl Pedido&lt;Pago&gt; {
+    fn enviar(self, codigo: &amp;str) -&gt; Pedido&lt;Enviado&gt; {
+        println!("pedido {} de {} centavos enviado", self.id, self.estado.valor);
+        Pedido { id: self.id, estado: Enviado { codigo: codigo.into() } }
+    }
+}
+
+impl Pedido&lt;Enviado&gt; {
+    fn rastreio(&amp;self) -&gt; &amp;str {
+        &amp;self.estado.codigo
+    }
+}
+
+fn main() {
+    let p = Pedido::novo(42);
+    // p.enviar("BR1");       // erro: Pedido&lt;Novo&gt; não tem o método enviar
+    let p = p.pagar(4990);
+    // p.pagar(10);           // erro: Pedido&lt;Pago&gt; não tem o método pagar
+    let p = p.enviar("BR123");
+    println!("rastreio: {}", p.rastreio());
+    println!("tamanho de Pedido&lt;Novo&gt;: {} bytes", std::mem::size_of::&lt;Pedido&lt;Novo&gt;&gt;());
+}</code></pre>
+<pre class="saida"><code>pedido 42 de 4990 centavos enviado
+rastreio: BR123
+tamanho de Pedido&lt;Novo&gt;: 4 bytes</code></pre>
+<p>Cada transição <strong>consome</strong> o pedido anterior (<code>self</code> por valor) e devolve um tipo novo: não há como guardar um "pedido pago" e enviá-lo duas vezes. O estado <code>Novo</code>, sem campos, não ocupa espaço nenhum: um <code>Pedido&lt;Novo&gt;</code> tem só os 4 bytes do <code>id</code>. Compare com a máquina de estados com <code>enum</code> do módulo 3, que verificava as transições em execução e devolvia <code>Result</code>: o <em>typestate</em> é mais forte quando o estado é conhecido no código; o <code>enum</code> é necessário quando o estado vem de fora, como de um banco de dados.</p>
+<div class="questao" id="q61">
+<span class="num">Q61</span>
+<div class="corpo">
+<p class="titulo">Uma CLI sem dependências</p>
+<p>Escreva o núcleo de uma ferramenta de linha de comando que conte linhas, palavras e bytes (como o <code>wc</code>), com as opções <code>-l</code>, <code>-w</code>, <code>-c</code> e <code>--help</code>, analisando os argumentos com um <code>match</code> sobre slices e devolvendo <code>Result</code> para opções inválidas. Para o exemplo ser reprodutível, passe os argumentos como um vetor e o texto como uma string.</p>
+</div>
+</div>
+<pre class="codigo"><code>#[derive(Debug, Default)]
+struct Opcoes {
+    linhas: bool,
+    palavras: bool,
+    bytes: bool,
+}
+
+fn analisar(args: &amp;[&amp;str]) -&gt; Result&lt;Option&lt;Opcoes&gt;, String&gt; {
+    let mut o = Opcoes::default();
+    for a in args {
+        match *a {
+            "-l" =&gt; o.linhas = true,
+            "-w" =&gt; o.palavras = true,
+            "-c" =&gt; o.bytes = true,
+            "-h" | "--help" =&gt; return Ok(None),
+            outro =&gt; return Err(format!("opção desconhecida: {outro} (use --help)")),
+        }
+    }
+    if !(o.linhas || o.palavras || o.bytes) {
+        o = Opcoes { linhas: true, palavras: true, bytes: true }; // sem opções: tudo, como o wc
+    }
+    Ok(Some(o))
+}
+
+fn contar(texto: &amp;str, o: &amp;Opcoes) -&gt; String {
+    let mut partes = vec![];
+    if o.linhas {
+        partes.push(texto.lines().count().to_string());
+    }
+    if o.palavras {
+        partes.push(texto.split_whitespace().count().to_string());
+    }
+    if o.bytes {
+        partes.push(texto.len().to_string());
+    }
+    partes.join(" ")
+}
+
+fn main() {
+    let texto = "o rato roeu\na roupa do rei\nde Roma\n";
+    for args in [vec![], vec!["-l"], vec!["-w", "-c"], vec!["-x"], vec!["--help"]] {
+        let rotulo = format!("wc {}", args.join(" "));
+        match analisar(&amp;args) {
+            Ok(Some(o)) =&gt; println!("{rotulo:&lt;10} -&gt; {}", contar(texto, &amp;o)),
+            Ok(None) =&gt; println!("{rotulo:&lt;10} -&gt; uso: wc [-l] [-w] [-c]"),
+            Err(e) =&gt; println!("{rotulo:&lt;10} -&gt; erro: {e}"),
+        }
+    }
+}</code></pre>
+<pre class="saida"><code>wc         -&gt; 3 9 35
+wc -l      -&gt; 3
+wc -w -c   -&gt; 9 35
+wc -x      -&gt; erro: opção desconhecida: -x (use --help)
+wc --help  -&gt; uso: wc [-l] [-w] [-c]</code></pre>
+<p>Num programa de verdade, os argumentos vêm de <code>std::env::args().skip(1)</code>, o texto da entrada padrão ou de arquivos, e o erro sai pela saída de erro com <code>std::process::exit(2)</code>. Para ferramentas maiores, o <code>clap</code> (com <code>#[derive(Parser)]</code>) gera tudo isso a partir de um <code>struct</code>, incluindo a ajuda, a validação e o autocompletar do terminal. Separar <code>analisar</code> e <code>contar</code> da E/S é o que permite testar o núcleo sem processos nem arquivos, como a calculadora dos desafios.</p>
+</section>
+<section class="modulo" id="modulo-11">
+<h2><span class="rotulo">MÓDULO 11</span> Rust em domínios específicos e o futuro</h2>
+<p class="intro">Ciência de dados, jogos, sistemas distribuídos, compiladores, blockchain, machine learning, segurança, produção, comunidade, o futuro da linguagem e os projetos integradores.</p>
+<p class="aulas-titulo">Artigos 42 a 53</p>
+<ul class="aulas">
+<li><span class="n">#42</span> Rust para Data Science — Processamento de Dados com Polars e ndarray</li>
+<li><span class="n">#43</span> Rust para GameDev — Motores de Jogo, ECS e Bevy</li>
+<li><span class="n">#44</span> Sistemas Distribuídos — Consenso, Mensageria e Tolerância a Falhas</li>
+<li><span class="n">#45</span> Compiladores e Interpretadores — Construindo uma Linguagem com Rust</li>
+<li><span class="n">#46</span> Rust e Blockchain — Smart Contracts, Criptografia Aplicada e Web3</li>
+<li><span class="n">#47</span> Rust e Machine Learning — Inferência, ONNX e Aceleração de Modelos</li>
+<li><span class="n">#48</span> Segurança e Auditoria — Fuzzing, Análise Estática e Hardening de Código Rust</li>
+<li><span class="n">#49</span> Rust em Produção — Observabilidade, Métricas e Operação de Sistemas Rust</li>
+<li><span class="n">#50</span> Contribuindo com o Ecossistema Rust — Open Source, RFCs e a Comunidade</li>
+<li><span class="n">#51</span> O Futuro do Rust — Async Traits, GATs, Especialização e o Roadmap da Linguagem</li>
+<li><span class="n">#52</span> Projetos Integradores — Construindo Sistemas Completos do Zero</li>
+<li><span class="n">#53</span> Epílogo — O que Vem Depois, Como Continuar Crescendo, e a Filosofia do Rust</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q62">
+<span class="num">Q62</span>
+<div class="corpo">
+<p class="titulo">ECS no Bevy</p>
+<p>O Bevy organiza os jogos com ECS. Como um sistema do Bevy declara os dados de que precisa, e por que isso permite ao motor rodar sistemas em paralelo com segurança?</p>
+</div>
+</div>
+<p>Um sistema é uma função comum cujos parâmetros dizem o que ela acessa: <code>fn mover(mut q: Query&lt;(&amp;mut Transform, &amp;Velocidade)&gt;, tempo: Res&lt;Time&gt;)</code> pede, para cada entidade com <code>Transform</code> e <code>Velocidade</code>, acesso <strong>mutável</strong> ao primeiro e de <strong>leitura</strong> ao segundo, além do recurso global <code>Time</code>. Como esse acesso está na <strong>assinatura</strong>, o agendador do Bevy sabe, antes de rodar, quais sistemas leem e escrevem quais componentes. Dois sistemas que só leem <code>Velocidade</code>, ou que mexem em componentes diferentes, rodam em paralelo; dois que escrevem no mesmo componente rodam em sequência. São as regras de empréstimo do Rust aplicadas ao agendamento: a corrida de dados entre sistemas fica impossível sem nenhuma trava manual.</p>
+<div class="questao" id="q63">
+<span class="num">Q63</span>
+<div class="corpo">
+<p class="titulo">Consenso</p>
+<p>Num sistema distribuído com três réplicas de um banco, por que é preciso um algoritmo de consenso como o Raft? O que acontece quando a rede separa uma réplica das outras duas?</p>
+</div>
+</div>
+<p>Sem consenso, cada réplica poderia aceitar escritas diferentes, e o sistema teria versões conflitantes do mesmo dado. O Raft elege um <strong>líder</strong>, que recebe todas as escritas e as replica; uma escrita só é <strong>confirmada</strong> quando a <strong>maioria</strong> (2 de 3) a gravou. Quando a rede separa uma réplica, o lado com duas réplicas continua tendo maioria: elege ou mantém o líder e segue funcionando. A réplica isolada não consegue maioria, não confirma escritas (e, se era o líder, deixa de ser) e fica parada até a rede voltar, quando recebe o que perdeu. É a troca do teorema CAP: diante de uma partição, o Raft escolhe <strong>consistência</strong> em vez de disponibilidade no lado minoritário. É também por isso que os grupos têm tamanho ímpar: com 4 réplicas, uma partição de 2 e 2 deixa os dois lados sem maioria.</p>
+<div class="questao" id="q64">
+<span class="num">Q64</span>
+<div class="corpo">
+<p class="titulo">Fuzzing</p>
+<p>O que é <em>fuzzing</em>, e por que ele encontra <em>bugs</em> em código Rust "seguro"? Que tipo de função é a melhor candidata?</p>
+</div>
+</div>
+<p><em>Fuzzing</em> é executar uma função milhões de vezes com entradas geradas automaticamente, guiado pela <strong>cobertura</strong>: o <em>fuzzer</em> (como o <code>cargo fuzz</code>, sobre o libFuzzer) muta as entradas que exercitam caminhos novos do código, procurando uma que cause pânico, estouro, laço infinito ou consumo excessivo de memória. O Rust seguro impede o comportamento indefinido, mas não impede o <strong>pânico</strong> (um índice fora dos limites, um <code>unwrap</code> num <code>None</code>, um estouro em <em>debug</em>) nem os erros de lógica, e um pânico num servidor é uma negação de serviço. As melhores candidatas são as funções que recebem <strong>dados não confiáveis</strong>: <em>parsers</em> de formatos de arquivo, de protocolos de rede, de imagens, de configuração. São exatamente as que um atacante alimenta.</p>
+<div class="questao" id="q65">
+<span class="num">Q65</span>
+<div class="corpo">
+<p class="titulo">Como o Rust evolui</p>
+<p>O que são as <strong>edições</strong> do Rust (2018, 2021, 2024), e como elas permitem mudar a linguagem sem quebrar o código existente? Qual o papel das RFCs?</p>
+</div>
+</div>
+<p>Uma <strong>edição</strong> é um conjunto de mudanças <strong>incompatíveis</strong> que cada <em>crate</em> adota quando quiser, declarando <code>edition = "2024"</code> no <code>Cargo.toml</code>. <em>Crates</em> de edições diferentes compilam juntas no mesmo projeto, porque a edição afeta só a análise do código de cada uma; o compilador entende todas. Assim o Rust pôde, por exemplo, transformar <code>async</code> em palavra reservada e exigir <code>unsafe extern</code> sem quebrar nenhuma biblioteca antiga. O <code>cargo fix --edition</code> migra a maior parte do código sozinho. As <strong>RFCs</strong> (<em>Requests for Comments</em>) são o processo público de proposta: qualquer mudança relevante na linguagem, na biblioteca ou no Cargo é escrita, discutida abertamente e aprovada pela equipe responsável antes de ser implementada, e geralmente passa um tempo como recurso instável, disponível só no compilador <em>nightly</em>.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q66">
+<span class="num">Q66</span>
+<div class="corpo">
+<p class="titulo">Uma cadeia de blocos com hash</p>
+<p>Para entender a ideia por trás de um <em>blockchain</em>, monte uma cadeia de blocos em que cada bloco guarda os dados e o <em>hash</em> do anterior, calculado com o <code>DefaultHasher</code> da biblioteca padrão (que <strong>não</strong> é criptográfico: serve só para o exemplo). Escreva <code>valida(&amp;cadeia) -&gt; Result&lt;(), usize&gt;</code> e mostre que alterar um bloco do meio invalida a cadeia a partir dele.</p>
+</div>
+</div>
+<pre class="codigo"><code>use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
+
+#[derive(Hash, Clone)]
+struct Bloco {
+    indice: u32,
+    dados: String,
+    hash_anterior: u64,
+}
+
+fn hash_de(b: &amp;Bloco) -&gt; u64 {
+    let mut h = DefaultHasher::new();
+    b.hash(&amp;mut h);
+    h.finish()
+}
+
+fn encadear(dados: &amp;[&amp;str]) -&gt; Vec&lt;Bloco&gt; {
+    let mut cadeia: Vec&lt;Bloco&gt; = vec![];
+    for (i, d) in dados.iter().enumerate() {
+        let anterior = cadeia.last().map(hash_de).unwrap_or(0);
+        cadeia.push(Bloco { indice: i as u32, dados: d.to_string(), hash_anterior: anterior });
+    }
+    cadeia
+}
+
+fn valida(cadeia: &amp;[Bloco]) -&gt; Result&lt;(), usize&gt; {
+    for par in cadeia.windows(2) {
+        if par[1].hash_anterior != hash_de(&amp;par[0]) {
+            return Err(par[1].indice as usize);
+        }
+    }
+    Ok(())
+}
+
+fn main() {
+    let mut cadeia = encadear(&amp;["Ana paga 10 a Bruno", "Bruno paga 3 a Carla", "Carla paga 1 a Ana", "Ana paga 2 a Bruno"]);
+    println!("cadeia original: {:?}", valida(&amp;cadeia));
+
+    cadeia[1].dados = "Bruno paga 300 a Carla".into(); // adulteração
+    match valida(&amp;cadeia) {
+        Ok(()) =&gt; println!("adulterada: passou?!"),
+        Err(i) =&gt; println!("adulterada: quebra no bloco {i}, que não reconhece o anterior"),
+    }
+
+    let refeita = encadear(&amp;cadeia.iter().map(|b| b.dados.as_str()).collect::&lt;Vec&lt;_&gt;&gt;());
+    println!("recalculando todos os hashes: {:?}", valida(&amp;refeita));
+}</code></pre>
+<pre class="saida"><code>cadeia original: Ok(())
+adulterada: quebra no bloco 2, que não reconhece o anterior
+recalculando todos os hashes: Ok(())</code></pre>
+<p>Alterar o bloco 1 muda o <em>hash</em> dele, e o bloco 2, que guardava o <em>hash</em> antigo, deixa de reconhecê-lo. O atacante pode <strong>recalcular</strong> todos os <em>hashes</em> seguintes, como a última linha mostra; o que impede isso num <em>blockchain</em> real é a <strong>prova de trabalho</strong> (cada bloco exige um cálculo caro) ou de participação, somada a uma rede de participantes que mantém cópias e só aceita a cadeia com mais trabalho acumulado. O <code>DefaultHasher</code> também muda entre versões do Rust e não resiste a ataques: o caso real usa SHA-256 (<code>sha2</code>) ou BLAKE3.</p>
+<div class="questao" id="q67">
+<span class="num">Q67</span>
+<div class="corpo">
+<p class="titulo">Um interpretador de expressões</p>
+<p>Escreva um analisador de expressões aritméticas com precedência e parênteses, por <strong>descida recursiva</strong>: um <em>tokenizer</em> e as funções <code>expressao</code> (soma e subtração), <code>termo</code> (multiplicação e divisão) e <code>fator</code> (número, negativo ou parênteses), que devolvem <code>Result&lt;f64, String&gt;</code>. Avalie quatro expressões, uma com erro.</p>
+</div>
+</div>
+<pre class="codigo"><code>#[derive(Debug, Clone, Copy, PartialEq)]
+enum Token {
+    Num(f64),
+    Op(char),
+}
+
+fn tokenizar(s: &amp;str) -&gt; Result&lt;Vec&lt;Token&gt;, String&gt; {
+    let mut tokens = vec![];
+    let cs: Vec&lt;char&gt; = s.chars().collect();
+    let mut i = 0;
+    while i &lt; cs.len() {
+        let c = cs[i];
+        if c.is_whitespace() {
+            i += 1;
+        } else if c.is_ascii_digit() || c == '.' {
+            let ini = i;
+            while i &lt; cs.len() &amp;&amp; (cs[i].is_ascii_digit() || cs[i] == '.') {
+                i += 1;
+            }
+            let texto: String = cs[ini..i].iter().collect();
+            tokens.push(Token::Num(texto.parse().map_err(|_| format!("número inválido: {texto}"))?));
+        } else if "+-*/()".contains(c) {
+            tokens.push(Token::Op(c));
+            i += 1;
+        } else {
+            return Err(format!("caractere inesperado: {c}"));
+        }
+    }
+    Ok(tokens)
+}
+
+struct Analisador {
+    tokens: Vec&lt;Token&gt;,
+    pos: usize,
+}
+
+impl Analisador {
+    fn espiar(&amp;self) -&gt; Option&lt;Token&gt; {
+        self.tokens.get(self.pos).copied()
+    }
+    fn expressao(&amp;mut self) -&gt; Result&lt;f64, String&gt; {
+        let mut v = self.termo()?;
+        while let Some(Token::Op(op @ ('+' | '-'))) = self.espiar() {
+            self.pos += 1;
+            let d = self.termo()?;
+            v = if op == '+' { v + d } else { v - d };
+        }
+        Ok(v)
+    }
+    fn termo(&amp;mut self) -&gt; Result&lt;f64, String&gt; {
+        let mut v = self.fator()?;
+        while let Some(Token::Op(op @ ('*' | '/'))) = self.espiar() {
+            self.pos += 1;
+            let d = self.fator()?;
+            if op == '/' &amp;&amp; d == 0.0 {
+                return Err("divisão por zero".into());
+            }
+            v = if op == '*' { v * d } else { v / d };
+        }
+        Ok(v)
+    }
+    fn fator(&amp;mut self) -&gt; Result&lt;f64, String&gt; {
+        self.pos += 1;
+        match self.tokens.get(self.pos - 1).copied() {
+            Some(Token::Num(n)) =&gt; Ok(n),
+            Some(Token::Op('-')) =&gt; Ok(-self.fator()?),
+            Some(Token::Op('(')) =&gt; {
+                let v = self.expressao()?;
+                if self.espiar() != Some(Token::Op(')')) {
+                    return Err("faltou fechar o parêntese".into());
+                }
+                self.pos += 1;
+                Ok(v)
+            }
+            outro =&gt; Err(format!("esperava um número, achei {outro:?}")),
+        }
+    }
+}
+
+fn avaliar(s: &amp;str) -&gt; Result&lt;f64, String&gt; {
+    let mut a = Analisador { tokens: tokenizar(s)?, pos: 0 };
+    let v = a.expressao()?;
+    match a.espiar() {
+        None =&gt; Ok(v),
+        Some(t) =&gt; Err(format!("sobrou {t:?} no fim")),
+    }
+}
+
+fn main() {
+    for e in ["2 + 3 * 4", "(2 + 3) * 4", "-(1.5 + 2) * -2", "2 * (3 + ", "7 / (2 - 2)"] {
+        match avaliar(e) {
+            Ok(v) =&gt; println!("{e:&lt;18} = {v}"),
+            Err(m) =&gt; println!("{e:&lt;18} -&gt; erro: {m}"),
+        }
+    }
+}</code></pre>
+<pre class="saida"><code>2 + 3 * 4          = 14
+(2 + 3) * 4        = 20
+-(1.5 + 2) * -2    = 7
+2 * (3 +           -&gt; erro: esperava um número, achei None
+7 / (2 - 2)        -&gt; erro: divisão por zero</code></pre>
+<p>A precedência sai da <strong>estrutura</strong> das funções: <code>expressao</code> chama <code>termo</code>, que chama <code>fator</code>, e por isso a multiplicação é resolvida antes da soma sem nenhuma tabela. Cada regra da gramática vira uma função, o que torna a descida recursiva o jeito mais simples de escrever um <em>parser</em> à mão; é a base do interpretador construído no artigo #45. O padrão <code>op @ ('+' | '-')</code> casa com um dos dois caracteres e dá nome a ele. Para gramáticas maiores, as bibliotecas <code>nom</code> e <code>pest</code> do módulo 9 geram a mesma estrutura com menos código.</p>
+</section>
+<section class="modulo" id="desafios">
+<h2><span class="rotulo">PARA IR ALÉM</span> Desafios integradores</h2>
+<p class="intro">Projetos maiores, que juntam vários módulos. Não há uma única resposta certa: o gabarito mostra um caminho.</p>
+<div class="questao desafio" id="d1">
+<span class="num">D1</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora de terminal</p>
+<p>Escreva uma calculadora de terminal com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada (<code>raiz 2</code>). Ela deve: (a) aceitar vírgula ou ponto como separador decimal; (b) guardar o último resultado em <code>ans</code>, utilizável na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário, resultado infinito e texto que não é número com uma mensagem clara, <strong>sem encerrar o programa</strong>; (d) ter os comandos <code>hist</code> (histórico) e <code>sair</code>. Separe o núcleo (um módulo <code>calc</code>, sem E/S, com um <code>enum</code> de erros e <code>Result</code>) da interface (<code>main</code>), e escreva testes para o núcleo.</p>
+</div>
+</div>
+<p><strong>Caminho da solução</strong></p>
+<ul><li><strong>Núcleo</strong>: o módulo <code>calc</code> tem a <code>struct Calculadora</code> com o <code>ans</code> e o método <code>avaliar(&amp;mut self, linha: &amp;str) -&gt; Result&lt;f64, ErroCalc&gt;</code>. O <code>ErroCalc</code> é um <code>enum</code> com uma variante por tipo de erro e implementa <code>Display</code>; nenhuma <code>String</code> de erro solta, e o <code>match</code> da interface não pode esquecer um caso.</li><li><strong>Números</strong>: <code>str::parse::&lt;f64&gt;()</code> depois de trocar a vírgula por ponto, recusando <code>inf</code> e <code>NaN</code> escritos por extenso (o <code>parse</code> os aceita). O resultado é conferido com <code>is_finite</code>.</li><li><strong>Interface</strong>: <code>stdin().lines()</code>, um <code>Vec&lt;String&gt;</code> de histórico e a vírgula decimal na exibição.</li><li><strong>Testes</strong>: um <code>#[cfg(test)] mod tests</code> dentro do módulo, rodado com <code>cargo test</code> (ou <code>rustc --test</code>).</li></ul>
+<pre class="codigo"><code>mod calc {
+    use std::fmt;
+
+    #[derive(Debug, PartialEq)]
+    pub enum ErroCalc {
+        Formato,
+        Numero(String),
+        Operacao(String),
+        DivisaoPorZero,
+        RaizNegativa,
+        Expoente,
+        Estouro,
+    }
+
+    impl fmt::Display for ErroCalc {
+        fn fmt(&amp;self, f: &amp;mut fmt::Formatter) -&gt; fmt::Result {
+            match self {
+                ErroCalc::Formato =&gt; write!(f, "use \"a op b\" ou \"raiz a\""),
+                ErroCalc::Numero(t) =&gt; write!(f, "\"{t}\" não é um número"),
+                ErroCalc::Operacao(op) =&gt; write!(f, "operação desconhecida \"{op}\" (use + - * / ^ % ou raiz)"),
+                ErroCalc::DivisaoPorZero =&gt; write!(f, "divisão por zero"),
+                ErroCalc::RaizNegativa =&gt; write!(f, "raiz de número negativo"),
+                ErroCalc::Expoente =&gt; write!(f, "o expoente precisa ser inteiro"),
+                ErroCalc::Estouro =&gt; write!(f, "resultado grande demais"),
+            }
+        }
+    }
+
+    #[derive(Default)]
+    pub struct Calculadora {
+        ans: f64,
+    }
+
+    impl Calculadora {
+        fn numero(&amp;self, t: &amp;str) -&gt; Result&lt;f64, ErroCalc&gt; {
+            if t == "ans" {
+                return Ok(self.ans);
+            }
+            let ok = t.chars().all(|c| c.is_ascii_digit() || matches!(c, ',' | '.' | '-'));
+            match t.replace(',', ".").parse::&lt;f64&gt;() {
+                Ok(v) if ok =&gt; Ok(v),
+                _ =&gt; Err(ErroCalc::Numero(t.to_string())), // recusa "inf", "NaN" e texto
+            }
+        }
+
+        pub fn avaliar(&amp;mut self, linha: &amp;str) -&gt; Result&lt;f64, ErroCalc&gt; {
+            let p: Vec&lt;&amp;str&gt; = linha.split_whitespace().collect();
+            let r = match p.as_slice() {
+                ["raiz", x] =&gt; {
+                    let x = self.numero(x)?;
+                    if x &lt; 0.0 { return Err(ErroCalc::RaizNegativa) }
+                    x.sqrt()
+                }
+                [a, op, b] =&gt; {
+                    let (a, b) = (self.numero(a)?, self.numero(b)?);
+                    match *op {
+                        "+" =&gt; a + b,
+                        "-" =&gt; a - b,
+                        "*" =&gt; a * b,
+                        "/" if b == 0.0 =&gt; return Err(ErroCalc::DivisaoPorZero),
+                        "/" =&gt; a / b,
+                        "%" =&gt; a * b / 100.0,
+                        "^" if b.fract() != 0.0 =&gt; return Err(ErroCalc::Expoente),
+                        "^" =&gt; a.powi(b as i32),
+                        outro =&gt; return Err(ErroCalc::Operacao(outro.to_string())),
+                    }
+                }
+                _ =&gt; return Err(ErroCalc::Formato),
+            };
+            if !r.is_finite() {
+                return Err(ErroCalc::Estouro);
+            }
+            self.ans = r; // só um resultado válido substitui o ans
+            Ok(r)
+        }
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        #[test]
+        fn usa_o_ans() {
+            let mut c = Calculadora::default();
+            c.avaliar("2 + 3").unwrap();
+            assert_eq!(c.avaliar("ans * 2"), Ok(10.0));
+        }
+
+        #[test]
+        fn erro_nao_altera_o_ans() {
+            let mut c = Calculadora::default();
+            c.avaliar("4 * 2").unwrap();
+            assert_eq!(c.avaliar("1 / 0"), Err(ErroCalc::DivisaoPorZero));
+            assert_eq!(c.avaliar("ans + 0"), Ok(8.0));
+        }
+    }
+}
+
+use std::io::{self, BufRead, Write};
+
+fn com_virgula(v: f64) -&gt; String {
+    let s = format!("{v:.15}");
+    let s = s.trim_end_matches('0').trim_end_matches('.');
+    s.replace('.', ",")
+}
+
+fn main() {
+    let mut c = calc::Calculadora::default();
+    let mut historico: Vec&lt;String&gt; = vec![];
+    println!("Calculadora: + - * / ^ % e raiz. Comandos: hist, sair.");
+    let mut linhas = io::stdin().lock().lines();
+    loop {
+        print!("&gt; ");
+        io::stdout().flush().unwrap();
+        let Some(Ok(linha)) = linhas.next() else { break };
+        match linha.trim() {
+            "sair" =&gt; break,
+            "hist" =&gt; historico.iter().enumerate().for_each(|(i, h)| println!("  {}. {h}", i + 1)),
+            "" =&gt; {}
+            conta =&gt; match c.avaliar(conta) {
+                Ok(r) =&gt; {
+                    historico.push(format!("{conta} = {}", com_virgula(r)));
+                    println!("{}", historico.last().unwrap());
+                }
+                Err(e) =&gt; println!("erro: {e}"),
+            },
+        }
+    }
+}</code></pre>
+<p class="rotulo-entrada">Entrada digitada:</p>
+<pre class="codigo"><code>2 + 3
+0,1 + 0,2
+ans * 10
+10 / 0
+2 ^ 0,5
+raiz -4
+raiz 2
+ans * ans
+10 / 3
+15 % 200
+inf + 1
+2 ^ 2000
+2 $ 3
+hist
+sair</code></pre>
+<pre class="saida"><code>Calculadora: + - * / ^ % e raiz. Comandos: hist, sair.
+&gt; 2 + 3 = 5
+&gt; 0,1 + 0,2 = 0,3
+&gt; ans * 10 = 3
+&gt; erro: divisão por zero
+&gt; erro: o expoente precisa ser inteiro
+&gt; erro: raiz de número negativo
+&gt; raiz 2 = 1,414213562373095
+&gt; ans * ans = 2
+&gt; 10 / 3 = 3,333333333333333
+&gt; 15 % 200 = 30
+&gt; erro: "inf" não é um número
+&gt; erro: resultado grande demais
+&gt; erro: operação desconhecida "$" (use + - * / ^ % ou raiz)
+&gt;   1. 2 + 3 = 5
+  2. 0,1 + 0,2 = 0,3
+  3. ans * 10 = 3
+  4. raiz 2 = 1,414213562373095
+  5. ans * ans = 2
+  6. 10 / 3 = 3,333333333333333
+  7. 15 % 200 = 30
+&gt;</code></pre>
+<p>Com a entrada redirecionada, o terminal não ecoa o que foi digitado, e cada resposta aparece logo depois do <code>&gt;</code>.</p>
+<p><code>testar.sh</code>:</p>
+<pre class="codigo"><code>rustc --edition 2024 --test main.rs -o testes 2&gt;&amp;1 &amp;&amp; ./testes 2&gt;&amp;1 | grep -E '^(test |test result)' | sed -E 's/ finished in [0-9.]+s//' | sort</code></pre>
+<pre class="saida"><code>test calc::tests::erro_nao_altera_o_ans ... ok
+test calc::tests::usa_o_ans ... ok
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;</code></pre>
+<p>O <code>{v:.15}</code> com os zeros finais removidos esconde o ruído do <code>f64</code>, como o <code>%.15g</code> dos cadernos de C e de C++: <code>0,1 + 0,2</code> guarda 0,30000000000000004. O <code>match</code> sobre <code>p.as_slice()</code> com padrões de slice (<code>["raiz", x]</code>, <code>[a, op, b]</code>) analisa o formato da linha numa só expressão. Sem a verificação de caracteres em <code>numero</code>, o <code>parse</code> aceitaria <code>inf</code> como número, e a calculadora faria contas com infinito. O <code>let ... else</code> encerra o laço no fim da entrada (ou num erro de leitura) sem um <code>match</code> aninhado.</p>
+<p>Uma versão gráfica fica como extensão do módulo 9: compilada para <strong>WebAssembly</strong> com o <code>wasm-bindgen</code>, a mesma <code>Calculadora</code> roda no navegador, ligada a uma página com um campo de texto e um botão; ou, no desktop, com o <code>egui</code>, numa janela com o visor e os botões. Nos dois casos, o módulo <code>calc</code> não muda uma linha, e os testes dele continuam valendo.</p>
+<div class="questao desafio" id="d2">
+<span class="num">D2</span>
+<div class="corpo">
+<p class="titulo">Um servidor chave-valor concorrente</p>
+<p>Escreva um servidor TCP que guarde pares chave-valor em memória, com os comandos de texto <code>SET chave valor</code>, <code>GET chave</code>, <code>DEL chave</code> e <code>KEYS</code>, uma linha por comando, atendendo vários clientes ao mesmo tempo. Acrescente expiração opcional (<code>SET chave valor EX 10</code>), persistência num arquivo de log e testes de integração que conectem clientes reais.</p>
+</div>
+</div>
+<p><strong>Caminho da solução</strong></p>
+<ul><li><strong>Protocolo</strong>: uma linha por comando e uma por resposta (<code>OK</code>, o valor, <code>(nil)</code> ou <code>ERR mensagem</code>), como uma versão mínima do Redis. A análise do comando é uma função pura <code>fn analisar(linha: &amp;str) -&gt; Result&lt;Comando, String&gt;</code>, com um <code>enum Comando</code>, testável sem rede.</li><li><strong>Concorrência</strong>: com <code>std</code>, um <code>Arc&lt;RwLock&lt;HashMap&lt;String, Entrada&gt;&gt;&gt;</code> e uma thread por conexão (o servidor de eco do módulo 9); com <code>tokio</code>, uma tarefa por conexão. O <code>RwLock</code> permite muitos <code>GET</code> em paralelo e um <code>SET</code> por vez. Para escalar, o mapa pode ser dividido em vários pedaços (<em>shards</em>), cada um com a sua trava.</li><li><strong>Expiração</strong>: cada <code>Entrada</code> guarda o valor e um <code>Option&lt;Instant&gt;</code>. O <code>GET</code> verifica e apaga o que expirou (expiração preguiçosa), e uma thread de fundo varre o mapa de tempos em tempos para não acumular chaves esquecidas.</li><li><strong>Persistência</strong>: cada <code>SET</code> e <code>DEL</code> é acrescentado a um arquivo (com <code>BufWriter</code> e <code>flush</code> a cada comando, ou a cada segundo, uma troca entre segurança e velocidade); ao iniciar, o servidor relê o log. Uma compactação reescreve o log só com o estado atual, num arquivo temporário trocado com <code>rename</code>.</li><li><strong>Testes</strong>: testes unitários do <code>analisar</code> e da expiração (com o tempo injetado, não com <code>sleep</code>), e testes de integração que sobem o servidor na porta 0, conectam dois clientes e verificam que o <code>SET</code> de um aparece no <code>GET</code> do outro.</li></ul>
+<p>É a mesma ideia do banco chave-valor do caderno de C++, agora com concorrência: o compilador garante que nenhuma thread lê o mapa enquanto outra o altera sem passar pela trava.</p>
+</section>
+<footer class="fim">
+<p><strong>Fim do gabarito.</strong></p>
+<p>Dominando Rust em 1 Ano · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</footer>
+</body>
+</html>
