@@ -1,0 +1,970 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dominando C++ em 1 Ano · Caderno de Exercícios</title>
+<link rel="stylesheet" href="../caderno.css">
+</head>
+<body class="caderno exercicios">
+<header class="capa">
+<p class="serie">DOMINANDO C++ EM 1 ANO</p>
+<h1>Caderno de Exercícios</h1>
+<p class="subtitulo">59 aulas de prática, do #01 ao #59</p>
+<p class="subtitulo">C++23 · clang ou gcc · 10 módulos · 91 questões · 2 desafios integradores</p>
+<p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</header>
+<div class="ficha"><span>Nome do aluno:</span><span>Início:</span><span>Término:</span></div>
+<aside class="nota">
+<p><strong>Como usar este caderno</strong></p>
+<p>Cada módulo reúne um bloco de aulas do curso, com a lista dos artigos que ele cobre. As perguntas conceituais pedem explicações com as suas palavras; os exercícios de código pedem programas: escreva, compile e execute cada um.</p>
+<p>Tente sempre resolver sozinho antes de abrir o <strong>Caderno de Respostas</strong>. É no erro que o conhecimento fixa.</p>
+</aside>
+<h2 class="sumario-titulo">Sumário</h2>
+<table class="sumario">
+<thead><tr><th>Módulo</th><th>Tema</th><th>Aulas</th><th>Questões</th></tr></thead>
+<tbody>
+<tr><td>MÓDULO 1</td><td>O que muda ao sair do C</td><td>#01–#06</td><td>Q1–Q11</td></tr>
+<tr><td>MÓDULO 2</td><td>Objetos e posse de recursos</td><td>#07–#12</td><td>Q12–Q22</td></tr>
+<tr><td>MÓDULO 3</td><td>Herança, polimorfismo e operadores</td><td>#13–#16</td><td>Q23–Q32</td></tr>
+<tr><td>MÓDULO 4</td><td>A biblioteca padrão: contêineres, iteradores e algoritmos</td><td>#17–#23</td><td>Q33–Q44</td></tr>
+<tr><td>MÓDULO 5</td><td>Programação genérica</td><td>#24–#26</td><td>Q45–Q50</td></tr>
+<tr><td>MÓDULO 6</td><td>Erros, valores opcionais e o C++ moderno</td><td>#27–#30</td><td>Q51–Q58</td></tr>
+<tr><td>MÓDULO 7</td><td>Concorrência</td><td>#31–#34</td><td>Q59–Q65</td></tr>
+<tr><td>MÓDULO 8</td><td>Ferramentas e qualidade</td><td>#35–#38</td><td>Q66–Q71</td></tr>
+<tr><td>MÓDULO 9</td><td>Projeto final e extensões: o mini banco de dados, a web e a persistência</td><td>#39–#52</td><td>Q72–Q83</td></tr>
+<tr><td>MÓDULO 10</td><td>Jogos</td><td>#53–#59</td><td>Q84–Q91</td></tr>
+<tr><td>DESAFIOS</td><td>Desafios integradores</td><td>todas</td><td>D1–D2</td></tr>
+</tbody>
+</table>
+<aside class="legenda">
+<p>Legenda: nas perguntas, <code>assim</code> indica código, nomes de tipos e comandos. As linhas pautadas são para a sua resposta; nos exercícios de código, use também o computador: <strong>todo programa deve ser compilado e executado</strong>.</p>
+</aside>
+<section class="modulo" id="modulo-1">
+<h2><span class="rotulo">MÓDULO 1</span> O que muda ao sair do C</h2>
+<p class="intro">Saída com std::print, referências, const, sobrecarga, std::string, nullptr e auto: o que o C++ muda para quem já domina C.</p>
+<p class="aulas-titulo">Artigos 01 a 06</p>
+<ul class="aulas">
+<li><span class="n">#01</span> A Filosofia por Trás do C++ e a Saída Elegante do printf</li>
+<li><span class="n">#02</span> Referências e Ponteiros, Frente a Frente</li>
+<li><span class="n">#03</span> A Disciplina do const — Promessas que o Compilador Cobra</li>
+<li><span class="n">#04</span> Um Nome, Vários Sentidos — Sobrecarga de Funções</li>
+<li><span class="n">#05</span> O Fim do char* — Textos de Verdade com std::string</li>
+<li><span class="n">#06</span> Adeus NULL, Bem-vindo à Dedução — nullptr e auto</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q1">
+<span class="num">Q1</span>
+<div class="corpo">
+<p class="titulo">Por que não printf</p>
+<p>O <code>printf</code> funciona em C++. Que dois problemas dele o <code>std::print</code> (C++23) e o <code>std::format</code> resolvem? Dê um exemplo de erro que o <code>printf</code> deixa passar e o <code>std::print</code> não.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q2">
+<span class="num">Q2</span>
+<div class="corpo">
+<p class="titulo">Referência ou ponteiro</p>
+<p>Cite três diferenças entre uma referência (<code>int&amp;</code>) e um ponteiro (<code>int*</code>). Quando o ponteiro continua sendo a escolha certa?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q3">
+<span class="num">Q3</span>
+<div class="corpo">
+<p class="titulo">const em quatro lugares</p>
+<p>Explique o que cada <code>const</code> promete em <code>const char* const nome(const Pessoa&amp; p) const;</code>, supondo que a função seja membro de uma classe.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q4">
+<span class="num">Q4</span>
+<div class="corpo">
+<p class="titulo">Sobrecarga e ambiguidade</p>
+<p>Por que a chamada <code>f(0)</code> é ambígua quando existem <code>void f(long)</code> e <code>void f(double)</code>, e não é quando existe também <code>void f(int)</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q5">
+<span class="num">Q5</span>
+<div class="corpo">
+<p class="titulo">Por que nullptr</p>
+<p>Em C, <code>NULL</code> costuma ser <code>0</code> ou <code>((void*)0)</code>. Que problema isso cria com sobrecarga em C++, e como o <code>nullptr</code> o resolve?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q6">
+<span class="num">Q6</span>
+<div class="corpo">
+<p class="titulo">Quando auto atrapalha</p>
+<p>O <code>auto</code> deduz o tipo pela inicialização. Que tipo tem <code>x</code> em cada linha, e qual delas provavelmente é um erro?</p>
+<pre class="codigo"><code>const std::string nome = "Ana";
+auto a = nome;
+auto&amp; b = nome;
+auto c = {1, 2, 3};
+auto d = 5u - 10;</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q7">
+<span class="num">Q7</span>
+<div class="corpo">
+<p class="titulo">Formatando uma tabela</p>
+<p>Escreva um programa que imprima, com <code>std::println</code>, uma tabela de três produtos (nome, quantidade, preço) com o nome alinhado à esquerda em 12 colunas, a quantidade à direita em 4 e o preço com duas casas decimais à direita em 9. Na última linha, mostre o total.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q8">
+<span class="num">Q8</span>
+<div class="corpo">
+<p class="titulo">Troca com referências</p>
+<p>Escreva <code>void trocar(int&amp; a, int&amp; b)</code> e compare com a versão de C, que recebe ponteiros. Depois escreva <code>void dobrar_todos(std::vector&lt;int&gt;&amp; v)</code> que dobre cada elemento usando um <code>for</code> com referência, e mostre o que acontece se você esquecer o <code>&amp;</code> no laço.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q9">
+<span class="num">Q9</span>
+<div class="corpo">
+<p class="titulo">Sobrecarga para áreas</p>
+<p>Escreva três funções <code>area</code> sobrecarregadas: uma para um círculo (raio <code>double</code>), uma para um retângulo (largura e altura <code>double</code>) e uma para um quadrado de lado inteiro (<code>int</code>). Mostre qual é chamada para <code>area(2)</code>, <code>area(2.0)</code> e <code>area(2.0, 3.0)</code>, e explique o que muda se a versão <code>int</code> for removida.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q10">
+<span class="num">Q10</span>
+<div class="corpo">
+<p class="titulo">Contando palavras com std::string</p>
+<p>Escreva <code>std::string normalizar(std::string_view s)</code> que remova espaços do começo e do fim e reduza espaços repetidos a um só. Depois conte as palavras da frase normalizada. Não use <code>char*</code> nem <code>strtok</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q11">
+<span class="num">Q11</span>
+<div class="corpo">
+<p class="titulo">auto e o tipo verdadeiro</p>
+<p>Escreva um programa que percorra um <code>std::map&lt;std::string, int&gt;</code> com <code>for (auto [nome, idade] : pessoas)</code> e mostre que alterar <code>idade</code> dentro do laço não muda o mapa. Corrija com a forma de referência e explique por que <code>nome</code> não pode ser alterado nem nela.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-2">
+<h2><span class="rotulo">MÓDULO 2</span> Objetos e posse de recursos</h2>
+<p class="intro">Construtores e destrutores, RAII, a regra dos três e dos cinco, ponteiros inteligentes, invariantes e inicialização de membros.</p>
+<p class="aulas-titulo">Artigos 07 a 12</p>
+<ul class="aulas">
+<li><span class="n">#07</span> Nascimento e Morte de um Objeto — Construtores, Destrutores e o RAII na Prática</li>
+<li><span class="n">#08</span> Quando Copiar Dá Errado — a Regra dos Três e dos Cinco</li>
+<li><span class="n">#09</span> Um Dono, Um Recurso — o std::unique_ptr</li>
+<li><span class="n">#10</span> Posse Compartilhada e seus Perigos — shared_ptr e weak_ptr</li>
+<li><span class="n">#11</span> Projetando Abstrações — Encapsulamento, Invariantes e o Ponteiro this</li>
+<li><span class="n">#12</span> A Vida Começa Aqui — Inicialização de Membros a Fundo</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q12">
+<span class="num">Q12</span>
+<div class="corpo">
+<p class="titulo">RAII em uma frase</p>
+<p>O que significa RAII, e por que ele substitui com vantagem o padrão do C de "<code>goto fim</code> e liberar tudo no final"?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q13">
+<span class="num">Q13</span>
+<div class="corpo">
+<p class="titulo">Regra dos três, dos cinco e do zero</p>
+<p>Uma classe guarda um <code>char*</code> alocado com <code>new[]</code>. Quais funções especiais ela precisa escrever (regra dos cinco)? E o que diz a regra do zero?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q14">
+<span class="num">Q14</span>
+<div class="corpo">
+<p class="titulo">unique_ptr não copia</p>
+<p>Por que <code>std::unique_ptr</code> não pode ser copiado, mas pode ser movido? O que acontece com a origem depois de <code>auto b = std::move(a);</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q15">
+<span class="num">Q15</span>
+<div class="corpo">
+<p class="titulo">Ciclo de shared_ptr</p>
+<p>Dois objetos <code>No</code> se apontam mutuamente com <code>std::shared_ptr</code>. Por que nenhum deles é destruído quando as variáveis locais saem de escopo? Como o <code>std::weak_ptr</code> resolve isso?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q16">
+<span class="num">Q16</span>
+<div class="corpo">
+<p class="titulo">Ordem de inicialização dos membros</p>
+<p>O que esta classe imprime para <code>Janela j(800);</code>, e por que o compilador avisa?</p>
+<pre class="codigo"><code>struct Janela {
+    int area;
+    int largura;
+    Janela(int l) : largura(l), area(largura * 2) {}
+};</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q17">
+<span class="num">Q17</span>
+<div class="corpo">
+<p class="titulo">explicit</p>
+<p>Para que serve <code>explicit</code> num construtor de um argumento? Mostre o erro que ele previne com <code>struct Metros { Metros(double v); };</code> e uma função <code>void correr(Metros m)</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q18">
+<span class="num">Q18</span>
+<div class="corpo">
+<p class="titulo">Um arquivo com RAII</p>
+<p>Escreva uma classe <code>Arquivo</code> que abra um <code>FILE*</code> no construtor (lançando <code>std::runtime_error</code> se falhar) e feche no destrutor, imprimindo uma mensagem em cada um. Proíba a cópia. Use-a numa função que retorna no meio e mostre que o arquivo é fechado mesmo assim.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q19">
+<span class="num">Q19</span>
+<div class="corpo">
+<p class="titulo">Um buffer com a regra dos cinco</p>
+<p>Escreva <code>class Buffer</code> que guarde <code>n</code> inteiros alocados com <code>new int[n]</code>, com os cinco membros especiais. Teste cópia, movimento e autoatribuição, e mostre o tamanho da origem depois de movida.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q20">
+<span class="num">Q20</span>
+<div class="corpo">
+<p class="titulo">Uma fábrica com unique_ptr</p>
+<p>Escreva uma hierarquia mínima <code>Forma</code> (com destrutor virtual e <code>area()</code> virtual pura), <code>Circulo</code> e <code>Quadrado</code>, e uma função <code>std::unique_ptr&lt;Forma&gt; criar(char tipo, double medida)</code> que devolva <code>nullptr</code> para tipo desconhecido. Guarde as formas num <code>std::vector&lt;std::unique_ptr&lt;Forma&gt;&gt;</code> e mostre que todas são destruídas sem nenhum <code>delete</code> no código.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q21">
+<span class="num">Q21</span>
+<div class="corpo">
+<p class="titulo">Quebrando o ciclo com weak_ptr</p>
+<p>Monte uma árvore com <code>struct No { std::string nome; std::vector&lt;std::shared_ptr&lt;No&gt;&gt; filhos; std::weak_ptr&lt;No&gt; pai; }</code> e um destrutor que imprima o nome. Crie uma raiz com dois filhos, mostre o caminho de um filho até a raiz usando <code>pai.lock()</code> e confirme que tudo é destruído no fim. Depois diga o que aconteceria com <code>pai</code> sendo <code>shared_ptr</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q22">
+<span class="num">Q22</span>
+<div class="corpo">
+<p class="titulo">Invariante protegida</p>
+<p>Escreva <code>class Fracao</code> que mantenha sempre a invariante "denominador positivo e fração irredutível". O construtor deve lançar <code>std::invalid_argument</code> para denominador zero. Ofereça <code>numerador()</code>, <code>denominador()</code> e <code>somar(const Fracao&amp;)</code>. Mostre <code>Fracao(2, -4)</code> e a soma de 1/6 com 1/3.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-3">
+<h2><span class="rotulo">MÓDULO 3</span> Herança, polimorfismo e operadores</h2>
+<p class="intro">A cadeia de construção, funções virtuais, classes abstratas, destrutores virtuais e a sobrecarga de operadores.</p>
+<p class="aulas-titulo">Artigos 13 a 16</p>
+<ul class="aulas">
+<li><span class="n">#13</span> Uma Classe que Nasce de Outra — Herança e a Cadeia de Construção</li>
+<li><span class="n">#14</span> Um Método, Vários Comportamentos — Funções Virtuais e Polimorfismo</li>
+<li><span class="n">#15</span> Contratos e Destruição Segura — Classes Abstratas e Destrutores Virtuais</li>
+<li><span class="n">#16</span> Ensinando Símbolos ao seu Tipo — Sobrecarga de Operadores</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q23">
+<span class="num">Q23</span>
+<div class="corpo">
+<p class="titulo">Ordem de construção e destruição</p>
+<p>Numa hierarquia <code>Base → Meio → Folha</code>, em que ordem rodam os construtores e os destrutores ao criar e destruir uma <code>Folha</code>? Por que essa ordem é a única segura?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q24">
+<span class="num">Q24</span>
+<div class="corpo">
+<p class="titulo">Fatiamento</p>
+<p>O que é <em>object slicing</em>? Mostre como ele acontece com <code>void mostrar(Animal a)</code> recebendo um <code>Cachorro</code>, e como evitá-lo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q25">
+<span class="num">Q25</span>
+<div class="corpo">
+<p class="titulo">Destrutor virtual</p>
+<p>Quando o destrutor da base precisa ser <code>virtual</code>? O que acontece em <code>Base* p = new Derivada; delete p;</code> quando ele não é?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q26">
+<span class="num">Q26</span>
+<div class="corpo">
+<p class="titulo">override e final</p>
+<p>O que <code>override</code> e <code>final</code> acrescentam, se o programa compila sem eles? Dê um erro que o <code>override</code> pega.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q27">
+<span class="num">Q27</span>
+<div class="corpo">
+<p class="titulo">Operadores membros ou livres</p>
+<p>Por que <code>operator+</code> de um tipo <code>Vetor2</code> costuma ser uma função livre, enquanto <code>operator+=</code> é membro? E por que <code>operator&lt;&lt;</code> para <code>std::ostream</code> não pode ser membro de <code>Vetor2</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q28">
+<span class="num">Q28</span>
+<div class="corpo">
+<p class="titulo">A cadeia de construção</p>
+<p>Escreva <code>Base</code>, <code>Meio</code> e <code>Folha</code>, cada uma com um membro do tipo <code>Rastro</code> (uma classe que imprime ao nascer e ao morrer) e construtores e destrutores que imprimem. Crie uma <code>Folha</code> e explique a saída.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q29">
+<span class="num">Q29</span>
+<div class="corpo">
+<p class="titulo">Polimorfismo e fatiamento</p>
+<p>Escreva <code>Animal</code> com <code>virtual std::string som() const</code>, as derivadas <code>Cachorro</code> e <code>Gato</code>, e duas funções: <code>falar_valor(Animal a)</code> e <code>falar_ref(const Animal&amp; a)</code>. Chame as duas com um <code>Cachorro</code> e mostre a diferença. Depois percorra um <code>std::vector&lt;std::unique_ptr&lt;Animal&gt;&gt;</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q30">
+<span class="num">Q30</span>
+<div class="corpo">
+<p class="titulo">Uma interface abstrata</p>
+<p>Defina a interface <code>Notificador</code> com <code>virtual void enviar(const std::string&amp; msg) = 0</code> e duas implementações, <code>Email</code> e <code>Sms</code> (que recusa mensagens com mais de 20 caracteres, lançando <code>std::length_error</code>). Escreva <code>void alertar(Notificador&amp; n, const std::string&amp; msg)</code> que trate o erro, e mostre que <code>Notificador n;</code> não compila.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q31">
+<span class="num">Q31</span>
+<div class="corpo">
+<p class="titulo">Operadores de um vetor 2D</p>
+<p>Escreva <code>struct Vetor2 { double x, y; }</code> com <code>+=</code>, <code>+</code>, <code>-</code>, multiplicação por escalar dos dois lados (<code>v * 2</code> e <code>2 * v</code>), <code>==</code> (use <code>= default</code>) e um <code>std::formatter</code> para que <code>std::println("{}", v)</code> imprima <code>(x, y)</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q32">
+<span class="num">Q32</span>
+<div class="corpo">
+<p class="titulo">Comparação com a nave espacial</p>
+<p>Escreva <code>struct Versao { int maior, menor, patch; }</code> com <code>auto operator&lt;=&gt;(const Versao&amp;) const = default;</code> e ordene um vetor de versões com <code>std::sort</code>. Explique por que a comparação gerada é a certa aqui, e quando não seria.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-4">
+<h2><span class="rotulo">MÓDULO 4</span> A biblioteca padrão: contêineres, iteradores e algoritmos</h2>
+<p class="intro">vector a fundo, string e string_view, map, set e as versões hash, iteradores, &lt;algorithm&gt;, o for de intervalo e lambdas.</p>
+<p class="aulas-titulo">Artigos 17 a 23</p>
+<ul class="aulas">
+<li><span class="n">#17</span> O Array que Cresce Sozinho — std::vector a Fundo</li>
+<li><span class="n">#18</span> Texto como Coleção — std::string Revisitada e o std::string_view</li>
+<li><span class="n">#19</span> Buscas Instantâneas — map, set e suas Versões Hash</li>
+<li><span class="n">#20</span> O Fio que Une Tudo — Iteradores como Conceito Central</li>
+<li><span class="n">#21</span> Pare de Escrever Laços — a Biblioteca &lt;algorithm&gt;</li>
+<li><span class="n">#22</span> Percorrendo com Elegância — o Range-Based for a Fundo</li>
+<li><span class="n">#23</span> Funções Anônimas e Capturas — Lambdas de Verdade</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q33">
+<span class="num">Q33</span>
+<div class="corpo">
+<p class="titulo">Capacidade do vector</p>
+<p>Qual a diferença entre <code>size()</code> e <code>capacity()</code> num <code>std::vector</code>? Por que um <code>push_back</code> pode invalidar todos os ponteiros e iteradores para os elementos, e como o <code>reserve</code> ajuda?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q34">
+<span class="num">Q34</span>
+<div class="corpo">
+<p class="titulo">O perigo do string_view</p>
+<p>Por que esta função tem um bug, e por que ele não é detectado pelo compilador?</p>
+<pre class="codigo"><code>std::string_view saudacao(const std::string&amp; nome) {
+    std::string s = "Olá, " + nome;
+    return s;
+}</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q35">
+<span class="num">Q35</span>
+<div class="corpo">
+<p class="titulo">map ou unordered_map</p>
+<p>Compare <code>std::map</code> e <code>std::unordered_map</code> em complexidade, ordem de iteração e requisitos sobre a chave. Quando o <code>map</code> é a melhor escolha mesmo sendo O(log n)?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q36">
+<span class="num">Q36</span>
+<div class="corpo">
+<p class="titulo">Categorias de iteradores</p>
+<p>Por que <code>std::sort</code> não funciona com <code>std::list</code>? O que isso diz sobre as categorias de iteradores?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q37">
+<span class="num">Q37</span>
+<div class="corpo">
+<p class="titulo">Erase-remove</p>
+<p>Por que <code>std::remove(v.begin(), v.end(), 0)</code> não diminui o tamanho do vetor? Como apagar de verdade, antes e depois do C++20?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q38">
+<span class="num">Q38</span>
+<div class="corpo">
+<p class="titulo">Captura por referência</p>
+<p>Esta função devolve uma lambda. Por que chamá-la depois é comportamento indefinido, e como corrigir?</p>
+<pre class="codigo"><code>auto contador() {
+    int n = 0;
+    return [&amp;n] { return ++n; };
+}</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q39">
+<span class="num">Q39</span>
+<div class="corpo">
+<p class="titulo">Observando a capacidade</p>
+<p>Escreva um programa que faça 17 <code>push_back</code> num <code>std::vector&lt;int&gt;</code> vazio, imprimindo o tamanho e a capacidade sempre que a capacidade mudar. Repita com <code>reserve(17)</code> antes. O que o resultado diz sobre a estratégia de crescimento da sua biblioteca?</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q40">
+<span class="num">Q40</span>
+<div class="corpo">
+<p class="titulo">Frequência de palavras</p>
+<p>Leia um texto (pode estar numa <code>std::string</code> no programa), conte a frequência de cada palavra em minúsculas com um <code>std::unordered_map&lt;std::string, int&gt;</code> e mostre as três mais frequentes, desempatando em ordem alfabética. Use <code>std::istringstream</code> para separar as palavras.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q41">
+<span class="num">Q41</span>
+<div class="corpo">
+<p class="titulo">Agenda ordenada com map</p>
+<p>Use um <code>std::map&lt;std::string, std::string&gt;</code> (nome → telefone) para uma agenda. Insira cinco nomes fora de ordem, liste em ordem alfabética, busque um nome com <code>find</code> e liste só os nomes que começam com "Ma" usando <code>lower_bound</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q42">
+<span class="num">Q42</span>
+<div class="corpo">
+<p class="titulo">Algoritmos no lugar de laços</p>
+<p>Dado <code>std::vector&lt;int&gt; v{5, 3, 8, 1, 9, 2, 7}</code>, use só funções de <code>&lt;algorithm&gt;</code> e <code>&lt;numeric&gt;</code>, sem escrever nenhum <code>for</code>, para: (a) somar os elementos; (b) contar os pares; (c) achar o maior; (d) verificar se todos são positivos; (e) gerar um vetor com os quadrados; (f) ordenar de forma decrescente.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q43">
+<span class="num">Q43</span>
+<div class="corpo">
+<p class="titulo">Removendo durante a iteração</p>
+<p>Dado um <code>std::vector&lt;std::string&gt;</code> com nomes, apague todos os que têm menos de 4 letras de três formas: (a) o laço "ingênuo" com <code>erase</code> dentro de um <code>for</code> de intervalo (explique por que não fazer); (b) o laço correto com o iterador devolvido por <code>erase</code>; (c) <code>std::erase_if</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q44">
+<span class="num">Q44</span>
+<div class="corpo">
+<p class="titulo">Lambdas que guardam estado</p>
+<p>Escreva <code>auto criar_contador(int inicio, int passo)</code> que devolva uma lambda que, a cada chamada, devolve o próximo valor da sequência. Crie dois contadores independentes. Depois use uma lambda com captura por referência para somar, com <code>std::for_each</code>, os elementos de um vetor numa variável local.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-5">
+<h2><span class="rotulo">MÓDULO 5</span> Programação genérica</h2>
+<p class="intro">Templates de função e de classe, e concepts para dizer o que um tipo precisa oferecer.</p>
+<p class="aulas-titulo">Artigos 24 a 26</p>
+<ul class="aulas">
+<li><span class="n">#24</span> Escreva uma Vez, Use com Todo Tipo — Templates de Função</li>
+<li><span class="n">#25</span> Estruturas de Dados para Qualquer Tipo — Templates de Classe</li>
+<li><span class="n">#26</span> Requisitos Explícitos — Concepts e o Fim dos Erros Ilegíveis</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q45">
+<span class="num">Q45</span>
+<div class="corpo">
+<p class="titulo">Template em vez de macro</p>
+<p>Compare <code>#define MAX(a, b) ((a) &gt; (b) ? (a) : (b))</code> com <code>template &lt;typename T&gt; const T&amp; maximo(const T&amp; a, const T&amp; b)</code>. Cite dois problemas da macro que o template não tem.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q46">
+<span class="num">Q46</span>
+<div class="corpo">
+<p class="titulo">Por que templates ficam no cabeçalho</p>
+<p>Por que a definição de uma função template normalmente fica no <code>.h</code>, e não no <code>.cpp</code> como as funções comuns?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q47">
+<span class="num">Q47</span>
+<div class="corpo">
+<p class="titulo">O ganho dos concepts</p>
+<p>O que muda para quem usa a função quando <code>template &lt;typename T&gt; T somar(...)</code> vira <code>template &lt;std::integral T&gt; T somar(...)</code>? Mostre a diferença na mensagem de erro de <code>somar(std::string("a"), ...)</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q48">
+<span class="num">Q48</span>
+<div class="corpo">
+<p class="titulo">Um template de função com concept</p>
+<p>Escreva <code>template &lt;typename T&gt; T limitar(T valor, T minimo, T maximo)</code> que prenda o valor ao intervalo, restrito a tipos com <code>operator&lt;</code> (use <code>std::totally_ordered</code>). Teste com <code>int</code>, <code>double</code> e <code>std::string</code>, e mostre (em comentário) a chamada que não compila e por quê.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q49">
+<span class="num">Q49</span>
+<div class="corpo">
+<p class="titulo">Uma pilha genérica</p>
+<p>Escreva <code>template &lt;typename T&gt; class Pilha</code> sobre um <code>std::vector&lt;T&gt;</code>, com <code>empilhar</code>, <code>desempilhar</code> (que devolve <code>std::optional&lt;T&gt;</code>, vazio quando a pilha está vazia), <code>topo</code> e <code>tamanho</code>. Use-a com <code>int</code> e com <code>std::string</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q50">
+<span class="num">Q50</span>
+<div class="corpo">
+<p class="titulo">Um concept próprio</p>
+<p>Defina o concept <code>Desenhavel</code>: um tipo que tem <code>desenhar()</code> devolvendo algo conversível para <code>std::string</code> e <code>area()</code> devolvendo um tipo de ponto flutuante. Escreva <code>void relatorio(const Desenhavel auto&amp; f)</code> e teste com dois tipos sem herança. Mostre por que um terceiro tipo é rejeitado.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-6">
+<h2><span class="rotulo">MÓDULO 6</span> Erros, valores opcionais e o C++ moderno</h2>
+<p class="intro">Exceções e RAII, std::optional, std::variant, std::expected e structured bindings.</p>
+<p class="aulas-titulo">Artigos 27 a 30</p>
+<ul class="aulas">
+<li><span class="n">#27</span> Quando o Contrato se Quebra — Exceções e a Aliança com o RAII</li>
+<li><span class="n">#28</span> Um Valor que Pode Não Existir — std::optional</li>
+<li><span class="n">#29</span> Um de Vários, ou o Valor e a Razão da Falha — std::variant e std::expected</li>
+<li><span class="n">#30</span> O Conforto do C++ Moderno — Structured Bindings e Dedução de Tipos</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q51">
+<span class="num">Q51</span>
+<div class="corpo">
+<p class="titulo">Exceção ou código de erro</p>
+<p>Em C, erros voltam como valor de retorno. Que dois problemas desse modelo as exceções resolvem, e qual é o custo delas?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q52">
+<span class="num">Q52</span>
+<div class="corpo">
+<p class="titulo">Garantias de segurança</p>
+<p>Explique as garantias básica, forte e <em>nothrow</em>. Qual delas o <code>std::vector::push_back</code> oferece?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q53">
+<span class="num">Q53</span>
+<div class="corpo">
+<p class="titulo">optional, variant ou expected</p>
+<p>Para cada situação, escolha entre <code>std::optional&lt;T&gt;</code>, <code>std::variant&lt;A, B&gt;</code> e <code>std::expected&lt;T, E&gt;</code>, justificando: (a) buscar um usuário por id; (b) converter texto em número, informando por que falhou; (c) um token de uma calculadora, que pode ser número, operador ou parêntese.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q54">
+<span class="num">Q54</span>
+<div class="corpo">
+<p class="titulo">Structured bindings</p>
+<p>O que <code>auto [it, inseriu] = mapa.insert({"a", 1});</code> declara? Por que essa forma é melhor que <code>std::pair</code> com <code>.first</code> e <code>.second</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q55">
+<span class="num">Q55</span>
+<div class="corpo">
+<p class="titulo">Exceções e o desempilhar</p>
+<p>Escreva três funções aninhadas (<code>nivel1</code> chama <code>nivel2</code>, que chama <code>nivel3</code>), cada uma com um objeto local que imprime ao ser destruído. O <code>nivel3</code> lança <code>std::runtime_error</code>; só o <code>main</code> trata. Mostre a ordem das mensagens e explique o <em>stack unwinding</em>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q56">
+<span class="num">Q56</span>
+<div class="corpo">
+<p class="titulo">Convertendo texto com expected</p>
+<p>Escreva <code>std::expected&lt;int, std::string&gt; para_int(std::string_view s)</code> usando <code>std::from_chars</code>, com mensagens diferentes para texto vazio, caractere inválido e número fora do intervalo do <code>int</code>. Teste com <code>"42"</code>, <code>""</code>, <code>"12a"</code> e <code>"99999999999"</code>, e use <code>value_or</code> num dos casos.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q57">
+<span class="num">Q57</span>
+<div class="corpo">
+<p class="titulo">Encadeando com and_then</p>
+<p>Usando o <code>para_int</code> do exercício anterior, escreva <code>std::expected&lt;int, std::string&gt; dividir(int a, int b)</code> (erro para <code>b == 0</code>) e calcule, com <code>and_then</code> e <code>transform</code>, a expressão "converter dois textos, dividir e dobrar o resultado", sem nenhum <code>if</code>. Teste um caminho de sucesso e dois de erro.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q58">
+<span class="num">Q58</span>
+<div class="corpo">
+<p class="titulo">Tokens com variant</p>
+<p>Escreva um tokenizador para expressões como <code>"3.5 * (2 + 10)"</code> que devolva um <code>std::vector&lt;std::variant&lt;double, char&gt;&gt;</code>, com números em <code>double</code> e operadores e parênteses em <code>char</code>. Imprima os tokens com <code>std::visit</code>, mostrando o tipo de cada um.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-7">
+<h2><span class="rotulo">MÓDULO 7</span> Concorrência</h2>
+<p class="intro">std::thread, mutex e lock_guard, std::atomic, std::async e condition_variable.</p>
+<p class="aulas-titulo">Artigos 31 a 34</p>
+<ul class="aulas">
+<li><span class="n">#31</span> Fazendo Duas Coisas ao Mesmo Tempo — std::thread</li>
+<li><span class="n">#32</span> O Cadeado que Protege — std::mutex e lock_guard</li>
+<li><span class="n">#33</span> Operações Indivisíveis — std::atomic</li>
+<li><span class="n">#34</span> Tarefas em Segundo Plano e a Arte de Esperar — std::async e condition_variable</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q59">
+<span class="num">Q59</span>
+<div class="corpo">
+<p class="titulo">join ou detach</p>
+<p>O que acontece se um <code>std::thread</code> é destruído sem <code>join()</code> nem <code>detach()</code>? Por que o <code>std::jthread</code> (C++20) existe?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q60">
+<span class="num">Q60</span>
+<div class="corpo">
+<p class="titulo">Condição de corrida</p>
+<p>Duas threads executam <code>++contador</code> 100 mil vezes cada sobre um <code>int</code> compartilhado. Por que o resultado quase nunca é 200 mil? Cite duas correções.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q61">
+<span class="num">Q61</span>
+<div class="corpo">
+<p class="titulo">Deadlock</p>
+<p>Duas threads precisam travar os mutexes <code>a</code> e <code>b</code>. A primeira trava <code>a</code> e depois <code>b</code>; a segunda, <code>b</code> e depois <code>a</code>. Explique o <em>deadlock</em> e duas formas de evitá-lo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q62">
+<span class="num">Q62</span>
+<div class="corpo">
+<p class="titulo">Espera espúria</p>
+<p>Por que a espera numa <code>std::condition_variable</code> deve usar um predicado (<code>cv.wait(lk, [&amp;]{ return pronto; })</code>) em vez de um <code>cv.wait(lk)</code> simples?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q63">
+<span class="num">Q63</span>
+<div class="corpo">
+<p class="titulo">Corrida de dados medida</p>
+<p>Escreva um programa com quatro threads, cada uma incrementando 100 mil vezes: (a) um <code>std::atomic&lt;int&gt;</code>; (b) um <code>int</code> protegido por <code>std::mutex</code>; (c) um contador local por thread, somado no fim. Os três devem dar 400000. (Não inclua a versão com <code>int</code> sem proteção: é comportamento indefinido.)</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q64">
+<span class="num">Q64</span>
+<div class="corpo">
+<p class="titulo">Soma paralela com async</p>
+<p>Some os números de 1 a 10 milhões dividindo o intervalo em quatro partes, cada uma calculada por um <code>std::async(std::launch::async, ...)</code>, e junte os <code>std::future&lt;long long&gt;</code>. Compare com a fórmula <code>n(n+1)/2</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q65">
+<span class="num">Q65</span>
+<div class="corpo">
+<p class="titulo">Produtor e consumidor</p>
+<p>Escreva uma fila protegida por <code>std::mutex</code> e <code>std::condition_variable</code> (<code>push</code> e <code>pop</code> bloqueante) e use-a com um produtor que envia os números de 1 a 5 e depois um valor sentinela <code>-1</code>, e um consumidor que imprime o dobro de cada número até receber o sentinela.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-8">
+<h2><span class="rotulo">MÓDULO 8</span> Ferramentas e qualidade</h2>
+<p class="intro">CMake, sanitizers, clang-tidy, testes com Catch2 e as Core Guidelines.</p>
+<p class="aulas-titulo">Artigos 35 a 38</p>
+<ul class="aulas">
+<li><span class="n">#35</span> Do Comando Único ao Projeto Real — Construindo com CMake</li>
+<li><span class="n">#36</span> Redes de Segurança Automáticas — Sanitizers e clang-tidy</li>
+<li><span class="n">#37</span> Provando que Funciona — Testes Automatizados com Catch2</li>
+<li><span class="n">#38</span> A Sabedoria Codificada — Core Guidelines e Código Limpo em C++</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q66">
+<span class="num">Q66</span>
+<div class="corpo">
+<p class="titulo">Alvos e visibilidade no CMake</p>
+<p>No CMake moderno, o que significam <code>PRIVATE</code>, <code>PUBLIC</code> e <code>INTERFACE</code> em <code>target_include_directories</code> e <code>target_link_libraries</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q67">
+<span class="num">Q67</span>
+<div class="corpo">
+<p class="titulo">Qual sanitizer</p>
+<p>Para cada bug, diga qual sanitizer o encontra: (a) ler <code>v[10]</code> num vetor de 10 elementos; (b) <code>INT_MAX + 1</code>; (c) duas threads escrevendo a mesma variável sem trava; (d) usar um <code>string_view</code> para uma string já destruída.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q68">
+<span class="num">Q68</span>
+<div class="corpo">
+<p class="titulo">O que um teste unitário deve ter</p>
+<p>Cite três características de um bom teste unitário e explique por que um teste que depende da ordem de execução dos outros é um problema.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q69">
+<span class="num">Q69</span>
+<div class="corpo">
+<p class="titulo">Um CMakeLists para biblioteca e executável</p>
+<p>Escreva um <code>CMakeLists.txt</code> para um projeto com uma biblioteca <code>calc</code> (em <code>src/calc.cpp</code>, com o cabeçalho público em <code>include/calc/calc.h</code>), um executável <code>app</code> (<code>src/main.cpp</code>) que a usa e um executável de testes <code>testes</code> ligado ao Catch2 baixado com <code>FetchContent</code>. Exija C++23, ative os avisos e permita ligar o AddressSanitizer com uma opção.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q70">
+<span class="num">Q70</span>
+<div class="corpo">
+<p class="titulo">Testando sem framework</p>
+<p>Antes do Catch2, escreva um mini-framework de testes com uma macro <code>VERIFICA(expr)</code> que registre a falha com arquivo, linha e o texto da expressão, sem interromper os outros testes. Use-o para testar uma função <code>bool eh_palindromo(std::string_view)</code> (incluindo um caso que falha de propósito) e devolva um código de saída diferente de zero se algum teste falhar.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q71">
+<span class="num">Q71</span>
+<div class="corpo">
+<p class="titulo">Seguindo as Core Guidelines</p>
+<p>Reescreva este trecho seguindo as Core Guidelines e explique cada mudança com a regra correspondente (pelo tema, não é preciso decorar o número):</p>
+<pre class="codigo"><code>int* criar(int n) {
+    int* v = (int*)malloc(n * sizeof(int));
+    for (int i = 0; i &lt;= n; i++) v[i] = 0;
+    return v;
+}</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-9">
+<h2><span class="rotulo">MÓDULO 9</span> Projeto final e extensões: o mini banco de dados, a web e a persistência</h2>
+<p class="intro">O mini banco de dados em memória (célula com variant, tabelas com RAII e STL, consultas com templates e lambdas, erros com expected) e as extensões: SQLite, HTTP, HTML gerado e dependências.</p>
+<p class="aulas-titulo">Artigos 39 a 52</p>
+<ul class="aulas">
+<li><span class="n">#39</span> O Projeto Final Começa — Arquitetando um Mini Banco de Dados em Memória</li>
+<li><span class="n">#40</span> A Primeira Pedra — Uma Célula Poliforme com std::variant</li>
+<li><span class="n">#41</span> A Segunda Pedra — Linhas e Tabelas com RAII e STL</li>
+<li><span class="n">#42</span> A Terceira Pedra — Um Motor de Consultas com Templates e Lambdas</li>
+<li><span class="n">#43</span> A Quarta Pedra — Tratamento de Erros Coerente com std::expected</li>
+<li><span class="n">#44</span> A Pedra de Acabamento — Integração, Testes e Verificação do Sistema</li>
+<li><span class="n">#45</span> A Jornada Completa — Retrospectiva de Um Ano de C++</li>
+<li><span class="n">#46</span> Extensão — C++ no Mundo da Web e da Persistência</li>
+<li><span class="n">#47</span> Extensão — Dados que Sobrevivem: Integrando SQLite com RAII</li>
+<li><span class="n">#48</span> Extensão — O Terminal Vira Rede: Um Servidor HTTP Mínimo</li>
+<li><span class="n">#49</span> Extensão — Páginas Dinâmicas: HTML Gerado com Templates</li>
+<li><span class="n">#50</span> Extensão — Além do SQLite: PostgreSQL, MySQL e MongoDB</li>
+<li><span class="n">#51</span> Extensão — A Arte de Integrar: Dependências e Bibliotecas de Terceiros</li>
+<li><span class="n">#52</span> O Destino e o Novo Começo — Encerrando a Jornada Completa</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q72">
+<span class="num">Q72</span>
+<div class="corpo">
+<p class="titulo">variant ou herança para a célula</p>
+<p>No projeto final, a célula da tabela (<code>Value</code>) guarda um inteiro, um real ou um texto num <code>std::variant</code>. Que vantagens isso tem sobre uma hierarquia <code>ValorBase</code> com <code>ValorInteiro</code>, <code>ValorReal</code> e <code>ValorTexto</code>? Quando a herança seria a melhor escolha?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q73">
+<span class="num">Q73</span>
+<div class="corpo">
+<p class="titulo">Onde ficam as invariantes da tabela</p>
+<p>A tabela tem um esquema (nomes e tipos das colunas). Por que validar cada linha <strong>na inserção</strong>, e não na consulta? Que invariante isso garante?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q74">
+<span class="num">Q74</span>
+<div class="corpo">
+<p class="titulo">Uma política de erros</p>
+<p>O artigo #43 adota <code>std::expected</code> para erros de uso (coluna inexistente, tipo errado) e mantém exceções para falhas de programação ou de recurso (memória esgotada). Justifique a divisão.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q75">
+<span class="num">Q75</span>
+<div class="corpo">
+<p class="titulo">RAII para uma API em C</p>
+<p>A API do SQLite é em C: <code>sqlite3_open</code> e <code>sqlite3_close</code>, <code>sqlite3_prepare_v2</code> e <code>sqlite3_finalize</code>. Como o <code>std::unique_ptr</code> com um <em>deleter</em> próprio transforma esses pares em RAII, sem escrever uma classe completa?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q76">
+<span class="num">Q76</span>
+<div class="corpo">
+<p class="titulo">Um servidor HTTP mínimo</p>
+<p>Um servidor HTTP feito à mão com <em>sockets</em> lê a requisição com <code>recv</code>. Por que é um erro assumir que uma chamada a <code>recv</code> traz a requisição inteira? E por que um servidor de estudo costuma responder com <code>Connection: close</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q77">
+<span class="num">Q77</span>
+<div class="corpo">
+<p class="titulo">Bibliotecas de terceiros</p>
+<p>Compare três formas de trazer uma biblioteca para um projeto C++: copiar o código para o repositório, <code>FetchContent</code> do CMake e um gerenciador de pacotes (vcpkg ou Conan). Qual usar num projeto de equipe?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q78">
+<span class="num">Q78</span>
+<div class="corpo">
+<p class="titulo">Uma célula com variant e ordem entre tipos</p>
+<p>Escreva <code>class Value</code> sobre <code>std::variant&lt;std::int64_t, double, std::string&gt;</code>, com <code>para_texto()</code> usando <code>std::visit</code> e um <code>operator&lt;=&gt;</code> próprio em que inteiros e reais se comparam pelo valor numérico (2 é menor que 2.5) e todo número vem antes de todo texto. Ordene um vetor misto.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q79">
+<span class="num">Q79</span>
+<div class="corpo">
+<p class="titulo">Tabela com esquema e expected</p>
+<p>Escreva <code>struct Coluna { std::string nome; Tipo tipo; }</code> (com <code>enum class Tipo { Inteiro, Texto }</code>), <code>struct Erro { std::string mensagem; }</code> e <code>class Tabela</code> com <code>std::expected&lt;void, Erro&gt; inserir(std::vector&lt;Valor&gt; linha)</code>, que recuse linhas com número errado de células ou tipo errado. Use <code>using Valor = std::variant&lt;long, std::string&gt;;</code>. Mostre uma inserção válida e duas inválidas.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q80">
+<span class="num">Q80</span>
+<div class="corpo">
+<p class="titulo">Um motor de consultas fluente</p>
+<p>Escreva <code>template &lt;typename T&gt; class Consulta</code> que receba um <code>std::vector&lt;T&gt;</code> e ofereça <code>onde(pred)</code>, <code>ordenar_por(projecao)</code> e <code>limite(n)</code>, cada um devolvendo <code>Consulta&amp;</code> para encadear, e <code>executar()</code> que devolve o resultado. Use-a para listar os dois livros mais antigos publicados depois de 1900.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q81">
+<span class="num">Q81</span>
+<div class="corpo">
+<p class="titulo">SQLite com RAII e parâmetros</p>
+<p>Usando a API C do SQLite (<code>&lt;sqlite3.h&gt;</code>, compile com <code>-lsqlite3</code>), crie um banco em memória com a tabela <code>livros(titulo, ano)</code>, insira três livros com um <em>statement</em> preparado e parâmetros <code>?</code> (um dos títulos deve ser uma tentativa de injeção de SQL) e liste-os em ordem de ano. Administre o banco e os <em>statements</em> com <code>std::unique_ptr</code> e <em>deleters</em> próprios.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q82">
+<span class="num">Q82</span>
+<div class="corpo">
+<p class="titulo">Analisando a linha de requisição HTTP</p>
+<p>Sem <em>sockets</em>, escreva <code>std::expected&lt;Requisicao, std::string&gt; analisar(std::string_view linha)</code> que separe uma linha como <code>GET /livros?autor=ramos HTTP/1.1</code> em método, caminho, <em>query string</em> e versão. Recuse métodos fora de GET, POST, PUT e DELETE, caminhos que não começam com <code>/</code> e versões que não começam com <code>HTTP/</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q83">
+<span class="num">Q83</span>
+<div class="corpo">
+<p class="titulo">HTML gerado com segurança</p>
+<p>Escreva <code>std::string escapar(std::string_view)</code> que troque <code>&amp; &lt; &gt; " '</code> pelas entidades HTML e <code>std::string renderizar(std::string_view modelo, const std::map&lt;std::string, std::string&gt;&amp; vars)</code> que substitua <code>{{nome}}</code> pelo valor escapado. Mostre o resultado com um nome que contém <code>&lt;script&gt;</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-10">
+<h2><span class="rotulo">MÓDULO 10</span> Jogos</h2>
+<p class="intro">O game loop, raylib, o padrão ECS, colisões, recursos com RAII e estados de jogo: Pong, Snake e Breakout.</p>
+<p class="aulas-titulo">Artigos 53 a 59</p>
+<ul class="aulas">
+<li><span class="n">#53</span> Um Novo Território — Por que Jogos, o Game Loop e as Três Bibliotecas</li>
+<li><span class="n">#54</span> O Primeiro Pixel — Janela, Desenho e Input com raylib</li>
+<li><span class="n">#55</span> Entidades de Verdade — Componentes e o Padrão ECS</li>
+<li><span class="n">#56</span> Quando as Coisas se Tocam — Colisão e o Primeiro Jogo: Pong</li>
+<li><span class="n">#57</span> Imagem e Som — Recursos de Jogo com RAII, e o Início do Snake</li>
+<li><span class="n">#58</span> Menu, Jogo, Fim — Estados de Jogo e o Snake Completo</li>
+<li><span class="n">#59</span> O Capstone dos Jogos — Breakout e o Fim da Jornada</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q84">
+<span class="num">Q84</span>
+<div class="corpo">
+<p class="titulo">O game loop</p>
+<p>Descreva as três etapas de um <em>game loop</em> e explique por que usar o tempo do quadro (<em>delta time</em>) no movimento. Que problema o passo fixo resolve que o <em>delta time</em> variável não resolve?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q85">
+<span class="num">Q85</span>
+<div class="corpo">
+<p class="titulo">ECS ou herança</p>
+<p>Num jogo, por que uma hierarquia como <code>Entidade → Movel → Inimigo → InimigoVoador</code> tende a se complicar? Como o padrão ECS (<em>Entity Component System</em>) organiza o mesmo jogo?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q86">
+<span class="num">Q86</span>
+<div class="corpo">
+<p class="titulo">Recursos de jogo e a ordem de destruição</p>
+<p>Uma classe <code>Textura</code> com RAII chama <code>LoadTexture</code> no construtor e <code>UnloadTexture</code> no destrutor. Por que declarar uma <code>Textura</code> global quebra o programa, e como organizar a vida dos recursos em relação a <code>InitWindow</code> e <code>CloseWindow</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q87">
+<span class="num">Q87</span>
+<div class="corpo">
+<p class="titulo">Passo fixo na prática</p>
+<p>Simule um <em>game loop</em> sem gráficos: os quadros chegam com tempos de 0,016 s, 0,033 s, 0,008 s, 0,050 s e 0,016 s. A física roda em passos fixos de 0,02 s, com um objeto a 100 unidades por segundo. Para cada quadro, mostre quantos passos de física rodaram, a posição e o tempo que sobrou no acumulador.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q88">
+<span class="num">Q88</span>
+<div class="corpo">
+<p class="titulo">Colisão AABB e o rebote do Pong</p>
+<p>Escreva <code>struct Retangulo { float x, y, w, h; }</code> e <code>bool colide(const Retangulo&amp;, const Retangulo&amp;)</code> (caixas alinhadas aos eixos). Simule uma bola de Pong que anda 4 unidades por passo em x e 1 em y e rebate numa raquete em x = 20: ao colidir, inverta a velocidade horizontal e empurre a bola para fora da raquete. Mostre os passos em que houve colisão.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q89">
+<span class="num">Q89</span>
+<div class="corpo">
+<p class="titulo">Um ECS mínimo</p>
+<p>Escreva um ECS em que as entidades são índices, os componentes <code>Posicao</code>, <code>Velocidade</code> e <code>Vida</code> ficam em <code>std::vector&lt;std::optional&lt;T&gt;&gt;</code>, e dois sistemas: <code>mover</code> (atua em quem tem posição e velocidade) e <code>envenenar</code> (tira 1 de vida por passo e marca para remoção quem chega a zero). Crie um jogador, uma moeda parada e um inimigo envenenado, e rode três passos.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q90">
+<span class="num">Q90</span>
+<div class="corpo">
+<p class="titulo">A cobra do Snake</p>
+<p>Represente a cobra do Snake como um <code>std::deque&lt;Ponto&gt;</code> (a cabeça na frente). Escreva <code>bool andar(Direcao d, bool comeu)</code> que acrescente a nova cabeça, remova a cauda quando a cobra não comeu e devolva <code>false</code> se a cabeça bater no próprio corpo. Simule uma sequência de movimentos que termina em colisão.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q91">
+<span class="num">Q91</span>
+<div class="corpo">
+<p class="titulo">Estados de jogo</p>
+<p>Modele os estados <code>Menu</code>, <code>Jogando</code>, <code>Pausado</code> e <code>FimDeJogo</code> com um <code>enum class</code> e uma função <code>Estado proximo(Estado atual, Evento e)</code> com as transições: Enter no menu começa o jogo; P pausa e despausa; perder vida leva ao fim de jogo; Enter no fim volta ao menu. Eventos que não se aplicam ao estado atual são ignorados. Rode uma sequência de eventos e mostre cada transição.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="desafios">
+<h2><span class="rotulo">PARA IR ALÉM</span> Desafios integradores</h2>
+<p class="intro">Projetos maiores, que juntam vários módulos. Não há uma única resposta certa: o gabarito mostra um caminho.</p>
+<div class="questao desafio" id="d1">
+<span class="num">D1</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora de terminal</p>
+<p>Escreva uma calculadora de terminal com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada (<code>raiz 2</code>). Ela deve: (a) aceitar vírgula ou ponto como separador decimal; (b) guardar o último resultado em <code>ans</code>, utilizável na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário, resultado que estoura o <code>double</code> e texto que não é número com uma mensagem clara, <strong>sem encerrar o programa</strong>; (d) ter os comandos <code>hist</code> (histórico) e <code>sair</code>. Separe o núcleo (<code>calc.h</code> e <code>calc.cpp</code>, sem entrada nem saída) da interface (<code>main.cpp</code>) e use <code>std::expected</code> para os erros.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+<div class="questao desafio" id="d2">
+<span class="num">D2</span>
+<div class="corpo">
+<p class="titulo">Um banco chave-valor persistente</p>
+<p>Escreva um banco chave-valor de linha de comando com os comandos <code>set chave valor</code>, <code>get chave</code>, <code>del chave</code>, <code>list</code> e <code>sair</code>. Os dados devem sobreviver entre execuções: cada alteração é acrescentada a um arquivo de log (<code>set</code> e <code>del</code>), e ao iniciar o programa reconstrói o estado relendo o log. Acrescente um comando <code>compactar</code> que reescreve o log só com o estado atual. Teste o núcleo com Catch2.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+</section>
+<footer class="fim">
+<p><strong>Bom estudo e bons exercícios!</strong></p>
+<p>Dominando C++ em 1 Ano · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</footer>
+</body>
+</html>
