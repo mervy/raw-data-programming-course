@@ -30,15 +30,15 @@ o `.md` em arquivos individuais.
 
 | Curso | Conversa | Caderno de Exercícios | Caderno de Respostas |
 |---|:-:|:-:|:-:|
-| Linguagem C | ✅ | — | — |
-| Linguagem C++ | ✅ | — | — |
-| Linguagem C# | ✅ | — | — |
+| Linguagem C | ✅ | ✅ | ✅ |
+| Linguagem C++ | ✅ | ✅ | ✅ |
+| Linguagem C# | ✅ | ✅ | ✅ |
 | Linguagem Java | ✅ | ✅ | ✅ |
 | Linguagem JavaScript | ✅ | ✅ | ✅ |
 | Linguagem Python | ✅ | ✅ | ✅ |
 | Linguagem Go | ✅ | ✅ | ✅ |
-| Linguagem PHP | ✅ | — | — |
-| DevOps e Cloud | ✅ | — | — |
+| Linguagem PHP | ✅ | ✅ | ✅ |
+| DevOps e Cloud | ✅ | ✅ | ✅ |
 
 Nomenclatura: `Curso - <Tecnologia>.md` para a conversa e
 `books/<curso>/` para os cadernos.
@@ -75,7 +75,8 @@ são `<div class="linhas" style="--n:5">` (5 linhas).
 Todo caderno termina com o desafio **"Uma calculadora, duas interfaces"**: o mesmo
 núcleo (sete operações, `ans`, erros que não derrubam o programa) usado por uma
 versão de terminal e por uma gráfica (JavaFX, página web servida em Go, tkinter,
-navegador). O código dos gabaritos que traz quadro de **Saída** foi executado, e a
+navegador, página web em PHP com sessão). Em C, C++, C# e DevOps (Bash), a versão gráfica fica como extensão descrita no
+gabarito (GTK ou raylib, raylib, Avalonia, whiptail), sem código executado. O código dos gabaritos que traz quadro de **Saída** foi executado, e a
 saída mostrada é a real; as capturas das janelas ficam em `books/<curso>/img/`.
 
 O PDF que vai para download no site é gerado do HTML, com o Chrome em modo

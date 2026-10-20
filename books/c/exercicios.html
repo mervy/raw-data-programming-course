@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dominando a Linguagem C em 1 Ano · Caderno de Exercícios</title>
+<link rel="stylesheet" href="../caderno.css">
+</head>
+<body class="caderno exercicios">
+<header class="capa">
+<p class="serie">DOMINANDO A LINGUAGEM C EM 1 ANO</p>
+<h1>Caderno de Exercícios</h1>
+<p class="subtitulo">52 aulas de prática, do #01 ao #52</p>
+<p class="subtitulo">C17 · gcc ou clang · 9 módulos · 71 questões · 2 desafios integradores</p>
+<p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</header>
+<div class="ficha"><span>Nome do aluno:</span><span>Início:</span><span>Término:</span></div>
+<aside class="nota">
+<p><strong>Como usar este caderno</strong></p>
+<p>Cada módulo reúne um bloco de aulas do curso, com a lista dos artigos que ele cobre. As perguntas conceituais pedem explicações com as suas palavras; os exercícios de código pedem programas: escreva, compile e execute cada um.</p>
+<p>Tente sempre resolver sozinho antes de abrir o <strong>Caderno de Respostas</strong>. É no erro que o conhecimento fixa.</p>
+</aside>
+<h2 class="sumario-titulo">Sumário</h2>
+<table class="sumario">
+<thead><tr><th>Módulo</th><th>Tema</th><th>Aulas</th><th>Questões</th></tr></thead>
+<tbody>
+<tr><td>MÓDULO 1</td><td>Fundamentos da linguagem</td><td>#01–#06</td><td>Q1–Q9</td></tr>
+<tr><td>MÓDULO 2</td><td>Ponteiros e strings</td><td>#07–#10</td><td>Q10–Q16</td></tr>
+<tr><td>MÓDULO 3</td><td>Memória: pilha, heap e vazamentos</td><td>#11–#13</td><td>Q17–Q23</td></tr>
+<tr><td>MÓDULO 4</td><td>Tipos próprios, pré-processador e compilação</td><td>#14–#20</td><td>Q24–Q32</td></tr>
+<tr><td>MÓDULO 5</td><td>Entrada, saída e biblioteca padrão</td><td>#21–#25</td><td>Q33–Q40</td></tr>
+<tr><td>MÓDULO 6</td><td>Ponteiros para função, recursão e bits</td><td>#26–#30</td><td>Q41–Q47</td></tr>
+<tr><td>MÓDULO 7</td><td>Estruturas de dados</td><td>#31–#35</td><td>Q48–Q54</td></tr>
+<tr><td>MÓDULO 8</td><td>Ferramentas, qualidade e comportamento indefinido</td><td>#36–#46</td><td>Q55–Q63</td></tr>
+<tr><td>MÓDULO 9</td><td>Programação de sistemas</td><td>#47–#51</td><td>Q64–Q71</td></tr>
+<tr><td>DESAFIOS</td><td>Desafios integradores</td><td>todas</td><td>D1–D2</td></tr>
+</tbody>
+</table>
+<aside class="legenda">
+<p>Legenda: nas perguntas, <code>assim</code> indica código, nomes de tipos e comandos. As linhas pautadas são para a sua resposta; nos exercícios de código, use também o computador: <strong>todo programa deve ser compilado e executado</strong>.</p>
+</aside>
+<section class="modulo" id="modulo-1">
+<h2><span class="rotulo">MÓDULO 1</span> Fundamentos da linguagem</h2>
+<p class="intro">Por que C existe, tipos e memória, funções, decisões, laços e o primeiro vetor.</p>
+<p class="aulas-titulo">Artigos 01 a 06</p>
+<ul class="aulas">
+<li><span class="n">#01</span> Por que C existe e o que ele quer de você</li>
+<li><span class="n">#02</span> Variáveis, Tipos e a Memória por Trás Deles</li>
+<li><span class="n">#03</span> Funções, Escopo e Passagem por Valor</li>
+<li><span class="n">#04</span> Quando o Programa Decide: if, else e switch</li>
+<li><span class="n">#05</span> A Arte da Repetição com while, do-while e for</li>
+<li><span class="n">#06</span> Vetores e o Primeiro Contato com a Memória Contígua</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q1">
+<span class="num">Q1</span>
+<div class="corpo">
+<p class="titulo">O que C quer de você</p>
+<p>O artigo #01 diz que C "confia no programador". O que isso significa na prática? Cite duas coisas que a linguagem <strong>não</strong> faz por você e que linguagens como Python ou Java fazem.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q2">
+<span class="num">Q2</span>
+<div class="corpo">
+<p class="titulo">Tamanho dos tipos</p>
+<p>Por que o padrão C não fixa que <code>int</code> tem 32 bits? O que ele garante sobre <code>char</code>, <code>short</code>, <code>int</code> e <code>long</code>? Quando usar <code>int32_t</code> de <code>&lt;stdint.h&gt;</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q3">
+<span class="num">Q3</span>
+<div class="corpo">
+<p class="titulo">Passagem por valor</p>
+<p>"Em C, toda passagem de argumento é por valor." Explique a frase e diga como, então, uma função consegue alterar uma variável de quem a chamou.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q4">
+<span class="num">Q4</span>
+<div class="corpo">
+<p class="titulo">switch e o break esquecido</p>
+<p>O que acontece quando um <code>case</code> de um <code>switch</code> não termina com <code>break</code>? Dê uma situação em que isso é intencional.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q5">
+<span class="num">Q5</span>
+<div class="corpo">
+<p class="titulo">Vetor como argumento</p>
+<p>Por que, dentro de uma função <code>void f(int v[])</code>, a expressão <code>sizeof v / sizeof v[0]</code> não dá o número de elementos? Como as funções da biblioteca resolvem isso?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q6">
+<span class="num">Q6</span>
+<div class="corpo">
+<p class="titulo">Divisão inteira e conversões</p>
+<p>Sem executar, diga o que o programa imprime. Depois execute e explique cada linha.</p>
+<pre class="codigo"><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int a = 7, b = 2;
+    printf("%d\n", a / b);
+    printf("%d\n", -7 / 2);
+    printf("%d\n", -7 % 2);
+    printf("%.2f\n", a / b * 1.0);
+    printf("%.2f\n", (double) a / b);
+    unsigned int u = 0;
+    printf("%u\n", u - 1);
+    return 0;
+}</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q7">
+<span class="num">Q7</span>
+<div class="corpo">
+<p class="titulo">Troca com ponteiros</p>
+<p>Escreva <code>void troca(int *a, int *b)</code> que troca os valores de duas variáveis e mostre, no mesmo programa, por que uma versão <code>void troca_errada(int a, int b)</code> não funciona.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q8">
+<span class="num">Q8</span>
+<div class="corpo">
+<p class="titulo">Laços e o do-while</p>
+<p>Escreva um programa que leia números inteiros da entrada até chegar um <code>0</code> e mostre quantos foram lidos (sem contar o zero), a soma e a média com uma casa decimal. Use <code>do-while</code> e trate o caso de nenhum número antes do zero.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q9">
+<span class="num">Q9</span>
+<div class="corpo">
+<p class="titulo">Busca do maior e do segundo maior</p>
+<p>Escreva uma função <code>void dois_maiores(const int v[], int n, int *maior, int *segundo)</code> que encontra, numa única passada, o maior e o segundo maior valor <strong>distintos</strong> do vetor. Teste com <code>{5, 9, 2, 9, 7}</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-2">
+<h2><span class="rotulo">MÓDULO 2</span> Ponteiros e strings</h2>
+<p class="intro">Endereços, aritmética de ponteiros, strings e argumentos de linha de comando.</p>
+<p class="aulas-titulo">Artigos 07 a 10</p>
+<ul class="aulas">
+<li><span class="n">#07</span> Ponteiros: O que É um Endereço de Memória</li>
+<li><span class="n">#08</span> Aritmética de Ponteiros e a Ligação Profunda com Vetores</li>
+<li><span class="n">#09</span> Strings: Vetores de Caracteres e a Biblioteca string.h</li>
+<li><span class="n">#10</span> Ponteiro para Ponteiro e Argumentos de Linha de Comando</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q10">
+<span class="num">Q10</span>
+<div class="corpo">
+<p class="titulo">Vetor e ponteiro não são a mesma coisa</p>
+<p><code>int v[5]</code> e <code>int *p = v</code> permitem escrever <code>v[2]</code> e <code>p[2]</code>. Cite duas diferenças reais entre <code>v</code> e <code>p</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q11">
+<span class="num">Q11</span>
+<div class="corpo">
+<p class="titulo">Aritmética de ponteiros</p>
+<p>Se <code>p</code> é um <code>int *</code> que vale <code>0x1000</code> e <code>int</code> tem 4 bytes, quanto vale <code>p + 3</code>? E se <code>p</code> fosse um <code>char *</code>? O que significa subtrair dois ponteiros?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q12">
+<span class="num">Q12</span>
+<div class="corpo">
+<p class="titulo">O '\0' e o tamanho da string</p>
+<p>Qual a diferença entre <code>sizeof</code> e <code>strlen</code> aplicados a <code>char s[20] = "casa";</code>? Por que <code>char t[4] = "casa";</code> é perigoso?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q13">
+<span class="num">Q13</span>
+<div class="corpo">
+<p class="titulo">Literal de string</p>
+<p>Por que <code>char *s = "texto"; s[0] = 'T';</code> pode derrubar o programa, enquanto <code>char s[] = "texto"; s[0] = 'T';</code> funciona?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q14">
+<span class="num">Q14</span>
+<div class="corpo">
+<p class="titulo">Percorrendo com ponteiro</p>
+<p>Escreva <code>size_t meu_strlen(const char *s)</code> sem usar índices, só ponteiros, e <code>void inverte(char *s)</code> que inverte a string no lugar. Teste com "ponteiro".</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q15">
+<span class="num">Q15</span>
+<div class="corpo">
+<p class="titulo">Contando palavras</p>
+<p>Escreva <code>int conta_palavras(const char *s)</code> que conta palavras separadas por um ou mais espaços, tabs ou quebras de linha, usando <code>isspace</code> de <code>&lt;ctype.h&gt;</code>. Teste com <code>"  uma   frase\tcom\n cinco palavras "</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q16">
+<span class="num">Q16</span>
+<div class="corpo">
+<p class="titulo">Argumentos de linha de comando</p>
+<p>Escreva um programa que receba números pela linha de comando e imprima a soma. Argumentos que não forem números inteiros devem ser avisados em <code>stderr</code> e ignorados. Use <code>strtol</code>, não <code>atoi</code>, e diga por quê.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-3">
+<h2><span class="rotulo">MÓDULO 3</span> Memória: pilha, heap e vazamentos</h2>
+<p class="intro">Onde cada coisa vive, alocação dinâmica e a caça aos vazamentos.</p>
+<p class="aulas-titulo">Artigos 11 a 13</p>
+<ul class="aulas">
+<li><span class="n">#11</span> A Pilha e o Heap: Onde Cada Coisa Vive</li>
+<li><span class="n">#12</span> Alocação Dinâmica: malloc, calloc, realloc e free</li>
+<li><span class="n">#13</span> Vazamentos de Memória e Como Caçá-los</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q17">
+<span class="num">Q17</span>
+<div class="corpo">
+<p class="titulo">Pilha ou heap</p>
+<p>Para cada variável, diga onde ela vive e quando deixa de existir: (a) um <code>int</code> local de uma função; (b) uma variável <code>static</code> dentro de uma função; (c) o bloco devolvido por <code>malloc</code>; (d) uma variável global.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q18">
+<span class="num">Q18</span>
+<div class="corpo">
+<p class="titulo">realloc sem perder memória</p>
+<p>Por que <code>p = realloc(p, novo_tamanho);</code> é um padrão perigoso? Escreva a forma correta.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q19">
+<span class="num">Q19</span>
+<div class="corpo">
+<p class="titulo">calloc e malloc</p>
+<p>Quais as duas diferenças entre <code>malloc(n * sizeof(int))</code> e <code>calloc(n, sizeof(int))</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q20">
+<span class="num">Q20</span>
+<div class="corpo">
+<p class="titulo">Dangling pointer</p>
+<p>O que é um <em>dangling pointer</em>? Dê dois jeitos de criar um e um hábito que reduz o estrago.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q21">
+<span class="num">Q21</span>
+<div class="corpo">
+<p class="titulo">Vetor que cresce</p>
+<p>Implemente um vetor dinâmico de <code>int</code> com <code>push</code> que dobra a capacidade quando enche (comece com capacidade 2). Insira os números de 1 a 10 e mostre a capacidade a cada realocação. Libere tudo no fim.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q22">
+<span class="num">Q22</span>
+<div class="corpo">
+<p class="titulo">Duplicando uma string</p>
+<p>Escreva <code>char *duplica(const char *s)</code>, equivalente ao <code>strdup</code> (que só entrou no padrão no C23), e um programa que duplica, modifica a cópia e mostra que o original não mudou.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q23">
+<span class="num">Q23</span>
+<div class="corpo">
+<p class="titulo">Achando o vazamento</p>
+<p>O programa abaixo vaza memória. Encontre os dois vazamentos, corrija e diga qual ferramenta do curso confirmaria a correção.</p>
+<pre class="codigo"><code>#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+char *saudacao(const char *nome) {
+    char *s = malloc(strlen(nome) + 7);
+    strcpy(s, "Olá, ");
+    strcat(s, nome);
+    return s;
+}
+
+int main(void) {
+    for (int i = 0; i &lt; 3; i++) {
+        char *msg = saudacao("Ana");
+        msg = saudacao("Bia");
+        free(msg);
+    }
+    return 0;
+}</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-4">
+<h2><span class="rotulo">MÓDULO 4</span> Tipos próprios, pré-processador e compilação</h2>
+<p class="intro">Structs, unions, enums, typedef, macros, cabeçalhos e classes de armazenamento.</p>
+<p class="aulas-titulo">Artigos 14 a 20</p>
+<ul class="aulas">
+<li><span class="n">#14</span> Structs: Criando Seus Próprios Tipos</li>
+<li><span class="n">#15</span> Ponteiros para Struct e o Operador Seta</li>
+<li><span class="n">#16</span> Unions e Enums: Economia e Clareza</li>
+<li><span class="n">#17</span> typedef e o Design de Tipos Legíveis</li>
+<li><span class="n">#18</span> O Pré-processador: #define, Macros e Inclusões</li>
+<li><span class="n">#19</span> Compilação Separada: Cabeçalhos e Múltiplos Arquivos</li>
+<li><span class="n">#20</span> Classes de Armazenamento: static, extern e o Tempo de Vida</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q24">
+<span class="num">Q24</span>
+<div class="corpo">
+<p class="titulo">Padding em structs</p>
+<p>Por que <code>sizeof</code> de <code>struct { char c; int i; char d; }</code> costuma ser 12 e não 6? Como reordenar os campos para gastar menos?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q25">
+<span class="num">Q25</span>
+<div class="corpo">
+<p class="titulo">union</p>
+<p>O que é uma <code>union</code> e qual o perigo de ler um campo diferente do último escrito? Dê um uso legítimo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q26">
+<span class="num">Q26</span>
+<div class="corpo">
+<p class="titulo">Macros com efeito colateral</p>
+<p>Por que <code>#define QUADRADO(x) x * x</code> está errado duas vezes? Corrija e mostre um caso que nem a versão corrigida resolve.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q27">
+<span class="num">Q27</span>
+<div class="corpo">
+<p class="titulo">static e extern</p>
+<p>Explique os dois significados de <code>static</code>: numa variável dentro de uma função e numa função ou variável no escopo do arquivo. E para que serve <code>extern</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q28">
+<span class="num">Q28</span>
+<div class="corpo">
+<p class="titulo">Include guard</p>
+<p>Para que serve o trecho <code>#ifndef PILHA_H / #define PILHA_H / ... / #endif</code> num cabeçalho? O que acontece sem ele?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q29">
+<span class="num">Q29</span>
+<div class="corpo">
+<p class="titulo">Ponto e retângulo</p>
+<p>Defina <code>typedef struct { double x, y; } Ponto;</code> e <code>typedef struct { Ponto canto; double largura, altura; } Retangulo;</code>. Escreva <code>int contem(const Retangulo *r, Ponto p)</code> e teste três pontos, usando o operador seta.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q30">
+<span class="num">Q30</span>
+<div class="corpo">
+<p class="titulo">União etiquetada</p>
+<p>Escreva um tipo <code>Valor</code> que guarda um inteiro <strong>ou</strong> um texto (até 31 caracteres), com um <code>enum</code> dizendo qual. Escreva <code>void imprime(const Valor *v)</code> e teste os dois casos. Mostre também o <code>sizeof</code> do tipo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q31">
+<span class="num">Q31</span>
+<div class="corpo">
+<p class="titulo">Contador com static</p>
+<p>Escreva uma função <code>int proximo_id(void)</code> que devolve 1, 2, 3… a cada chamada, sem variável global. Depois explique por que ela não serve, como está, para um programa com várias threads.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q32">
+<span class="num">Q32</span>
+<div class="corpo">
+<p class="titulo">Macro de depuração</p>
+<p>Escreva uma macro <code>LOG(fmt, ...)</code> que imprime em <code>stderr</code> o arquivo, a linha e a mensagem formatada, e que some completamente quando o programa é compilado com <code>-DNDEBUG</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-5">
+<h2><span class="rotulo">MÓDULO 5</span> Entrada, saída e biblioteca padrão</h2>
+<p class="intro">printf e scanf a fundo, arquivos de texto e binários, stdlib, math, ctype, time e strings.</p>
+<p class="aulas-titulo">Artigos 21 a 25</p>
+<ul class="aulas">
+<li><span class="n">#21</span> Entrada e Saída Formatada: printf e scanf a Fundo</li>
+<li><span class="n">#22</span> Lendo e Gravando Arquivos de Texto</li>
+<li><span class="n">#23</span> Arquivos Binários e Posicionamento no Disco</li>
+<li><span class="n">#24</span> Explorando a Biblioteca Padrão: stdlib, math, ctype, time</li>
+<li><span class="n">#25</span> Manipulação de Strings sem Sofrimento</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q33">
+<span class="num">Q33</span>
+<div class="corpo">
+<p class="titulo">scanf e o '\n' que sobra</p>
+<p>Por que, depois de <code>scanf("%d", &amp;idade);</code>, um <code>fgets(nome, sizeof nome, stdin);</code> parece "pular" a leitura? Como resolver?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q34">
+<span class="num">Q34</span>
+<div class="corpo">
+<p class="titulo">Modo texto e binário</p>
+<p>Qual a diferença entre abrir um arquivo com <code>"r"</code> e com <code>"rb"</code>? Em que sistema ela aparece de verdade?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q35">
+<span class="num">Q35</span>
+<div class="corpo">
+<p class="titulo">feof no lugar errado</p>
+<p>Por que o laço <code>while (!feof(f)) { fgets(linha, sizeof linha, f); ... }</code> costuma processar a última linha duas vezes?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q36">
+<span class="num">Q36</span>
+<div class="corpo">
+<p class="titulo">rand e a semente</p>
+<p>O que faz <code>srand(time(NULL))</code>? Por que chamá-lo dentro de um laço, antes de cada <code>rand()</code>, é um erro?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q37">
+<span class="num">Q37</span>
+<div class="corpo">
+<p class="titulo">Gravando e lendo texto</p>
+<p>Escreva um programa que grava três linhas <code>nome;nota</code> num arquivo <code>notas.txt</code>, fecha, reabre para leitura e imprime a média, tratando a falha de <code>fopen</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q38">
+<span class="num">Q38</span>
+<div class="corpo">
+<p class="titulo">Arquivo binário com fseek</p>
+<p>Grave 5 structs <code>{int id; double preco;}</code> com <code>fwrite</code>, depois leia <strong>só a quarta</strong> usando <code>fseek</code>, sem ler as anteriores. Mostre também o tamanho do arquivo com <code>ftell</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q39">
+<span class="num">Q39</span>
+<div class="corpo">
+<p class="titulo">Estatísticas com math.h</p>
+<p>Escreva um programa que calcula média, desvio padrão (populacional) e mediana do vetor <code>{4, 8, 15, 16, 23, 42}</code>, usando <code>qsort</code> para a mediana e <code>sqrt</code> de <code>&lt;math.h&gt;</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q40">
+<span class="num">Q40</span>
+<div class="corpo">
+<p class="titulo">Texto em maiúsculas e sem espaços duplicados</p>
+<p>Escreva <code>void normaliza(char *s)</code> que, no próprio vetor, converte para maiúsculas, remove espaços do início e do fim e reduz espaços repetidos a um só. Teste com <code>"   olá   mundo  em  C   "</code> e explique o que acontece com o <code>á</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-6">
+<h2><span class="rotulo">MÓDULO 6</span> Ponteiros para função, recursão e bits</h2>
+<p class="intro">Comportamento como argumento, qsort e bsearch, recursão, máscaras e campos de bits.</p>
+<p class="aulas-titulo">Artigos 26 a 30</p>
+<ul class="aulas">
+<li><span class="n">#26</span> Ponteiros para Função: Passando Comportamento como Argumento</li>
+<li><span class="n">#27</span> qsort e bsearch: Ordenando e Buscando com a Biblioteca</li>
+<li><span class="n">#28</span> Recursão: Quando uma Função Chama a Si Mesma</li>
+<li><span class="n">#29</span> Manipulação de Bits e Máscaras</li>
+<li><span class="n">#30</span> Campos de Bits e Estruturas Compactas</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q41">
+<span class="num">Q41</span>
+<div class="corpo">
+<p class="titulo">Lendo declarações</p>
+<p>Explique em palavras o que declara cada linha: (a) <code>int (*f)(int, int);</code> (b) <code>int *g(int, int);</code> (c) <code>void (*tabela[3])(void);</code></p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q42">
+<span class="num">Q42</span>
+<div class="corpo">
+<p class="titulo">Recursão e a pilha</p>
+<p>O que é estouro de pilha (<em>stack overflow</em>) numa função recursiva? O que é recursão de cauda e por que o padrão C não garante que ela economize pilha?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q43">
+<span class="num">Q43</span>
+<div class="corpo">
+<p class="titulo">Operações com bits</p>
+<p>Escreva as expressões para, num <code>unsigned</code> chamado <code>flags</code>: ligar o bit 3, desligar o bit 5, inverter o bit 0 e testar se o bit 7 está ligado. Por que usar tipos sem sinal para isso?</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q44">
+<span class="num">Q44</span>
+<div class="corpo">
+<p class="titulo">Ordenando structs com qsort</p>
+<p>Ordene um vetor de alunos <code>{nome, nota}</code> por nota decrescente e, em caso de empate, por nome em ordem alfabética. Depois use <code>bsearch</code> num vetor de inteiros ordenado para achar o 23.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q45">
+<span class="num">Q45</span>
+<div class="corpo">
+<p class="titulo">Calculadora com tabela de funções</p>
+<p>Escreva uma tabela que associa os caracteres <code>+ - * /</code> a funções <code>double f(double, double)</code> e um laço que aplica cada operação a 12 e 4, procurando a função pelo símbolo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q46">
+<span class="num">Q46</span>
+<div class="corpo">
+<p class="titulo">Torres de Hanói</p>
+<p>Escreva a solução recursiva das Torres de Hanói que imprime os movimentos para 3 discos e conta quantos foram. Quantos movimentos são necessários para n discos?</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q47">
+<span class="num">Q47</span>
+<div class="corpo">
+<p class="titulo">Contando bits e testando potência de 2</p>
+<p>Escreva <code>int conta_bits(unsigned x)</code> com o truque <code>x &amp;= x - 1</code> e <code>int potencia_de_2(unsigned x)</code>. Mostre os resultados para 0, 1, 12, 64 e 255, e explique o truque.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-7">
+<h2><span class="rotulo">MÓDULO 7</span> Estruturas de dados</h2>
+<p class="intro">Listas simples, duplas e circulares, pilhas, filas, árvores de busca e tabelas hash.</p>
+<p class="aulas-titulo">Artigos 31 a 35</p>
+<ul class="aulas">
+<li><span class="n">#31</span> Listas Encadeadas: A Estrutura que Só Existe com Ponteiros</li>
+<li><span class="n">#32</span> Listas Duplamente Encadeadas e Circulares</li>
+<li><span class="n">#33</span> Pilhas e Filas na Prática</li>
+<li><span class="n">#34</span> Árvores Binárias de Busca</li>
+<li><span class="n">#35</span> Tabelas Hash: Busca em Tempo Constante</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q48">
+<span class="num">Q48</span>
+<div class="corpo">
+<p class="titulo">Lista ou vetor</p>
+<p>Compare lista encadeada e vetor dinâmico em: acesso ao i-ésimo elemento, inserção no início, uso de memória e aproveitamento do cache do processador. Quando a lista ganha?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q49">
+<span class="num">Q49</span>
+<div class="corpo">
+<p class="titulo">Árvore desbalanceada</p>
+<p>Em que ordem de inserção uma árvore binária de busca vira uma "lista"? Qual o custo da busca nesse caso e que tipos de árvore evitam o problema?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q50">
+<span class="num">Q50</span>
+<div class="corpo">
+<p class="titulo">Colisões numa tabela hash</p>
+<p>O que é uma colisão numa tabela hash? Explique o encadeamento separado e diga o que é o fator de carga e por que ele importa.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q51">
+<span class="num">Q51</span>
+<div class="corpo">
+<p class="titulo">Lista encadeada com inversão</p>
+<p>Implemente uma lista simplesmente encadeada de <code>int</code> com <code>insere_inicio</code>, <code>imprime</code>, <code>inverte</code> (no lugar, sem alocar nós) e <code>libera</code>. Teste inserindo 1, 2, 3 e 4.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q52">
+<span class="num">Q52</span>
+<div class="corpo">
+<p class="titulo">Verificando expressões com uma pilha</p>
+<p>Usando uma pilha (vetor e índice de topo), escreva <code>int balanceado(const char *s)</code> que verifica se <code>()</code>, <code>[]</code> e <code>{}</code> estão corretamente aninhados. Teste com quatro expressões.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q53">
+<span class="num">Q53</span>
+<div class="corpo">
+<p class="titulo">Árvore binária de busca</p>
+<p>Implemente uma BST de inteiros com <code>insere</code>, <code>busca</code>, percurso em ordem e <code>altura</code>. Insira 50, 30, 70, 20, 40, 60, 80 e mostre a altura; depois mostre a altura inserindo de 1 a 7 em ordem.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q54">
+<span class="num">Q54</span>
+<div class="corpo">
+<p class="titulo">Tabela hash de contagem de palavras</p>
+<p>Implemente uma tabela hash com encadeamento (31 posições, função djb2) que conta quantas vezes cada palavra aparece em "o rato roeu a roupa do rei de roma e o rei riu do rato". Imprima as palavras que aparecem mais de uma vez.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-8">
+<h2><span class="rotulo">MÓDULO 8</span> Ferramentas, qualidade e comportamento indefinido</h2>
+<p class="intro">GDB, Valgrind, sanitizers, Make, CMake, UB, errno, testes, código limpo e desempenho.</p>
+<p class="aulas-titulo">Artigos 36 a 46</p>
+<ul class="aulas">
+<li><span class="n">#36</span> Depurando de Verdade com o GDB</li>
+<li><span class="n">#37</span> Caçando Bugs de Memória com Valgrind e Sanitizers</li>
+<li><span class="n">#38</span> Automação de Build com Make</li>
+<li><span class="n">#39</span> Projetos Maiores com CMake</li>
+<li><span class="n">#40</span> Undefined Behavior: O Território Perigoso do C</li>
+<li><span class="n">#41</span> Tratamento de Erros Idiomático: errno e Códigos de Retorno</li>
+<li><span class="n">#42</span> Testes Automatizados em C</li>
+<li><span class="n">#43</span> Código Limpo em C: Nomes, Funções e Legibilidade</li>
+<li><span class="n">#44</span> Programação Defensiva e Contratos</li>
+<li><span class="n">#45</span> Organização de Projetos e Convenções da Comunidade</li>
+<li><span class="n">#46</span> Otimização Consciente e Noções de Desempenho</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q55">
+<span class="num">Q55</span>
+<div class="corpo">
+<p class="titulo">Comportamento indefinido</p>
+<p>O que é comportamento indefinido (UB)? Por que "no meu computador funciona" não prova nada? Cite três exemplos.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q56">
+<span class="num">Q56</span>
+<div class="corpo">
+<p class="titulo">Sanitizers ou Valgrind</p>
+<p>Qual a diferença de funcionamento entre o AddressSanitizer e o Valgrind? Cite uma vantagem de cada.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q57">
+<span class="num">Q57</span>
+<div class="corpo">
+<p class="titulo">O que o make sabe</p>
+<p>Como o <code>make</code> decide o que recompilar? O que acontece se o <code>Makefile</code> não declarar que <code>main.o</code> depende de <code>pilha.h</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q58">
+<span class="num">Q58</span>
+<div class="corpo">
+<p class="titulo">errno</p>
+<p>Como funciona o <code>errno</code>? Por que é errado testar <code>errno</code> sem antes verificar o valor de retorno da função?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q59">
+<span class="num">Q59</span>
+<div class="corpo">
+<p class="titulo">assert não é tratamento de erro</p>
+<p>Para que serve o <code>assert</code>? Por que é errado usá-lo para validar a entrada do usuário ou o retorno de <code>malloc</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q60">
+<span class="num">Q60</span>
+<div class="corpo">
+<p class="titulo">Estouro detectado</p>
+<p>O código abaixo calcula a média de dois <code>int</code> e falha para valores grandes. Explique o problema e escreva uma versão que nunca estoura. Teste com <code>INT_MAX</code> e <code>INT_MAX - 2</code>.</p>
+<pre class="codigo"><code>int media(int a, int b) { return (a + b) / 2; }</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q61">
+<span class="num">Q61</span>
+<div class="corpo">
+<p class="titulo">Erros por código de retorno</p>
+<p>Escreva <code>int le_inteiro(const char *texto, int *saida)</code> que devolve 0 em caso de sucesso e códigos de erro distintos para "vazio", "não é número", "sobra texto" e "fora do intervalo de int". Escreva um <code>main</code> que testa cinco entradas e mostra a mensagem de cada erro.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q62">
+<span class="num">Q62</span>
+<div class="corpo">
+<p class="titulo">Um teste automatizado mínimo</p>
+<p>Sem biblioteca externa, escreva uma macro <code>CHECA(cond)</code> que conta testes executados e falhos, mostrando a linha de cada falha. Use-a para testar uma função <code>int fatorial(int n)</code> (com o caso n = 0) e mostre o resumo. Inclua de propósito um teste errado para ver a falha.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q63">
+<span class="num">Q63</span>
+<div class="corpo">
+<p class="titulo">Makefile com dependências automáticas</p>
+<p>Escreva um <code>Makefile</code> para um projeto com <code>main.c</code>, <code>pilha.c</code> e <code>pilha.h</code> que: compila com <code>-Wall -Wextra -g</code>, gera as dependências de cabeçalhos automaticamente, tem os alvos <code>all</code> e <code>clean</code> e não confunde <code>clean</code> com um arquivo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-9">
+<h2><span class="rotulo">MÓDULO 9</span> Programação de sistemas</h2>
+<p class="intro">Processos, threads, sincronização, sockets e sinais no Unix.</p>
+<p class="aulas-titulo">Artigos 47 a 51</p>
+<ul class="aulas">
+<li><span class="n">#47</span> Processos: fork, exec e wait</li>
+<li><span class="n">#48</span> Threads com pthreads</li>
+<li><span class="n">#49</span> Sincronização: Mutexes e Variáveis de Condição</li>
+<li><span class="n">#50</span> Comunicação em Rede com Sockets</li>
+<li><span class="n">#51</span> Sinais Unix e Eventos do Sistema Operacional</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q64">
+<span class="num">Q64</span>
+<div class="corpo">
+<p class="titulo">fork</p>
+<p>O que <code>fork()</code> devolve no processo pai, no filho e em caso de erro? Por que um <code>printf("oi")</code> sem <code>\n</code> antes do <code>fork</code> pode aparecer duas vezes?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q65">
+<span class="num">Q65</span>
+<div class="corpo">
+<p class="titulo">Zumbis</p>
+<p>O que é um processo zumbi e como evitá-lo? E um processo órfão?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q66">
+<span class="num">Q66</span>
+<div class="corpo">
+<p class="titulo">Mutex e variável de condição</p>
+<p>Por que o <code>pthread_cond_wait</code> precisa receber o mutex? E por que a condição é testada num <code>while</code>, não num <code>if</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q67">
+<span class="num">Q67</span>
+<div class="corpo">
+<p class="titulo">O que fazer num tratador de sinal</p>
+<p>Por que é errado chamar <code>printf</code> ou <code>malloc</code> dentro de um tratador de sinal? Qual o padrão recomendado?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q68">
+<span class="num">Q68</span>
+<div class="corpo">
+<p class="titulo">fork, exec e wait</p>
+<p>Escreva um programa que cria um processo filho para executar <code>echo</code> com os argumentos <code>"olá do filho"</code>, espera o filho terminar e mostra o código de saída dele.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q69">
+<span class="num">Q69</span>
+<div class="corpo">
+<p class="titulo">Somando em paralelo com threads</p>
+<p>Some os números de 1 a 10.000.000 dividindo o trabalho entre 4 threads, cada uma com o seu intervalo e o seu resultado parcial, sem nenhum mutex. Explique por que não é preciso mutex.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q70">
+<span class="num">Q70</span>
+<div class="corpo">
+<p class="titulo">Contador compartilhado com mutex</p>
+<p>Crie 4 threads que incrementam um contador global 100.000 vezes cada. Mostre o resultado com o mutex protegendo o incremento e explique o que muda sem ele.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q71">
+<span class="num">Q71</span>
+<div class="corpo">
+<p class="titulo">Encerrando com Ctrl+C</p>
+<p>Escreva um programa que fica num laço "trabalhando" e, ao receber <code>SIGINT</code>, termina o laço de forma limpa e imprime quantas voltas deu. Para o teste ser automático, o próprio programa envia o sinal a si mesmo depois de 3 voltas com <code>raise(SIGINT)</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="desafios">
+<h2><span class="rotulo">PARA IR ALÉM</span> Desafios integradores</h2>
+<p class="intro">Projetos maiores, que juntam vários módulos. Não há uma única resposta certa: o gabarito mostra um caminho.</p>
+<div class="questao desafio" id="d1">
+<span class="num">D1</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora de terminal</p>
+<p>Escreva uma calculadora de terminal com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada (<code>raiz 2</code>). Ela deve: (a) aceitar vírgula ou ponto como separador decimal; (b) guardar o último resultado em <code>ans</code>, utilizável na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário e texto que não é número com uma mensagem clara, <strong>sem encerrar o programa</strong>; (d) ter os comandos <code>hist</code> (histórico) e <code>sair</code>. Separe o núcleo (<code>calc.c</code> e <code>calc.h</code>, que não fazem entrada nem saída) da interface (<code>main.c</code>).</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+<div class="questao desafio" id="d2">
+<span class="num">D2</span>
+<div class="corpo">
+<p class="titulo">Um mini-shell</p>
+<p>Escreva um mini-shell que mostra um prompt, lê um comando com argumentos, executa-o num processo filho e espera o fim, e tem três comandos internos: <code>cd</code>, <code>historico</code> (os últimos 10 comandos, numa lista circular) e <code>sair</code>. Comandos inexistentes devem mostrar uma mensagem e devolver o prompt. Como extensão, implemente o redirecionamento <code>&gt; arquivo</code>.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+</section>
+<footer class="fim">
+<p><strong>Bom estudo e bons exercícios!</strong></p>
+<p>Dominando a Linguagem C em 1 Ano · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</footer>
+</body>
+</html>

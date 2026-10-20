@@ -156,6 +156,12 @@ ul.aulas .n { display: inline-block; min-width: 3em; font-weight: 700; color: va
 .questao .dica { color: var(--suave); font-size: .92em; }
 .questao .tipo { margin: 0 0 2px; color: var(--suave); font-size: .8em; text-transform: uppercase; letter-spacing: .06em; }
 
+/* a etiqueta ("calc.h:", "Entrada digitada:") não fica sozinha no fim da página */
+@media print { p:has(+ pre) { break-after: avoid; } }
+
+/* rótulo do bloco com a entrada digitada (stdin) de um programa */
+.rotulo-entrada { margin: 6px 0 2px; color: var(--suave); font-size: .85em; }
+
 /* captura de tela de um programa (a janela da calculadora) */
 figure.captura { margin: 12px 0; text-align: center; break-inside: avoid; }
 figure.captura img { max-width: 100%; height: auto; border: 1px solid var(--linha); border-radius: 4px; }

