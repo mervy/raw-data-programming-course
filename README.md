@@ -37,7 +37,7 @@ o `.md` em arquivos individuais.
 | Linguagem JavaScript | ✅ | ✅ | ✅ |
 | Linguagem Python | ✅ | ✅ | ✅ |
 | Linguagem Go | ✅ | ✅ | ✅ |
-| Linguagem PHP | ✅ | — | — |
+| Linguagem PHP | ✅ | ✅ | ✅ |
 | DevOps e Cloud | ✅ | — | — |
 
 Nomenclatura: `Curso - <Tecnologia>.md` para a conversa e
@@ -75,7 +75,7 @@ são `<div class="linhas" style="--n:5">` (5 linhas).
 Todo caderno termina com o desafio **"Uma calculadora, duas interfaces"**: o mesmo
 núcleo (sete operações, `ans`, erros que não derrubam o programa) usado por uma
 versão de terminal e por uma gráfica (JavaFX, página web servida em Go, tkinter,
-navegador). Em C, C++ e C#, a versão gráfica fica como extensão descrita no
+navegador, página web em PHP com sessão). Em C, C++ e C#, a versão gráfica fica como extensão descrita no
 gabarito (GTK ou raylib, raylib, Avalonia), sem código executado. O código dos gabaritos que traz quadro de **Saída** foi executado, e a
 saída mostrada é a real; as capturas das janelas ficam em `books/<curso>/img/`.
 
