@@ -1613,6 +1613,7 @@ all: $(PROG)
 $(PROG): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $^
 
+%.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $&lt;
 
 clean:
