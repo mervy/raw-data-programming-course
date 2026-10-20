@@ -16,8 +16,9 @@ de código.
   `# you asked` (o prompt, com `message time`) e `# claude response`
   (a resposta). Contém o plano do curso, os artigos e as correções pedidas ao
   longo da conversa.
-- **`.docx`** — cadernos prontos para o aluno: exercícios e respostas
-  comentadas, organizados por módulo.
+- **`books/<curso>/exercicios.html` e `respostas.html`** — cadernos para o
+  aluno: exercícios e respostas comentadas, organizados por módulo. O HTML é a
+  fonte (antes eram `.docx`); o estilo único está em `books/caderno.css`.
 
 A ideia de cada série: um "professor com mestrado em Programação" escreve
 ~52 artigos-aula (um por semana), nem longos nem curtos, para quem quer
@@ -29,18 +30,18 @@ o `.md` em arquivos individuais.
 
 | Curso | Conversa | Caderno de Exercícios | Caderno de Respostas |
 |---|:-:|:-:|:-:|
-| Linguagem C | ✅ | — | — |
-| Linguagem C++ | ✅ | — | — |
-| Linguagem C# | ✅ | — | — |
+| Linguagem C | ✅ | ✅ | ✅ |
+| Linguagem C++ | ✅ | ✅ | ✅ |
+| Linguagem C# | ✅ | ✅ | ✅ |
 | Linguagem Java | ✅ | ✅ | ✅ |
 | Linguagem JavaScript | ✅ | ✅ | ✅ |
 | Linguagem Python | ✅ | ✅ | ✅ |
 | Linguagem Go | ✅ | ✅ | ✅ |
-| Linguagem PHP | ✅ | — | — |
-| DevOps e Cloud | ✅ | — | — |
+| Linguagem PHP | ✅ | ✅ | ✅ |
+| DevOps e Cloud | ✅ | ✅ | ✅ |
 
 Nomenclatura: `Curso - <Tecnologia>.md` para a conversa e
-`Curso - <Tecnologia> - Caderno de Exercícios|Respostas.docx` para os cadernos.
+`books/<curso>/` para os cadernos.
 
 ## Do bruto ao site: banco em HTML e modelos
 
@@ -62,3 +63,28 @@ Padrões que aparecem nos modelos:
 - Acentuação: os cursos mais antigos (JavaScript, PHP, Python, Rust) usam
   entidades HTML (`&atilde;`, `&ccedil;`); os mais novos (C, C++, C#, DevOps)
   usam UTF-8 direto.
+
+## Cadernos (`books/`)
+
+Cada curso tem uma pasta com `exercicios.html` e `respostas.html`, no mesmo
+formato: capa, sumário, um `<section class="modulo">` por fase ou trilha e
+cada questão em `<div class="questao" id="qN">` (no JavaScript, numerado por
+módulo: `id="q3-2"` é o exercício 3.2). As linhas pautadas para a resposta à mão
+são `<div class="linhas" style="--n:5">` (5 linhas).
+
+Todo caderno termina com o desafio **"Uma calculadora, duas interfaces"**: o mesmo
+núcleo (sete operações, `ans`, erros que não derrubam o programa) usado por uma
+versão de terminal e por uma gráfica (JavaFX, página web servida em Go, tkinter,
+navegador, página web em PHP com sessão). Em C, C++, C# e DevOps (Bash), a versão gráfica fica como extensão descrita no
+gabarito (GTK ou raylib, raylib, Avalonia, whiptail), sem código executado. O código dos gabaritos que traz quadro de **Saída** foi executado, e a
+saída mostrada é a real; as capturas das janelas ficam em `books/<curso>/img/`.
+
+O PDF que vai para download no site é gerado do HTML, com o Chrome em modo
+headless (no WSL, usa o Chrome do Windows):
+
+```bash
+books/gerar-pdf.sh          # todos os cursos
+books/gerar-pdf.sh java     # só um
+```
+
+Os PDFs saem em `books/pdf/`, que não é versionada.

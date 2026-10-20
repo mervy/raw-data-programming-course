@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dominando o Python em 1 Ano · Caderno de Exercícios</title>
+<link rel="stylesheet" href="../caderno.css">
+</head>
+<body class="caderno exercicios">
+<header class="capa">
+<p class="serie">DOMINANDO O PYTHON EM 1 ANO</p>
+<h1>Caderno de Exercícios</h1>
+<p class="subtitulo">52 aulas de prática, do #01 ao #52</p>
+<p class="subtitulo">Python 3.13 · 9 módulos · 80 questões · 1 desafio integrador</p>
+<p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</header>
+<div class="ficha"><span>Nome do aluno:</span><span>Início:</span><span>Término:</span></div>
+<aside class="nota">
+<p><strong>Como usar este caderno</strong></p>
+<p>Cada módulo reúne um bloco de aulas do curso, com a lista dos artigos que ele cobre. As questões seguem a ordem dos artigos; as marcadas como desafio, no fim de cada módulo, juntam vários assuntos. Escreva e rode cada programa: o interpretador é o melhor corretor.</p>
+<p>Tente sempre resolver sozinho antes de abrir o <strong>Caderno de Respostas</strong>. É no erro que o conhecimento fixa.</p>
+</aside>
+<h2 class="sumario-titulo">Sumário</h2>
+<table class="sumario">
+<thead><tr><th>Módulo</th><th>Tema</th><th>Aulas</th><th>Questões</th></tr></thead>
+<tbody>
+<tr><td>MÓDULO 1</td><td>Fundamentos da Linguagem</td><td>#01–#06</td><td>Q1–Q10</td></tr>
+<tr><td>MÓDULO 2</td><td>Estruturas de Dados e Algoritmos</td><td>#07–#12</td><td>Q11–Q20</td></tr>
+<tr><td>MÓDULO 3</td><td>Orientação a Objetos</td><td>#13–#18</td><td>Q21–Q30</td></tr>
+<tr><td>MÓDULO 4</td><td>Arquivos, I/O e Banco de Dados</td><td>#19–#24</td><td>Q31–Q40</td></tr>
+<tr><td>MÓDULO 5</td><td>Python para Web</td><td>#25–#30</td><td>Q41–Q50</td></tr>
+<tr><td>MÓDULO 6</td><td>Automação e Scripts</td><td>#31–#34</td><td>Q51–Q56</td></tr>
+<tr><td>MÓDULO 7</td><td>Data Science e Machine Learning</td><td>#35–#42</td><td>Q57–Q66</td></tr>
+<tr><td>MÓDULO 8</td><td>Testes, Qualidade e Boas Práticas</td><td>#43–#47</td><td>Q67–Q74</td></tr>
+<tr><td>MÓDULO 9</td><td>Projetos Reais e Carreira</td><td>#48–#52</td><td>Q75–Q80</td></tr>
+<tr><td>DESAFIOS</td><td>Projetos integradores</td><td>todas</td><td>D1</td></tr>
+</tbody>
+</table>
+<aside class="legenda">
+<p>Legenda: <code>assim</code> indica código. As linhas pautadas são para a sua resposta; nas questões de código, use também o computador: <strong>todo programa deve ser executado</strong>. As dicas ajudam a começar, não entregam a resposta.</p>
+</aside>
+<section class="modulo" id="modulo-1">
+<h2><span class="rotulo">MÓDULO 1</span> Fundamentos da Linguagem</h2>
+<p class="aulas-titulo">Artigos 01 a 06</p>
+<ul class="aulas">
+<li><span class="n">#01</span> A História do Python e os Primeiros Passos</li>
+<li><span class="n">#02</span> Variáveis e Tipos de Dados</li>
+<li><span class="n">#03</span> Operadores e Expressões</li>
+<li><span class="n">#04</span> Estruturas de Controle: if, elif e else</li>
+<li><span class="n">#05</span> Laços de Repetição: for e while</li>
+<li><span class="n">#06</span> Funções: definição, parâmetros e escopo</li>
+</ul>
+<div class="questao" id="q1">
+<span class="num">Q1</span>
+<div class="corpo">
+<p>Explique com suas próprias palavras o que é o Zen do Python e cite 3 de seus princípios.</p>
+<p class="dica"><strong>Dica:</strong> Execute: python3 -c "import this"</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q2">
+<span class="num">Q2</span>
+<div class="corpo">
+<p>Qual a diferença entre tipagem dinâmica e tipagem estática? Dê um exemplo em Python.</p>
+<p class="dica"><strong>Dica:</strong> Pense em como Python atribui tipos automaticamente.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q3">
+<span class="num">Q3</span>
+<div class="corpo">
+<p>O que o código abaixo imprime? Justifique.</p>
+<pre class="codigo"><code>x = 10
+y = 3
+print(x // y)
+print(x % y)
+print(x ** y)
+print(x / y)</code></pre>
+<p class="dica"><strong>Dica:</strong> Analise cada linha antes de executar.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q4">
+<span class="num">Q4</span>
+<div class="corpo">
+<p>Sem executar, classifique cada valor abaixo como <em>truthy</em> ou <em>falsy</em>. Depois rode e explique os que você errou.</p>
+<pre class="codigo"><code>0    0.0    ""    "0"    " "    []    [0]    [[]]    None    set()    "False"    float("nan")</code></pre>
+<p class="dica"><strong>Dica:</strong> Só coleções vazias, zeros, <code>None</code> e <code>False</code> são falsy.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q5">
+<span class="num">Q5</span>
+<div class="corpo">
+<p>O que o trecho abaixo imprime, e por quê? Em seguida, explique o <code>else</code> do <code>for</code> e use-o para escrever <code>eh_primo(n)</code>, listando os primos menores que 30.</p>
+<pre class="codigo"><code>for i in range(3):
+    pass
+print(i)</code></pre>
+<p class="dica"><strong>Dica:</strong> O <code>else</code> do laço roda quando ele termina sem <code>break</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q6">
+<span class="num">Q6</span>
+<div class="corpo">
+<p>A função abaixo tem um dos bugs mais famosos do Python. Mostre o que acontece ao chamá-la duas vezes seguidas, explique a causa e corrija.</p>
+<pre class="codigo"><code>def adicionar(item, lista=[]):
+    lista.append(item)
+    return lista</code></pre>
+<p class="dica"><strong>Dica:</strong> Quando o valor padrão de um parâmetro é criado?</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q7">
+<span class="num">Q7</span>
+<div class="corpo">
+<p>O que é escopo LEGB? Escreva um exemplo que demonstre um conflito de escopo.</p>
+<p class="dica"><strong>Dica:</strong> L=Local, E=Enclosing, G=Global, B=Built-in</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q8">
+<span class="num">Q8</span>
+<div class="corpo">
+<p>Qual a diferença entre '==' e 'is'? Quando usar cada um? Dê exemplos.</p>
+<p class="dica"><strong>Dica:</strong> is compara identidade de objeto na memória.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q9">
+<span class="num">Q9</span>
+<div class="corpo">
+<p>Escreva uma função com *args e **kwargs que receba qualquer número de argumentos e os imprima formatados.</p>
+<p class="dica"><strong>Dica:</strong> Explore args como tupla e kwargs como dicionário.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao desafio" id="q10">
+<span class="num">Q10</span>
+<div class="corpo">
+<p>Implemente a sequência de Fibonacci usando recursão e compare com a versão iterativa. Qual é mais eficiente? Por quê?</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="modulo-2">
+<h2><span class="rotulo">MÓDULO 2</span> Estruturas de Dados e Algoritmos</h2>
+<p class="aulas-titulo">Artigos 07 a 12</p>
+<ul class="aulas">
+<li><span class="n">#07</span> Listas: criação, manipulação e métodos</li>
+<li><span class="n">#08</span> Tuplas e Sets: imutabilidade e unicidade</li>
+<li><span class="n">#09</span> Dicionários: chave, valor e as estruturas do mundo real</li>
+<li><span class="n">#10</span> Strings em Profundidade: métodos, formatação e expressões regulares</li>
+<li><span class="n">#11</span> Algoritmos de Ordenação e Busca</li>
+<li><span class="n">#12</span> Recursão e Estruturas de Dados Avançadas: pilhas, filas e árvores</li>
+</ul>
+<div class="questao" id="q11">
+<span class="num">Q11</span>
+<div class="corpo">
+<p>Qual a diferença entre list.sort() e sorted()? Em quais situações você preferiria cada um?</p>
+<p class="dica"><strong>Dica:</strong> Uma modifica a lista in-place, a outra retorna nova lista.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q12">
+<span class="num">Q12</span>
+<div class="corpo">
+<p>Reescreva o código abaixo usando list comprehension em uma única linha.</p>
+<pre class="codigo"><code>resultado = []
+for n in range(1, 21):
+    if n % 2 == 0:
+        resultado.append(n ** 2)</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q13">
+<span class="num">Q13</span>
+<div class="corpo">
+<p>O que acontece ao tentar modificar uma tupla? Por que esse comportamento é útil?</p>
+<p class="dica"><strong>Dica:</strong> Tente: t = (1,2,3); t[0] = 10</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q14">
+<span class="num">Q14</span>
+<div class="corpo">
+<p>Use um dicionário para contar a frequência de cada caractere na string abaixo.</p>
+<pre class="codigo"><code>frase = "python e uma linguagem incrivel"</code></pre>
+<p class="dica"><strong>Dica:</strong> Use dict.get() com valor padrão 0.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q15">
+<span class="num">Q15</span>
+<div class="corpo">
+<p>Explique com um exemplo prático a diferença entre set.remove() e set.discard().</p>
+<p class="dica"><strong>Dica:</strong> O que acontece quando o elemento não existe?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q16">
+<span class="num">Q16</span>
+<div class="corpo">
+<p>Implemente a busca binária iterativa. Qual sua complexidade de tempo e por quê?</p>
+<p class="dica"><strong>Dica:</strong> Divida o espaço de busca pela metade a cada iteração.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q17">
+<span class="num">Q17</span>
+<div class="corpo">
+<p>Escreva uma função que use uma pilha (list) para verificar se uma expressão tem parênteses balanceados.</p>
+<p class="dica"><strong>Dica:</strong> Push ao abrir, pop ao fechar. Compara pares.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q18">
+<span class="num">Q18</span>
+<div class="corpo">
+<p>Escreva uma expressão regular que valide e-mails no formato usuario@dominio.com.</p>
+<p class="dica"><strong>Dica:</strong> Use o módulo re. Considere pontos, hífens e underscores.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q19">
+<span class="num">Q19</span>
+<div class="corpo">
+<p>Explique o funcionamento do Merge Sort com um exemplo passo a passo para a lista [5, 2, 8, 1, 9].</p>
+<p class="dica"><strong>Dica:</strong> Divisão e conquista recursiva.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao desafio" id="q20">
+<span class="num">Q20</span>
+<div class="corpo">
+<p>Implemente uma Árvore Binária de Busca com os métodos inserir(), buscar() e percurso_em_ordem(). Demonstre com os valores [10, 5, 15, 3, 7, 20].</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="modulo-3">
+<h2><span class="rotulo">MÓDULO 3</span> Orientação a Objetos</h2>
+<p class="aulas-titulo">Artigos 13 a 18</p>
+<ul class="aulas">
+<li><span class="n">#13</span> Classes e Objetos: os fundamentos da Orientação a Objetos</li>
+<li><span class="n">#14</span> Herança e Polimorfismo</li>
+<li><span class="n">#15</span> Interfaces, Protocolos e Composição</li>
+<li><span class="n">#16</span> Decoradores e Metaprogramação</li>
+<li><span class="n">#17</span> Tratamento de Exceções e Erros</li>
+<li><span class="n">#18</span> Módulos, Pacotes e Organização de Projetos</li>
+</ul>
+<div class="questao" id="q21">
+<span class="num">Q21</span>
+<div class="corpo">
+<p>O que é encapsulamento? Qual a diferença entre atributo com _ e com __ em Python?</p>
+<p class="dica"><strong>Dica:</strong> Name mangling: __attr vira _Classe__attr.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q22">
+<span class="num">Q22</span>
+<div class="corpo">
+<p>Crie uma classe ContaBancaria com saldo privado, métodos depositar(), sacar() e saldo (property). Valide valores negativos.</p>
+<p class="dica"><strong>Dica:</strong> Use @property para controle de acesso ao saldo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q23">
+<span class="num">Q23</span>
+<div class="corpo">
+<p>O que é o método __repr__ e quando ele é chamado? Como difere de __str__?</p>
+<p class="dica"><strong>Dica:</strong> repr() vs str() — quando cada um é usado?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q24">
+<span class="num">Q24</span>
+<div class="corpo">
+<p>Explique o princípio de Liskov e mostre um exemplo de violação com herança em Python.</p>
+<p class="dica"><strong>Dica:</strong> Subclasse deve poder substituir a superclasse.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q25">
+<span class="num">Q25</span>
+<div class="corpo">
+<p>Implemente um decorador @medir_tempo que calcula e imprime o tempo de execução de qualquer função.</p>
+<p class="dica"><strong>Dica:</strong> Use time.perf_counter() e @wraps.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q26">
+<span class="num">Q26</span>
+<div class="corpo">
+<p>Qual a diferença entre @classmethod e @staticmethod? Crie um exemplo com cada um na mesma classe.</p>
+<p class="dica"><strong>Dica:</strong> classmethod recebe cls; staticmethod não recebe self nem cls.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q27">
+<span class="num">Q27</span>
+<div class="corpo">
+<p>Crie uma hierarquia de exceções customizadas para um sistema de pagamentos: ErroBase, ErroValidacao, ErroSaldoInsuficiente, ErroCartaoBloqueado.</p>
+<p class="dica"><strong>Dica:</strong> Herde de Exception. Adicione atributos relevantes.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q28">
+<span class="num">Q28</span>
+<div class="corpo">
+<p>Quando usar composição ao invés de herança? Reescreva o exemplo abaixo usando composição.</p>
+<pre class="codigo"><code>class Motor(Veiculo):  # errado!
+    def ligar(self): ...
+    def desligar(self): ...</code></pre>
+<p class="dica"><strong>Dica:</strong> Relação 'tem um' → composição. 'é um' → herança.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q29">
+<span class="num">Q29</span>
+<div class="corpo">
+<p>Use @dataclass para criar uma classe Produto com nome, preco e estoque. Adicione um método desconto() e valide preco &gt;= 0 em __post_init__.</p>
+<p class="dica"><strong>Dica:</strong> from dataclasses import dataclass, field</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao desafio" id="q30">
+<span class="num">Q30</span>
+<div class="corpo">
+<p>Implemente o padrão Singleton usando um decorator. Em seguida, crie uma classe ConfiguracaoApp que use o decorator e demonstre que múltiplas instâncias são o mesmo objeto.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="modulo-4">
+<h2><span class="rotulo">MÓDULO 4</span> Arquivos, I/O e Banco de Dados</h2>
+<p class="aulas-titulo">Artigos 19 a 24</p>
+<ul class="aulas">
+<li><span class="n">#19</span> Leitura e Escrita de Arquivos</li>
+<li><span class="n">#20</span> Trabalhando com Datas e Horas</li>
+<li><span class="n">#21</span> Banco de Dados com SQLite e SQLAlchemy</li>
+<li><span class="n">#22</span> MySQL, MariaDB, PostgreSQL e MongoDB</li>
+<li><span class="n">#23</span> Consumindo APIs REST com requests e httpx</li>
+<li><span class="n">#24</span> Concorrência: threads, processos e async/await</li>
+</ul>
+<div class="questao" id="q31">
+<span class="num">Q31</span>
+<div class="corpo">
+<p>Qual a vantagem de usar 'with open(...)' em vez de open()/close() manualmente? O que acontece se uma exceção ocorrer?</p>
+<p class="dica"><strong>Dica:</strong> O context manager garante fechamento mesmo com erros.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q32">
+<span class="num">Q32</span>
+<div class="corpo">
+<p>Escreva um script que leia um arquivo CSV de alunos (nome, nota) e gere um relatório JSON com média, maior e menor nota.</p>
+<p class="dica"><strong>Dica:</strong> Use csv.DictReader e json.dump com indent=2.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q33">
+<span class="num">Q33</span>
+<div class="corpo">
+<p>O que é um datetime 'naive' vs 'aware'? Por que essa distinção importa em sistemas distribuídos?</p>
+<p class="dica"><strong>Dica:</strong> Pense em fusos horários e servidores em diferentes regiões.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q34">
+<span class="num">Q34</span>
+<div class="corpo">
+<p>Escreva uma query SQL que liste, <strong>para cada turma</strong>, os 5 alunos com maior média de notas, com a posição de cada um na turma.</p>
+<p class="dica"><strong>Dica:</strong> Com <code>LIMIT 5</code> a lista inteira para em 5 linhas; para cortar dentro de cada turma, use uma função de janela.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q35">
+<span class="num">Q35</span>
+<div class="corpo">
+<p>O que é SQL Injection? Como o uso de parâmetros (?) previne esse ataque? Dê um exemplo do ataque e da prevenção.</p>
+<p class="dica"><strong>Dica:</strong> Nunca concatene strings para montar SQL!</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q36">
+<span class="num">Q36</span>
+<div class="corpo">
+<p>Explique a diferença entre threading, multiprocessing e asyncio. Para cada um, cite um caso de uso ideal.</p>
+<p class="dica"><strong>Dica:</strong> I/O vs CPU vs alta concorrência.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q37">
+<span class="num">Q37</span>
+<div class="corpo">
+<p>Escreva uma função assíncrona que busque dados de 5 URLs em paralelo usando asyncio.gather() e httpx.</p>
+<p class="dica"><strong>Dica:</strong> Use async with httpx.AsyncClient() as client.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q38">
+<span class="num">Q38</span>
+<div class="corpo">
+<p>O que é o padrão Repository? Escreva uma interface (Protocol) para um repositório de alunos com métodos salvar(), buscar(), listar() e deletar().</p>
+<p class="dica"><strong>Dica:</strong> from typing import Protocol</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q39">
+<span class="num">Q39</span>
+<div class="corpo">
+<p>Qual a diferença entre MongoDB e PostgreSQL? Em que situações você escolheria cada um?</p>
+<p class="dica"><strong>Dica:</strong> Documental vs relacional — pense em esquema e queries.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao desafio" id="q40">
+<span class="num">Q40</span>
+<div class="corpo">
+<p>Implemente um gerenciador de contexto personalizado usando a classe __enter__/__exit__ que mede o tempo de execução de um bloco de código e registra em arquivo de log.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="modulo-5">
+<h2><span class="rotulo">MÓDULO 5</span> Python para Web</h2>
+<p class="aulas-titulo">Artigos 25 a 30</p>
+<ul class="aulas">
+<li><span class="n">#25</span> Introdução ao Desenvolvimento Web com Flask</li>
+<li><span class="n">#26</span> FastAPI: APIs modernas com tipagem e documentação automática</li>
+<li><span class="n">#27</span> Autenticação e Segurança em APIs Python</li>
+<li><span class="n">#28</span> Templates HTML com Jinja2 e Deploy com Docker</li>
+<li><span class="n">#29</span> WebSockets e Comunicação em Tempo Real em Python</li>
+<li><span class="n">#30</span> Celery: Filas de Tarefas e Processamento Assíncrono</li>
+</ul>
+<div class="questao" id="q41">
+<span class="num">Q41</span>
+<div class="corpo">
+<p>Quais são os princípios REST? Uma API que usa POST para tudo é RESTful? Justifique.</p>
+<p class="dica"><strong>Dica:</strong> GET=buscar, POST=criar, PUT=substituir, PATCH=atualizar, DELETE=remover.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q42">
+<span class="num">Q42</span>
+<div class="corpo">
+<p>Crie um endpoint FastAPI GET /alunos/{id} que retorne 200 com o aluno ou 404 com mensagem de erro. Use Pydantic para o schema de resposta.</p>
+<p class="dica"><strong>Dica:</strong> HTTPException(status_code=404, detail=...)</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q43">
+<span class="num">Q43</span>
+<div class="corpo">
+<p>O que é JWT? Quais são suas três partes? Por que não armazenar dados sensíveis no payload?</p>
+<p class="dica"><strong>Dica:</strong> Header.Payload.Signature — o payload é apenas codificado, não criptografado.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q44">
+<span class="num">Q44</span>
+<div class="corpo">
+<p>Explique o que é Dependency Injection no FastAPI. Escreva uma dependência get_db() que fornece uma sessão SQLAlchemy.</p>
+<p class="dica"><strong>Dica:</strong> Depends() injeta a dependência automaticamente.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q45">
+<span class="num">Q45</span>
+<div class="corpo">
+<p>Qual a diferença entre Flask e FastAPI? Cite 3 vantagens de cada um.</p>
+<p class="dica"><strong>Dica:</strong> Performance, async, documentação automática, maturidade...</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q46">
+<span class="num">Q46</span>
+<div class="corpo">
+<p>O que é CORS? Por que uma API precisa configurar CORS? Escreva a configuração para permitir apenas http://localhost:3000.</p>
+<p class="dica"><strong>Dica:</strong> Cross-Origin Resource Sharing — segurança do browser.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q47">
+<span class="num">Q47</span>
+<div class="corpo">
+<p>O que são WebSockets e em que diferem do HTTP convencional? Cite 3 casos de uso.</p>
+<p class="dica"><strong>Dica:</strong> Full-duplex vs request-response.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q48">
+<span class="num">Q48</span>
+<div class="corpo">
+<p>Explique o que é o Celery e qual problema ele resolve. Qual a diferença entre broker e backend?</p>
+<p class="dica"><strong>Dica:</strong> Processamento assíncrono fora do ciclo request-response.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q49">
+<span class="num">Q49</span>
+<div class="corpo">
+<p>Escreva um Dockerfile multi-stage para uma aplicação FastAPI. Explique por que multi-stage reduz o tamanho da imagem.</p>
+<p class="dica"><strong>Dica:</strong> FROM ... AS builder / FROM ... AS runtime</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao desafio" id="q50">
+<span class="num">Q50</span>
+<div class="corpo">
+<p>Projete uma API REST completa para um sistema de biblioteca: endpoints para livros, usuários e empréstimos. Desenhe os schemas Pydantic, as rotas e o modelo de banco. Implemente autenticação JWT.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="modulo-6">
+<h2><span class="rotulo">MÓDULO 6</span> Automação e Scripts</h2>
+<p class="aulas-titulo">Artigos 31 a 34</p>
+<ul class="aulas">
+<li><span class="n">#31</span> Automação com Python: arquivos, pastas e sistema operacional</li>
+<li><span class="n">#32</span> Web Scraping com BeautifulSoup e Selenium</li>
+<li><span class="n">#33</span> Automação de Planilhas e PDFs</li>
+<li><span class="n">#34</span> Envio de E-mails e Integração com APIs de Comunicação</li>
+</ul>
+<div class="questao" id="q51">
+<span class="num">Q51</span>
+<div class="corpo">
+<p>Escreva um script que organize arquivos de uma pasta por extensão, movendo para subpastas (Imagens/, Documentos/, etc.). Adicione modo de simulação.</p>
+<p class="dica"><strong>Dica:</strong> Use pathlib e shutil. simular=True só exibe o que faria.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q52">
+<span class="num">Q52</span>
+<div class="corpo">
+<p>Qual a diferença entre BeautifulSoup e Selenium para web scraping? Quando usar cada um?</p>
+<p class="dica"><strong>Dica:</strong> HTML estático vs JavaScript dinâmico.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q53">
+<span class="num">Q53</span>
+<div class="corpo">
+<p>Escreva um script de scraping que colete título e preço dos 5 primeiros livros de books.toscrape.com.</p>
+<p class="dica"><strong>Dica:</strong> Use requests + BeautifulSoup. Respeite robots.txt.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q54">
+<span class="num">Q54</span>
+<div class="corpo">
+<p>Crie um script com argparse que aceite --entrada (pasta), --saida (pasta) e --formato (csv ou json) e gere relatório de arquivos.</p>
+<p class="dica"><strong>Dica:</strong> Use argparse com argumentos obrigatórios e opcionais.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q55">
+<span class="num">Q55</span>
+<div class="corpo">
+<p>Escreva o código para enviar um e-mail HTML com anexo usando smtplib. Quais cuidados de segurança são necessários?</p>
+<p class="dica"><strong>Dica:</strong> Use MIMEMultipart, MIMEText e MIMEBase. Senha em variável de ambiente.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao desafio" id="q56">
+<span class="num">Q56</span>
+<div class="corpo">
+<p>Crie um monitor de preços que: (1) coleta preços de 3 produtos em sites reais, (2) salva histórico em JSON, (3) envia alerta via e-mail quando o preço cai abaixo de um threshold configurável.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="modulo-7">
+<h2><span class="rotulo">MÓDULO 7</span> Data Science e Machine Learning</h2>
+<p class="aulas-titulo">Artigos 35 a 42</p>
+<ul class="aulas">
+<li><span class="n">#35</span> Introdução ao Data Science com Python</li>
+<li><span class="n">#36</span> Machine Learning com scikit-learn</li>
+<li><span class="n">#37</span> Redes Neurais com TensorFlow e Keras</li>
+<li><span class="n">#38</span> Processamento de Linguagem Natural (NLP)</li>
+<li><span class="n">#39</span> Visão Computacional com OpenCV e PIL</li>
+<li><span class="n">#40</span> Análise de Dados com Pandas Avançado e Plotly</li>
+<li><span class="n">#41</span> Séries Temporais e Previsão com Prophet e statsmodels</li>
+<li><span class="n">#42</span> MLOps: Versionamento de Modelos, MLflow e Deploy de ML</li>
+</ul>
+<div class="questao" id="q57">
+<span class="num">Q57</span>
+<div class="corpo">
+<p>Qual a diferença entre média, mediana e moda? Em qual situação a mediana é mais representativa do que a média?</p>
+<p class="dica"><strong>Dica:</strong> Pense em distribuições com outliers.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q58">
+<span class="num">Q58</span>
+<div class="corpo">
+<p>O código abaixo tem um erro clássico de pandas. Identifique e corrija.</p>
+<pre class="codigo"><code>df_alunos = df[df['nota'] &gt;= 6]
+df_alunos['aprovado'] = True  # bug!</code></pre>
+<p class="dica"><strong>Dica:</strong> SettingWithCopyWarning — use .loc para atribuição.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q59">
+<span class="num">Q59</span>
+<div class="corpo">
+<p>Explique overfitting e underfitting. Como cross-validation ajuda a detectar overfitting?</p>
+<p class="dica"><strong>Dica:</strong> Bias-variance tradeoff.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q60">
+<span class="num">Q60</span>
+<div class="corpo">
+<p>O que é TF-IDF? Por que é superior a simples contagem de palavras para classificação de texto?</p>
+<p class="dica"><strong>Dica:</strong> TF=frequência no doc, IDF=raridade no corpus.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q61">
+<span class="num">Q61</span>
+<div class="corpo">
+<p>Escreva um pipeline scikit-learn completo: StandardScaler + RandomForestClassifier + GridSearchCV para um dataset de classificação.</p>
+<p class="dica"><strong>Dica:</strong> Pipeline([('scaler', ...), ('clf', ...)]) encadeia pré-processamento e modelo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q62">
+<span class="num">Q62</span>
+<div class="corpo">
+<p>O que é a Curva ROC e o AUC? Por que AUC é melhor que acurácia para datasets desbalanceados?</p>
+<p class="dica"><strong>Dica:</strong> Considera todos os limiares de classificação.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q63">
+<span class="num">Q63</span>
+<div class="corpo">
+<p>Qual a diferença entre Batch Normalization e Dropout em redes neurais? Quando usar cada um?</p>
+<p class="dica"><strong>Dica:</strong> BN normaliza ativações; Dropout desativa neurônios aleatoriamente.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q64">
+<span class="num">Q64</span>
+<div class="corpo">
+<p>O que é Transfer Learning? Explique Fine-tuning. Quando faz sentido congelar as camadas da base?</p>
+<p class="dica"><strong>Dica:</strong> Modelos pré-treinados como MobileNet, BERT, GPT-2.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q65">
+<span class="num">Q65</span>
+<div class="corpo">
+<p>O que é MLflow? Cite 5 coisas que ele rastreia automaticamente. O que é o Model Registry?</p>
+<p class="dica"><strong>Dica:</strong> Experimentos, parâmetros, métricas, artefatos, modelos.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao desafio" id="q66">
+<span class="num">Q66</span>
+<div class="corpo">
+<p>Crie um pipeline completo de análise de sentimentos: (1) escreva 20 reviews de produtos, metade positivas e metade negativas; (2) pré-processe o texto (minúsculas, sem acentos, sem pontuação e sem <em>stopwords</em>); (3) vetorize com TF-IDF; (4) treine uma regressão logística; (5) avalie com F1 e matriz de confusão. O que o resultado diz sobre o tamanho do conjunto de dados?</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="modulo-8">
+<h2><span class="rotulo">MÓDULO 8</span> Testes, Qualidade e Boas Práticas</h2>
+<p class="aulas-titulo">Artigos 43 a 47</p>
+<ul class="aulas">
+<li><span class="n">#43</span> Testes com pytest: fixtures, mocks e cobertura</li>
+<li><span class="n">#44</span> Qualidade de Código: linting, type hints e mypy</li>
+<li><span class="n">#45</span> CI/CD com GitHub Actions</li>
+<li><span class="n">#46</span> Logging, Monitoramento e Observabilidade</li>
+<li><span class="n">#47</span> Design Patterns em Python</li>
+</ul>
+<div class="questao" id="q67">
+<span class="num">Q67</span>
+<div class="corpo">
+<p>O que é o padrão AAA em testes? Escreva um teste pytest para a função calcular_media() que testa o caso de lista vazia.</p>
+<p class="dica"><strong>Dica:</strong> Arrange / Act / Assert.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q68">
+<span class="num">Q68</span>
+<div class="corpo">
+<p>O que são fixtures no pytest? Qual a diferença de escopo function vs session? Escreva um exemplo.</p>
+<p class="dica"><strong>Dica:</strong> scope='function' recria a cada teste; 'session' cria uma vez.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q69">
+<span class="num">Q69</span>
+<div class="corpo">
+<p>O que é Mock? Escreva um teste que usa mocker.patch para simular o envio de e-mail em uma função de cadastro.</p>
+<p class="dica"><strong>Dica:</strong> Isola dependências externas dos testes unitários.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q70">
+<span class="num">Q70</span>
+<div class="corpo">
+<p>Escreva 5 type hints diferentes usando recursos modernos do Python 3.10+: union com |, list[] sem List, dict[] sem Dict.</p>
+<p class="dica"><strong>Dica:</strong> from __future__ import annotations pode ajudar.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q71">
+<span class="num">Q71</span>
+<div class="corpo">
+<p>O que detecta cada ferramenta: ruff, black, mypy e bandit? Qual a ordem recomendada para rodar em um pipeline CI?</p>
+<p class="dica"><strong>Dica:</strong> Linting, formatação, tipos, segurança.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q72">
+<span class="num">Q72</span>
+<div class="corpo">
+<p>Escreva um workflow GitHub Actions que rode em pull_request: instale dependências, execute ruff, mypy e pytest com cobertura.</p>
+<p class="dica"><strong>Dica:</strong> jobs &gt; steps &gt; run.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q73">
+<span class="num">Q73</span>
+<div class="corpo">
+<p>O que são os três pilares da observabilidade? Qual a diferença entre log estruturado (JSON) e log em texto puro?</p>
+<p class="dica"><strong>Dica:</strong> Logs, métricas e traces.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao desafio" id="q74">
+<span class="num">Q74</span>
+<div class="corpo">
+<p>Implemente os padrões Strategy, Observer e Command em um sistema de processamento de pedidos: Strategy para cálculo de frete, Observer para notificações, Command para histórico com undo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="modulo-9">
+<h2><span class="rotulo">MÓDULO 9</span> Projetos Reais e Carreira</h2>
+<p class="aulas-titulo">Artigos 48 a 52</p>
+<ul class="aulas">
+<li><span class="n">#48</span> Projeto 1: API REST Completa com FastAPI, PostgreSQL e Docker</li>
+<li><span class="n">#49</span> Projeto 2: Pipeline de Data Science do Zero ao Deploy</li>
+<li><span class="n">#50</span> Projeto 3: Bot de Automação com Scraping e Notificações</li>
+<li><span class="n">#51</span> Projeto 4: Dashboard Analítico com Dash e Banco de Dados Real</li>
+<li><span class="n">#52</span> Carreira: portfólio, GitHub, open source e o mercado Python</li>
+</ul>
+<div class="questao" id="q75">
+<span class="num">Q75</span>
+<div class="corpo">
+<p>Projete a arquitetura de uma API REST de e-commerce: entidades, endpoints principais, autenticação e banco de dados.</p>
+<p class="dica"><strong>Dica:</strong> Pense em Produto, Carrinho, Pedido, Usuário.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q76">
+<span class="num">Q76</span>
+<div class="corpo">
+<p>O que é o padrão Repository e por que ele facilita testes? Qual a diferença entre Repository e DAO?</p>
+<p class="dica"><strong>Dica:</strong> Repository fala a linguagem do domínio; DAO fala SQL.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q77">
+<span class="num">Q77</span>
+<div class="corpo">
+<p>Escreva um README.md profissional para um projeto fictício 'task-api'. Inclua badges, instalação, uso e arquitetura.</p>
+<p class="dica"><strong>Dica:</strong> Siga a estrutura do artigo 52: badges, demo, quick start, arquitetura.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao" id="q78">
+<span class="num">Q78</span>
+<div class="corpo">
+<p>Quais são as 5 perguntas técnicas mais comuns em entrevistas Python? Responda cada uma em 2-3 frases.</p>
+<p class="dica"><strong>Dica:</strong> GIL, mutabilidade, decoradores, generators, *args/**kwargs.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q79">
+<span class="num">Q79</span>
+<div class="corpo">
+<p>Implemente o algoritmo Two Sum em Python com complexidade O(n) usando hash map. Explique a solução.</p>
+<p class="dica"><strong>Dica:</strong> Para cada número, verifique se o complemento já foi visto.</p>
+</div>
+</div>
+<div class="linhas" style="--n:10"></div>
+<div class="questao desafio" id="q80">
+<span class="num">Q80</span>
+<div class="corpo">
+<p></p>
+<ol><li>FastAPI com CRUD completo (Criar, Listar, Atualizar, Deletar tarefas)</li><li>PostgreSQL via SQLAlchemy com migrations Alembic</li><li>Autenticação JWT (registro, login, refresh token)</li><li>Testes com pytest cobrindo todos os endpoints (mínimo 80%)</li><li>Dockerfile + docker-compose com PostgreSQL</li><li>GitHub Actions executando lint + testes a cada push</li><li>README.md profissional com instruções de instalação e uso</li></ol>
+<p>Projete e implemente um sistema completo de gestão de tarefas (TODO API) com:</p>
+<p><strong>Este é o exercício que vai para o seu portfólio.</strong></p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="desafios">
+<h2><span class="rotulo">PARA IR ALÉM</span> Desafios integradores</h2>
+<p class="intro">Projetos maiores, que juntam vários módulos. Não há uma única resposta certa.</p>
+<div class="questao desafio" id="d1">
+<span class="num">D1</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora, duas interfaces</p>
+<p>Escreva uma calculadora com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada. Ela deve: (a) fazer as contas com <code>decimal.Decimal</code>, para que <code>0,1 + 0,2</code> dê exatamente <code>0,3</code>, aceitando vírgula ou ponto e limitando o resultado a 16 dígitos significativos; (b) guardar o último resultado em <code>ans</code>, que pode ser usado na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário e texto que não é número com uma exceção própria e uma mensagem clara, <strong>sem encerrar o programa</strong>. Escreva o núcleo num módulo que não sabe nada de entrada e saída, e reaproveite-o em duas interfaces: uma de <strong>terminal</strong> (com os comandos <code>hist</code> e <code>sair</code>) e uma <strong>gráfica</strong> com <code>tkinter</code>, com teclado na tela, visor e histórico.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+
+</section>
+<footer class="fim">
+<p><strong>Bom estudo e bons exercícios!</strong></p>
+<p>Dominando o Python em 1 Ano · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</footer>
+</body>
+</html>

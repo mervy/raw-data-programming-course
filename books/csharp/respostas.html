@@ -1,0 +1,2507 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Do Console ao Jogo Online: C# em 1 Ano · Caderno de Respostas</title>
+<link rel="stylesheet" href="../caderno.css">
+</head>
+<body class="caderno respostas">
+<header class="capa">
+<p class="serie">DO CONSOLE AO JOGO ONLINE: C# EM 1 ANO</p>
+<h1>Caderno de Respostas</h1>
+<p class="subtitulo">Gabarito comentado: 73 aulas de prática, do #01 ao #73</p>
+<p class="subtitulo">C# 14 · .NET 10 · 10 módulos · 88 questões · 2 desafios integradores</p>
+<p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</header>
+<aside class="nota">
+<p><strong>Consulte este gabarito só depois de tentar.</strong></p>
+<p>As respostas são comentadas para ensinar, não só para conferir. Nos exercícios de código existem outras soluções igualmente válidas: o que importa é entender por que a sua funciona e o que ela troca em relação à mostrada aqui.</p>
+<p>Os programas com um quadro verde de <strong>Saída</strong> foram executados com o .NET 10 (dotnet run arquivo.cs) no Linux, e a saída mostrada é a real.</p>
+</aside>
+<h2 class="sumario-titulo">Sumário</h2>
+<table class="sumario">
+<thead><tr><th>Módulo</th><th>Tema</th><th>Aulas</th><th>Questões</th></tr></thead>
+<tbody>
+<tr><td>MÓDULO 1</td><td>Fundamentos da linguagem</td><td>#01–#08</td><td>Q1–Q13</td></tr>
+<tr><td>MÓDULO 2</td><td>Orientação a objetos</td><td>#09–#15</td><td>Q14–Q23</td></tr>
+<tr><td>MÓDULO 3</td><td>Genéricos, delegates e LINQ</td><td>#16–#21</td><td>Q24–Q32</td></tr>
+<tr><td>MÓDULO 4</td><td>A plataforma por dentro</td><td>#22–#30</td><td>Q33–Q44</td></tr>
+<tr><td>MÓDULO 5</td><td>Testes e bancos de dados</td><td>#31–#42</td><td>Q45–Q53</td></tr>
+<tr><td>MÓDULO 6</td><td>ASP.NET Core e serviços</td><td>#43–#52</td><td>Q54–Q65</td></tr>
+<tr><td>MÓDULO 7</td><td>A vitrine web e o deploy</td><td>#53–#59</td><td>Q66–Q72</td></tr>
+<tr><td>MÓDULO 8</td><td>Aplicativos de desktop e celular</td><td>#60–#62</td><td>Q73–Q77</td></tr>
+<tr><td>MÓDULO 9</td><td>Jogos</td><td>#63–#69</td><td>Q78–Q82</td></tr>
+<tr><td>MÓDULO 10</td><td>Arquitetura, IA e desempenho</td><td>#70–#73</td><td>Q83–Q88</td></tr>
+<tr><td>DESAFIOS</td><td>Desafios integradores</td><td>todas</td><td>D1–D2</td></tr>
+</tbody>
+</table>
+<section class="modulo" id="modulo-1">
+<h2><span class="rotulo">MÓDULO 1</span> Fundamentos da linguagem</h2>
+<p class="intro">A história do C#, o .NET por dentro, tipos e conversões, texto e console, decisões e laços, métodos, coleções e exceções.</p>
+<p class="aulas-titulo">Artigos 01 a 08</p>
+<ul class="aulas">
+<li><span class="n">#01</span> Da Rivalidade com o Java ao Código Aberto: a História do C#</li>
+<li><span class="n">#02</span> Do Código-Fonte ao Processo: Instalando o .NET e Entendendo o que Acontece ao Rodar</li>
+<li><span class="n">#03</span> Cada Valor Tem um Tipo: Variáveis, Números e Conversões em C#</li>
+<li><span class="n">#04</span> Operadores, Texto e Conversa com o Usuário</li>
+<li><span class="n">#05</span> O Programa Que Escolhe e Repete: if, switch e Laços</li>
+<li><span class="n">#06</span> Métodos: Dividindo o Problema em Partes Que Conversam</li>
+<li><span class="n">#07</span> Guardando Muitos Valores: Arrays, Listas e Dicionários</li>
+<li><span class="n">#08</span> Quando Algo Dá Errado: Exceções em C#</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q1">
+<span class="num">Q1</span>
+<div class="corpo">
+<p class="titulo">Do código ao processo</p>
+<p>Descreva o caminho de um <code>Program.cs</code> até a execução: o que o compilador gera, o que é IL e o que o JIT faz. Por que o mesmo <code>.dll</code> roda em Windows, Linux e macOS?</p>
+</div>
+</div>
+<p>O compilador do C# (Roslyn) não gera código de máquina: gera <strong>IL</strong> (<em>Intermediate Language</em>), um código para uma máquina virtual, guardado num <em>assembly</em> (<code>.dll</code>) junto com os metadados dos tipos. Ao executar, o <em>runtime</em> (CLR) carrega o <em>assembly</em> e o <strong>JIT</strong> (<em>just-in-time</em>) traduz cada método para o código de máquina do processador <strong>na primeira vez em que ele é chamado</strong>. Como o IL não depende do processador nem do sistema, o mesmo <code>.dll</code> roda em qualquer plataforma que tenha o <em>runtime</em> do .NET; só o executável de partida (o <em>apphost</em>) é específico. O Native AOT, visto no fim do curso, faz o caminho inverso: compila tudo para código de máquina antes, sem JIT.</p>
+<div class="questao" id="q2">
+<span class="num">Q2</span>
+<div class="corpo">
+<p class="titulo">Tipos de valor e de referência</p>
+<p>Qual a diferença entre <code>int</code> (tipo de valor) e <code>string</code> ou uma <code>class</code> (tipos de referência) numa atribuição <code>b = a</code>? Por que a <code>string</code>, sendo de referência, se comporta "como valor"?</p>
+</div>
+</div>
+<p>Num <strong>tipo de valor</strong>, a variável contém o próprio dado: <code>b = a</code> copia o valor, e as duas variáveis seguem independentes. Num <strong>tipo de referência</strong>, a variável contém uma referência para um objeto no <em>heap</em>: <code>b = a</code> copia a referência, e as duas passam a apontar para <strong>o mesmo</strong> objeto; alterar o objeto por <code>b</code> aparece em <code>a</code>. A <code>string</code> é de referência, mas é <strong>imutável</strong>: nenhum método a altera; <code>ToUpper</code>, <code>Replace</code> e <code>+</code> criam strings novas. Como ninguém consegue mudar o objeto compartilhado, compartilhá-lo é indistinguível de copiá-lo.</p>
+<div class="questao" id="q3">
+<span class="num">Q3</span>
+<div class="corpo">
+<p class="titulo">decimal, double e dinheiro</p>
+<p>Por que <code>0.1 + 0.2 == 0.3</code> é falso com <code>double</code> e verdadeiro com <code>decimal</code>? Qual usar para preços na livraria do curso, e qual o custo?</p>
+</div>
+</div>
+<p>O <code>double</code> guarda números em <strong>binário</strong> (IEEE 754), e 0,1 não tem representação binária finita, assim como 1/3 não tem em decimal: o valor guardado é o mais próximo possível, e os erros se somam. O <code>decimal</code> guarda um inteiro de 96 bits e uma <strong>escala decimal</strong>, então 0,1 é exatamente 1 × 10⁻¹. Para dinheiro, use <code>decimal</code>: centavos não podem sumir num arredondamento. O custo é desempenho (as contas são feitas em software, muitas vezes mais lentas) e alcance menor (cerca de 7,9 × 10²⁸, contra 1,8 × 10³⁰⁸ do <code>double</code>). Para física, gráficos e estatística, <code>double</code>.</p>
+<div class="questao" id="q4">
+<span class="num">Q4</span>
+<div class="corpo">
+<p class="titulo">Parse ou TryParse</p>
+<p>Qual a diferença entre <code>int.Parse(texto)</code> e <code>int.TryParse(texto, out int n)</code>? Qual usar para ler o que o usuário digitou, e por quê?</p>
+</div>
+</div>
+<p>O <code>Parse</code> <strong>lança</strong> <code>FormatException</code> (ou <code>OverflowException</code>) quando o texto não é um número; o <code>TryParse</code> devolve <code>false</code> e deixa <code>n</code> com 0, sem exceção. Para entrada do usuário, use <code>TryParse</code>: digitar errado é <strong>esperado</strong>, não excepcional, e um <code>if</code> deixa o fluxo mais claro e mais barato que um <code>try/catch</code>. O <code>Parse</code> cabe onde um texto inválido é de fato um erro de programa, como um valor de configuração que deveria estar sempre correto. Os dois aceitam um <code>IFormatProvider</code>: <code>double.Parse("1,5")</code> depende da cultura da máquina; para formato fixo, use <code>CultureInfo.InvariantCulture</code>.</p>
+<div class="questao" id="q5">
+<span class="num">Q5</span>
+<div class="corpo">
+<p class="titulo">ref, out e in</p>
+<p>Explique a diferença entre os modificadores de parâmetro <code>ref</code>, <code>out</code> e <code>in</code>. Por que o C# exige escrever <code>ref</code> também na chamada?</p>
+</div>
+</div>
+<ul><li>**<code>ref</code>**: passa a própria variável (por referência). Ela precisa estar inicializada antes, e o método pode ler e alterar.</li><li>**<code>out</code><strong>: também por referência, mas para </strong>saída<strong>: não precisa estar inicializada, e o método é </strong>obrigado** a atribuir antes de retornar (como no <code>TryParse</code>).</li><li>**<code>in</code><strong>: por referência e </strong>somente leitura**; serve para evitar a cópia de <em>structs</em> grandes.</li></ul>
+<p>Exigir o modificador na chamada (<code>Trocar(ref a, ref b)</code>) deixa visível, no ponto de uso, que a variável pode mudar. É a resposta do C# ao problema das referências escondidas que o C++ tem.</p>
+<div class="questao" id="q6">
+<span class="num">Q6</span>
+<div class="corpo">
+<p class="titulo">List, array ou Dictionary</p>
+<p>Para cada caso, escolha entre <code>T[]</code>, <code>List&lt;T&gt;</code> e <code>Dictionary&lt;TKey, TValue&gt;</code>: (a) as notas de um aluno numa prova com 10 questões; (b) os itens de um carrinho de compras; (c) buscar um livro pelo ISBN.</p>
+</div>
+</div>
+<ul><li>(a) <strong>Array</strong>: o tamanho é fixo e conhecido (10).</li><li>(b) **<code>List&lt;T&gt;</code>**: itens entram e saem; a lista cresce sozinha.</li><li>(c) **<code>Dictionary&lt;string, Livro&gt;</code>**: busca pela chave em O(1) em média. Procurar o ISBN numa lista seria percorrê-la inteira a cada busca, em O(n).</li></ul>
+<div class="questao" id="q7">
+<span class="num">Q7</span>
+<div class="corpo">
+<p class="titulo">Quando capturar uma exceção</p>
+<p>"Capture apenas as exceções que você sabe tratar." Explique a regra e por que <code>catch (Exception) { }</code> vazio é um dos piores trechos que um programa pode ter.</p>
+</div>
+</div>
+<p>Capturar uma exceção é afirmar que, naquele ponto, existe uma <strong>ação útil</strong>: tentar de novo, usar um valor padrão, avisar o usuário. Se não há, a exceção deve subir até um nível que saiba o que fazer, que no pior caso registra o erro e encerra. O <code>catch (Exception) { }</code> vazio engole <strong>qualquer</strong> erro, inclusive bugs (<code>NullReferenceException</code>, <code>IndexOutOfRangeException</code>): o programa segue num estado inconsistente, e o problema reaparece depois, longe da causa e sem nenhum rastro. Se for preciso registrar e repassar, use <code>throw;</code> (sem argumento), que preserva o <em>stack trace</em> original; <code>throw ex;</code> o reinicia.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q8">
+<span class="num">Q8</span>
+<div class="corpo">
+<p class="titulo">Lendo um número com segurança</p>
+<p>Escreva um programa que leia linhas da entrada até receber um inteiro entre 1 e 100, avisando quando o texto não for número e quando estiver fora do intervalo. Use <code>int.TryParse</code>. Em seguida, mostre o número, o dobro e se é par.</p>
+</div>
+</div>
+<pre class="codigo"><code>int? lido = null;
+while (lido is null)
+{
+    Console.Write("Número entre 1 e 100: ");
+    string? linha = Console.ReadLine();
+    if (linha is null)
+    {
+        Console.WriteLine("fim da entrada");
+        return;
+    }
+    if (!int.TryParse(linha, out int n))
+        Console.WriteLine($"\"{linha}\" não é um número inteiro");
+    else if (n is &lt; 1 or &gt; 100)
+        Console.WriteLine($"{n} está fora do intervalo");
+    else
+        lido = n;
+}
+Console.WriteLine($"lido {lido}, dobro {lido * 2}, {(lido % 2 == 0 ? "par" : "ímpar")}");</code></pre>
+<p class="rotulo-entrada">Entrada digitada:</p>
+<pre class="codigo"><code>dez
+150
+42</code></pre>
+<pre class="saida"><code>Número entre 1 e 100: "dez" não é um número inteiro
+Número entre 1 e 100: 150 está fora do intervalo
+Número entre 1 e 100: lido 42, dobro 84, par</code></pre>
+<p>O <code>ReadLine</code> devolve <code>null</code> quando a entrada acaba (Ctrl+D no Linux, ou o fim de um arquivo redirecionado), e o tipo <code>string?</code> obriga a tratar esse caso. O padrão <code>n is &lt; 1 or &gt; 100</code> (C# 9) lê como a frase que descreve a regra.</p>
+<div class="questao" id="q9">
+<span class="num">Q9</span>
+<div class="corpo">
+<p class="titulo">Formatando valores em reais</p>
+<p>Mostre o preço <code>1234.5m</code> formatado: (a) com a cultura <code>pt-BR</code> como moeda; (b) com duas casas e separador de milhar em <code>pt-BR</code>; (c) na cultura invariante. Depois leia o texto <code>"1.234,50"</code> de volta para <code>decimal</code> usando <code>pt-BR</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>using System.Globalization;
+
+var br = CultureInfo.GetCultureInfo("pt-BR");
+decimal preco = 1234.5m;
+
+Console.WriteLine(preco.ToString("C", br));
+Console.WriteLine(preco.ToString("N2", br));
+Console.WriteLine(preco.ToString("N2", CultureInfo.InvariantCulture));
+
+decimal lido = decimal.Parse("1.234,50", NumberStyles.Number, br);
+Console.WriteLine($"lido de volta: {lido.ToString(CultureInfo.InvariantCulture)} (igual? {lido == preco})");</code></pre>
+<pre class="saida"><code>R$ 1.234,50
+1.234,50
+1,234.50
+lido de volta: 1234.50 (igual? True)</code></pre>
+<p>Sem a cultura explícita, o resultado depende da configuração da máquina: o mesmo programa mostra "1,234.50" num servidor em inglês. Para gravar em arquivo ou trocar dados entre sistemas, use sempre <code>InvariantCulture</code>; para mostrar ao usuário, a cultura dele. O espaço depois do <code>R$</code> é um espaço inseparável (U+00A0), detalhe que derruba comparações de texto feitas sem cuidado.</p>
+<div class="questao" id="q10">
+<span class="num">Q10</span>
+<div class="corpo">
+<p class="titulo">switch moderno</p>
+<p>Escreva <code>static string Classificar(int idade)</code> usando uma expressão <code>switch</code> com padrões relacionais (<code>&lt; 0</code>, <code>&lt; 13</code>, <code>&lt; 18</code>, <code>&lt; 60</code>, <code>_</code>), devolvendo "inválida", "criança", "adolescente", "adulto" ou "idoso". Depois escreva <code>static decimal Frete(string uf, decimal total)</code> com uma expressão <code>switch</code> sobre uma tupla: frete grátis acima de R$ 200, R$ 10 para SP e RJ, R$ 25 para as demais UFs.</p>
+</div>
+</div>
+<pre class="codigo"><code>static string Classificar(int idade) =&gt; idade switch
+{
+    &lt; 0 =&gt; "inválida",
+    &lt; 13 =&gt; "criança",
+    &lt; 18 =&gt; "adolescente",
+    &lt; 60 =&gt; "adulto",
+    _ =&gt; "idoso",
+};
+
+static decimal Frete(string uf, decimal total) =&gt; (uf, total) switch
+{
+    (_, &gt; 200m) =&gt; 0m,
+    ("SP" or "RJ", _) =&gt; 10m,
+    _ =&gt; 25m,
+};
+
+foreach (var i in new[] { -1, 8, 15, 30, 70 })
+    Console.WriteLine($"{i,3}: {Classificar(i)}");
+Console.WriteLine($"SP R$ 50: {Frete("SP", 50m)} | BA R$ 50: {Frete("BA", 50m)} | BA R$ 300: {Frete("BA", 300m)}");</code></pre>
+<pre class="saida"><code> -1: inválida
+  8: criança
+ 15: adolescente
+ 30: adulto
+ 70: idoso
+SP R$ 50: 10 | BA R$ 50: 25 | BA R$ 300: 0</code></pre>
+<p>Os casos são testados <strong>na ordem</strong>: <code>&lt; 13</code> só é avaliado se <code>&lt; 0</code> falhou, por isso não é preciso escrever <code>&gt;= 0 and &lt; 13</code>. Se um caso nunca puder ser alcançado (por exemplo, <code>&lt; 10</code> depois de <code>&lt; 13</code>), o compilador acusa erro. Sem o <code>_</code> final, ele avisa que o <code>switch</code> não cobre todos os valores.</p>
+<div class="questao" id="q11">
+<span class="num">Q11</span>
+<div class="corpo">
+<p class="titulo">Métodos com parâmetros opcionais e out</p>
+<p>Escreva <code>static bool TentarDividir(int a, int b, out int quociente, out int resto)</code> e <code>static string Repetir(string texto, int vezes = 2, string separador = " ")</code>. Chame o segundo com argumentos nomeados, pulando um dos opcionais.</p>
+</div>
+</div>
+<pre class="codigo"><code>static bool TentarDividir(int a, int b, out int quociente, out int resto)
+{
+    if (b == 0)
+    {
+        quociente = resto = 0;  // out obriga a atribuir mesmo na falha
+        return false;
+    }
+    quociente = a / b;
+    resto = a % b;
+    return true;
+}
+
+static string Repetir(string texto, int vezes = 2, string separador = " ")
+    =&gt; string.Join(separador, Enumerable.Repeat(texto, vezes));
+
+if (TentarDividir(17, 5, out int q, out int r))
+    Console.WriteLine($"17 / 5 = {q}, resto {r}");
+if (!TentarDividir(1, 0, out _, out _))
+    Console.WriteLine("divisão por zero recusada");
+
+Console.WriteLine(Repetir("oi"));
+Console.WriteLine(Repetir("ha", 3, ""));
+Console.WriteLine(Repetir("lá", separador: "-"));</code></pre>
+<pre class="saida"><code>17 / 5 = 3, resto 2
+divisão por zero recusada
+oi oi
+hahaha
+lá-lá</code></pre>
+<p>O <code>out _</code> descarta um resultado que não interessa. Os valores padrão dos parâmetros opcionais são <strong>copiados para o código de quem chama</strong> na compilação: mudar o padrão numa biblioteca não afeta quem já foi compilado contra a versão antiga, o que é motivo para usá-los com parcimônia em APIs públicas.</p>
+<div class="questao" id="q12">
+<span class="num">Q12</span>
+<div class="corpo">
+<p class="titulo">Estoque com Dictionary</p>
+<p>Escreva um programa que mantenha o estoque de uma livraria num <code>Dictionary&lt;string, int&gt;</code> (título → quantidade), processe uma lista de movimentações (<code>"+Dom Casmurro:3"</code>, <code>"-Vidas Secas:1"</code>) e recuse saídas maiores que o estoque. Mostre o estoque final em ordem alfabética.</p>
+</div>
+</div>
+<pre class="codigo"><code>var estoque = new Dictionary&lt;string, int&gt; { ["Dom Casmurro"] = 2, ["Vidas Secas"] = 1 };
+string[] movimentos = ["+Dom Casmurro:3", "-Vidas Secas:1", "-Vidas Secas:1", "+Macunaíma:4", "-Iracema:1"];
+
+foreach (var m in movimentos)
+{
+    char sinal = m[0];
+    var partes = m[1..].Split(':');
+    string titulo = partes[0];
+    int qtd = int.Parse(partes[1]);
+    int atual = estoque.GetValueOrDefault(titulo);  // 0 se o título não existe
+
+    if (sinal == '-' &amp;&amp; qtd &gt; atual)
+    {
+        Console.WriteLine($"recusado: {m} (há {atual})");
+        continue;
+    }
+    estoque[titulo] = atual + (sinal == '+' ? qtd : -qtd);
+}
+
+foreach (var (titulo, qtd) in estoque.OrderBy(p =&gt; p.Key))
+    Console.WriteLine($"{titulo,-14} {qtd}");</code></pre>
+<pre class="saida"><code>recusado: -Vidas Secas:1 (há 0)
+recusado: -Iracema:1 (há 0)
+Dom Casmurro   5
+Macunaíma      4
+Vidas Secas    0</code></pre>
+<p>O indexador <code>estoque[titulo] = ...</code> cria a chave se ela não existe e substitui o valor se existe; ler <code>estoque["Iracema"]</code> de uma chave inexistente, ao contrário, lança <code>KeyNotFoundException</code>, por isso o <code>GetValueOrDefault</code>. A ordem de iteração de um <code>Dictionary</code> não é garantida; o <code>OrderBy</code> deixa a saída previsível. Note que "Vidas Secas" ficou com 0 e continua no dicionário.</p>
+<div class="questao" id="q13">
+<span class="num">Q13</span>
+<div class="corpo">
+<p class="titulo">Exceções próprias</p>
+<p>Crie <code>class EstoqueInsuficienteException : Exception</code> com as propriedades <code>Titulo</code> e <code>Disponivel</code>. Escreva <code>static void Vender(Dictionary&lt;string, int&gt; estoque, string titulo, int qtd)</code> que a lance quando faltar estoque e <code>ArgumentOutOfRangeException</code> para quantidade menor que 1. Trate as duas de forma diferente e use <code>finally</code> para registrar o fim de cada tentativa.</p>
+</div>
+</div>
+<pre class="codigo"><code>var estoque = new Dictionary&lt;string, int&gt; { ["Dom Casmurro"] = 2 };
+
+foreach (var (titulo, qtd) in new[] { ("Dom Casmurro", 1), ("Dom Casmurro", 5), ("Dom Casmurro", 0) })
+{
+    try
+    {
+        Vender(estoque, titulo, qtd);
+        Console.WriteLine($"vendidos {qtd}; restam {estoque[titulo]}");
+    }
+    catch (EstoqueInsuficienteException e)
+    {
+        Console.WriteLine($"{e.Message} Disponível: {e.Disponivel}.");
+    }
+    catch (ArgumentOutOfRangeException e)
+    {
+        Console.WriteLine($"erro de programação: {e.ParamName} inválido");
+    }
+    finally
+    {
+        Console.WriteLine("  (tentativa registrada)");
+    }
+}
+
+static void Vender(Dictionary&lt;string, int&gt; estoque, string titulo, int qtd)
+{
+    ArgumentOutOfRangeException.ThrowIfLessThan(qtd, 1);
+    int disponivel = estoque.GetValueOrDefault(titulo);
+    if (qtd &gt; disponivel)
+        throw new EstoqueInsuficienteException(titulo, disponivel);
+    estoque[titulo] = disponivel - qtd;
+}
+
+class EstoqueInsuficienteException(string titulo, int disponivel)
+    : Exception($"Estoque insuficiente de \"{titulo}\".")
+{
+    public string Titulo { get; } = titulo;
+    public int Disponivel { get; } = disponivel;
+}</code></pre>
+<pre class="saida"><code>vendidos 1; restam 1
+  (tentativa registrada)
+Estoque insuficiente de "Dom Casmurro". Disponível: 1.
+  (tentativa registrada)
+erro de programação: qtd inválido
+  (tentativa registrada)</code></pre>
+<p>A ordem dos <code>catch</code> vai do mais específico ao mais geral; o compilador recusa um <code>catch (Exception)</code> antes de um mais específico. O <code>ThrowIfLessThan</code> (.NET 8) preenche o <code>ParamName</code> sozinho, a partir do nome do argumento. Num arquivo com instruções de nível superior, os tipos (<code>class</code>) precisam vir <strong>depois</strong> delas.</p>
+</section>
+<section class="modulo" id="modulo-2">
+<h2><span class="rotulo">MÓDULO 2</span> Orientação a objetos</h2>
+<p class="intro">Classes e objetos da livraria, propriedades, herança, interfaces, class/struct/record, enums e pattern matching, namespaces, projetos e pacotes NuGet.</p>
+<p class="aulas-titulo">Artigos 09 a 15</p>
+<ul class="aulas">
+<li><span class="n">#09</span> Classes e Objetos: Dando Forma aos Dados da Livraria</li>
+<li><span class="n">#10</span> Propriedades e Encapsulamento: Deixar Ler, Controlar a Escrita</li>
+<li><span class="n">#11</span> Herança: Quando um Tipo É uma Versão Especializada de Outro</li>
+<li><span class="n">#12</span> Interfaces: Contratos Que Qualquer Tipo Pode Assinar</li>
+<li><span class="n">#13</span> Classe, Struct ou Record: Identidade, Valor e Igualdade</li>
+<li><span class="n">#14</span> Enums e Pattern Matching: Nomes para Estados e Perguntas sobre Formas</li>
+<li><span class="n">#15</span> Do Arquivo Único à Solução: Namespaces, Projetos e Pacotes NuGet</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q14">
+<span class="num">Q14</span>
+<div class="corpo">
+<p class="titulo">Campo ou propriedade</p>
+<p>Por que, em C#, os dados públicos de uma classe são expostos como propriedades (<code>public decimal Preco { get; private set; }</code>) e não como campos públicos? Cite duas vantagens concretas.</p>
+</div>
+</div>
+<ul><li><strong>Validação e regras</strong>: uma propriedade pode ter lógica no <code>set</code> (recusar preço negativo) ou no <code>get</code> (calcular um valor), e essa lógica pode ser acrescentada <strong>depois</strong>, sem mudar quem usa a classe. Trocar um campo público por propriedade quebra a compatibilidade binária: quem foi compilado contra o campo precisa ser recompilado.</li><li><strong>Acesso diferenciado</strong>: <code>get</code> público com <code>private set</code> (ou <code>init</code>) deixa todos lerem e só a própria classe alterar.</li></ul>
+<p>Além disso, <em>data binding</em>, serialização e muitos <em>frameworks</em> (WPF, EF Core) trabalham com propriedades, não com campos.</p>
+<div class="questao" id="q15">
+<span class="num">Q15</span>
+<div class="corpo">
+<p class="titulo">Herança ou interface</p>
+<p>A livraria vende livros físicos e e-books. Quando modelar <code>LivroFisico</code> e <code>Ebook</code> herdando de uma classe <code>Produto</code>, e quando fazer os dois implementarem uma interface <code>IVendavel</code>? Por que o C# permite várias interfaces, mas uma só classe base?</p>
+</div>
+</div>
+<p><strong>Herança</strong> quando há uma relação "é um" com <strong>estado e comportamento comuns</strong> a reaproveitar: título, preço e as regras de desconto vivem em <code>Produto</code>. <strong>Interface</strong> quando o que se compartilha é só um <strong>contrato</strong>, entre tipos que podem não ter nada mais em comum: um <code>IVendavel</code> pode ser implementado por um livro, um vale-presente e uma assinatura. A herança simples evita o "problema do diamante" (duas bases com o mesmo membro, com implementações diferentes); as interfaces, que tradicionalmente não têm estado, podem ser combinadas à vontade. Desde o C# 8 elas podem ter implementações padrão, mas continuam sem campos de instância.</p>
+<div class="questao" id="q16">
+<span class="num">Q16</span>
+<div class="corpo">
+<p class="titulo">class, struct ou record</p>
+<p>Para cada tipo da livraria, escolha <code>class</code>, <code>struct</code>, <code>record</code> ou <code>record struct</code>, justificando: (a) <code>Cliente</code>, com identidade e dados que mudam; (b) <code>Isbn</code>, um código de 13 dígitos; (c) <code>ItemDoPedido</code> (título, quantidade e preço unitário), comparado por valor; (d) <code>Coordenada</code> com dois <code>double</code>, criada aos milhões num mapa.</p>
+</div>
+</div>
+<ul><li>(a) **<code>class</code>**: dois clientes com o mesmo nome continuam pessoas diferentes (identidade), e o objeto muda ao longo do tempo.</li><li>(b) **<code>readonly record struct</code><em>*: é um valor pequeno e imutável, comparado pelo conteúdo, e vale a pena não alocar no *heap</em>.</li><li>(c) **<code>record</code>** (classe): igualdade por valor, <code>ToString</code> legível e <code>with</code> para criar cópias alteradas, sem se preocupar com tamanho.</li><li>(d) **<code>record struct</code>** (ou <code>struct</code>): 16 bytes, criado em grande quantidade; como tipo de valor, fica dentro do array que o contém, sem uma alocação por coordenada para o coletor de lixo acompanhar.</li></ul>
+<p>Regra geral: <code>struct</code> só para tipos pequenos (até uns 16 bytes), imutáveis e com semântica de valor; o resto, <code>class</code> ou <code>record</code>.</p>
+<div class="questao" id="q17">
+<span class="num">Q17</span>
+<div class="corpo">
+<p class="titulo">Pattern matching</p>
+<p>O que este método devolve para um <code>Ebook</code> de 30 reais, para um <code>LivroFisico</code> de 0,5 kg e para <code>null</code>? Por que a ordem dos casos importa?</p>
+<pre class="codigo"><code>static decimal Frete(Produto? p) =&gt; p switch
+{
+    null =&gt; throw new ArgumentNullException(nameof(p)),
+    Ebook =&gt; 0m,
+    LivroFisico { PesoKg: &lt;= 1 } =&gt; 10m,
+    LivroFisico l =&gt; 10m + (decimal)(l.PesoKg - 1) * 5m,
+    _ =&gt; 15m,
+};</code></pre>
+</div>
+</div>
+<ul><li><code>Ebook</code> de 30 reais: <strong>0</strong>. O padrão de tipo <code>Ebook</code> casa, e o preço nem é consultado.</li><li><code>LivroFisico</code> de 0,5 kg: <strong>10</strong>. O padrão de propriedade <code>{ PesoKg: &lt;= 1 }</code> casa antes do caso geral.</li><li><code>null</code>: lança <code>ArgumentNullException</code>.</li></ul>
+<p>A ordem importa porque o primeiro caso que casa vence: se <code>LivroFisico l</code> viesse antes de <code>LivroFisico { PesoKg: &lt;= 1 }</code>, o segundo nunca seria alcançado, e o compilador acusaria <strong>erro</strong> por isso. O <code>_</code> final cobre os outros produtos (um vale-presente, por exemplo).</p>
+<div class="questao" id="q18">
+<span class="num">Q18</span>
+<div class="corpo">
+<p class="titulo">Pacotes e projetos</p>
+<p>Qual a diferença entre uma <em>solution</em> (<code>.sln</code> ou <code>.slnx</code>), um projeto (<code>.csproj</code>) e um pacote NuGet? Como a livraria seria dividida em projetos, e o que significa um <code>&lt;PackageReference Include="Dapper" Version="2.1.66" /&gt;</code>?</p>
+</div>
+</div>
+<p>O <strong>projeto</strong> é a unidade de compilação: gera um <em>assembly</em> (<code>.dll</code> ou executável) e declara as dependências. A <strong>solution</strong> só agrupa projetos para abri-los e compilá-los juntos. Um <strong>pacote NuGet</strong> é um <em>assembly</em> publicado e versionado, baixado de um repositório (nuget.org). A livraria poderia ter <code>Livraria.Dominio</code> (biblioteca de classes, sem dependências), <code>Livraria.Dados</code> (que referencia o domínio e os pacotes de banco), <code>Livraria.Api</code> e <code>Livraria.Testes</code>. O <code>PackageReference</code> pede o pacote Dapper na versão 2.1.66; o <code>dotnet restore</code> o baixa, e as dependências dele vêm junto. Fixar a versão exata dá <em>builds</em> reprodutíveis.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q19">
+<span class="num">Q19</span>
+<div class="corpo">
+<p class="titulo">Uma classe com invariante</p>
+<p>Escreva <code>class Livro</code> com <code>Titulo</code> (obrigatório, não vazio), <code>Preco</code> (não negativo, com <code>private set</code>) e o método <code>AplicarDesconto(decimal percentual)</code>, que aceita de 0 a 50% e arredonda para centavos. Use <code>ArgumentException</code> e <code>ArgumentOutOfRangeException</code>. Mostre uma criação válida, um desconto e duas tentativas inválidas.</p>
+</div>
+</div>
+<pre class="codigo"><code>var l = new Livro("Vidas Secas", 59.90m);
+l.AplicarDesconto(15);
+Console.WriteLine($"{l.Titulo}: R$ {l.Preco}");
+
+try { l.AplicarDesconto(80); }
+catch (ArgumentOutOfRangeException e) { Console.WriteLine($"recusado: {e.ParamName} = {e.ActualValue}"); }
+
+try { _ = new Livro("  ", 10m); }
+catch (ArgumentException e) { Console.WriteLine($"recusado: {e.Message}"); }
+
+class Livro
+{
+    public string Titulo { get; }
+    public decimal Preco { get; private set; }
+
+    public Livro(string titulo, decimal preco)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(titulo);
+        ArgumentOutOfRangeException.ThrowIfNegative(preco);
+        Titulo = titulo;
+        Preco = preco;
+    }
+
+    public void AplicarDesconto(decimal percentual)
+    {
+        if (percentual is &lt; 0 or &gt; 50)
+            throw new ArgumentOutOfRangeException(nameof(percentual), percentual, "entre 0 e 50");
+        Preco = Math.Round(Preco * (1 - percentual / 100), 2, MidpointRounding.AwayFromZero);
+    }
+}</code></pre>
+<pre class="saida"><code>Vidas Secas: R$ 50.92
+recusado: percentual = 80
+recusado: The value cannot be an empty string or composed entirely of whitespace. (Parameter 'titulo')</code></pre>
+<p>O <code>Math.Round</code> sem o terceiro argumento usa o <strong>arredondamento bancário</strong> (<code>ToEven</code>): 2,345 vira 2,34, e não 2,35. Para preços, a regra comercial costuma ser <code>AwayFromZero</code>. Como todo caminho de alteração passa pelo construtor ou pelo <code>AplicarDesconto</code>, nenhum <code>Livro</code> pode ter preço negativo. As mensagens das exceções da biblioteca saem em inglês: o .NET moderno não traz as traduções delas; para o usuário final, a mensagem deve vir do seu próprio código.</p>
+<div class="questao" id="q20">
+<span class="num">Q20</span>
+<div class="corpo">
+<p class="titulo">Herança com métodos virtuais</p>
+<p>Escreva <code>abstract class Produto</code> com <code>Titulo</code>, <code>PrecoBase</code> e <code>public virtual decimal PrecoFinal() =&gt; PrecoBase;</code>, e duas derivadas: <code>LivroFisico</code> (acrescenta R$ 5 de embalagem) e <code>Ebook</code> (10% mais barato). Some o total de um carrinho com os dois tipos numa <code>List&lt;Produto&gt;</code> e mostre por que <code>ToString()</code> sobrescrito ajuda a depurar.</p>
+</div>
+</div>
+<pre class="codigo"><code>List&lt;Produto&gt; carrinho = [new LivroFisico("Dom Casmurro", 40m), new Ebook("Dom Casmurro", 40m), new LivroFisico("Iracema", 25m)];
+
+foreach (var p in carrinho)
+    Console.WriteLine(p);
+Console.WriteLine($"Total: {carrinho.Sum(p =&gt; p.PrecoFinal()):C}");
+
+abstract class Produto(string titulo, decimal precoBase)
+{
+    public string Titulo { get; } = titulo;
+    public decimal PrecoBase { get; } = precoBase;
+    public virtual decimal PrecoFinal() =&gt; PrecoBase;
+    public override string ToString() =&gt; $"{GetType().Name,-12} {Titulo,-13} {PrecoFinal(),7:F2}";
+}
+
+class LivroFisico(string titulo, decimal preco) : Produto(titulo, preco)
+{
+    public override decimal PrecoFinal() =&gt; base.PrecoFinal() + 5m;
+}
+
+class Ebook(string titulo, decimal preco) : Produto(titulo, preco)
+{
+    public override decimal PrecoFinal() =&gt; PrecoBase * 0.9m;
+}</code></pre>
+<pre class="saida"><code>LivroFisico  Dom Casmurro    45.00
+Ebook        Dom Casmurro    36.00
+LivroFisico  Iracema         30.00
+Total: $111.00</code></pre>
+<p>O <code>ToString</code> da base chama <code>PrecoFinal()</code>, que é virtual: cada objeto mostra o próprio preço, mesmo com o código escrito uma vez só. O formato <code>:C</code> usa a cultura atual do processo, que vem do sistema: aqui saiu <code>$111.00</code> porque a máquina em que o programa rodou está em inglês dos EUA (<code>LANG=en_US.UTF-8</code>). Num programa real, defina <code>CultureInfo.CurrentCulture</code> ou passe a cultura explicitamente, como no módulo 1.</p>
+<div class="questao" id="q21">
+<span class="num">Q21</span>
+<div class="corpo">
+<p class="titulo">Interfaces e polimorfismo sem herança</p>
+<p>Defina <code>interface IDescontavel { decimal Desconto(decimal total); }</code> e três políticas: <code>SemDesconto</code>, <code>Percentual(decimal pct)</code> e <code>ProgressivoPorQuantidade</code> (5% a partir de 3 itens, 10% a partir de 5). Escreva um método que escolha a política mais vantajosa para o cliente entre várias.</p>
+</div>
+</div>
+<pre class="codigo"><code>IDescontavel[] politicas = [new SemDesconto(), new Percentual(7), new ProgressivoPorQuantidade(itens: 4)];
+decimal total = 200m;
+
+foreach (var p in politicas)
+    Console.WriteLine($"{p.GetType().Name,-25} desconto {p.Desconto(total),6:F2}");
+
+var melhor = politicas.MaxBy(p =&gt; p.Desconto(total))!;
+Console.WriteLine($"Melhor: {melhor.GetType().Name}, total a pagar {total - melhor.Desconto(total):F2}");
+
+interface IDescontavel
+{
+    decimal Desconto(decimal total);
+}
+
+class SemDesconto : IDescontavel
+{
+    public decimal Desconto(decimal total) =&gt; 0m;
+}
+
+class Percentual(decimal pct) : IDescontavel
+{
+    public decimal Desconto(decimal total) =&gt; total * pct / 100;
+}
+
+class ProgressivoPorQuantidade(int itens) : IDescontavel
+{
+    public decimal Desconto(decimal total) =&gt; itens switch
+    {
+        &gt;= 5 =&gt; total * 0.10m,
+        &gt;= 3 =&gt; total * 0.05m,
+        _ =&gt; 0m,
+    };
+}</code></pre>
+<pre class="saida"><code>SemDesconto               desconto   0.00
+Percentual                desconto  14.00
+ProgressivoPorQuantidade  desconto  10.00
+Melhor: Percentual, total a pagar 186.00</code></pre>
+<p>Cada política é uma <strong>estratégia</strong> (o padrão Strategy) intercambiável: acrescentar uma "Black Friday" é escrever uma classe nova, sem tocar no código que escolhe a melhor. O <code>MaxBy</code> (.NET 6) devolve o elemento com a maior chave, e não a chave em si.</p>
+<div class="questao" id="q22">
+<span class="num">Q22</span>
+<div class="corpo">
+<p class="titulo">Records e igualdade</p>
+<p>Escreva <code>record ItemDoPedido(string Titulo, int Quantidade, decimal PrecoUnitario)</code> com uma propriedade calculada <code>Subtotal</code>. Mostre: a igualdade por valor entre dois itens iguais; o <code>ToString</code> gerado; uma cópia com <code>with</code> mudando a quantidade; e um <code>HashSet</code> que elimina itens repetidos. Compare com uma <code>class</code> comum de mesmos campos.</p>
+</div>
+</div>
+<pre class="codigo"><code>var a = new ItemDoPedido("Iracema", 2, 25m);
+var b = new ItemDoPedido("Iracema", 2, 25m);
+var c = a with { Quantidade = 3 };
+
+Console.WriteLine(a);
+Console.WriteLine($"a == b? {a == b} | mesma referência? {ReferenceEquals(a, b)}");
+Console.WriteLine($"c: {c.Quantidade} un., subtotal {c.Subtotal}");
+Console.WriteLine($"HashSet com a, b e c: {new HashSet&lt;ItemDoPedido&gt; { a, b, c }.Count} itens");
+
+var x = new ItemClasse("Iracema", 2, 25m);
+var y = new ItemClasse("Iracema", 2, 25m);
+Console.WriteLine($"class: x == y? {x == y}");
+
+record ItemDoPedido(string Titulo, int Quantidade, decimal PrecoUnitario)
+{
+    public decimal Subtotal =&gt; Quantidade * PrecoUnitario;
+}
+
+class ItemClasse(string titulo, int quantidade, decimal precoUnitario)
+{
+    public string Titulo { get; } = titulo;
+    public int Quantidade { get; } = quantidade;
+    public decimal PrecoUnitario { get; } = precoUnitario;
+}</code></pre>
+<pre class="saida"><code>ItemDoPedido { Titulo = Iracema, Quantidade = 2, PrecoUnitario = 25, Subtotal = 50 }
+a == b? True | mesma referência? False
+c: 3 un., subtotal 75
+HashSet com a, b e c: 2 itens
+class: x == y? False</code></pre>
+<p>O <code>record</code> gera <code>Equals</code>, <code>GetHashCode</code>, <code>==</code>, <code>!=</code>, <code>ToString</code> e o suporte a <code>with</code>, todos baseados nas propriedades posicionais. A <code>class</code> compara <strong>referências</strong>: dois objetos com os mesmos dados são diferentes. O <code>ToString</code> gerado mostra todas as propriedades públicas, inclusive a calculada <code>Subtotal</code>; para mudar isso, sobrescreva o <code>PrintMembers</code>. A igualdade, por outro lado, usa só os campos: o <code>Subtotal</code> não guarda nada.</p>
+<div class="questao" id="q23">
+<span class="num">Q23</span>
+<div class="corpo">
+<p class="titulo">Enum e estados do pedido</p>
+<p>Modele <code>enum StatusPedido { Novo, Pago, Enviado, Entregue, Cancelado }</code> e escreva <code>static bool PodeIr(StatusPedido de, StatusPedido para)</code> com uma expressão <code>switch</code> sobre a tupla: só é permitido Novo → Pago, Pago → Enviado, Enviado → Entregue e cancelar a partir de Novo ou Pago. Teste todas as transições a partir de <code>Pago</code>. Mostre também o que <code>Enum.IsDefined</code> evita.</p>
+</div>
+</div>
+<pre class="codigo"><code>static bool PodeIr(StatusPedido de, StatusPedido para) =&gt; (de, para) switch
+{
+    (StatusPedido.Novo, StatusPedido.Pago) =&gt; true,
+    (StatusPedido.Pago, StatusPedido.Enviado) =&gt; true,
+    (StatusPedido.Enviado, StatusPedido.Entregue) =&gt; true,
+    (StatusPedido.Novo or StatusPedido.Pago, StatusPedido.Cancelado) =&gt; true,
+    _ =&gt; false,
+};
+
+foreach (var destino in Enum.GetValues&lt;StatusPedido&gt;())
+    Console.WriteLine($"Pago -&gt; {destino,-9}: {(PodeIr(StatusPedido.Pago, destino) ? "permitido" : "negado")}");
+
+var vindoDoBanco = (StatusPedido)42;  // compila: um enum é só um int com nomes
+Console.WriteLine($"{vindoDoBanco} é válido? {Enum.IsDefined(vindoDoBanco)}");
+
+enum StatusPedido { Novo, Pago, Enviado, Entregue, Cancelado }</code></pre>
+<pre class="saida"><code>Pago -&gt; Novo     : negado
+Pago -&gt; Pago     : negado
+Pago -&gt; Enviado  : permitido
+Pago -&gt; Entregue : negado
+Pago -&gt; Cancelado: permitido
+42 é válido? False</code></pre>
+<p>O <em>cast</em> <code>(StatusPedido)42</code> mostra a fragilidade dos enums: qualquer inteiro cabe neles, e o <code>ToString</code> devolve "42". Valores vindos de banco, JSON ou formulário precisam ser validados com <code>Enum.IsDefined</code> (ou com <code>Enum.TryParse</code> seguido dele). As regras de transição concentradas numa função pura podem ser testadas sem banco nenhum.</p>
+</section>
+<section class="modulo" id="modulo-3">
+<h2><span class="rotulo">MÓDULO 3</span> Genéricos, delegates e LINQ</h2>
+<p class="intro">Genéricos, delegates, lambdas e eventos, LINQ (filtrar, agrupar, cruzar e a execução adiada), nullable reference types e sequências com yield.</p>
+<p class="aulas-titulo">Artigos 16 a 21</p>
+<ul class="aulas">
+<li><span class="n">#16</span> Genéricos: Um Código, Muitos Tipos, Nenhuma Conversão</li>
+<li><span class="n">#17</span> Delegates, Lambdas e Eventos: Passando Comportamento Como Se Fosse Dado</li>
+<li><span class="n">#18</span> LINQ, Parte I: Perguntas ao Catálogo em Vez de Laços</li>
+<li><span class="n">#19</span> LINQ, Parte II: Agrupar, Cruzar e Entender Quando a Consulta Executa</li>
+<li><span class="n">#20</span> Nullable Reference Types: o Fim Anunciado do NullReferenceException</li>
+<li><span class="n">#21</span> Sequências Sob Demanda: IEnumerable, yield e Coleções Imutáveis</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q24">
+<span class="num">Q24</span>
+<div class="corpo">
+<p class="titulo">Por que genéricos</p>
+<p>Antes dos genéricos (C# 2), a coleção padrão era o <code>ArrayList</code>, que guarda <code>object</code>. Cite dois problemas que a <code>List&lt;int&gt;</code> resolve em relação a ele.</p>
+</div>
+</div>
+<ul><li><strong>Segurança de tipo</strong>: no <code>ArrayList</code> cabe qualquer coisa; um <code>string</code> inserido por engano numa lista de números só é descoberto em execução, no <em>cast</em> <code>(int)lista[i]</code>, que lança <code>InvalidCastException</code>. Na <code>List&lt;int&gt;</code>, é erro de compilação.</li><li><strong>Desempenho</strong>: guardar um <code>int</code> como <code>object</code> exige <em>boxing</em> (uma alocação no <em>heap</em> por número) e <em>unboxing</em> na leitura. A <code>List&lt;int&gt;</code> guarda os <code>int</code> direto num array interno, sem alocação por elemento.</li></ul>
+<p>Ao contrário dos <em>templates</em> do C++, os genéricos do .NET existem em tempo de execução: o JIT gera código especializado para tipos de valor e compartilha uma única versão entre os tipos de referência.</p>
+<div class="questao" id="q25">
+<span class="num">Q25</span>
+<div class="corpo">
+<p class="titulo">Func, Action e Predicate</p>
+<p>O que representam <code>Func&lt;int, int, int&gt;</code>, <code>Action&lt;string&gt;</code> e <code>Func&lt;Livro, bool&gt;</code>? Escreva uma lambda compatível com cada um.</p>
+</div>
+</div>
+<ul><li><code>Func&lt;int, int, int&gt;</code>: recebe dois <code>int</code> e devolve um <code>int</code> (o último parâmetro de tipo é o retorno). Ex.: <code>(a, b) =&gt; a + b</code>.</li><li><code>Action&lt;string&gt;</code>: recebe uma <code>string</code> e não devolve nada. Ex.: <code>msg =&gt; Console.WriteLine(msg)</code>.</li><li><code>Func&lt;Livro, bool&gt;</code>: um predicado sobre livros, usado no <code>Where</code>. Ex.: <code>l =&gt; l.Preco &lt; 50m</code>. O <code>Predicate&lt;Livro&gt;</code> tem a mesma assinatura, mas é outro tipo e não converte implicitamente; por isso o LINQ usa <code>Func</code>.</li></ul>
+<div class="questao" id="q26">
+<span class="num">Q26</span>
+<div class="corpo">
+<p class="titulo">Execução adiada</p>
+<p>Por que este código imprime 3, e não 2? O que muda com <code>.ToList()</code> no fim da primeira linha?</p>
+<pre class="codigo"><code>var lista = new List&lt;int&gt; { 1, 2, 3, 4 };
+var grandes = lista.Where(x =&gt; x &gt; 2);
+lista.Add(5);
+Console.WriteLine(grandes.Count());</code></pre>
+</div>
+</div>
+<p>O <code>Where</code> não filtra nada na hora: devolve um objeto que <strong>descreve</strong> a consulta. Ela só executa quando alguém percorre o resultado, aqui no <code>Count()</code>, e nesse momento a lista já tem o 5: os maiores que 2 são 3, 4 e 5. Com <code>.ToList()</code> no fim da primeira linha, a consulta executa imediatamente e o resultado é <strong>materializado</strong> numa lista nova; o <code>Add</code> posterior não a afeta, e o programa imprime 2. A execução adiada também significa que percorrer <code>grandes</code> duas vezes executa o filtro duas vezes, o que importa quando a fonte é um banco de dados.</p>
+<div class="questao" id="q27">
+<span class="num">Q27</span>
+<div class="corpo">
+<p class="titulo">Nullable reference types</p>
+<p>Com <code>&lt;Nullable&gt;enable&lt;/Nullable&gt;</code>, qual a diferença entre <code>string</code> e <code>string?</code>? O que o operador <code>!</code> (<em>null-forgiving</em>) faz, e por que usá-lo com moderação?</p>
+</div>
+</div>
+<p>Com o recurso ativo, <code>string</code> declara que a variável <strong>nunca</strong> deve ser nula e <code>string?</code> que pode ser. O compilador faz uma análise de fluxo e avisa quando um <code>string?</code> é usado sem verificação, ou quando <code>null</code> é atribuído a um <code>string</code>. Os avisos não mudam nada em execução: os dois tipos são a mesma <code>string</code>. O <code>!</code> diz ao compilador "confie em mim, aqui não é nulo" e silencia o aviso, <strong>sem nenhuma verificação real</strong>. Se a afirmação estiver errada, a <code>NullReferenceException</code> volta. Use-o só quando você sabe algo que o compilador não consegue deduzir, e prefira reescrever o código para que ele deduza.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q28">
+<span class="num">Q28</span>
+<div class="corpo">
+<p class="titulo">Um repositório genérico</p>
+<p>Escreva <code>interface IEntidade { int Id { get; } }</code> e <code>class RepositorioEmMemoria&lt;T&gt; where T : IEntidade</code> com <code>Adicionar</code>, <code>ObterPorId</code> (devolve <code>T?</code>) e <code>Todos()</code> (devolve <code>IReadOnlyList&lt;T&gt;</code>). Recuse IDs repetidos. Use-o com <code>Livro</code> e com <code>Cliente</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>var livros = new RepositorioEmMemoria&lt;Livro&gt;();
+livros.Adicionar(new Livro(1, "Vidas Secas"));
+livros.Adicionar(new Livro(2, "Iracema"));
+try { livros.Adicionar(new Livro(1, "Repetido")); }
+catch (InvalidOperationException e) { Console.WriteLine(e.Message); }
+
+Console.WriteLine(livros.ObterPorId(2)?.Titulo ?? "não achou");
+Console.WriteLine(livros.ObterPorId(9)?.Titulo ?? "não achou");
+
+var clientes = new RepositorioEmMemoria&lt;Cliente&gt;();
+clientes.Adicionar(new Cliente(7, "Ana"));
+Console.WriteLine($"{livros.Todos().Count} livros, {clientes.Todos().Count} cliente(s)");
+
+interface IEntidade
+{
+    int Id { get; }
+}
+
+record Livro(int Id, string Titulo) : IEntidade;
+record Cliente(int Id, string Nome) : IEntidade;
+
+class RepositorioEmMemoria&lt;T&gt; where T : class, IEntidade
+{
+    private readonly Dictionary&lt;int, T&gt; _itens = [];
+
+    public void Adicionar(T item)
+    {
+        if (!_itens.TryAdd(item.Id, item))
+            throw new InvalidOperationException($"{typeof(T).Name} {item.Id} já existe");
+    }
+
+    public T? ObterPorId(int id) =&gt; _itens.GetValueOrDefault(id);
+    public IReadOnlyList&lt;T&gt; Todos() =&gt; [.. _itens.Values];
+}</code></pre>
+<pre class="saida"><code>Livro 1 já existe
+Iracema
+não achou
+2 livros, 1 cliente(s)</code></pre>
+<p>A restrição <code>where T : class, IEntidade</code> permite usar <code>item.Id</code> dentro da classe e faz o <code>T?</code> significar "referência que pode ser nula". Sem o <code>class</code>, para um <code>T</code> que fosse <code>struct</code>, o <code>T?</code> não viraria <code>Nullable&lt;T&gt;</code>, e o <code>GetValueOrDefault</code> devolveria um <em>struct</em> zerado em vez de <code>null</code>. O <code>Todos()</code> devolve uma <strong>cópia</strong> (a expressão de coleção <code>[.. ]</code>): quem recebe não consegue alterar o dicionário interno.</p>
+<div class="questao" id="q29">
+<span class="num">Q29</span>
+<div class="corpo">
+<p class="titulo">Eventos de estoque</p>
+<p>Escreva <code>class Estoque</code> com o evento <code>public event EventHandler&lt;EstoqueBaixoEventArgs&gt;? EstoqueBaixo</code>, disparado quando uma retirada deixa um título abaixo de 2 unidades. Inscreva dois ouvintes (um que "envia e-mail" e um que registra em log), retire do estoque e mostre a ordem das notificações. Depois cancele uma das inscrições.</p>
+</div>
+</div>
+<pre class="codigo"><code>var estoque = new Estoque();
+EventHandler&lt;EstoqueBaixoEventArgs&gt; email = (_, e) =&gt; Console.WriteLine($"  [e-mail] repor {e.Titulo} (restam {e.Restante})");
+estoque.EstoqueBaixo += email;
+estoque.EstoqueBaixo += (_, e) =&gt; Console.WriteLine($"  [log] {e.Titulo}={e.Restante}");
+
+estoque.Entrar("Iracema", 3);
+Console.WriteLine("retira 1");
+estoque.Retirar("Iracema", 1);
+Console.WriteLine("retira 1");
+estoque.Retirar("Iracema", 1);
+estoque.EstoqueBaixo -= email;
+Console.WriteLine("retira 1 (sem o e-mail)");
+estoque.Retirar("Iracema", 1);
+
+class EstoqueBaixoEventArgs(string titulo, int restante) : EventArgs
+{
+    public string Titulo { get; } = titulo;
+    public int Restante { get; } = restante;
+}
+
+class Estoque
+{
+    private readonly Dictionary&lt;string, int&gt; _qtd = [];
+    public event EventHandler&lt;EstoqueBaixoEventArgs&gt;? EstoqueBaixo;
+
+    public void Entrar(string titulo, int n) =&gt; _qtd[titulo] = _qtd.GetValueOrDefault(titulo) + n;
+
+    public void Retirar(string titulo, int n)
+    {
+        _qtd[titulo] -= n;
+        if (_qtd[titulo] &lt; 2)
+            EstoqueBaixo?.Invoke(this, new EstoqueBaixoEventArgs(titulo, _qtd[titulo]));
+    }
+}</code></pre>
+<pre class="saida"><code>retira 1
+retira 1
+  [e-mail] repor Iracema (restam 1)
+  [log] Iracema=1
+retira 1 (sem o e-mail)
+  [log] Iracema=0</code></pre>
+<p>Os ouvintes são chamados <strong>na ordem de inscrição</strong>, na mesma thread de quem disparou. O <code>?.Invoke</code> cuida do caso sem nenhum ouvinte. A palavra <code>event</code> impede que código de fora faça <code>estoque.EstoqueBaixo = null</code> ou dispare o evento: de fora só são permitidos <code>+=</code> e <code>-=</code>. Um ouvinte esquecido mantém o objeto inscrito vivo, uma causa clássica de vazamento de memória em .NET.</p>
+<div class="questao" id="q30">
+<span class="num">Q30</span>
+<div class="corpo">
+<p class="titulo">Consultas LINQ no catálogo</p>
+<p>Dado um catálogo de livros (título, autor, ano, preço, gênero), escreva consultas LINQ para: (a) os títulos de romance anteriores a 1950, em ordem de ano; (b) o preço médio por gênero; (c) o autor com mais livros; (d) se existe algum livro acima de R$ 100; (e) as páginas de 2 livros, ordenadas por título, mostrando a página 2.</p>
+</div>
+</div>
+<pre class="codigo"><code>Livro[] catalogo =
+[
+    new("Dom Casmurro", "Machado de Assis", 1899, 35m, "romance"),
+    new("Memórias Póstumas", "Machado de Assis", 1881, 32m, "romance"),
+    new("Vidas Secas", "Graciliano Ramos", 1938, 49.9m, "romance"),
+    new("São Bernardo", "Graciliano Ramos", 1934, 44m, "romance"),
+    new("Quincas Borba", "Machado de Assis", 1891, 38m, "romance"),
+    new("A Rosa do Povo", "Carlos Drummond", 1945, 59m, "poesia"),
+    new("Claro Enigma", "Carlos Drummond", 1951, 52m, "poesia"),
+];
+
+var antigos = catalogo.Where(l =&gt; l.Genero == "romance" &amp;&amp; l.Ano &lt; 1950).OrderBy(l =&gt; l.Ano).Select(l =&gt; l.Titulo);
+Console.WriteLine("(a) " + string.Join(", ", antigos));
+
+foreach (var g in catalogo.GroupBy(l =&gt; l.Genero))
+    Console.WriteLine($"(b) {g.Key}: {g.Average(l =&gt; l.Preco):F2}");
+
+var autor = catalogo.CountBy(l =&gt; l.Autor).MaxBy(p =&gt; p.Value);
+Console.WriteLine($"(c) {autor.Key} ({autor.Value} livros)");
+
+Console.WriteLine($"(d) {catalogo.Any(l =&gt; l.Preco &gt; 100m)}");
+
+int tamanhoPagina = 2, pagina = 2;
+var pag = catalogo.OrderBy(l =&gt; l.Titulo).Skip((pagina - 1) * tamanhoPagina).Take(tamanhoPagina);
+Console.WriteLine("(e) " + string.Join(", ", pag.Select(l =&gt; l.Titulo)));
+
+record Livro(string Titulo, string Autor, int Ano, decimal Preco, string Genero);</code></pre>
+<pre class="saida"><code>(a) Memórias Póstumas, Quincas Borba, Dom Casmurro, São Bernardo, Vidas Secas
+(b) romance: 39.78
+(b) poesia: 55.50
+(c) Machado de Assis (3 livros)
+(d) False
+(e) Dom Casmurro, Memórias Póstumas</code></pre>
+<p>O <code>CountBy</code> (.NET 9) conta por chave sem montar os grupos; antes dele, o caminho era <code>GroupBy(l =&gt; l.Autor).MaxBy(g =&gt; g.Count())</code>. A paginação com <code>Skip</code> e <code>Take</code> é exatamente o que o EF Core traduz para <code>OFFSET</code> e <code>LIMIT</code> no SQL, desde que haja um <code>OrderBy</code> antes: sem ordem, "a página 2" não tem significado.</p>
+<div class="questao" id="q31">
+<span class="num">Q31</span>
+<div class="corpo">
+<p class="titulo">Juntando pedidos e clientes</p>
+<p>Com uma lista de clientes (id, nome, cidade) e uma de pedidos (id, idCliente, valor), use <code>Join</code> para listar pedido, cliente e valor; use <code>GroupJoin</code> para mostrar o total gasto por cliente, incluindo quem não comprou nada (total 0).</p>
+</div>
+</div>
+<pre class="codigo"><code>Cliente[] clientes = [new(1, "Ana", "Recife"), new(2, "Bruno", "Natal"), new(3, "Carla", "Recife")];
+Pedido[] pedidos = [new(10, 1, 120m), new(11, 2, 35m), new(12, 1, 80m)];
+
+var linhas = pedidos.Join(clientes, p =&gt; p.ClienteId, c =&gt; c.Id, (p, c) =&gt; $"pedido {p.Id}: {c.Nome,-5} {p.Valor,7:F2}");
+foreach (var l in linhas)
+    Console.WriteLine(l);
+
+var totais = clientes.GroupJoin(pedidos, c =&gt; c.Id, p =&gt; p.ClienteId,
+    (c, ps) =&gt; new { c.Nome, Total = ps.Sum(p =&gt; p.Valor), Qtd = ps.Count() });
+foreach (var t in totais)
+    Console.WriteLine($"{t.Nome,-5} {t.Qtd} pedido(s), total {t.Total,7:F2}");
+
+record Cliente(int Id, string Nome, string Cidade);
+record Pedido(int Id, int ClienteId, decimal Valor);</code></pre>
+<pre class="saida"><code>pedido 10: Ana    120.00
+pedido 11: Bruno   35.00
+pedido 12: Ana     80.00
+Ana   2 pedido(s), total  200.00
+Bruno 1 pedido(s), total   35.00
+Carla 0 pedido(s), total    0.00</code></pre>
+<p>O <code>Join</code> é um <em>inner join</em>: Carla, sem pedidos, não aparece na primeira lista. O <code>GroupJoin</code> entrega, para cada cliente, a sequência (possivelmente vazia) de pedidos, o equivalente a um <code>LEFT JOIN</code> seguido de <code>GROUP BY</code>. Os dois montam uma tabela hash com a sequência interna: são O(n + m), e não O(n × m) como dois laços aninhados. O .NET 10 também traz <code>LeftJoin</code>, que dispensa o truque.</p>
+<div class="questao" id="q32">
+<span class="num">Q32</span>
+<div class="corpo">
+<p class="titulo">Sequências com yield</p>
+<p>Escreva <code>static IEnumerable&lt;long&gt; Fibonacci()</code>, infinita, com <code>yield return</code>, e use LINQ para pegar os 10 primeiros, o primeiro acima de 1000 e a soma dos pares menores que 4 milhões. Depois escreva <code>static IEnumerable&lt;string&gt; LerLinhas(string caminho)</code> que leia um arquivo de forma preguiçosa e explique por que a sequência infinita não trava o programa.</p>
+</div>
+</div>
+<pre class="codigo"><code>static IEnumerable&lt;long&gt; Fibonacci()
+{
+    long a = 0, b = 1;
+    while (true)
+    {
+        yield return a;
+        (a, b) = (b, a + b);
+    }
+}
+
+static IEnumerable&lt;string&gt; LerLinhas(string caminho)
+{
+    using var leitor = new StreamReader(caminho);  // fechado quando a iteração termina
+    while (leitor.ReadLine() is { } linha)
+        yield return linha;
+}
+
+Console.WriteLine(string.Join(" ", Fibonacci().Take(10)));
+Console.WriteLine(Fibonacci().First(x =&gt; x &gt; 1000));
+Console.WriteLine(Fibonacci().TakeWhile(x =&gt; x &lt; 4_000_000).Where(x =&gt; x % 2 == 0).Sum());
+
+File.WriteAllLines("dados.txt", ["primeira", "", "terceira"]);
+foreach (var l in LerLinhas("dados.txt").Where(l =&gt; l.Length &gt; 0))
+    Console.WriteLine($"&gt; {l}");</code></pre>
+<pre class="saida"><code>0 1 1 2 3 5 8 13 21 34
+1597
+4613732
+&gt; primeira
+&gt; terceira</code></pre>
+<p>O compilador transforma o método com <code>yield</code> numa <strong>máquina de estados</strong>: cada <code>MoveNext()</code> executa até o próximo <code>yield return</code> e pausa ali. Nada é calculado além do que é pedido, então <code>Take(10)</code> para depois de dez elementos. O <code>using</code> dentro do iterador só fecha o arquivo quando o <code>foreach</code> termina (ou é interrompido por um <code>break</code>), porque o <code>foreach</code> chama <code>Dispose</code> no enumerador. O mesmo vale para <code>File.ReadLines</code>, que já faz isso pronto.</p>
+</section>
+<section class="modulo" id="modulo-4">
+<h2><span class="rotulo">MÓDULO 4</span> A plataforma por dentro</h2>
+<p class="intro">Reflexão e atributos, source generators, memória e coletor de lixo, Span&lt;T&gt;, arquivos e JSON, async/await, concorrência e interop com C.</p>
+<p class="aulas-titulo">Artigos 22 a 30</p>
+<ul class="aulas">
+<li><span class="n">#22</span> Reflexão e Atributos: Quando o Programa Examina a Si Mesmo</li>
+<li><span class="n">#23</span> Source Generators: Código Que Escreve Código Durante a Compilação</li>
+<li><span class="n">#24</span> Memória no .NET: Pilha, Heap, Coletor de Lixo e IDisposable</li>
+<li><span class="n">#25</span> Span&lt;T&gt; e Memory&lt;T&gt;: Olhar Sem Copiar, Processar Sem Alocar</li>
+<li><span class="n">#26</span> Arquivos, Streams e JSON: Dados Que Sobrevivem ao Programa</li>
+<li><span class="n">#27</span> async e await: Esperar Sem Bloquear</li>
+<li><span class="n">#28</span> Assincronia Avançada: Muitas Tarefas, Cancelamento e Fluxos Assíncronos</li>
+<li><span class="n">#29</span> Concorrência: Threads, Travas e Dados Compartilhados Sem Corrupção</li>
+<li><span class="n">#30</span> Interop com C: Chamando Código Nativo com P/Invoke e unsafe</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q33">
+<span class="num">Q33</span>
+<div class="corpo">
+<p class="titulo">Reflexão ou source generator</p>
+<p>Um serializador pode descobrir as propriedades de um tipo por <strong>reflexão</strong>, em execução, ou gerá-las com um <strong>source generator</strong>, na compilação. Compare as duas abordagens em desempenho, em compatibilidade com Native AOT e em facilidade de depuração.</p>
+</div>
+</div>
+<ul><li><strong>Reflexão</strong>: lê os metadados em execução (<code>typeof(T).GetProperties()</code>). É flexível e simples de escrever, mas é lenta (cada acesso passa por camadas de verificação), aumenta o tempo de partida e conflita com o <em>trimming</em> e o Native AOT, que removem o que parece não ser usado e não conseguem prever o que a reflexão vai pedir.</li><li><strong>Source generator</strong>: roda dentro do compilador e acrescenta código C# comum ao projeto. Em execução, é uma chamada direta, sem reflexão; funciona com AOT; e o código gerado pode ser lido e depurado como qualquer outro. O custo fica na compilação e na complexidade de escrever o gerador.</li></ul>
+<p>O <code>System.Text.Json</code> oferece os dois caminhos: reflexão por padrão e geração com <code>[JsonSerializable]</code> num <code>JsonSerializerContext</code>.</p>
+<div class="questao" id="q34">
+<span class="num">Q34</span>
+<div class="corpo">
+<p class="titulo">Gerações do coletor de lixo</p>
+<p>Explique as gerações 0, 1 e 2 do coletor de lixo do .NET e a hipótese em que elas se apoiam. O que é o LOH?</p>
+</div>
+</div>
+<p>A hipótese geracional diz que <strong>a maioria dos objetos morre jovem</strong>. Objetos novos nascem na geração 0, que é pequena e coletada com frequência e rapidez. Quem sobrevive a uma coleta sobe para a geração 1 (um "amortecedor") e, sobrevivendo de novo, para a 2, coletada raramente, porque objetos antigos tendem a continuar vivos. Assim, a maioria das coletas examina só uma pequena parte do <em>heap</em>. O <strong>LOH</strong> (<em>Large Object Heap</em>) guarda objetos a partir de 85.000 bytes, como arrays grandes: eles já nascem lógicamente na geração 2 e, por padrão, não são compactados, porque mover blocos grandes é caro. Alocar e descartar muitos arrays grandes fragmenta o LOH, e é aí que entram o <code>ArrayPool&lt;T&gt;</code> e o <code>Span&lt;T&gt;</code>.</p>
+<div class="questao" id="q35">
+<span class="num">Q35</span>
+<div class="corpo">
+<p class="titulo">IDisposable e using</p>
+<p>Se o .NET tem coletor de lixo, por que existe <code>IDisposable</code>? O que <code>using var arquivo = File.OpenRead(...)</code> garante, e o que é um <em>finalizer</em>?</p>
+</div>
+</div>
+<p>O coletor cuida de <strong>memória gerenciada</strong>, e só quando quiser. Arquivos, <em>sockets</em>, conexões de banco e travas são <strong>recursos não gerenciados</strong> ou escassos: precisam ser liberados assim que deixam de ser usados, e não "algum dia". O <code>IDisposable.Dispose()</code> é a liberação explícita, e o <code>using</code> garante a chamada no fim do escopo, mesmo com exceção (é o RAII do C#, mas opcional). O <em>finalizer</em> (<code>~Classe()</code>) é uma rede de segurança chamada pelo coletor antes de recuperar um objeto que não foi descartado; é lento, não tem hora certa e atrasa a coleta. O padrão é: <code>Dispose</code> libera e chama <code>GC.SuppressFinalize(this)</code>; o <em>finalizer</em>, quando existe, só cobre o esquecimento.</p>
+<div class="questao" id="q36">
+<span class="num">Q36</span>
+<div class="corpo">
+<p class="titulo">async não é thread</p>
+<p>"Um método <code>async</code> roda em outra thread." Por que a frase está errada? O que acontece de fato num <code>await File.ReadAllTextAsync(...)</code> quando o arquivo ainda não foi lido?</p>
+</div>
+</div>
+<p>O <code>async</code> não cria thread nenhuma: ele transforma o método numa <strong>máquina de estados</strong> que pode ser pausada. O método roda na thread de quem chamou até o primeiro <code>await</code> de uma operação que ainda não terminou. Nesse ponto, ele registra a <strong>continuação</strong> (o resto do método) e devolve uma <code>Task</code> incompleta para quem chamou: a thread fica livre para outras tarefas. A leitura acontece no sistema operacional, sem thread nenhuma esperando bloqueada. Quando o SO avisa que terminou, a continuação é agendada (no <em>thread pool</em>, num servidor; na thread da interface, num app gráfico) e o método segue de onde parou. É assim que um servidor atende milhares de requisições com poucas dezenas de threads.</p>
+<div class="questao" id="q37">
+<span class="num">Q37</span>
+<div class="corpo">
+<p class="titulo">Task.Run e async void</p>
+<p>Por que <code>Task.Run</code> não deve envolver chamadas de E/S num servidor ASP.NET Core, e por que <code>async void</code> só é aceitável em <em>handlers</em> de evento?</p>
+</div>
+</div>
+<p>O <code>Task.Run</code> empurra um trabalho para outra thread do <em>thread pool</em>. Para trabalho <strong>de CPU</strong> num app de interface, isso libera a thread da tela. Mas num servidor, onde a requisição já roda no <em>thread pool</em>, envolver E/S em <code>Task.Run</code> só troca uma thread por outra e acrescenta custo; o certo é chamar a versão assíncrona de verdade (<code>ReadAsync</code>, <code>QueryAsync</code>). Já o <code>async void</code> não devolve <code>Task</code>: quem chama não pode aguardar o fim, e uma exceção lançada dentro dele não tem para onde ir e derruba o processo. Existe porque <em>handlers</em> de evento precisam devolver <code>void</code>; em qualquer outro lugar, <code>async Task</code>.</p>
+<div class="questao" id="q38">
+<span class="num">Q38</span>
+<div class="corpo">
+<p class="titulo">lock e o que ele protege</p>
+<p>O que <code>lock (_trava) { ... }</code> garante, e por que a trava deve ser um objeto privado, e não <code>this</code> ou um <code>string</code>? O que o .NET 9 trouxe para isso?</p>
+</div>
+</div>
+<p>O <code>lock</code> garante <strong>exclusão mútua</strong>: só uma thread por vez executa os blocos protegidos pela mesma trava, e as escritas feitas dentro dele ficam visíveis para a próxima thread que entrar. Travar <code>this</code> ou um <code>typeof(...)</code> expõe a trava a qualquer código de fora, que pode travar o mesmo objeto e causar <em>deadlocks</em> difíceis de achar; uma <code>string</code> literal é compartilhada pelo processo inteiro (<em>interning</em>). Um campo <code>private readonly</code> garante que só a própria classe usa aquela trava. O .NET 9 trouxe o tipo <code>System.Threading.Lock</code>, feito só para isso: <code>private readonly Lock _trava = new();</code> funciona com o mesmo <code>lock</code> e é mais eficiente que travar um <code>object</code>.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q39">
+<span class="num">Q39</span>
+<div class="corpo">
+<p class="titulo">Atributos e reflexão</p>
+<p>Crie o atributo <code>[Obrigatorio]</code> e um validador genérico que percorra, por reflexão, as propriedades <code>string</code> de qualquer objeto e liste as marcadas com o atributo que estejam vazias. Teste com uma classe <code>CadastroCliente</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>#:property PublishAot=false
+using System.Reflection;
+
+var c = new CadastroCliente { Nome = "Ana", Email = "", Apelido = "" };
+foreach (var erro in Validador.Validar(c))
+    Console.WriteLine(erro);
+
+static class Validador
+{
+    public static IEnumerable&lt;string&gt; Validar(object obj)
+    {
+        foreach (var p in obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        {
+            if (p.PropertyType != typeof(string) || p.GetCustomAttribute&lt;ObrigatorioAttribute&gt;() is null)
+                continue;
+            if (string.IsNullOrWhiteSpace((string?)p.GetValue(obj)))
+                yield return $"{p.Name} é obrigatório";
+        }
+    }
+}
+
+[AttributeUsage(AttributeTargets.Property)]
+class ObrigatorioAttribute : Attribute;
+
+class CadastroCliente
+{
+    [Obrigatorio] public string Nome { get; set; } = "";
+    [Obrigatorio] public string Email { get; set; } = "";
+    [Obrigatorio] public string Cpf { get; set; } = "";
+    public string Apelido { get; set; } = "";  // opcional
+}</code></pre>
+<pre class="saida"><code>Email é obrigatório
+Cpf é obrigatório</code></pre>
+<p>A primeira linha é uma diretiva dos programas de arquivo único do .NET 10 (<code>dotnet run arquivo.cs</code>): eles são compilados, por padrão, prontos para Native AOT, o que liga os avisos de <em>trimming</em> e desliga recursos que dependem de reflexão em execução. O <code>PublishAot=false</code> volta ao comportamento de um projeto <code>.csproj</code> comum, onde a linha não é necessária.</p>
+<p>O atributo, sozinho, não faz nada: é só um metadado gravado no <em>assembly</em>. Quem lhe dá sentido é o código que o lê. É o mesmo mecanismo do <code>[Required]</code> do ASP.NET Core e do <code>[Key]</code> do EF Core. A ordem das propriedades devolvidas por <code>GetProperties</code> não é garantida pela especificação, embora na prática siga a declaração.</p>
+<div class="questao" id="q40">
+<span class="num">Q40</span>
+<div class="corpo">
+<p class="titulo">Span sem alocar</p>
+<p>Escreva <code>static int SomarCsv(ReadOnlySpan&lt;char&gt; linha)</code> que some os inteiros de uma linha como <code>"10;20;x;30"</code>, ignorando os campos inválidos, sem criar nenhuma <code>string</code> (nada de <code>Split</code>). Compare a quantidade de bytes alocados com a versão que usa <code>Split</code> e <code>int.Parse</code>, medindo com <code>GC.GetAllocatedBytesForCurrentThread()</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>static int SomarCsv(ReadOnlySpan&lt;char&gt; linha)
+{
+    int soma = 0;
+    foreach (var faixa in linha.Split(';'))  // .NET 9: Split de span devolve faixas, não strings
+        if (int.TryParse(linha[faixa], out int n))
+            soma += n;
+    return soma;
+}
+
+static int SomarComSplit(string linha)
+{
+    int soma = 0;
+    foreach (var campo in linha.Split(';'))
+        if (int.TryParse(campo, out int n))
+            soma += n;
+    return soma;
+}
+
+string linha = "10;20;x;30;40;50";
+SomarCsv(linha);  // aquecimento: a primeira chamada compila o método (JIT)
+SomarComSplit(linha);
+
+long antes = GC.GetAllocatedBytesForCurrentThread();
+int a = 0;
+for (int i = 0; i &lt; 1000; i++) a = SomarCsv(linha);
+long comSpan = GC.GetAllocatedBytesForCurrentThread() - antes;
+
+antes = GC.GetAllocatedBytesForCurrentThread();
+int b = 0;
+for (int i = 0; i &lt; 1000; i++) b = SomarComSplit(linha);
+long comSplit = GC.GetAllocatedBytesForCurrentThread() - antes;
+
+Console.WriteLine($"span:  soma {a}, {comSpan} bytes em 1000 chamadas");
+Console.WriteLine($"split: soma {b}, {(comSplit &gt; 100_000 ? "mais de 100 KB" : $"{comSplit} bytes")} em 1000 chamadas");</code></pre>
+<pre class="saida"><code>span:  soma 150, 0 bytes em 1000 chamadas
+split: soma 150, mais de 100 KB em 1000 chamadas</code></pre>
+<p>O <code>Split</code> cria um array e uma <code>string</code> para cada campo, em toda chamada; a versão com <code>Span</code> só olha para pedaços da string original e não aloca nada. O <code>ReadOnlySpan&lt;char&gt;</code> é uma <code>ref struct</code>: vive só na pilha, não pode ser campo de classe nem atravessar um <code>await</code>. Quando for preciso guardar ou atravessar <code>await</code>, o equivalente é o <code>ReadOnlyMemory&lt;char&gt;</code>.</p>
+<div class="questao" id="q41">
+<span class="num">Q41</span>
+<div class="corpo">
+<p class="titulo">Gravando e lendo JSON</p>
+<p>Serialize uma lista de <code>record Livro(string Titulo, decimal Preco, DateOnly Lancamento)</code> para um arquivo JSON com nomes em <em>camelCase</em> e indentação, leia o arquivo de volta e confira que as listas são iguais. Mostre o JSON gravado.</p>
+</div>
+</div>
+<pre class="codigo"><code>#:property PublishAot=false
+using System.Text.Json;
+
+var opcoes = new JsonSerializerOptions(JsonSerializerDefaults.Web) { WriteIndented = true };
+List&lt;Livro&gt; livros = [new("Vidas Secas", 49.9m, new DateOnly(1938, 3, 1)), new("Memórias Póstumas", 32m, new DateOnly(1881, 1, 1))];
+
+await using (var saida = File.Create("livros.json"))
+    await JsonSerializer.SerializeAsync(saida, livros, opcoes);
+
+Console.WriteLine(await File.ReadAllTextAsync("livros.json"));
+
+await using var entrada = File.OpenRead("livros.json");
+var lidos = await JsonSerializer.DeserializeAsync&lt;List&lt;Livro&gt;&gt;(entrada, opcoes) ?? [];
+Console.WriteLine($"iguais? {lidos.SequenceEqual(livros)}");
+
+record Livro(string Titulo, decimal Preco, DateOnly Lancamento);</code></pre>
+<pre class="saida"><code>[
+  {
+    "titulo": "Vidas Secas",
+    "preco": 49.9,
+    "lancamento": "1938-03-01"
+  },
+  {
+    "titulo": "Mem\u00F3rias P\u00F3stumas",
+    "preco": 32,
+    "lancamento": "1881-01-01"
+  }
+]
+iguais? True</code></pre>
+<p>O <code>JsonSerializerDefaults.Web</code> liga o <em>camelCase</em> e a leitura sem diferenciar maiúsculas, o padrão das APIs web. O <code>decimal</code> sai como número JSON sem perder casas, e o <code>DateOnly</code> como texto ISO 8601. O <code>SequenceEqual</code> funciona porque <code>record</code> compara por valor. O <code>\u00F3</code> aparece no lugar do "ó" porque, por segurança, o codificador padrão escapa tudo que não é ASCII; <code>Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping</code> grava os acentos como estão.</p>
+<div class="questao" id="q42">
+<span class="num">Q42</span>
+<div class="corpo">
+<p class="titulo">Várias tarefas com cancelamento</p>
+<p>Simule a consulta de preço de um livro em três fornecedores com tempos de resposta diferentes (<code>Task.Delay</code> de 300, 100 e 2000 ms). Use <code>Task.WhenAll</code> para esperar os que respondem em até 500 ms, cancelando o lento com um <code>CancellationTokenSource</code> com tempo limite, e mostre o menor preço entre os que responderam.</p>
+</div>
+</div>
+<pre class="codigo"><code>using System.Diagnostics;
+
+async Task&lt;decimal?&gt; ConsultarAsync(string fornecedor, int ms, decimal preco, CancellationToken ct)
+{
+    try
+    {
+        await Task.Delay(ms, ct);
+        Console.WriteLine($"  {fornecedor} respondeu");
+        return preco;
+    }
+    catch (OperationCanceledException)
+    {
+        Console.WriteLine($"  {fornecedor} cancelado");
+        return null;
+    }
+}
+
+var relogio = Stopwatch.StartNew();
+using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(500));
+var precos = await Task.WhenAll(
+    ConsultarAsync("Fornecedor A", 300, 47.5m, cts.Token),
+    ConsultarAsync("Fornecedor B", 100, 49.9m, cts.Token),
+    ConsultarAsync("Fornecedor C", 2000, 39.0m, cts.Token));
+
+var validos = precos.OfType&lt;decimal&gt;().ToList();
+Console.WriteLine($"menor preço: {validos.Min()} entre {validos.Count} respostas");
+Console.WriteLine($"tempo total abaixo de 1 s? {relogio.ElapsedMilliseconds &lt; 1000}");</code></pre>
+<pre class="saida"><code>  Fornecedor B respondeu
+  Fornecedor A respondeu
+  Fornecedor C cancelado
+menor preço: 47.5 entre 2 respostas
+tempo total abaixo de 1 s? True</code></pre>
+<p>As três consultas rodam <strong>ao mesmo tempo</strong>: o tempo total é o da mais lenta permitida (cerca de 500 ms), e não a soma (2,4 s). O cancelamento é <strong>cooperativo</strong>: o <code>CancellationToken</code> só tem efeito porque o <code>Task.Delay</code> o observa; um laço de CPU precisaria chamar <code>ct.ThrowIfCancellationRequested()</code> de tempos em tempos. Fornecedor C, mais barato, ficou de fora: o tempo limite é uma decisão de negócio, não só técnica.</p>
+<div class="questao" id="q43">
+<span class="num">Q43</span>
+<div class="corpo">
+<p class="titulo">Contando em paralelo sem corrupção</p>
+<p>Conte as palavras de 4 textos em paralelo com <code>Parallel.ForEach</code>, acumulando num <code>Dictionary&lt;string, int&gt;</code> comum protegido por <code>lock</code> e, em outra versão, num <code>ConcurrentDictionary&lt;string, int&gt;</code> com <code>AddOrUpdate</code>. Confira que os dois dão o mesmo total.</p>
+</div>
+</div>
+<pre class="codigo"><code>using System.Collections.Concurrent;
+
+string[] textos =
+[
+    "o rato roeu a roupa do rei",
+    "o rei riu do rato",
+    "a roupa do rei rasgou",
+    "o rato fugiu",
+];
+
+var comLock = new Dictionary&lt;string, int&gt;();
+var trava = new Lock();
+Parallel.ForEach(textos, t =&gt;
+{
+    foreach (var p in t.Split(' '))
+        lock (trava)
+            comLock[p] = comLock.GetValueOrDefault(p) + 1;
+});
+
+var concorrente = new ConcurrentDictionary&lt;string, int&gt;();
+Parallel.ForEach(textos, t =&gt;
+{
+    foreach (var p in t.Split(' '))
+        concorrente.AddOrUpdate(p, 1, (_, atual) =&gt; atual + 1);
+});
+
+Console.WriteLine($"total com lock: {comLock.Values.Sum()} | concorrente: {concorrente.Values.Sum()}");
+foreach (var (p, n) in concorrente.OrderByDescending(x =&gt; x.Value).ThenBy(x =&gt; x.Key).Take(3))
+    Console.WriteLine($"{p}: {n}");</code></pre>
+<pre class="saida"><code>total com lock: 20 | concorrente: 20
+do: 3
+o: 3
+rato: 3</code></pre>
+<p>Sem o <code>lock</code>, o <code>Dictionary</code> comum pode perder contagens ou até corromper a estrutura interna e entrar em laço infinito: ele não é seguro para escritas concorrentes. No <code>ConcurrentDictionary</code>, a função de atualização pode ser chamada <strong>mais de uma vez</strong> sob disputa, por isso precisa ser pura (sem efeitos colaterais). Para quatro frases, o paralelismo custa mais do que economiza; ele só compensa com volumes grandes.</p>
+<div class="questao" id="q44">
+<span class="num">Q44</span>
+<div class="corpo">
+<p class="titulo">Chamando C com P/Invoke</p>
+<p>Use <code>[LibraryImport]</code> para chamar a função <code>strlen</code> da biblioteca C do Linux (<code>libc</code>) e a função <code>abs</code>. Compare com <code>string.Length</code> para um texto com acentos e explique a diferença.</p>
+</div>
+</div>
+<pre class="codigo"><code>#:property AllowUnsafeBlocks=true
+using System.Runtime.InteropServices;
+
+string texto = "ação";
+Console.WriteLine($"Length (UTF-16):  {texto.Length}");
+Console.WriteLine($"strlen (UTF-8):   {Libc.strlen(texto)}");
+Console.WriteLine($"abs(-42) pela libc: {Libc.abs(-42)}");
+
+static partial class Libc
+{
+    [LibraryImport("libc", StringMarshalling = StringMarshalling.Utf8)]
+    internal static partial nuint strlen(string s);
+
+    [LibraryImport("libc")]
+    internal static partial int abs(int x);
+}</code></pre>
+<pre class="saida"><code>Length (UTF-16):  4
+strlen (UTF-8):   6
+abs(-42) pela libc: 42</code></pre>
+<p>O <code>Length</code> conta <strong>unidades UTF-16</strong> (4: a, ç, ã, o). Para chamar a função C, o <em>marshaller</em> converte a string para UTF-8 terminada em <code>'\0'</code>, e o <code>strlen</code> conta <strong>bytes</strong>: "ç" e "ã" ocupam dois bytes cada, então 6. O <code>[LibraryImport]</code> (.NET 7) gera o código de conversão na compilação, com um <em>source generator</em>, em vez de montá-lo em execução como o antigo <code>[DllImport]</code>; por isso a classe precisa ser <code>partial</code>; e o código gerado usa ponteiros, o que exige <code>AllowUnsafeBlocks</code> (num <code>.csproj</code>, <code>&lt;AllowUnsafeBlocks&gt;true&lt;/AllowUnsafeBlocks&gt;</code>). O <code>nuint</code> corresponde ao <code>size_t</code> do C. O nome <code>libc</code> resolve no Linux; no Windows, o equivalente seria <code>msvcrt</code> ou <code>ucrtbase</code>.</p>
+</section>
+<section class="modulo" id="modulo-5">
+<h2><span class="rotulo">MÓDULO 5</span> Testes e bancos de dados</h2>
+<p class="intro">xUnit, SQL com SQLite, ADO.NET, Dapper, Entity Framework Core, PostgreSQL, MySQL, MongoDB e um repositório independente do banco.</p>
+<p class="aulas-titulo">Artigos 31 a 42</p>
+<ul class="aulas">
+<li><span class="n">#31</span> Testes Automatizados com xUnit: Mudar Sem Medo</li>
+<li><span class="n">#32</span> SQL Essencial com SQLite: Perguntas a um Banco de Dados</li>
+<li><span class="n">#33</span> ADO.NET: Conexões, Comandos Parametrizados e o Perigo do SQL Injection</li>
+<li><span class="n">#34</span> Dapper: SQL Seu, Sem a Cerimônia</li>
+<li><span class="n">#35</span> Entity Framework Core: Objetos no Banco Sem Escrever SQL</li>
+<li><span class="n">#36</span> EF Core: Relacionamentos e Migrations</li>
+<li><span class="n">#37</span> EF Core com Desempenho: N+1, AsNoTracking e o SQL por Trás de Cada Consulta</li>
+<li><span class="n">#38</span> PostgreSQL: o Banco de Dados Servidor, com Npgsql, JSONB e Arrays</li>
+<li><span class="n">#39</span> MySQL: MySqlConnector, o Provider do EF e as Diferenças Que Importam</li>
+<li><span class="n">#40</span> MongoDB: o Modelo de Documentos e o Driver Oficial</li>
+<li><span class="n">#41</span> MongoDB Avançado: Agregações, Índices e a Escolha Entre Documento e Relacional</li>
+<li><span class="n">#42</span> Um Repositório, Três Bancos: Injeção de Dependência e a Livraria Independente de Infraestrutura</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q45">
+<span class="num">Q45</span>
+<div class="corpo">
+<p class="titulo">Fact, Theory e o padrão AAA</p>
+<p>No xUnit, qual a diferença entre <code>[Fact]</code> e <code>[Theory]</code> com <code>[InlineData]</code>? O que é o padrão <em>Arrange, Act, Assert</em>?</p>
+</div>
+</div>
+<p>O <code>[Fact]</code> é um teste sem parâmetros, que verifica uma afirmação sempre verdadeira. A <code>[Theory]</code> é um teste <strong>parametrizado</strong>: o mesmo método roda uma vez para cada <code>[InlineData(...)]</code>, e cada execução aparece como um teste separado no relatório. É ideal para uma regra com vários casos (o frete de cada UF, os limites de um desconto). O padrão AAA organiza o corpo em três blocos: <strong>Arrange</strong> (montar os objetos e os dados), <strong>Act</strong> (executar a ação testada, de preferência numa linha só) e <strong>Assert</strong> (verificar o resultado). Um teste que tem vários "Act" geralmente são vários testes.</p>
+<div class="questao" id="q46">
+<span class="num">Q46</span>
+<div class="corpo">
+<p class="titulo">SQL injection</p>
+<p>Mostre por que o código abaixo é vulnerável, o que um atacante digitaria e como o ADO.NET resolve o problema.</p>
+<pre class="codigo"><code>var cmd = conexao.CreateCommand();
+cmd.CommandText = $"SELECT * FROM clientes WHERE email = '{email}'";</code></pre>
+</div>
+</div>
+<p>O valor digitado vira <strong>parte do comando SQL</strong>. Com o e-mail <code>' OR '1'='1</code>, a consulta fica <code>... WHERE email = '' OR '1'='1'</code>, que devolve todos os clientes. Com <code>'; DROP TABLE clientes; --</code>, conforme o banco, o atacante executa um comando novo. A correção é o <strong>parâmetro</strong>: <code>cmd.CommandText = "SELECT * FROM clientes WHERE email = $email"; cmd.Parameters.AddWithValue("$email", email);</code>. O texto do comando e o valor viajam separados; o banco nunca interpreta o valor como SQL, qualquer que seja o conteúdo. A interpolação de string é o erro mais comum, justamente porque o <code>$"..."</code> parece inofensivo.</p>
+<div class="questao" id="q47">
+<span class="num">Q47</span>
+<div class="corpo">
+<p class="titulo">ADO.NET, Dapper ou EF Core</p>
+<p>Compare ADO.NET puro, Dapper e EF Core quanto ao que você escreve, ao controle sobre o SQL e ao que cada um faz por você. Quando escolher cada um?</p>
+</div>
+</div>
+<ul><li><strong>ADO.NET</strong>: você escreve o SQL e também o código de leitura linha a linha (<code>reader.GetString(0)</code>). Controle total e nenhuma dependência, mas muito código repetitivo.</li><li><strong>Dapper</strong>: você escreve o SQL; ele mapeia parâmetros e resultados para objetos (<code>conexao.Query&lt;Livro&gt;(sql, new { id })</code>). Quase a velocidade do ADO.NET, sem a cerimônia.</li><li><strong>EF Core</strong>: você escreve LINQ, e ele gera o SQL; acompanha as mudanças dos objetos (<em>change tracking</em>), gera <em>migrations</em> do esquema e cuida dos relacionamentos. Mais produtivo para CRUD, e o SQL fica menos visível.</li></ul>
+<p>Escolha EF Core para aplicações com muitas entidades e regras de negócio, Dapper para consultas de leitura sob medida ou de desempenho crítico, e ADO.NET quando não puder ter dependências. Elas convivem: é comum usar EF Core para escrever e Dapper para relatórios.</p>
+<div class="questao" id="q48">
+<span class="num">Q48</span>
+<div class="corpo">
+<p class="titulo">O problema N+1</p>
+<p>O que é o problema N+1 no EF Core? Mostre o código que o causa e duas formas de corrigir.</p>
+</div>
+</div>
+<p>Ao listar N pedidos e acessar <code>pedido.Cliente.Nome</code> de cada um com <em>lazy loading</em>, o EF executa <strong>uma consulta para os pedidos e mais uma para cada cliente</strong>: N+1 idas ao banco, cada uma com a sua latência de rede. Com 500 pedidos, 501 consultas. Correções:</p>
+<ul><li>**<code>Include</code>**: <code>db.Pedidos.Include(p =&gt; p.Cliente).ToList()</code> traz tudo num <code>JOIN</code>;</li><li><strong>projeção</strong>: <code>db.Pedidos.Select(p =&gt; new { p.Id, ClienteNome = p.Cliente.Nome }).ToList()</code> traz só as colunas usadas, também numa consulta.</li></ul>
+<p>Para leitura sem alteração posterior, <code>AsNoTracking()</code> ainda evita o custo do <em>change tracking</em>. O <code>ToQueryString()</code> ou o <em>log</em> do EF mostram o SQL realmente gerado.</p>
+<div class="questao" id="q49">
+<span class="num">Q49</span>
+<div class="corpo">
+<p class="titulo">Documento ou relacional</p>
+<p>A livraria guarda pedidos com itens. Quando modelar no MongoDB, com os itens <strong>embutidos</strong> no documento do pedido, é melhor que no PostgreSQL, com tabelas <code>pedidos</code> e <code>itens</code>? E quando é pior?</p>
+</div>
+</div>
+<p><strong>Melhor</strong> quando os dados são lidos e gravados juntos: o pedido é sempre exibido com os itens, e os itens não existem fora dele. Um documento traz tudo numa leitura só, sem <em>join</em>, e a estrutura pode variar entre pedidos (um item com dedicatória, outro com embrulho). <strong>Pior</strong> quando há relações entre entidades independentes e consultas transversais: "quantos exemplares de Vidas Secas vendemos este mês, por região?" exige agregações sobre todos os documentos, e o título de um livro repetido em milhares de pedidos precisa ser atualizado em todos. O relacional garante integridade (chaves estrangeiras, transações entre tabelas) e consultas <em>ad hoc</em>; o documento ganha em leitura do agregado e em flexibilidade de esquema.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q50">
+<span class="num">Q50</span>
+<div class="corpo">
+<p class="titulo">Testes com xUnit</p>
+<p>Escreva, como projeto de testes xUnit, os testes da regra de frete do módulo 1 (<code>Frete(uf, total)</code>): uma <code>[Theory]</code> cobrindo SP, RJ, outra UF e o limite de R$ 200 (exatamente 200 e 200,01), e um <code>[Fact]</code> que verifique que uma UF em minúsculas é tratada como as outras UFs (documentando o comportamento atual).</p>
+</div>
+</div>
+<pre class="codigo"><code>using Xunit;
+
+public static class Regras
+{
+    public static decimal Frete(string uf, decimal total) =&gt; (uf, total) switch
+    {
+        (_, &gt; 200m) =&gt; 0m,
+        ("SP" or "RJ", _) =&gt; 10m,
+        _ =&gt; 25m,
+    };
+}
+
+public class FreteTests
+{
+    [Theory]
+    [InlineData("SP", 50, 10)]
+    [InlineData("RJ", 50, 10)]
+    [InlineData("BA", 50, 25)]
+    [InlineData("BA", 200, 25)]      // exatamente 200 ainda paga
+    [InlineData("BA", 200.01, 0)]    // acima de 200 é grátis
+    public void Frete_segue_a_tabela(string uf, decimal total, decimal esperado)
+    {
+        var frete = Regras.Frete(uf, total);
+
+        Assert.Equal(esperado, frete);
+    }
+
+    [Fact]
+    public void Uf_em_minusculas_paga_como_outras_ufs()
+    {
+        Assert.Equal(25m, Regras.Frete("sp", 50m));
+    }
+}</code></pre>
+<p>Crie o projeto com <code>dotnet new xunit -n Livraria.Testes</code> e rode com <code>dotnet test</code>: com o xUnit 2.9.3, os seis casos passam. O <code>[InlineData]</code> só aceita constantes, e <code>decimal</code> não é uma delas: o xUnit converte o <code>50</code> e o <code>200.01</code> (que chegam como <code>int</code> e <code>double</code>) para o tipo do parâmetro. O teste com "sp" documenta um comportamento provavelmente indesejado; quando a regra mudar para aceitar minúsculas, é ele que vai falhar e lembrar de atualizar a documentação. Os casos de limite (200 e 200,01) são os que mais acham erros: é ali que um <code>&gt;</code> vira <code>&gt;=</code> sem ninguém perceber.</p>
+<div class="questao" id="q51">
+<span class="num">Q51</span>
+<div class="corpo">
+<p class="titulo">ADO.NET com SQLite</p>
+<p>Com o pacote <code>Microsoft.Data.Sqlite</code>, crie um banco em memória, a tabela <code>livros(id, titulo, preco)</code>, insira três livros com um comando parametrizado dentro de uma transação e liste os que custam menos de R$ 50, lendo com <code>SqliteDataReader</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>#:package Microsoft.Data.Sqlite@10.0.13
+using Microsoft.Data.Sqlite;
+
+using var conexao = new SqliteConnection("Data Source=:memory:");
+conexao.Open();
+
+using (var criar = conexao.CreateCommand())
+{
+    criar.CommandText = "CREATE TABLE livros (id INTEGER PRIMARY KEY, titulo TEXT NOT NULL, preco REAL NOT NULL)";
+    criar.ExecuteNonQuery();
+}
+
+using (var tx = conexao.BeginTransaction())
+{
+    var ins = conexao.CreateCommand();
+    ins.Transaction = tx;
+    ins.CommandText = "INSERT INTO livros (titulo, preco) VALUES ($titulo, $preco)";
+    var pTitulo = ins.Parameters.Add("$titulo", SqliteType.Text);
+    var pPreco = ins.Parameters.Add("$preco", SqliteType.Real);
+    foreach (var (t, p) in new[] { ("Vidas Secas", 49.9), ("A Rosa do Povo", 59.0), ("Iracema", 25.0) })
+    {
+        pTitulo.Value = t;
+        pPreco.Value = p;
+        ins.ExecuteNonQuery();
+    }
+    tx.Commit();
+}
+
+using var sel = conexao.CreateCommand();
+sel.CommandText = "SELECT id, titulo, preco FROM livros WHERE preco &lt; $max ORDER BY preco";
+sel.Parameters.AddWithValue("$max", 50);
+using var r = sel.ExecuteReader();
+while (r.Read())
+    Console.WriteLine($"{r.GetInt32(0)} {r.GetString(1),-12} {r.GetDouble(2):F2}");</code></pre>
+<pre class="saida"><code>3 Iracema      25.00
+1 Vidas Secas  49.90</code></pre>
+<p>A transação não é só por segurança: no SQLite, cada <code>INSERT</code> fora de uma transação explícita vira uma transação própria, com uma gravação em disco cada; com milhares de linhas, a diferença é de segundos para milissegundos. O mesmo comando é reaproveitado, trocando só os valores dos parâmetros. O SQLite não tem tipo decimal (<code>REAL</code> é <code>double</code>): para dinheiro, guarde centavos num <code>INTEGER</code>. A linha <code>#:package</code> é a forma de um programa de arquivo único (.NET 10) declarar um pacote NuGet.</p>
+<div class="questao" id="q52">
+<span class="num">Q52</span>
+<div class="corpo">
+<p class="titulo">EF Core em memória com relacionamentos</p>
+<p>Com o EF Core e o provedor SQLite em memória, modele <code>Autor</code> (um) e <code>Livro</code> (muitos), crie o banco com <code>EnsureCreated</code>, grave dois autores com livros e liste cada autor com a quantidade de livros e o mais caro, usando uma projeção. Diga como ver o SQL que o EF gerou.</p>
+</div>
+</div>
+<pre class="codigo"><code>#:package Microsoft.EntityFrameworkCore.Sqlite@10.0.13
+#:property PublishAot=false
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+
+using var conexao = new SqliteConnection("Data Source=:memory:");
+conexao.Open();  // o banco em memória vive enquanto a conexão estiver aberta
+var opcoes = new DbContextOptionsBuilder&lt;LivrariaDb&gt;().UseSqlite(conexao).Options;
+
+using (var db = new LivrariaDb(opcoes))
+{
+    db.Database.EnsureCreated();
+    db.Autores.AddRange(
+        new Autor { Nome = "Machado de Assis", Livros = [new() { Titulo = "Dom Casmurro", Preco = 35 }, new() { Titulo = "Quincas Borba", Preco = 38 }] },
+        new Autor { Nome = "Graciliano Ramos", Livros = [new() { Titulo = "Vidas Secas", Preco = 49.9m }] });
+    db.SaveChanges();
+}
+
+using (var db = new LivrariaDb(opcoes))
+{
+    var consulta = db.Autores
+        .OrderBy(a =&gt; a.Nome)
+        .Select(a =&gt; new
+        {
+            a.Nome,
+            Quantidade = a.Livros.Count,
+            MaisCaro = a.Livros.OrderByDescending(l =&gt; l.Preco).Select(l =&gt; l.Titulo).First(),
+        });
+    foreach (var a in consulta)
+        Console.WriteLine($"{a.Nome}: {a.Quantidade} livro(s), mais caro: {a.MaisCaro}");
+}
+
+class Autor
+{
+    public int Id { get; set; }
+    public required string Nome { get; set; }
+    public List&lt;Livro&gt; Livros { get; set; } = [];
+}
+
+class Livro
+{
+    public int Id { get; set; }
+    public required string Titulo { get; set; }
+    public decimal Preco { get; set; }
+    public int AutorId { get; set; }
+}
+
+class LivrariaDb(DbContextOptions&lt;LivrariaDb&gt; opcoes) : DbContext(opcoes)
+{
+    public DbSet&lt;Autor&gt; Autores =&gt; Set&lt;Autor&gt;();
+    public DbSet&lt;Livro&gt; Livros =&gt; Set&lt;Livro&gt;();
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder b)
+        =&gt; b.Properties&lt;decimal&gt;().HaveConversion&lt;double&gt;();  // SQLite não ordena decimal guardado como texto
+}</code></pre>
+<pre class="saida"><code>Graciliano Ramos: 1 livro(s), mais caro: Vidas Secas
+Machado de Assis: 2 livro(s), mais caro: Quincas Borba</code></pre>
+<p>As convenções do EF deduzem quase tudo: <code>Id</code> é a chave, <code>AutorId</code> é a chave estrangeira, e a lista <code>Livros</code> define o relacionamento um-para-muitos. A projeção traz <strong>só</strong> o nome, a contagem e um título, numa consulta só (com subconsultas: <code>Console.WriteLine(consulta.ToQueryString())</code> mostra o SQL exato, e <code>LogTo(Console.WriteLine)</code> nas opções registra cada comando executado), sem carregar os livros na memória; é a correção do N+1 vista acima. O <code>ConfigureConventions</code> existe por uma limitação do SQLite: o EF grava <code>decimal</code> como texto nele e não consegue ordenar por esse campo; com PostgreSQL ou SQL Server, a linha não é necessária. Num projeto real, o esquema evolui com <em>migrations</em> (<code>dotnet ef migrations add</code>), e não com <code>EnsureCreated</code>.</p>
+<div class="questao" id="q53">
+<span class="num">Q53</span>
+<div class="corpo">
+<p class="titulo">Um repositório, vários bancos</p>
+<p>Defina <code>interface ILivroRepositorio { Task&lt;Livro?&gt; ObterAsync(int id); Task AdicionarAsync(Livro l); }</code>, uma implementação em memória e um <code>CatalogoService</code> que dependa só da interface. Registre tudo num <code>ServiceCollection</code> (injeção de dependência) e mostre que trocar a implementação é uma linha.</p>
+</div>
+</div>
+<pre class="codigo"><code>#:package Microsoft.Extensions.DependencyInjection@10.0.13
+using Microsoft.Extensions.DependencyInjection;
+
+var servicos = new ServiceCollection();
+servicos.AddSingleton&lt;ILivroRepositorio, RepositorioEmMemoria&gt;();  // trocar o banco = trocar esta linha
+servicos.AddTransient&lt;CatalogoService&gt;();
+
+using var provedor = servicos.BuildServiceProvider();
+var catalogo = provedor.GetRequiredService&lt;CatalogoService&gt;();
+await catalogo.CadastrarAsync(new Livro(1, "Vidas Secas", 49.9m));
+Console.WriteLine(await catalogo.DescreverAsync(1));
+Console.WriteLine(await catalogo.DescreverAsync(2));
+
+record Livro(int Id, string Titulo, decimal Preco);
+
+interface ILivroRepositorio
+{
+    Task&lt;Livro?&gt; ObterAsync(int id);
+    Task AdicionarAsync(Livro l);
+}
+
+class RepositorioEmMemoria : ILivroRepositorio
+{
+    private readonly Dictionary&lt;int, Livro&gt; _dados = [];
+    public Task&lt;Livro?&gt; ObterAsync(int id) =&gt; Task.FromResult(_dados.GetValueOrDefault(id));
+    public Task AdicionarAsync(Livro l)
+    {
+        _dados[l.Id] = l;
+        return Task.CompletedTask;
+    }
+}
+
+class CatalogoService(ILivroRepositorio repo)
+{
+    public Task CadastrarAsync(Livro l) =&gt; repo.AdicionarAsync(l);
+
+    public async Task&lt;string&gt; DescreverAsync(int id)
+        =&gt; await repo.ObterAsync(id) is { } l ? $"{l.Titulo} por R$ {l.Preco}" : $"livro {id} não encontrado";
+}</code></pre>
+<pre class="saida"><code>Vidas Secas por R$ 49.9
+livro 2 não encontrado</code></pre>
+<p>O <code>CatalogoService</code> não sabe se os livros estão num dicionário, no PostgreSQL ou no MongoDB: recebe a interface pelo construtor, e o contêiner decide qual implementação entregar. Nos testes, a versão em memória substitui o banco sem nenhum <em>mock</em>. O tempo de vida importa: <code>Singleton</code> (um para o app inteiro) serve para o repositório em memória, mas um <code>DbContext</code> do EF deve ser <code>Scoped</code> (um por requisição), porque não é seguro para uso concorrente.</p>
+</section>
+<section class="modulo" id="modulo-6">
+<h2><span class="rotulo">MÓDULO 6</span> ASP.NET Core e serviços</h2>
+<p class="intro">Hosting e pipeline de middleware, a API da livraria, validação e ProblemDetails, JWT, configuração e logging, cache, SignalR, workers e mensageria, gRPC e produção.</p>
+<p class="aulas-titulo">Artigos 43 a 52</p>
+<ul class="aulas">
+<li><span class="n">#43</span> ASP.NET Core por dentro: hosting, pipeline de middleware e Minimal APIs</li>
+<li><span class="n">#44</span> A API da Livraria: recursos, verbos, DTOs e concorrência sobre HTTP</li>
+<li><span class="n">#45</span> Validação, ProblemDetails e OpenAPI: uma API que explica a si mesma</li>
+<li><span class="n">#46</span> Autenticação e autorização com JWT: quem é você e o que pode fazer</li>
+<li><span class="n">#47</span> Configuração, logging e testes de integração: a API pronta para ser operada</li>
+<li><span class="n">#48</span> Cache com Redis, HybridCache e output caching: responder sem ir ao banco</li>
+<li><span class="n">#49</span> Tempo real com SignalR: quando o servidor toma a iniciativa</li>
+<li><span class="n">#50</span> Worker Services e mensageria com RabbitMQ: trabalho fora da requisição</li>
+<li><span class="n">#51</span> gRPC: contratos binários e streaming entre serviços</li>
+<li><span class="n">#52</span> Produção: CORS, rate limiting, versionamento e OpenTelemetry</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q54">
+<span class="num">Q54</span>
+<div class="corpo">
+<p class="titulo">A ordem dos middlewares</p>
+<p>O pipeline do ASP.NET Core é uma sequência de <em>middlewares</em>. Por que <code>app.UseAuthentication()</code> precisa vir antes de <code>app.UseAuthorization()</code>, e o que acontece se um <em>middleware</em> não chamar <code>next()</code>?</p>
+</div>
+</div>
+<p>Cada <em>middleware</em> recebe a requisição, pode fazer algo <strong>antes</strong>, chama o próximo (<code>await next(context)</code>) e pode fazer algo <strong>depois</strong>, na volta: o pipeline é uma pilha de chamadas aninhadas. A autenticação descobre <strong>quem</strong> é o usuário (lê o <em>cookie</em> ou o <em>token</em> e preenche <code>HttpContext.User</code>); a autorização decide <strong>se</strong> ele pode acessar o <em>endpoint</em>. Com a ordem invertida, a autorização olharia para um usuário ainda anônimo e recusaria tudo. Um <em>middleware</em> que não chama <code>next()</code> <strong>encerra</strong> o pipeline (<em>short-circuit</em>): é o que fazem os arquivos estáticos ao achar o arquivo, o <em>rate limiter</em> ao devolver 429 e a autorização ao devolver 401 ou 403.</p>
+<div class="questao" id="q55">
+<span class="num">Q55</span>
+<div class="corpo">
+<p class="titulo">Entidade ou DTO</p>
+<p>Por que a API da livraria não deve receber nem devolver diretamente a entidade <code>Livro</code> do EF Core? O que é um DTO, e que ataque o <em>overposting</em> permite?</p>
+</div>
+</div>
+<p>A entidade é o modelo <strong>interno</strong>: tem chaves estrangeiras, propriedades de navegação, campos de auditoria e regras que mudam com o banco. Expô-la acopla o contrato público ao esquema (mudar uma coluna quebra os clientes) e pode vazar dados (o custo de aquisição, por exemplo). Um <strong>DTO</strong> (<em>Data Transfer Object</em>) é um tipo feito só para o contrato: <code>CriarLivroRequest(string Titulo, decimal Preco)</code> na entrada e <code>LivroResponse(...)</code> na saída. O <em>overposting</em> acontece quando a API faz <em>binding</em> da entidade inteira: o cliente envia um campo que não deveria poder definir, como <code>"Destaque": true</code> ou <code>"Preco": 0</code>, e ele é gravado. Com um DTO de entrada, só os campos previstos existem.</p>
+<div class="questao" id="q56">
+<span class="num">Q56</span>
+<div class="corpo">
+<p class="titulo">Concorrência otimista com ETag</p>
+<p>Dois atendentes abrem o mesmo livro, e cada um altera o preço e salva. Como <code>ETag</code> e <code>If-Match</code> evitam que a segunda gravação apague a primeira sem ninguém perceber? Que código HTTP a API devolve?</p>
+</div>
+</div>
+<p>No <code>GET</code>, a API devolve o recurso com um <code>ETag</code>, uma versão (um contador ou um <em>hash</em> do conteúdo, como o <code>RowVersion</code> do EF). No <code>PUT</code>, o cliente envia <code>If-Match: &lt;etag que ele leu&gt;</code>. A API só grava se a versão atual ainda for aquela; senão, devolve <strong>412 Precondition Failed</strong>. O primeiro atendente grava e muda a versão; o segundo recebe 412, recarrega e decide. É <strong>concorrência otimista</strong>: nada é travado durante a edição, e o conflito é detectado na gravação. Sem isso, vale a "última gravação", que perde dados em silêncio.</p>
+<div class="questao" id="q57">
+<span class="num">Q57</span>
+<div class="corpo">
+<p class="titulo">O que um JWT protege</p>
+<p>Um JWT tem três partes separadas por ponto. O que cada uma contém, e por que é um erro guardar a senha ou o CPF do usuário dentro dele?</p>
+</div>
+</div>
+<p>O cabeçalho (algoritmo), o <em>payload</em> (as <em>claims</em>: <code>sub</code>, <code>role</code>, <code>exp</code>...) e a <strong>assinatura</strong>. As duas primeiras são só JSON em <strong>Base64Url</strong>: qualquer um que tenha o <em>token</em> consegue lê-las, sem chave nenhuma. A assinatura garante a <strong>integridade</strong> (ninguém altera o <em>payload</em> sem invalidá-la), não o <strong>sigilo</strong>. Por isso dado sensível nunca vai no JWT. A API valida assinatura, emissor, audiência e validade (<code>exp</code>) a cada requisição; como o <em>token</em> não pode ser revogado antes de expirar sem um controle extra, o <em>token</em> de acesso deve durar pouco (minutos) e ser renovado com um <em>refresh token</em>.</p>
+<div class="questao" id="q58">
+<span class="num">Q58</span>
+<div class="corpo">
+<p class="titulo">De onde vem a configuração</p>
+<p>No ASP.NET Core, a mesma chave pode vir do <code>appsettings.json</code>, do <code>appsettings.Production.json</code>, de variáveis de ambiente e da linha de comando. Qual vence, e onde deve ficar a <em>connection string</em> de produção?</p>
+</div>
+</div>
+<p>As fontes são lidas em ordem, e <strong>a última vence</strong>: <code>appsettings.json</code>, depois <code>appsettings.{Ambiente}.json</code>, depois <em>user secrets</em> (só em desenvolvimento), variáveis de ambiente e, por fim, argumentos de linha de comando. A chave aninhada <code>ConnectionStrings:Livraria</code> vira a variável de ambiente <code>ConnectionStrings__Livraria</code> (dois sublinhados). A <em>connection string</em> de produção, com senha, <strong>não</strong> vai para nenhum arquivo versionado: vem de variável de ambiente, de um cofre de segredos (Azure Key Vault, AWS Secrets Manager) ou do orquestrador. O <code>appsettings.json</code> do repositório guarda só valores de desenvolvimento e padrões sem segredo.</p>
+<div class="questao" id="q59">
+<span class="num">Q59</span>
+<div class="corpo">
+<p class="titulo">Cache: o problema difícil</p>
+<p>"Há duas coisas difíceis em computação: invalidar cache e dar nomes às coisas." Ao guardar o catálogo da livraria no Redis, que estratégias existem para que um preço alterado não continue aparecendo velho, e o que é uma <em>cache stampede</em>?</p>
+</div>
+</div>
+<ul><li><strong>Expiração</strong> (TTL): o item some depois de N minutos. Simples, mas aceita um atraso de até N minutos.</li><li><strong>Invalidação explícita</strong>: quem altera o preço apaga (ou atualiza) a chave do livro. Exige que <strong>todo</strong> caminho de escrita lembre de invalidar.</li><li><strong>Etiquetas</strong>: o <code>HybridCache</code> (.NET 9) permite invalidar todas as entradas de uma etiqueta (<code>"catalogo"</code>) de uma vez.</li></ul>
+<p>A <em>cache stampede</em> acontece quando uma chave muito usada expira e centenas de requisições simultâneas encontram o cache vazio e vão <strong>todas</strong> ao banco ao mesmo tempo. O <code>HybridCache</code> evita isso: só uma requisição calcula o valor, e as outras aguardam o resultado dela.</p>
+<div class="questao" id="q60">
+<span class="num">Q60</span>
+<div class="corpo">
+<p class="titulo">Entrega pelo menos uma vez</p>
+<p>O RabbitMQ garante entrega "pelo menos uma vez" quando o consumidor só confirma (<code>ack</code>) depois de processar. Por que isso obriga o consumidor que envia o e-mail de confirmação de pedido a ser <strong>idempotente</strong>, e como fazê-lo?</p>
+</div>
+</div>
+<p>Se o consumidor processa a mensagem e cai <strong>antes</strong> de enviar o <code>ack</code>, o RabbitMQ entrega a mesma mensagem de novo, para ele ou para outro consumidor: o cliente receberia dois e-mails. Não há como garantir "exatamente uma vez" só com a fila. Ser idempotente significa que processar a mesma mensagem duas vezes tem o mesmo efeito que uma: cada mensagem carrega um identificador único (o id do pedido mais o tipo do evento), e o consumidor registra os ids já processados, de preferência na mesma transação do efeito, e ignora repetidos.</p>
+<div class="questao" id="q61">
+<span class="num">Q61</span>
+<div class="corpo">
+<p class="titulo">gRPC ou REST</p>
+<p>Para a comunicação entre o serviço de pedidos e o de estoque, por que gRPC pode ser melhor que uma API REST com JSON? Por que ele não costuma ser usado diretamente pelo navegador?</p>
+</div>
+</div>
+<p>O gRPC usa <strong>Protocol Buffers</strong>, um formato binário compacto e rápido de serializar, sobre HTTP/2, com várias chamadas multiplexadas numa conexão e <em>streaming</em> nos dois sentidos. O contrato (<code>.proto</code>) é a fonte da verdade: cliente e servidor são <strong>gerados</strong> a partir dele, com tipos verificados na compilação. Entre serviços internos, isso significa menos banda, menos CPU e menos erros de integração. O navegador não dá ao JavaScript o controle sobre os quadros HTTP/2 de que o gRPC precisa; é preciso o gRPC-Web, com um <em>proxy</em> ou suporte no servidor. Para APIs públicas, REST com JSON continua mais simples de consumir e depurar.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q62">
+<span class="num">Q62</span>
+<div class="corpo">
+<p class="titulo">O pipeline em ação</p>
+<p>Escreva uma aplicação ASP.NET Core mínima com dois <em>middlewares</em> próprios: um que mede o tempo e acrescenta o cabeçalho <code>X-Tempo-Ms</code>, e outro que recusa com 403 qualquer requisição para <code>/admin</code> sem o cabeçalho <code>X-Chave: segredo</code>. Suba o servidor numa porta local, faça três requisições com <code>HttpClient</code> dentro do próprio programa e mostre a ordem em que os <em>middlewares</em> rodam.</p>
+</div>
+</div>
+<pre class="codigo"><code>#:sdk Microsoft.NET.Sdk.Web
+#:property PublishAot=false
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+
+var builder = WebApplication.CreateBuilder();
+builder.Logging.ClearProviders();  // sem os logs do host, para a saída ficar limpa
+builder.WebHost.UseUrls("http://127.0.0.1:0");  // porta 0: o sistema escolhe uma livre
+var app = builder.Build();
+
+app.Use(async (ctx, next) =&gt;
+{
+    var inicio = TimeProvider.System.GetTimestamp();
+    Console.WriteLine($"  [tempo] entra {ctx.Request.Path}");
+    ctx.Response.OnStarting(() =&gt;
+    {
+        ctx.Response.Headers["X-Tempo-Ms"] = TimeProvider.System.GetElapsedTime(inicio).TotalMilliseconds.ToString("F0");
+        return Task.CompletedTask;
+    });
+    await next(ctx);
+    Console.WriteLine($"  [tempo] sai {ctx.Request.Path} com {ctx.Response.StatusCode}");
+});
+
+app.Use(async (ctx, next) =&gt;
+{
+    if (ctx.Request.Path.StartsWithSegments("/admin") &amp;&amp; ctx.Request.Headers["X-Chave"] != "segredo")
+    {
+        Console.WriteLine("  [guarda] recusou");
+        ctx.Response.StatusCode = StatusCodes.Status403Forbidden;
+        return;  // não chama next: o pipeline termina aqui
+    }
+    await next(ctx);
+});
+
+app.MapGet("/livros", () =&gt; "catálogo");
+app.MapGet("/admin", () =&gt; "painel");
+
+await app.StartAsync();
+var endereco = app.Services.GetRequiredService&lt;IServer&gt;().Features.Get&lt;IServerAddressesFeature&gt;()!.Addresses.First();
+using var http = new HttpClient { BaseAddress = new Uri(endereco) };
+
+foreach (var (rota, chave) in new[] { ("/livros", ""), ("/admin", ""), ("/admin", "segredo") })
+{
+    Console.WriteLine($"GET {rota} {(chave == "" ? "" : "com chave")}");
+    using var req = new HttpRequestMessage(HttpMethod.Get, rota);
+    if (chave != "")
+        req.Headers.Add("X-Chave", chave);
+    using var resp = await http.SendAsync(req);
+    Console.WriteLine($"-&gt; {(int)resp.StatusCode} \"{await resp.Content.ReadAsStringAsync()}\" (tem X-Tempo-Ms? {resp.Headers.Contains("X-Tempo-Ms")})");
+}
+await app.StopAsync();</code></pre>
+<pre class="saida"><code>GET /livros
+  [tempo] entra /livros
+  [tempo] sai /livros com 200
+-&gt; 200 "catálogo" (tem X-Tempo-Ms? True)
+GET /admin
+  [tempo] entra /admin
+  [guarda] recusou
+  [tempo] sai /admin com 403
+-&gt; 403 "" (tem X-Tempo-Ms? True)
+GET /admin com chave
+  [tempo] entra /admin
+  [tempo] sai /admin com 200
+-&gt; 200 "painel" (tem X-Tempo-Ms? True)</code></pre>
+<p>O "sai" do primeiro <em>middleware</em> aparece <strong>depois</strong> de tudo o que vem abaixo dele, inclusive quando o segundo encerra o pipeline: é a pilha de chamadas. O cabeçalho é gravado no <code>OnStarting</code> porque, depois que a resposta começa a ser enviada, os cabeçalhos já partiram; tentar alterá-los depois do <code>next</code> lançaria exceção. Subir o servidor dentro do próprio programa é também a ideia do <code>WebApplicationFactory</code>, usado nos testes de integração.</p>
+<div class="questao" id="q63">
+<span class="num">Q63</span>
+<div class="corpo">
+<p class="titulo">Uma API de livros com DTOs e ProblemDetails</p>
+<p>Escreva os <em>endpoints</em> <code>GET /livros/{id}</code> (200 ou 404), <code>POST /livros</code> (201 com o cabeçalho <code>Location</code>, ou 400 com <code>ValidationProblem</code> quando o título está vazio ou o preço não é positivo) e <code>PUT /livros/{id}</code> com <code>If-Match</code> (412 se a versão não bater). Use DTOs de entrada e saída e um dicionário como armazenamento. Teste com <code>HttpClient</code> no próprio programa.</p>
+</div>
+</div>
+<pre class="codigo"><code>#:sdk Microsoft.NET.Sdk.Web
+#:property PublishAot=false
+using System.Collections.Concurrent;
+using System.Net.Http.Json;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+
+var builder = WebApplication.CreateBuilder();
+builder.Logging.ClearProviders();
+builder.WebHost.UseUrls("http://127.0.0.1:0");
+builder.Services.AddProblemDetails();
+var app = builder.Build();
+
+var livros = new ConcurrentDictionary&lt;int, Livro&gt;();
+var proximoId = 0;
+
+app.MapGet("/livros/{id:int}", (int id, HttpContext ctx) =&gt;
+{
+    if (!livros.TryGetValue(id, out var l))
+        return Results.NotFound();
+    ctx.Response.Headers.ETag = $"\"{l.Versao}\"";
+    return Results.Ok(new LivroResponse(l.Id, l.Titulo, l.Preco));
+});
+
+app.MapPost("/livros", (CriarLivroRequest req) =&gt;
+{
+    var erros = Validar(req);
+    if (erros.Count &gt; 0)
+        return Results.ValidationProblem(erros);
+    var l = new Livro(Interlocked.Increment(ref proximoId), req.Titulo, req.Preco, Versao: 1);
+    livros[l.Id] = l;
+    return Results.Created($"/livros/{l.Id}", new LivroResponse(l.Id, l.Titulo, l.Preco));
+});
+
+app.MapPut("/livros/{id:int}", (int id, CriarLivroRequest req, HttpContext ctx) =&gt;
+{
+    if (!livros.TryGetValue(id, out var atual))
+        return Results.NotFound();
+    if (ctx.Request.Headers.IfMatch.ToString() != $"\"{atual.Versao}\"")
+        return Results.Problem(statusCode: 412, title: "O livro foi alterado por outra pessoa. Recarregue.");
+    var erros = Validar(req);
+    if (erros.Count &gt; 0)
+        return Results.ValidationProblem(erros);
+    var novo = atual with { Titulo = req.Titulo, Preco = req.Preco, Versao = atual.Versao + 1 };
+    if (!livros.TryUpdate(id, novo, atual))  // outra requisição gravou entre a leitura e aqui
+        return Results.Problem(statusCode: 412, title: "Conflito de versão.");
+    return Results.NoContent();
+});
+
+await app.StartAsync();
+var endereco = app.Services.GetRequiredService&lt;IServer&gt;().Features.Get&lt;IServerAddressesFeature&gt;()!.Addresses.First();
+using var http = new HttpClient { BaseAddress = new Uri(endereco) };
+
+var criado = await http.PostAsJsonAsync("/livros", new CriarLivroRequest("Vidas Secas", 49.9m));
+Console.WriteLine($"POST válido: {(int)criado.StatusCode}, Location {criado.Headers.Location}");
+
+var invalido = await http.PostAsJsonAsync("/livros", new CriarLivroRequest("", -1m));
+var problema = await invalido.Content.ReadFromJsonAsync&lt;HttpValidationProblemDetails&gt;();
+Console.WriteLine($"POST inválido: {(int)invalido.StatusCode}, campos: {string.Join(", ", problema!.Errors.Keys.Order())}");
+
+Console.WriteLine($"GET 99: {(int)(await http.GetAsync("/livros/99")).StatusCode}");
+
+var lido = await http.GetAsync("/livros/1");
+var etag = lido.Headers.ETag!.Tag;
+Console.WriteLine($"GET 1: {(int)lido.StatusCode}, ETag {etag}");
+
+foreach (var atendente in new[] { "Ana", "Bruno" })
+{
+    using var put = new HttpRequestMessage(HttpMethod.Put, "/livros/1") { Content = JsonContent.Create(new CriarLivroRequest("Vidas Secas", 45m)) };
+    put.Headers.TryAddWithoutValidation("If-Match", etag);  // os dois leram a mesma versão
+    Console.WriteLine($"PUT de {atendente}: {(int)(await http.SendAsync(put)).StatusCode}");
+}
+await app.StopAsync();
+
+static Dictionary&lt;string, string[]&gt; Validar(CriarLivroRequest r)
+{
+    var erros = new Dictionary&lt;string, string[]&gt;();
+    if (string.IsNullOrWhiteSpace(r.Titulo))
+        erros["titulo"] = ["O título é obrigatório."];
+    if (r.Preco &lt;= 0)
+        erros["preco"] = ["O preço deve ser positivo."];
+    return erros;
+}
+
+record Livro(int Id, string Titulo, decimal Preco, int Versao);
+record CriarLivroRequest(string Titulo, decimal Preco);
+record LivroResponse(int Id, string Titulo, decimal Preco);</code></pre>
+<pre class="saida"><code>POST válido: 201, Location /livros/1
+POST inválido: 400, campos: preco, titulo
+GET 99: 404
+GET 1: 200, ETag "1"
+PUT de Ana: 204
+PUT de Bruno: 412</code></pre>
+<p>O segundo <code>PUT</code> recebe 412 porque a versão mudou com o primeiro: Bruno é avisado, em vez de apagar a alteração de Ana. O <code>TryUpdate</code> fecha a pequena janela entre comparar a versão e gravar, quando duas requisições chegam ao mesmo tempo; com EF Core, o mesmo papel é do <code>[Timestamp]</code> (ou <code>IsRowVersion</code>). O corpo do 400 segue a RFC 9457 (<em>Problem Details</em>): um formato padrão de erro, com <code>title</code>, <code>status</code> e o dicionário <code>errors</code>, que qualquer cliente sabe ler. No .NET 10, um <code>AddValidation()</code> com <em>data annotations</em> nos DTOs substitui o <code>Validar</code> manual.</p>
+<div class="questao" id="q64">
+<span class="num">Q64</span>
+<div class="corpo">
+<p class="titulo">Limitando requisições</p>
+<p>Use o <em>rate limiter</em> embutido do ASP.NET Core para permitir no máximo 3 requisições a cada 10 segundos em <code>/busca</code>, respondendo 429 às excedentes. Faça 5 requisições seguidas e mostre os códigos.</p>
+</div>
+</div>
+<pre class="codigo"><code>#:sdk Microsoft.NET.Sdk.Web
+#:property PublishAot=false
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+
+var builder = WebApplication.CreateBuilder();
+builder.Logging.ClearProviders();
+builder.WebHost.UseUrls("http://127.0.0.1:0");
+builder.Services.AddRateLimiter(o =&gt;
+{
+    o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    o.AddFixedWindowLimiter("busca", j =&gt;
+    {
+        j.PermitLimit = 3;
+        j.Window = TimeSpan.FromSeconds(10);
+        j.QueueLimit = 0;  // sem fila: excedeu, recusa na hora
+    });
+});
+var app = builder.Build();
+app.UseRateLimiter();
+app.MapGet("/busca", (string q) =&gt; $"resultados para {q}").RequireRateLimiting("busca");
+
+await app.StartAsync();
+var endereco = app.Services.GetRequiredService&lt;IServer&gt;().Features.Get&lt;IServerAddressesFeature&gt;()!.Addresses.First();
+using var http = new HttpClient { BaseAddress = new Uri(endereco) };
+for (int i = 1; i &lt;= 5; i++)
+    Console.WriteLine($"requisição {i}: {(int)(await http.GetAsync($"/busca?q=machado{i}")).StatusCode}");
+await app.StopAsync();</code></pre>
+<pre class="saida"><code>requisição 1: 200
+requisição 2: 200
+requisição 3: 200
+requisição 4: 429
+requisição 5: 429</code></pre>
+<p>Aqui o limite é <strong>global</strong> para o <em>endpoint</em>: todos os clientes juntos dividem as 3 requisições. Em produção, a partição costuma ser por usuário ou por IP (<code>AddPolicy</code> com <code>RateLimitPartition.GetFixedWindowLimiter(ip, ...)</code>), e atrás de um <em>proxy</em> o IP real vem do <code>X-Forwarded-For</code>, que só deve ser aceito de <em>proxies</em> confiáveis (<code>UseForwardedHeaders</code> com <code>KnownProxies</code>). A janela fixa permite uma rajada de 6 requisições em pouco tempo, 3 no fim de uma janela e 3 no começo da seguinte; a janela deslizante (<code>AddSlidingWindowLimiter</code>) suaviza isso.</p>
+<div class="questao" id="q65">
+<span class="num">Q65</span>
+<div class="corpo">
+<p class="titulo">Um worker com fila em memória</p>
+<p>Sem RabbitMQ, simule o padrão de mensageria com <code>System.Threading.Channels</code>: um <code>Channel&lt;T&gt;</code> limitado a 2 itens recebe eventos <code>PedidoCriado</code>. Mostre que a fila recusa um terceiro evento enquanto ninguém consome (<code>TryWrite</code>), depois inicie um consumidor que processa cada evento de forma idempotente, ignorando um evento entregue duas vezes, e publique o restante com <code>WriteAsync</code>, que espera quando a fila enche.</p>
+</div>
+</div>
+<pre class="codigo"><code>using System.Threading.Channels;
+
+var canal = Channel.CreateBounded&lt;PedidoCriado&gt;(new BoundedChannelOptions(2) { FullMode = BoundedChannelFullMode.Wait });
+var repetido = new PedidoCriado(Guid.NewGuid(), 3);
+PedidoCriado[] eventos = [new(Guid.NewGuid(), 1), new(Guid.NewGuid(), 2), repetido, repetido, new(Guid.NewGuid(), 4)];
+
+// Sem consumidor, a fila enche no segundo evento.
+foreach (var ev in eventos[..3])
+    Console.WriteLine($"TryWrite pedido {ev.PedidoId}: {(canal.Writer.TryWrite(ev) ? "na fila" : "fila cheia, recusado")}");
+
+var processados = new HashSet&lt;Guid&gt;();
+var consumidor = Task.Run(async () =&gt;
+{
+    await foreach (var ev in canal.Reader.ReadAllAsync())
+    {
+        if (!processados.Add(ev.EventoId))
+        {
+            Console.WriteLine($"consumidor: evento repetido do pedido {ev.PedidoId}, ignorado");
+            continue;
+        }
+        await Task.Delay(50);  // "envia o e-mail"
+        Console.WriteLine($"consumidor: e-mail do pedido {ev.PedidoId}");
+    }
+});
+
+foreach (var ev in eventos[2..])
+    await canal.Writer.WriteAsync(ev);  // espera enquanto a fila tiver 2 itens
+canal.Writer.Complete();  // "não vem mais nada": o ReadAllAsync termina depois do último
+await consumidor;
+
+record PedidoCriado(Guid EventoId, int PedidoId);</code></pre>
+<pre class="saida"><code>TryWrite pedido 1: na fila
+TryWrite pedido 2: na fila
+TryWrite pedido 3: fila cheia, recusado
+consumidor: e-mail do pedido 1
+consumidor: e-mail do pedido 2
+consumidor: e-mail do pedido 3
+consumidor: evento repetido do pedido 3, ignorado
+consumidor: e-mail do pedido 4</code></pre>
+<p>O <code>TryWrite</code> devolve <code>false</code> na hora em que a fila está cheia; o <code>WriteAsync</code> <strong>espera</strong> até haver espaço. Essa contrapressão (<em>backpressure</em>) impede que um produtor rápido consuma toda a memória. Num <code>BackgroundService</code> do ASP.NET Core, o consumidor seria o <code>ExecuteAsync</code>, e o <em>endpoint</em> que cria o pedido só escreveria no canal e responderia na hora. A fila em memória some se o processo cair; é aí que entra o RabbitMQ, com mensagens persistentes e o <code>ack</code> depois do processamento. O <code>HashSet</code> de ids processados, em produção, fica no banco, gravado na mesma transação do efeito.</p>
+</section>
+<section class="modulo" id="modulo-7">
+<h2><span class="rotulo">MÓDULO 7</span> A vitrine web e o deploy</h2>
+<p class="intro">Razor Pages, formulários e validação, Blazor e os modos de renderização, o site consumindo a API, login e upload, e o deploy com contêineres, nginx e Aspire.</p>
+<p class="aulas-titulo">Artigos 53 a 59</p>
+<ul class="aulas">
+<li><span class="n">#53</span> Razor Pages: HTML montado no servidor para a vitrine da Livraria</li>
+<li><span class="n">#54</span> Formulários e validação: o site recebe dados</li>
+<li><span class="n">#55</span> Blazor: componentes, parâmetros, eventos e ciclo de vida</li>
+<li><span class="n">#56</span> Blazor: modos de renderização, WebAssembly e estado</li>
+<li><span class="n">#57</span> O site consumindo a API: clientes resilientes, cache condicional e um BFF com YARP</li>
+<li><span class="n">#58</span> Login, área administrativa, upload de capas e notificações em tempo real</li>
+<li><span class="n">#59</span> Deploy: contêineres, nginx, Linux e a orquestração com Aspire</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q66">
+<span class="num">Q66</span>
+<div class="corpo">
+<p class="titulo">Post, Redirect, Get</p>
+<p>Depois de processar o formulário de "finalizar pedido", por que a página deve responder com um redirecionamento (303 ou 302) para uma página de confirmação, e não renderizar a confirmação direto?</p>
+</div>
+</div>
+<p>Se a resposta ao <code>POST</code> for a própria página, o navegador guarda o <code>POST</code> como última ação: um F5 (ou o botão voltar e avançar) <strong>reenvia o formulário</strong>, e o cliente pode criar o pedido duas vezes (o navegador até avisa "deseja reenviar os dados?"). Com o padrão PRG, o <code>POST</code> processa e responde <code>303 See Other</code> com <code>Location: /pedidos/123/confirmacao</code>; o navegador faz um <code>GET</code> nessa URL, e recarregar a página só repete o <code>GET</code>, que é inofensivo. Nas Razor Pages, isso é <code>return RedirectToPage("Confirmacao", new { id })</code>. O PRG não substitui a idempotência no servidor: um duplo clique rápido ainda pode enviar dois <code>POST</code>.</p>
+<div class="questao" id="q67">
+<span class="num">Q67</span>
+<div class="corpo">
+<p class="titulo">O token antiforgery</p>
+<p>O que o <em>token antiforgery</em> das Razor Pages protege, e por que ele não é necessário numa API que só aceita <code>Authorization: Bearer</code>?</p>
+</div>
+</div>
+<p>Ele protege contra <strong>CSRF</strong>: um site malicioso faz o navegador da vítima enviar um formulário para a livraria, e o navegador anexa sozinho o <em>cookie</em> de sessão. O <em>token</em> é um valor secreto embutido no formulário (um campo oculto) e conferido no servidor; o site atacante não consegue lê-lo, então não consegue forjar uma requisição válida. As Razor Pages o incluem e validam automaticamente nos formulários. Uma API autenticada por <code>Bearer</code> não sofre CSRF porque o navegador <strong>não</strong> anexa esse cabeçalho sozinho: o JavaScript da própria aplicação precisa colocá-lo. O risco volta se a API também aceitar <em>cookies</em>.</p>
+<div class="questao" id="q68">
+<span class="num">Q68</span>
+<div class="corpo">
+<p class="titulo">Modos de renderização do Blazor</p>
+<p>Compare os modos <em>Static SSR</em>, <em>Interactive Server</em> e <em>Interactive WebAssembly</em> do Blazor quanto a onde o código roda, latência das interações e custo para o servidor. Qual usar na página de um livro, no carrinho e no painel administrativo?</p>
+</div>
+</div>
+<ul><li><strong>Static SSR</strong>: o componente é renderizado em HTML no servidor, sem interatividade (como Razor Pages). Rápido e barato. Bom para a <strong>página do livro</strong>, que precisa ser indexada e carregar rápido.</li><li><strong>Interactive Server</strong>: o componente roda no servidor e mantém uma conexão SignalR (um <em>circuito</em>) com o navegador; cada clique viaja até o servidor e volta. Sem <em>download</em> inicial, mas cada usuário conectado consome memória no servidor, e a latência de rede aparece em cada interação. Bom para o <strong>painel administrativo</strong>: poucos usuários, acesso direto a dados e regras no servidor.</li><li><strong>Interactive WebAssembly</strong>: o .NET roda no navegador. As interações são locais, sem custo de servidor, mas há um <em>download</em> inicial grande, e o código fica exposto ao usuário. Bom para o <strong>carrinho</strong>, se ele precisar ser muito responsivo (e o modo <strong>Auto</strong> começa no servidor e passa para WebAssembly depois do <em>download</em>).</li></ul>
+<div class="questao" id="q69">
+<span class="num">Q69</span>
+<div class="corpo">
+<p class="titulo">Cache condicional</p>
+<p>O site consulta <code>GET /livros/1</code> na API a cada visita. Como <code>ETag</code> e <code>If-None-Match</code> economizam banda, e que código a API devolve quando nada mudou?</p>
+</div>
+</div>
+<p>Na primeira resposta, a API envia o <code>ETag</code>. O site (ou o <code>HttpClient</code> com um cache próprio) guarda o corpo e o <code>ETag</code>; na próxima vez, envia <code>If-None-Match: "&lt;etag&gt;"</code>. Se a versão não mudou, a API responde <strong>304 Not Modified</strong> sem corpo, e o site reaproveita o que tinha. Ainda há uma ida à rede, mas sem transferir o conteúdo, e a API pode responder sem montar o JSON. É o mesmo <code>ETag</code> da concorrência otimista, usado para outro fim: no <code>If-Match</code>, ele protege a escrita; no <code>If-None-Match</code>, economiza na leitura.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q70">
+<span class="num">Q70</span>
+<div class="corpo">
+<p class="titulo">Validando um upload de capa</p>
+<p>Escreva <code>static string? ValidarCapa(string nomeArquivo, long tamanho, ReadOnlySpan&lt;byte&gt; inicio)</code> que devolva uma mensagem de erro (ou <code>null</code> se estiver tudo certo) para o upload da capa de um livro: aceite só JPEG e PNG, conferindo a extensão <strong>e</strong> os primeiros bytes do arquivo (a "assinatura"), com até 2 MB. Teste com um PNG válido, um "PNG" que na verdade é um executável, uma capa grande demais e um nome sem extensão.</p>
+</div>
+</div>
+<pre class="codigo"><code>static string? ValidarCapa(string nomeArquivo, long tamanho, ReadOnlySpan&lt;byte&gt; inicio)
+{
+    const long Max = 2 * 1024 * 1024;
+    ReadOnlySpan&lt;byte&gt; png = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
+    ReadOnlySpan&lt;byte&gt; jpeg = [0xFF, 0xD8, 0xFF];
+
+    if (tamanho is &lt;= 0 or &gt; Max)
+        return $"tamanho inválido ({tamanho / 1024} KB; máximo 2048 KB)";
+    var ext = Path.GetExtension(nomeArquivo).ToLowerInvariant();
+    bool assinaturaOk = ext switch
+    {
+        ".png" =&gt; inicio.StartsWith(png),
+        ".jpg" or ".jpeg" =&gt; inicio.StartsWith(jpeg),
+        _ =&gt; false,
+    };
+    if (ext is not (".png" or ".jpg" or ".jpeg"))
+        return $"extensão não permitida: \"{ext}\"";
+    return assinaturaOk ? null : "o conteúdo não corresponde à extensão";
+}
+
+byte[] pngReal = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00];
+byte[] executavel = [0x4D, 0x5A, 0x90, 0x00];  // "MZ": cabeçalho de um .exe do Windows
+
+Console.WriteLine(ValidarCapa("capa.png", 150_000, pngReal) ?? "aceita");
+Console.WriteLine(ValidarCapa("capa.PNG", 150_000, executavel) ?? "aceita");
+Console.WriteLine(ValidarCapa("capa.jpg", 5_000_000, [0xFF, 0xD8, 0xFF, 0xE0]) ?? "aceita");
+Console.WriteLine(ValidarCapa("capa", 1_000, pngReal) ?? "aceita");</code></pre>
+<pre class="saida"><code>aceita
+o conteúdo não corresponde à extensão
+tamanho inválido (4882 KB; máximo 2048 KB)
+extensão não permitida: ""</code></pre>
+<p>A extensão e o <code>Content-Type</code> são escolhidos por quem envia: só a assinatura diz algo sobre o conteúdo. Mesmo assim, ela não é prova de segurança (um arquivo pode ser um PNG válido e carregar outra coisa no fim); em produção, a capa é <strong>regravada</strong> por uma biblioteca de imagens (reduzindo e convertendo), guardada fora da pasta pública ou num <em>storage</em> de objetos, e com um nome <strong>gerado pelo servidor</strong>, nunca o enviado. Limitar o tamanho também no servidor web (<code>MaxRequestBodySize</code>) evita que o arquivo inteiro seja lido antes da recusa.</p>
+<div class="questao" id="q71">
+<span class="num">Q71</span>
+<div class="corpo">
+<p class="titulo">Repetição com espera exponencial</p>
+<p>O site chama a API, que às vezes falha por instantes. Escreva <code>static async Task&lt;T&gt; ComRepeticao&lt;T&gt;(Func&lt;Task&lt;T&gt;&gt; acao, int tentativas, TimeSpan esperaInicial)</code> que repita a ação em caso de <code>HttpRequestException</code>, dobrando a espera a cada falha, e desista depois do número de tentativas, relançando o último erro. Simule uma API que falha duas vezes e depois responde.</p>
+</div>
+</div>
+<pre class="codigo"><code>static async Task&lt;T&gt; ComRepeticao&lt;T&gt;(Func&lt;Task&lt;T&gt;&gt; acao, int tentativas, TimeSpan esperaInicial)
+{
+    var espera = esperaInicial;
+    for (int i = 1; ; i++)
+    {
+        try
+        {
+            return await acao();
+        }
+        catch (HttpRequestException e) when (i &lt; tentativas)  // na última, o filtro falha e a exceção sobe
+        {
+            Console.WriteLine($"  tentativa {i} falhou ({e.Message}); nova tentativa em {espera.TotalMilliseconds} ms");
+            await Task.Delay(espera);
+            espera *= 2;
+        }
+    }
+}
+
+int chamadas = 0;
+Task&lt;string&gt; ApiInstavel() =&gt; ++chamadas &lt;= 2
+    ? Task.FromException&lt;string&gt;(new HttpRequestException("503 Service Unavailable"))
+    : Task.FromResult("{\"titulo\":\"Vidas Secas\"}");
+
+Console.WriteLine(await ComRepeticao(ApiInstavel, tentativas: 4, TimeSpan.FromMilliseconds(50)));
+
+chamadas = -10;  // agora falha sempre
+try
+{
+    await ComRepeticao(ApiInstavel, tentativas: 3, TimeSpan.FromMilliseconds(10));
+}
+catch (HttpRequestException e)
+{
+    Console.WriteLine($"desistiu: {e.Message}");
+}</code></pre>
+<pre class="saida"><code>  tentativa 1 falhou (503 Service Unavailable); nova tentativa em 50 ms
+  tentativa 2 falhou (503 Service Unavailable); nova tentativa em 100 ms
+{"titulo":"Vidas Secas"}
+  tentativa 1 falhou (503 Service Unavailable); nova tentativa em 10 ms
+  tentativa 2 falhou (503 Service Unavailable); nova tentativa em 20 ms
+desistiu: 503 Service Unavailable</code></pre>
+<p>O filtro <code>when (i &lt; tentativas)</code> é o que faz a última falha subir com o <em>stack trace</em> original, sem <code>throw</code> explícito. Só se repete o que é <strong>transitório</strong> (503, <em>timeout</em>, conexão recusada); um 400 ou um 404 vão falhar igual na próxima vez. Em produção, acrescenta-se um valor aleatório à espera (<em>jitter</em>), para que mil clientes não tentem de novo no mesmo instante, e usa-se o <code>Microsoft.Extensions.Http.Resilience</code> (sobre o Polly), que junta repetição, <em>timeout</em> e <em>circuit breaker</em> com uma linha: <code>AddStandardResilienceHandler()</code>.</p>
+<div class="questao" id="q72">
+<span class="num">Q72</span>
+<div class="corpo">
+<p class="titulo">Um Dockerfile para a API</p>
+<p>Escreva um <code>Dockerfile</code> em múltiplos estágios para a API da livraria: um estágio com o SDK que restaura e publica, e um estágio final só com o <em>runtime</em> do ASP.NET, rodando com um usuário sem privilégios. Explique por que copiar o <code>.csproj</code> antes do restante do código acelera os <em>builds</em>.</p>
+</div>
+</div>
+<pre class="codigo"><code># Estágio 1: compilar (imagem grande, com o SDK)
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+COPY Livraria.Api/Livraria.Api.csproj Livraria.Api/
+RUN dotnet restore Livraria.Api/Livraria.Api.csproj
+COPY . .
+RUN dotnet publish Livraria.Api/Livraria.Api.csproj -c Release -o /app --no-restore
+
+# Estágio 2: executar (só o runtime, sem compilador nem código-fonte)
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
+WORKDIR /app
+COPY --from=build /app .
+USER $APP_UID
+ENV ASPNETCORE_HTTP_PORTS=8080
+EXPOSE 8080
+ENTRYPOINT ["dotnet", "Livraria.Api.dll"]</code></pre>
+<p>O Docker guarda cada instrução numa camada em cache e só refaz a partir da primeira cuja entrada mudou. Copiando primeiro só o <code>.csproj</code> e restaurando, a camada do <code>restore</code> (que baixa os pacotes, a parte lenta) só é refeita quando as <strong>dependências</strong> mudam; alterar um <code>.cs</code> invalida só as camadas a partir do <code>COPY . .</code>. A imagem final não tem o SDK nem o código-fonte: é menor e oferece menos superfície de ataque. As imagens oficiais do .NET 8 em diante já trazem um usuário sem privilégios, <code>app</code>, cujo id está em <code>$APP_UID</code>, e escutam na porta 8080, que não exige <em>root</em>. Um <code>.dockerignore</code> com <code>bin/</code> e <code>obj/</code> impede que artefatos locais entrem no <code>COPY . .</code>.</p>
+<p>Se o Docker não estiver disponível, o caminho equivalente sem contêiner é publicar com <code>dotnet publish -c Release -o /srv/livraria</code>, criar um usuário de sistema (<code>sudo useradd --system livraria</code>) e registrar um serviço do systemd com <code>ExecStart=/usr/bin/dotnet /srv/livraria/Livraria.Api.dll</code>, <code>User=livraria</code> e <code>Environment=ASPNETCORE_HTTP_PORTS=8080</code>, atrás do nginx como <em>proxy</em> reverso.</p>
+</section>
+<section class="modulo" id="modulo-8">
+<h2><span class="rotulo">MÓDULO 8</span> Aplicativos de desktop e celular</h2>
+<p class="intro">WinForms, WPF, MAUI e Avalonia; o caixa da livraria com MVVM e vendas offline; o aplicativo do cliente em .NET MAUI.</p>
+<p class="aulas-titulo">Artigos 60 a 62</p>
+<ul class="aulas">
+<li><span class="n">#60</span> Interfaces no .NET: WinForms, WPF, MAUI, Avalonia e o que escolher</li>
+<li><span class="n">#61</span> O caixa da Livraria em Avalonia: MVVM, navegação, leitor de código de barras e vendas offline</li>
+<li><span class="n">#62</span> O aplicativo do cliente em .NET MAUI: Shell, listas, login no celular e acompanhamento de pedidos</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q73">
+<span class="num">Q73</span>
+<div class="corpo">
+<p class="titulo">Qual framework de interface</p>
+<p>O caixa da livraria precisa rodar em Windows e em Linux; o aplicativo do cliente, em Android e iOS. Por que o curso escolheu Avalonia para o primeiro e .NET MAUI para o segundo, e onde WinForms e WPF ainda fazem sentido?</p>
+</div>
+</div>
+<p>O <strong>Avalonia</strong> desenha os próprios controles e roda em Windows, Linux e macOS com a mesma aparência, usando XAML e MVVM como o WPF: serve ao caixa, que precisa de Linux. O <strong>.NET MAUI</strong> é o caminho oficial da Microsoft para Android e iOS (e também Windows e macOS), usando os controles nativos de cada plataforma: serve ao aplicativo do cliente. <strong>WinForms</strong> e <strong>WPF</strong> são só para Windows: o WinForms é o mais rápido para montar telas simples de cadastro arrastando controles, e o WPF tem o ecossistema mais maduro para aplicações de desktop ricas. Fazem sentido em sistemas internos que só rodam em Windows, e são a realidade de muitos sistemas legados.</p>
+<div class="questao" id="q74">
+<span class="num">Q74</span>
+<div class="corpo">
+<p class="titulo">A regra da thread de interface</p>
+<p>Por que um clique que faz <code>var dados = http.GetStringAsync(url).Result;</code> congela a janela, e por que alterar um controle a partir de uma thread de segundo plano lança exceção?</p>
+</div>
+</div>
+<p>Os <em>frameworks</em> de interface têm uma única <strong>thread de interface</strong>, que processa os eventos (cliques, redesenho) num laço. O <code>.Result</code> <strong>bloqueia</strong> essa thread até a resposta chegar: nesse intervalo nenhum evento é processado, e a janela "não responde". Pior, se a continuação precisar voltar para a mesma thread, o resultado é um <em>deadlock</em>. O certo é <code>var dados = await http.GetStringAsync(url);</code>: a thread fica livre durante a espera, e o código depois do <code>await</code> volta a rodar nela. Os controles não são seguros para acesso concorrente; por isso só a thread de interface pode alterá-los, e quem está em outra thread precisa despachar a alteração (<code>Dispatcher.UIThread.Post</code> no Avalonia, <code>MainThread.BeginInvokeOnMainThread</code> no MAUI).</p>
+<div class="questao" id="q75">
+<span class="num">Q75</span>
+<div class="corpo">
+<p class="titulo">Por que MVVM</p>
+<p>O que o padrão MVVM separa, e qual a vantagem concreta de ter a lógica do caixa num <em>ViewModel</em> em vez de nos eventos de clique da janela?</p>
+</div>
+</div>
+<p>O MVVM separa a <strong>View</strong> (o XAML, só aparência), o <strong>ViewModel</strong> (o estado da tela e os comandos, em C# puro, sem referência a controles) e o <strong>Model</strong> (domínio e dados). A View se liga ao ViewModel por <em>data binding</em>: quando uma propriedade muda e o ViewModel avisa por <code>INotifyPropertyChanged</code>, a tela se atualiza sozinha; quando o usuário aciona um botão, um <code>ICommand</code> do ViewModel é executado. A vantagem concreta é que o ViewModel pode ser <strong>testado sem abrir janela nenhuma</strong>: "adicionar um item soma o total", "o botão Finalizar fica desabilitado com o carrinho vazio". Com a lógica nos eventos de clique, o teste exigiria automatizar a interface, e a mesma lógica não poderia ser reaproveitada na versão MAUI.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q76">
+<span class="num">Q76</span>
+<div class="corpo">
+<p class="titulo">Um ViewModel testável</p>
+<p>Escreva <code>class CaixaViewModel : INotifyPropertyChanged</code> com uma lista de itens, a propriedade calculada <code>Total</code>, um <code>CommandoSimples</code> (implementação mínima de <code>ICommand</code>) para finalizar a venda, habilitado só com itens no carrinho, e o método <code>Adicionar(string titulo, decimal preco)</code>. Sem interface gráfica, mostre as notificações disparadas e o estado do comando.</p>
+</div>
+</div>
+<pre class="codigo"><code>using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
+
+var vm = new CaixaViewModel();
+vm.PropertyChanged += (_, e) =&gt; Console.WriteLine($"  notificou: {e.PropertyName}");
+vm.Finalizar.CanExecuteChanged += (_, _) =&gt; Console.WriteLine($"  Finalizar habilitado? {vm.Finalizar.CanExecute(null)}");
+
+Console.WriteLine($"início: total {vm.Total}, pode finalizar? {vm.Finalizar.CanExecute(null)}");
+Console.WriteLine("adiciona Vidas Secas");
+vm.Adicionar("Vidas Secas", 49.9m);
+Console.WriteLine("adiciona Iracema");
+vm.Adicionar("Iracema", 25m);
+Console.WriteLine("finaliza");
+vm.Finalizar.Execute(null);
+Console.WriteLine($"fim: {vm.Mensagem}");
+
+class CaixaViewModel : INotifyPropertyChanged
+{
+    private readonly List&lt;(string Titulo, decimal Preco)&gt; _itens = [];
+    private string _mensagem = "";
+
+    public CaixaViewModel() =&gt; Finalizar = new ComandoSimples(FinalizarVenda, () =&gt; _itens.Count &gt; 0);
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    public ComandoSimples Finalizar { get; }
+    public decimal Total =&gt; _itens.Sum(i =&gt; i.Preco);
+    public string Mensagem
+    {
+        get =&gt; _mensagem;
+        private set { _mensagem = value; Avisar(); }
+    }
+
+    public void Adicionar(string titulo, decimal preco)
+    {
+        _itens.Add((titulo, preco));
+        Avisar(nameof(Total));
+        Finalizar.ReavaliarEstado();
+    }
+
+    private void FinalizarVenda()
+    {
+        Mensagem = $"venda de {_itens.Count} itens, R$ {Total}";
+        _itens.Clear();
+        Avisar(nameof(Total));
+        Finalizar.ReavaliarEstado();
+    }
+
+    private void Avisar([CallerMemberName] string? nome = null) =&gt; PropertyChanged?.Invoke(this, new(nome));
+}
+
+class ComandoSimples(Action executar, Func&lt;bool&gt; podeExecutar) : ICommand
+{
+    public event EventHandler? CanExecuteChanged;
+    public bool CanExecute(object? parametro) =&gt; podeExecutar();
+    public void Execute(object? parametro) =&gt; executar();
+    public void ReavaliarEstado() =&gt; CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+}</code></pre>
+<pre class="saida"><code>início: total 0, pode finalizar? False
+adiciona Vidas Secas
+  notificou: Total
+  Finalizar habilitado? True
+adiciona Iracema
+  notificou: Total
+  Finalizar habilitado? True
+finaliza
+  notificou: Mensagem
+  notificou: Total
+  Finalizar habilitado? False
+fim: venda de 2 itens, R$ 74.9</code></pre>
+<p>O <code>[CallerMemberName]</code> preenche o nome da propriedade sozinho no <code>set</code> de <code>Mensagem</code>; para o <code>Total</code>, que é calculado, o aviso precisa ser explícito. É exatamente isso que a tela usaria: um <code>TextBlock</code> ligado a <code>Total</code> se redesenha a cada <code>notificou: Total</code>, e o botão ligado a <code>Finalizar</code> se habilita e desabilita pelo <code>CanExecuteChanged</code>. Na prática, o pacote CommunityToolkit.Mvvm gera esse código com <code>[ObservableProperty]</code> e <code>[RelayCommand]</code>.</p>
+<div class="questao" id="q77">
+<span class="num">Q77</span>
+<div class="corpo">
+<p class="titulo">Vendas offline</p>
+<p>O caixa precisa continuar vendendo quando a internet cai. Escreva uma <code>FilaOffline</code> que guarde as vendas pendentes, e um método <code>SincronizarAsync(Func&lt;Venda, Task&lt;bool&gt;&gt; enviar)</code> que tente enviar cada uma <strong>em ordem</strong>, parando na primeira falha (para não enviar a venda 3 antes da 2), e removendo da fila só as que foram aceitas. Simule uma queda no meio da sincronização.</p>
+</div>
+</div>
+<pre class="codigo"><code>var fila = new FilaOffline();
+for (int i = 1; i &lt;= 4; i++)
+    fila.Registrar(new Venda(Guid.NewGuid(), i, 10m * i));
+Console.WriteLine($"pendentes: {fila.Pendentes}");
+
+int tentativas = 0;
+async Task&lt;bool&gt; ApiInstavel(Venda v)
+{
+    await Task.Delay(10);
+    return ++tentativas != 3;  // a terceira chamada falha: "a internet caiu"
+}
+
+await fila.SincronizarAsync(ApiInstavel);
+Console.WriteLine($"pendentes depois da queda: {fila.Pendentes}");
+await fila.SincronizarAsync(ApiInstavel);
+Console.WriteLine($"pendentes depois de voltar: {fila.Pendentes}");
+
+record Venda(Guid Id, int Numero, decimal Total);
+
+class FilaOffline
+{
+    private readonly Queue&lt;Venda&gt; _pendentes = new();
+    public int Pendentes =&gt; _pendentes.Count;
+
+    public void Registrar(Venda v) =&gt; _pendentes.Enqueue(v);
+
+    public async Task SincronizarAsync(Func&lt;Venda, Task&lt;bool&gt;&gt; enviar)
+    {
+        while (_pendentes.TryPeek(out var v))  // olha sem remover
+        {
+            if (!await enviar(v))
+            {
+                Console.WriteLine($"  venda {v.Numero}: falhou, sincronização interrompida");
+                return;
+            }
+            _pendentes.Dequeue();  // só sai da fila depois de aceita
+            Console.WriteLine($"  venda {v.Numero}: enviada");
+        }
+    }
+}</code></pre>
+<pre class="saida"><code>pendentes: 4
+  venda 1: enviada
+  venda 2: enviada
+  venda 3: falhou, sincronização interrompida
+pendentes depois da queda: 2
+  venda 3: enviada
+  venda 4: enviada
+pendentes depois de voltar: 0</code></pre>
+<p>O <code>TryPeek</code> seguido de <code>Dequeue</code> só depois do sucesso é o que garante que nenhuma venda se perde: se o programa fechar no meio do envio, ela continua na fila. O risco oposto é enviar <strong>duas vezes</strong> (a API gravou, mas a resposta não chegou); por isso cada venda leva um <code>Guid</code> gerado no caixa, e a API ignora um id que já recebeu (idempotência, como no consumidor do módulo 6). No aplicativo real, a fila fica num SQLite local, para sobreviver ao fechamento.</p>
+</section>
+<section class="modulo" id="modulo-9">
+<h2><span class="rotulo">MÓDULO 9</span> Jogos</h2>
+<p class="intro">Unity, Godot e MonoGame; o game loop do zero; nós, cenas e sinais; física e colisões; arquitetura sem alocar no loop; áudio, interface e save game.</p>
+<p class="aulas-titulo">Artigos 63 a 69</p>
+<ul class="aulas">
+<li><span class="n">#63</span> C# nos jogos: Unity, Godot, MonoGame e o game loop</li>
+<li><span class="n">#64</span> Um game loop do zero com MonoGame: janela, sprites, entrada e os primeiros livros caindo</li>
+<li><span class="n">#65</span> Godot com C#: nós, cenas e sinais</li>
+<li><span class="n">#66</span> Input, física e colisões: fazendo o jogo parecer justo</li>
+<li><span class="n">#67</span> Arquitetura de jogo e por que não alocar dentro do loop</li>
+<li><span class="n">#68</span> Áudio, interface e save game: o que faz um jogo parecer pronto</li>
+<li><span class="n">#69</span> Projeto: a Biblioteca em Apuros completa, do documento de design ao export</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q78">
+<span class="num">Q78</span>
+<div class="corpo">
+<p class="titulo">Unity, Godot ou MonoGame</p>
+<p>Compare Unity, Godot e MonoGame quanto ao que cada um oferece pronto e ao modelo de licença. Por que o curso começa o game loop com MonoGame e depois passa para Godot?</p>
+</div>
+</div>
+<ul><li><strong>Unity</strong>: motor completo (editor, física, animação, loja de recursos), com C# como linguagem de <em>scripts</em>. Proprietário, com planos pagos acima de certo faturamento.</li><li><strong>Godot</strong>: motor completo e <strong>livre</strong> (licença MIT), leve, com editor próprio e suporte a C# (via .NET) além do GDScript.</li><li><strong>MonoGame</strong>: um <em>framework</em>, não um motor: dá janela, desenho, entrada e áudio, e o resto (cenas, colisão, câmera) é com você. Livre e de código aberto.</li></ul>
+<p>Começar pelo MonoGame mostra <strong>o que um motor faz por dentro</strong>: o laço de <code>Update</code> e <code>Draw</code>, o <code>GameTime</code>, o carregamento de recursos. Depois, no Godot, os nós, as cenas e os sinais deixam de ser mágica e passam a ser conveniências cujo funcionamento você já conhece.</p>
+<div class="questao" id="q79">
+<span class="num">Q79</span>
+<div class="corpo">
+<p class="titulo">Por que não alocar no loop</p>
+<p>Um jogo roda a 60 quadros por segundo e cria, a cada quadro, uma <code>List&lt;Inimigo&gt;</code> temporária e algumas strings para o placar. Por que isso causa "engasgos" periódicos, e que técnicas evitam o problema?</p>
+</div>
+</div>
+<p>Cada alocação vai para a geração 0 do <em>heap</em>. Alocando a cada quadro, a geração 0 enche a cada poucos segundos e o coletor de lixo roda; uma coleta, mesmo curta, pode levar alguns milissegundos, e um quadro a 60 FPS tem só 16,7 ms. O resultado é um engasgo perceptível em intervalos regulares. Técnicas:</p>
+<ul><li><strong>reaproveitar</strong> coleções: uma <code>List</code> como campo, com <code>Clear()</code> a cada quadro, em vez de <code>new</code> (a capacidade interna é mantida);</li><li><strong>pool de objetos</strong>: projéteis e partículas voltam para um <em>pool</em> em vez de virar lixo;</li><li><strong>structs</strong> para dados pequenos, como vetores e cores;</li><li><strong>evitar strings no loop</strong>: atualizar o texto do placar só quando a pontuação muda, ou formatar num <code>Span&lt;char&gt;</code>.</li></ul>
+<div class="questao" id="q80">
+<span class="num">Q80</span>
+<div class="corpo">
+<p class="titulo">Sinais do Godot</p>
+<p>No Godot, um nó <code>Moeda</code> emite o sinal <code>Coletada</code> quando o jogador a toca, e o nó <code>Placar</code> reage a ele. Que vantagem isso tem sobre a moeda chamar <code>GetNode&lt;Placar&gt;("/root/Fase/Placar").Somar(10)</code> diretamente?</p>
+</div>
+</div>
+<p>Com a chamada direta, a moeda <strong>conhece</strong> o placar e o caminho exato dele na árvore: mover o placar na cena, reaproveitar a moeda numa fase sem placar ou acrescentar um som de coleta exige mexer no código da moeda. Com o sinal, que é o padrão Observer (o mesmo dos eventos do C#), a moeda só anuncia o que aconteceu, e quem se interessa se conecta: o placar, o tocador de som e o sistema de conquistas, cada um por conta própria. A regra do Godot resume: "chame para baixo, sinalize para cima": um nó chama os filhos diretamente e avisa o pai e os irmãos por sinais.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q81">
+<span class="num">Q81</span>
+<div class="corpo">
+<p class="titulo">Um pool de projéteis</p>
+<p>Escreva <code>class PoolDeProjeteis</code> que crie 3 projéteis de antemão, entregue um inativo em <code>Disparar()</code> (ou <code>null</code> se todos estiverem em uso) e os devolva ao <em>pool</em> quando saem da tela. Simule 10 quadros disparando a cada quadro e mostre que o número de objetos criados não passa de 3. Compare as alocações com uma versão que cria um projétil novo a cada disparo.</p>
+</div>
+</div>
+<pre class="codigo"><code>var pool = new PoolDeProjeteis(capacidade: 3);
+for (int quadro = 1; quadro &lt;= 10; quadro++)
+{
+    var p = pool.Disparar();
+    pool.Atualizar();
+    Console.WriteLine($"quadro {quadro,2}: {(p is null ? "sem projétil livre" : $"disparou #{p.Id}")}, ativos {pool.Ativos}");
+}
+Console.WriteLine($"projéteis criados no total: {Projetil.Criados}");
+
+class Projetil
+{
+    public static int Criados;
+    public int Id { get; } = ++Criados;
+    public bool Ativo;
+    public float X;
+}
+
+class PoolDeProjeteis
+{
+    private readonly Projetil[] _itens;
+    public PoolDeProjeteis(int capacidade) =&gt; _itens = [.. Enumerable.Range(0, capacidade).Select(_ =&gt; new Projetil())];
+    public int Ativos =&gt; _itens.Count(p =&gt; p.Ativo);
+
+    public Projetil? Disparar()
+    {
+        foreach (var p in _itens)
+            if (!p.Ativo)
+            {
+                p.Ativo = true;
+                p.X = 0;
+                return p;
+            }
+        return null;  // pool esgotado: o jogo decide (ignorar o tiro, ou crescer o pool)
+    }
+
+    public void Atualizar()
+    {
+        foreach (var p in _itens)
+            if (p.Ativo &amp;&amp; (p.X += 30) &gt; 100)  // saiu da tela: volta para o pool
+                p.Ativo = false;
+    }
+}</code></pre>
+<pre class="saida"><code>quadro  1: disparou #1, ativos 1
+quadro  2: disparou #2, ativos 2
+quadro  3: disparou #3, ativos 3
+quadro  4: sem projétil livre, ativos 2
+quadro  5: disparou #1, ativos 2
+quadro  6: disparou #2, ativos 2
+quadro  7: disparou #3, ativos 3
+quadro  8: sem projétil livre, ativos 2
+quadro  9: disparou #1, ativos 2
+quadro 10: disparou #2, ativos 2
+projéteis criados no total: 3</code></pre>
+<p>Cada projétil vive quatro quadros (0 → 30 → 60 → 90 → 120) e, com três no <em>pool</em>, a cada quatro quadros um disparo fica sem projétil livre. É uma decisão de projeto: um <em>pool</em> que cresce sob demanda nunca recusa, mas pode alocar no meio do jogo. O <code>Ativos</code> com <code>Count</code> percorre o <em>array</em> inteiro; com milhares de objetos, mantém-se um contador. Num jogo real, o <em>pool</em> é medido no perfilador (o do Visual Studio, o <code>dotnet-counters</code> ou o próprio editor do motor), e não adivinhado.</p>
+<div class="questao" id="q82">
+<span class="num">Q82</span>
+<div class="corpo">
+<p class="titulo">Save game com versão</p>
+<p>Escreva <code>record SaveGame(int Versao, int Fase, int Pontos, List&lt;string&gt; Itens)</code> e funções para salvar em JSON e carregar, migrando saves antigos: a versão 1 não tinha <code>Itens</code>. Carregue um save da versão 1 escrito à mão, migre para a versão 2 e recuse um arquivo corrompido sem derrubar o jogo.</p>
+</div>
+</div>
+<pre class="codigo"><code>#:property PublishAot=false
+using System.Text.Json;
+
+const int VersaoAtual = 2;
+
+SaveGame? Carregar(string json)
+{
+    try
+    {
+        var s = JsonSerializer.Deserialize&lt;SaveGame&gt;(json, JsonSerializerOptions.Web);
+        if (s is null)
+            return null;
+        if (s.Versao == 1)
+            s = s with { Versao = 2, Itens = s.Itens ?? [] };  // migração: v1 não tinha itens
+        return s.Versao == VersaoAtual ? s : null;
+    }
+    catch (JsonException e)
+    {
+        Console.WriteLine($"  save corrompido ({e.GetType().Name}); começando um jogo novo");
+        return null;
+    }
+}
+
+var novo = new SaveGame(VersaoAtual, 3, 1200, ["chave dourada"]);
+string json = JsonSerializer.Serialize(novo, JsonSerializerOptions.Web);
+Console.WriteLine($"salvo: {json}");
+
+string Descrever(SaveGame? s) =&gt; s is null ? "nenhum" : $"v{s.Versao}, fase {s.Fase}, {s.Pontos} pontos, itens [{string.Join(", ", s.Itens ?? [])}]";
+Console.WriteLine($"recarregado: {Descrever(Carregar(json))}");
+Console.WriteLine($"da versão 1: {Descrever(Carregar("""{"versao":1,"fase":2,"pontos":300}"""))}");
+Console.WriteLine($"corrompido: {Descrever(Carregar("""{"versao":2,"fase":"""))}");
+
+record SaveGame(int Versao, int Fase, int Pontos, List&lt;string&gt;? Itens);</code></pre>
+<pre class="saida"><code>salvo: {"versao":2,"fase":3,"pontos":1200,"itens":["chave dourada"]}
+recarregado: v2, fase 3, 1200 pontos, itens [chave dourada]
+da versão 1: v2, fase 2, 300 pontos, itens []
+  save corrompido (JsonException); começando um jogo novo
+corrompido: nenhum</code></pre>
+<p>O campo <code>Versao</code> é a decisão que mais economiza dor de cabeça: sem ele, um save antigo é indistinguível de um corrompido. A migração encadeia versões (1 → 2, 2 → 3), cada uma pequena e testável. Para não perder o save se o jogo cair durante a gravação, grave num arquivo temporário e troque com <code>File.Move(temp, destino, overwrite: true)</code>, a mesma técnica do banco chave-valor do caderno de C++. O <code>JsonSerializerOptions.Web</code> (.NET 9) é uma instância pronta com as opções da web, que evita criar opções novas a cada chamada.</p>
+</section>
+<section class="modulo" id="modulo-10">
+<h2><span class="rotulo">MÓDULO 10</span> Arquitetura, IA e desempenho</h2>
+<p class="intro">Clean Architecture e DDD com moderação, C# e IA com Microsoft.Extensions.AI e busca semântica, BenchmarkDotNet, Native AOT e ferramentas de linha de comando.</p>
+<p class="aulas-titulo">Artigos 70 a 73</p>
+<ul class="aulas">
+<li><span class="n">#70</span> Arquitetura: Clean Architecture, DDD com moderação e os padrões que já usamos</li>
+<li><span class="n">#71</span> C# e IA: Microsoft.Extensions.AI, busca semântica e um assistente com ferramentas</li>
+<li><span class="n">#72</span> Performance e distribuição: BenchmarkDotNet, Native AOT e ferramentas de linha de comando</li>
+<li><span class="n">#73</span> Capstone: o jogo, a API, o banco e o site num só fluxo, e a retrospectiva do curso</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q83">
+<span class="num">Q83</span>
+<div class="corpo">
+<p class="titulo">A regra da dependência</p>
+<p>Na Clean Architecture, as camadas são Domínio, Aplicação, Infraestrutura e Apresentação. Para que lado apontam as referências entre os projetos, e por que o <code>Livraria.Dominio</code> não deve referenciar o pacote do EF Core?</p>
+</div>
+</div>
+<p>As dependências apontam <strong>para dentro</strong>, em direção ao domínio: a Apresentação (API) e a Infraestrutura (EF Core, e-mail, fila) dependem da Aplicação, que depende do Domínio, e o Domínio não depende de ninguém. A Aplicação define <strong>interfaces</strong> (<code>ILivroRepositorio</code>), e a Infraestrutura as implementa: é a inversão de dependência do módulo 5. Se o Domínio referenciasse o EF Core, as regras de negócio ficariam presas a uma tecnologia de persistência: trocar de banco, testar sem banco ou reaproveitar o domínio num <em>worker</em> exigiriam arrastar o EF junto. O "com moderação" do curso vale aqui: num CRUD pequeno, quatro projetos podem ser cerimônia demais, e uma API com o <code>DbContext</code> direto é uma escolha honesta.</p>
+<div class="questao" id="q84">
+<span class="num">Q84</span>
+<div class="corpo">
+<p class="titulo">Ferramentas para um modelo de IA</p>
+<p>Num assistente da livraria feito com <code>Microsoft.Extensions.AI</code>, o modelo pode chamar a função <code>BuscarLivros(string termo)</code>. Quem executa a função de fato, e que cuidados de segurança isso exige?</p>
+</div>
+</div>
+<p>O <strong>modelo não executa nada</strong>: ele responde com um pedido estruturado ("chame <code>BuscarLivros</code> com <code>termo = 'sertão'</code>"). Quem executa é o <strong>seu código</strong> (o <code>UseFunctionInvocation()</code> do <code>ChatClientBuilder</code> automatiza o ciclo), que devolve o resultado ao modelo para ele montar a resposta final. Cuidados: tratar os argumentos como <strong>entrada não confiável</strong> (validar e usar parâmetros no SQL, como qualquer formulário); expor só funções com o mínimo de poder necessário (buscar, sim; apagar pedidos, não, ou só com confirmação humana); aplicar a autorização do <strong>usuário</strong> que está conversando, e não a do sistema; e lembrar que um texto vindo de fora (a sinopse de um livro, um e-mail) pode conter instruções que tentam desviar o modelo (<em>prompt injection</em>).</p>
+<div class="questao" id="q85">
+<span class="num">Q85</span>
+<div class="corpo">
+<p class="titulo">Medir antes de otimizar</p>
+<p>Por que um laço com <code>Stopwatch</code> em volta de uma chamada é uma forma pouco confiável de comparar duas implementações, e o que o BenchmarkDotNet faz de diferente?</p>
+</div>
+</div>
+<p>Uma medição ingênua mistura o tempo do <strong>JIT</strong> (a primeira chamada compila o método), sofre com o compilador eliminando código cujo resultado não é usado, mede o ruído do sistema (outros processos, frequência variável da CPU, coletas de lixo) e costuma ser feita em modo <em>Debug</em>. O BenchmarkDotNet roda cada caso num processo separado, em <em>Release</em>, faz o aquecimento, repete até a medida estabilizar, consome os resultados para que não sejam eliminados e relata média, desvio e, com <code>[MemoryDiagnoser]</code>, os bytes alocados por operação. É a diferença entre uma impressão e uma medida.</p>
+<div class="questao" id="q86">
+<span class="num">Q86</span>
+<div class="corpo">
+<p class="titulo">Native AOT: o que se ganha e o que se perde</p>
+<p>O que muda ao publicar uma ferramenta de linha de comando com <code>PublishAot=true</code>? Cite dois ganhos e duas restrições.</p>
+</div>
+</div>
+<p>O código é compilado para código de máquina <strong>antes</strong> da execução, num executável único, sem JIT e sem precisar do <em>runtime</em> instalado. Ganhos: <strong>partida quase instantânea</strong> (milissegundos, contra dezenas ou centenas com JIT), ótima para ferramentas de terminal e funções <em>serverless</em>; e <strong>menor uso de memória</strong>, com um executável que não exige o .NET instalado. Restrições: <strong>reflexão dinâmica e geração de código em execução</strong> ficam limitadas (é por isso que os programas de arquivo único deste caderno precisaram de <code>PublishAot=false</code> para JSON por reflexão e EF Core); e o executável é <strong>específico de uma plataforma</strong> (um <em>build</em> para Linux x64, outro para Windows ARM64). Bibliotecas que dependem de reflexão precisam de alternativas com <em>source generators</em>.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q87">
+<span class="num">Q87</span>
+<div class="corpo">
+<p class="titulo">Um objeto de valor Dinheiro</p>
+<p>No espírito do DDD, escreva <code>readonly record struct Dinheiro(decimal Valor, string Moeda)</code> que recuse valores com mais de duas casas, impeça somar moedas diferentes (lançando <code>InvalidOperationException</code>) e ofereça <code>Dividir(int partes)</code>, que reparte sem perder centavos (o resto vai para as primeiras partes). Divida R$ 100,00 em 3.</p>
+</div>
+</div>
+<pre class="codigo"><code>var conta = new Dinheiro(100m, "BRL");
+var partes = conta.Dividir(3);
+Console.WriteLine($"{conta} em 3: {string.Join(" + ", partes)} = {partes.Aggregate((a, b) =&gt; a + b)}");
+
+Console.WriteLine(new Dinheiro(10.5m, "BRL") + new Dinheiro(0.25m, "BRL"));
+try { _ = new Dinheiro(1m, "BRL") + new Dinheiro(1m, "USD"); }
+catch (InvalidOperationException e) { Console.WriteLine($"recusado: {e.Message}"); }
+try { _ = new Dinheiro(0.001m, "BRL"); }
+catch (ArgumentException e) { Console.WriteLine($"recusado: {e.Message}"); }
+
+readonly record struct Dinheiro
+{
+    public decimal Valor { get; }
+    public string Moeda { get; }
+
+    public Dinheiro(decimal valor, string moeda)
+    {
+        if (decimal.Round(valor, 2) != valor)
+            throw new ArgumentException($"{valor} tem mais de duas casas decimais");
+        Valor = valor;
+        Moeda = moeda;
+    }
+
+    public static Dinheiro operator +(Dinheiro a, Dinheiro b) =&gt;
+        a.Moeda == b.Moeda ? new(a.Valor + b.Valor, a.Moeda)
+                           : throw new InvalidOperationException($"não dá para somar {a.Moeda} com {b.Moeda}");
+
+    public Dinheiro[] Dividir(int partes)
+    {
+        long centavos = (long)(Valor * 100);
+        long cada = centavos / partes, resto = centavos % partes;
+        var moeda = Moeda;
+        return [.. Enumerable.Range(0, partes).Select(i =&gt; new Dinheiro((cada + (i &lt; resto ? 1 : 0)) / 100m, moeda))];
+    }
+
+    public override string ToString() =&gt; $"{Moeda} {Valor:F2}";
+}</code></pre>
+<pre class="saida"><code>BRL 100.00 em 3: BRL 33.34 + BRL 33.33 + BRL 33.33 = BRL 100.00
+BRL 10.75
+recusado: não dá para somar BRL com USD
+recusado: 0.001 tem mais de duas casas decimais</code></pre>
+<p>Dividir 100 por 3 com <code>decimal</code> daria 33,3333…, e arredondar cada parte para 33,33 somaria 99,99: um centavo sumiria. Trabalhar em centavos inteiros e distribuir o resto garante que as partes <strong>sempre</strong> somam o total. Como objeto de valor, <code>Dinheiro</code> não tem identidade, é imutável e se valida ao nascer: um "valor com moeda" inválido não existe no domínio. A forma não posicional, com construtor explícito, deixa a validação acontecer antes de qualquer atribuição; e como as propriedades não têm <code>init</code>, nem um <code>with</code> consegue criar um <code>Dinheiro</code> sem passar por ela. O único furo é o <code>default(Dinheiro)</code>, que todo <code>struct</code> tem: valor 0 e moeda nula.</p>
+<div class="questao" id="q88">
+<span class="num">Q88</span>
+<div class="corpo">
+<p class="titulo">Busca semântica com vetores</p>
+<p>Uma busca semântica compara <em>embeddings</em>: vetores que um modelo de IA gera para cada texto, próximos quando os significados são próximos. Sem chamar modelo nenhum, use vetores de 4 dimensões já prontos para três sinopses e para a pergunta "livro sobre a seca no sertão", calcule a <strong>similaridade de cosseno</strong> com <code>TensorPrimitives.CosineSimilarity</code> e ordene os resultados.</p>
+</div>
+</div>
+<pre class="codigo"><code>#:package System.Numerics.Tensors@10.0.13
+using System.Numerics.Tensors;
+
+// Vetores de brinquedo. Um modelo de embeddings real gera centenas ou milhares de dimensões.
+(string Titulo, float[] Vetor)[] acervo =
+[
+    ("Vidas Secas",       [0.9f, 0.8f, 0.1f, 0.0f]),  // seca, sertão
+    ("Dom Casmurro",      [0.0f, 0.1f, 0.9f, 0.7f]),  // ciúme, cidade
+    ("Os Sertões",        [0.7f, 0.9f, 0.0f, 0.3f]),  // sertão, guerra
+];
+float[] pergunta = [0.8f, 0.7f, 0.0f, 0.1f];  // "livro sobre a seca no sertão"
+
+foreach (var (titulo, sim) in acervo.Select(l =&gt; (l.Titulo, TensorPrimitives.CosineSimilarity(pergunta, l.Vetor)))
+                                    .OrderByDescending(r =&gt; r.Item2))
+    Console.WriteLine($"{titulo,-13} {sim:F3}");</code></pre>
+<pre class="saida"><code>Vidas Secas   0.992
+Os Sertões    0.969
+Dom Casmurro  0.115</code></pre>
+<p>A similaridade de cosseno mede o <strong>ângulo</strong> entre os vetores: 1 é a mesma direção, 0 é sem relação, e o tamanho dos vetores não importa. Com <code>Microsoft.Extensions.AI</code>, os vetores viriam de um <code>IEmbeddingGenerator&lt;string, Embedding&lt;float&gt;&gt;</code>, e o acervo ficaria num banco com índice vetorial (o <code>pgvector</code> do PostgreSQL, por exemplo), para não comparar a pergunta com cada livro, um por um. O <code>TensorPrimitives</code> usa instruções SIMD do processador, várias multiplicações por instrução.</p>
+</section>
+<section class="modulo" id="desafios">
+<h2><span class="rotulo">PARA IR ALÉM</span> Desafios integradores</h2>
+<p class="intro">Projetos maiores, que juntam vários módulos. Não há uma única resposta certa: o gabarito mostra um caminho.</p>
+<div class="questao desafio" id="d1">
+<span class="num">D1</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora de terminal</p>
+<p>Escreva uma calculadora de terminal com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada (<code>raiz 2</code>). Ela deve: (a) aceitar vírgula ou ponto como separador decimal; (b) guardar o último resultado em <code>ans</code>, utilizável na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário, resultado grande demais e texto que não é número com uma mensagem clara, <strong>sem encerrar o programa</strong>; (d) ter os comandos <code>hist</code> (histórico) e <code>sair</code>. Separe o núcleo (uma classe <code>Calculadora</code> sem <code>Console</code>) da interface, e use <code>decimal</code> para que <code>0,1 + 0,2</code> dê exatamente <code>0,3</code>.</p>
+</div>
+</div>
+<p><strong>Caminho da solução</strong></p>
+<ul><li><strong>Núcleo</strong>: <code>Calculadora.Avaliar(string linha)</code> devolve um <code>Resultado</code> (um <em>record</em> com o valor ou a mensagem de erro), sem lançar exceções para erros do usuário e sem nenhuma referência ao <code>Console</code>. Num projeto real, ela fica numa biblioteca <code>Calculadora.Core</code>, usada pelo terminal, por uma janela e pelos testes.</li><li><strong>Números</strong>: <code>decimal.TryParse</code> com <code>CultureInfo.InvariantCulture</code>, depois de trocar a vírgula por ponto. Com <code>decimal</code>, as quatro operações são exatas para valores decimais; a raiz quadrada não tem versão <code>decimal</code> na biblioteca, então passa por <code>double</code> (e perde a exatidão, o que a saída mostra).</li><li><strong>Potência</strong>: calculada por multiplicações repetidas em <code>decimal</code>, dentro de um bloco <code>checked</code>, que transforma o estouro em <code>OverflowException</code>, tratada como "resultado grande demais".</li><li><strong>Interface</strong>: o laço lê com <code>Console.ReadLine</code>, mostra os resultados com vírgula (cultura <code>pt-BR</code>) e guarda o histórico numa <code>List&lt;string&gt;</code>.</li></ul>
+<pre class="codigo"><code>using System.Globalization;
+
+var calc = new Calculadora();
+var historico = new List&lt;string&gt;();
+var br = CultureInfo.GetCultureInfo("pt-BR");
+Console.WriteLine("Calculadora: + - * / ^ % e raiz. Comandos: hist, sair.");
+while (true)
+{
+    Console.Write("&gt; ");
+    var linha = Console.ReadLine()?.Trim();
+    if (linha is null or "sair")
+        break;
+    if (linha == "hist")
+    {
+        for (int i = 0; i &lt; historico.Count; i++)
+            Console.WriteLine($"  {i + 1}. {historico[i]}");
+        continue;
+    }
+    if (linha == "")
+        continue;
+    var r = calc.Avaliar(linha);
+    if (r.Erro is null)
+    {
+        historico.Add($"{linha} = {r.Valor.ToString(br)}");
+        Console.WriteLine(historico[^1]);
+    }
+    else
+    {
+        Console.WriteLine($"erro: {r.Erro}");
+    }
+}
+
+record Resultado(decimal Valor, string? Erro)
+{
+    public static Resultado Ok(decimal v) =&gt; new(v, null);
+    public static Resultado Falha(string e) =&gt; new(0, e);
+}
+
+class Calculadora
+{
+    public decimal Ans { get; private set; }
+
+    public Resultado Avaliar(string linha)
+    {
+        var p = linha.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        Resultado r = p switch
+        {
+            ["raiz", var x] =&gt; Numero(x) is { } v ? Raiz(v) : Resultado.Falha("operando não é um número"),
+            [var a, var op, var b] =&gt; Numero(a) is { } va &amp;&amp; Numero(b) is { } vb ? Operar(op, va, vb)
+                                                                              : Resultado.Falha("operando não é um número"),
+            _ =&gt; Resultado.Falha("use \"a op b\" ou \"raiz a\""),
+        };
+        if (r.Erro is null)
+            Ans = r.Valor;  // só um resultado válido substitui o ans
+        return r;
+    }
+
+    private decimal? Numero(string texto) =&gt;
+        texto == "ans" ? Ans
+        : decimal.TryParse(texto.Replace(',', '.'), NumberStyles.Number, CultureInfo.InvariantCulture, out var v) ? v
+        : null;
+
+    private static Resultado Raiz(decimal x) =&gt;
+        x &lt; 0 ? Resultado.Falha("raiz de número negativo") : Resultado.Ok((decimal)Math.Sqrt((double)x));
+
+    private static Resultado Operar(string op, decimal a, decimal b)
+    {
+        try
+        {
+            return op switch
+            {
+                "+" =&gt; Resultado.Ok(a + b),
+                "-" =&gt; Resultado.Ok(a - b),
+                "*" =&gt; Resultado.Ok(a * b),
+                "/" =&gt; b == 0 ? Resultado.Falha("divisão por zero") : Resultado.Ok(a / b),
+                "%" =&gt; Resultado.Ok(a * b / 100),
+                "^" =&gt; b != decimal.Truncate(b) ? Resultado.Falha("o expoente precisa ser inteiro") : Resultado.Ok(Potencia(a, (int)b)),
+                _ =&gt; Resultado.Falha("operação desconhecida (use + - * / ^ % ou raiz)"),
+            };
+        }
+        catch (OverflowException)
+        {
+            return Resultado.Falha("resultado grande demais");
+        }
+    }
+
+    private static decimal Potencia(decimal a, int n)
+    {
+        if (n &lt; 0)
+            return 1 / Potencia(a, -n);
+        decimal r = 1;
+        checked
+        {
+            for (int i = 0; i &lt; n; i++)
+                r *= a;  // decimal estoura com OverflowException
+        }
+        return r;
+    }
+}</code></pre>
+<p class="rotulo-entrada">Entrada digitada:</p>
+<pre class="codigo"><code>2 + 3
+0,1 + 0,2
+ans * 10
+10 / 0
+2 ^ 0,5
+raiz -4
+raiz 2
+ans * ans
+10 / 3
+15 % 200
+abc + 1
+2 ^ 200
+2 $ 3
+hist
+sair</code></pre>
+<pre class="saida"><code>Calculadora: + - * / ^ % e raiz. Comandos: hist, sair.
+&gt; 2 + 3 = 5
+&gt; 0,1 + 0,2 = 0,3
+&gt; ans * 10 = 3,0
+&gt; erro: divisão por zero
+&gt; erro: o expoente precisa ser inteiro
+&gt; erro: raiz de número negativo
+&gt; raiz 2 = 1,4142135623731
+&gt; ans * ans = 2,00000000000001400410360361
+&gt; 10 / 3 = 3,3333333333333333333333333333
+&gt; 15 % 200 = 30
+&gt; erro: operando não é um número
+&gt; erro: resultado grande demais
+&gt; erro: operação desconhecida (use + - * / ^ % ou raiz)
+&gt;   1. 2 + 3 = 5
+  2. 0,1 + 0,2 = 0,3
+  3. ans * 10 = 3,0
+  4. raiz 2 = 1,4142135623731
+  5. ans * ans = 2,00000000000001400410360361
+  6. 10 / 3 = 3,3333333333333333333333333333
+  7. 15 % 200 = 30
+&gt;</code></pre>
+<p>Com a entrada redirecionada, o terminal não ecoa o que foi digitado, e cada resposta aparece logo depois do <code>&gt;</code>.</p>
+<p>Compare com os cadernos de C e de C++: lá, <code>0,1 + 0,2</code> só "dava" 0,3 porque a impressão arredondava; aqui o <code>decimal</code> guarda exatamente 0,3. Ele também guarda a <strong>escala</strong>: <code>0,3 * 10</code> dá <code>3,0</code>, com uma casa, e não <code>3</code>. Mas a exatidão do <code>decimal</code> é <strong>decimal</strong>, não absoluta: <code>10 / 3</code> tem 28 dígitos e um arredondamento no fim, e a raiz de 2 passou por <code>double</code> e, na conversão para <code>decimal</code>, ficou com 14 algarismos significativos; por isso <code>ans * ans</code> não volta a dar 2. O <code>decimal</code> também tem alcance menor (até cerca de 7,9 × 10²⁸), e por isso <code>2 ^ 200</code> estoura aqui, enquanto com <code>double</code> daria 1,6 × 10⁶⁰.</p>
+<p>Uma versão gráfica com <strong>Avalonia</strong> (módulo 8) reaproveita a classe <code>Calculadora</code> sem mudar uma linha: um <code>CalculadoraViewModel</code> com a propriedade <code>Visor</code>, um <code>ICommand</code> para cada botão que acrescenta o símbolo ao visor e um comando "=" que chama <code>Avaliar</code> e mostra o resultado ou o erro. O mesmo ViewModel serve a uma versão .NET MAUI para o celular, e testes xUnit do núcleo valem para as três interfaces.</p>
+<div class="questao desafio" id="d2">
+<span class="num">D2</span>
+<div class="corpo">
+<p class="titulo">A livraria de ponta a ponta</p>
+<p>Junte as peças do curso numa versão mínima da livraria: uma API (Minimal API) com <code>GET /livros</code>, <code>GET /livros/{id}</code> e <code>POST /pedidos</code>, com EF Core e SQLite; um <em>worker</em> que consome os pedidos criados de um <code>Channel</code> e "envia" o e-mail de confirmação; e um cliente de terminal que lista o catálogo e faz um pedido pela API. Inclua testes de integração da API com <code>WebApplicationFactory</code>.</p>
+</div>
+</div>
+<p><strong>Caminho da solução</strong></p>
+<ul><li><strong>Projetos</strong>: <code>Livraria.Dominio</code> (entidades e regras, sem dependências), <code>Livraria.Api</code> (<em>endpoints</em>, EF Core, o <em>worker</em>), <code>Livraria.Cliente</code> (terminal com <code>HttpClient</code>) e <code>Livraria.Testes</code>. Use DTOs nos <em>endpoints</em>, nunca as entidades (módulo 6).</li><li><strong>Pedido</strong>: o <code>POST /pedidos</code> valida (livro existe, quantidade positiva, estoque suficiente), grava o pedido e a baixa de estoque <strong>na mesma transação</strong> (<code>SaveChanges</code> único), publica <code>PedidoCriado</code> no <code>Channel</code> e responde <code>201 Created</code>. O estoque usa concorrência otimista (<code>[Timestamp]</code>), para que dois pedidos simultâneos do último exemplar não sejam ambos aceitos.</li><li><strong>Worker</strong>: um <code>BackgroundService</code> lê o canal com <code>ReadAllAsync(stoppingToken)</code> e registra o envio em log. Se o processo cair entre gravar o pedido e publicar o evento, o e-mail se perde: a correção profissional é o padrão <em>outbox</em> (gravar o evento numa tabela na mesma transação e publicá-lo depois).</li><li><strong>Cliente</strong>: <code>HttpClient</code> com <code>AddStandardResilienceHandler</code> (repetição e <em>timeout</em>), <code>GetFromJsonAsync&lt;List&lt;LivroResponse&gt;&gt;</code> e tratamento do <code>ProblemDetails</code> nos erros 400 e 409.</li><li><strong>Testes</strong>: <code>WebApplicationFactory&lt;Program&gt;</code> sobe a API em memória; troque a conexão do EF por um SQLite em memória por teste (<code>ConfigureServices</code> no <code>WithWebHostBuilder</code>). Teste o caminho feliz do pedido, o 400 de quantidade inválida, o 404 de livro inexistente e o conflito de estoque com dois pedidos concorrentes do último exemplar.</li><li><strong>Execução</strong>: o .NET Aspire (módulo 7) sobe a API, o <em>worker</em> e um PostgreSQL com um só <code>dotnet run</code> do projeto <em>AppHost</em>, com o painel de <em>logs</em> e <em>traces</em> do OpenTelemetry. Sem Aspire e sem Docker, rode a API com <code>dotnet run --project Livraria.Api</code> e o cliente com <code>dotnet run --project Livraria.Cliente</code> em dois terminais, com o SQLite em arquivo.</li></ul>
+</section>
+<footer class="fim">
+<p><strong>Fim do gabarito.</strong></p>
+<p>Do Console ao Jogo Online: C# em 1 Ano · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</footer>
+</body>
+</html>
