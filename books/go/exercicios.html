@@ -1,0 +1,1112 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dominando Go em 1 Ano · Caderno de Exercícios</title>
+<link rel="stylesheet" href="../caderno.css">
+</head>
+<body class="caderno exercicios">
+<header class="capa">
+<p class="serie">DOMINANDO GO EM 1 ANO</p>
+<h1>Caderno de Exercícios</h1>
+<p class="subtitulo">52 aulas de prática, do #01 ao #52</p>
+<p class="subtitulo">Go 1.27 · 9 módulos · 122 questões · 6 desafios integradores</p>
+<p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</header>
+<div class="ficha"><span>Nome do aluno:</span><span>Início:</span><span>Término:</span></div>
+<aside class="nota">
+<p><strong>Como usar este caderno</strong></p>
+<p>Cada módulo reúne um bloco de aulas do curso, com a lista dos artigos que ele cobre. As perguntas conceituais pedem explicações com as suas palavras; os exercícios de código pedem programas: escreva, rode com <code>go run</code> e teste com <code>go test -race</code>.</p>
+<p>Tente sempre resolver sozinho antes de abrir o <strong>Caderno de Respostas</strong>. É no erro que o conhecimento fixa.</p>
+</aside>
+<h2 class="sumario-titulo">Sumário</h2>
+<table class="sumario">
+<thead><tr><th>Módulo</th><th>Tema</th><th>Aulas</th><th>Questões</th></tr></thead>
+<tbody>
+<tr><td>MÓDULO 1</td><td>Fundamentos da Linguagem</td><td>#01–#08</td><td>Q1–Q17</td></tr>
+<tr><td>MÓDULO 2</td><td>Estruturas de Dados e Coleções</td><td>#09–#14</td><td>Q18–Q30</td></tr>
+<tr><td>MÓDULO 3</td><td>Pacotes, Módulos e Organização</td><td>#15–#18</td><td>Q31–Q42</td></tr>
+<tr><td>MÓDULO 4</td><td>Concorrência</td><td>#19–#25</td><td>Q43–Q57</td></tr>
+<tr><td>MÓDULO 5</td><td>I/O, HTTP e APIs</td><td>#26–#31</td><td>Q58–Q69</td></tr>
+<tr><td>MÓDULO 6</td><td>Banco de Dados</td><td>#32–#37</td><td>Q70–Q82</td></tr>
+<tr><td>MÓDULO 7</td><td>Ferramentas, CLI e Qualidade</td><td>#38–#43</td><td>Q83–Q94</td></tr>
+<tr><td>MÓDULO 8</td><td>Arquitetura e Padrões</td><td>#44–#48</td><td>Q95–Q108</td></tr>
+<tr><td>MÓDULO 9</td><td>Deploy, Cloud e Carreira</td><td>#49–#52</td><td>Q109–Q122</td></tr>
+<tr><td>DESAFIOS</td><td>Desafios integradores</td><td>todas</td><td>D1–D6</td></tr>
+</tbody>
+</table>
+<aside class="legenda">
+<p>Legenda: nas perguntas, <code>assim</code> indica código, nomes de tipos e comandos. As linhas pautadas são para a sua resposta; nos exercícios de código, use também o computador: <strong>todo programa deve ser compilado e executado</strong>.</p>
+</aside>
+<section class="modulo" id="modulo-1">
+<h2><span class="rotulo">MÓDULO 1</span> Fundamentos da Linguagem</h2>
+<p class="aulas-titulo">Artigos 01 a 08</p>
+<ul class="aulas">
+<li><span class="n">#01</span> Introdução ao Go: história, filosofia e os criadores da linguagem</li>
+<li><span class="n">#02</span> Instalação, configuração do ambiente e o comando <code>go</code></li>
+<li><span class="n">#03</span> Variáveis, tipos primitivos e declaração curta</li>
+<li><span class="n">#04</span> Operadores, expressões e conversão de tipo</li>
+<li><span class="n">#05</span> Estruturas de controle: if, for e switch</li>
+<li><span class="n">#06</span> Funções: declaração, múltiplos retornos e variádicas</li>
+<li><span class="n">#07</span> Ponteiros: conceito, uso e quando evitar</li>
+<li><span class="n">#08</span> Arrays e Slices: a espinha dorsal das coleções em Go</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q1">
+<span class="num">Q1</span>
+<div class="corpo">
+<p>Quem são os três criadores do Go e em que empresa trabalhavam quando projetaram a linguagem?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q2">
+<span class="num">Q2</span>
+<div class="corpo">
+<p>O que é a <strong>promessa de compatibilidade do Go 1</strong> (2012)? O que ela garante, o que fica de fora dela e qual é o papel da linha <code>go</code> do <code>go.mod</code> quando a linguagem muda o comportamento de algo, como aconteceu com a variável de laço no Go 1.22?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q3">
+<span class="num">Q3</span>
+<div class="corpo">
+<p>Qual é a diferença entre <code>var x int</code> e <code>x := 0</code> no Go? Em quais escopos cada forma é permitida?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q4">
+<span class="num">Q4</span>
+<div class="corpo">
+<p>Qual é o valor zero de cada tipo: <code>int</code>, <code>float64</code>, <code>string</code>, <code>bool</code>, <code>*int</code>, <code>[]int</code>, <code>map[string]int</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q5">
+<span class="num">Q5</span>
+<div class="corpo">
+<p>O que acontece ao tentar dividir dois inteiros em Go: <code>7 / 2</code>? Como obter <code>3.5</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q6">
+<span class="num">Q6</span>
+<div class="corpo">
+<p>Por que <code>if x = 5 { }</code> não compila em Go, ao contrário de C? E por que o compilador também recusa uma variável local declarada e nunca usada, e um <code>import</code> que nada usa?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q7">
+<span class="num">Q7</span>
+<div class="corpo">
+<p>Por que <code>fmt.Printf("%d", "texto")</code> é detectado pelo <code>go vet</code> mas não impede a compilação?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q8">
+<span class="num">Q8</span>
+<div class="corpo">
+<p>Go não tem <code>while</code> nem <code>do-while</code>. Usando só <code>for</code>, escreva: (a) a soma de 1 a 100 no estilo <code>while</code>; (b) um laço que lê números de uma lista até encontrar <code>0</code> e soma os anteriores, no estilo <code>do-while</code> (o corpo roda pelo menos uma vez); (c) a soma de (a) com <code>range</code> sobre um inteiro.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q9">
+<span class="num">Q9</span>
+<div class="corpo">
+<p>Qual é a diferença entre <code>break</code> e <code>continue</code> dentro de um laço? Dê um exemplo de cada.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q10">
+<span class="num">Q10</span>
+<div class="corpo">
+<p>O que é <code>defer</code>? Em que ordem múltiplos <code>defer</code>s são executados? Dê um exemplo prático.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q11">
+<span class="num">Q11</span>
+<div class="corpo">
+<p>Complete o código abaixo para que a função retorne o maior dos três valores:</p>
+<pre class="codigo"><code>func maior(a, b, c int) int {
+    // escreva aqui
+
+
+
+}</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q12">
+<span class="num">Q12</span>
+<div class="corpo">
+<p>Corrija o código abaixo (ele tem 4 erros):</p>
+<pre class="codigo"><code>package main
+
+func main() {
+    var x int = 10.5
+    y := x + "5"
+    fmt.Println(y)
+    x++
+    fmt.Println(x
+}</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q13">
+<span class="num">Q13</span>
+<div class="corpo">
+<p>Escreva uma função variádica <code>soma(nums ...int) int</code> que retorna a soma de todos os argumentos.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q14">
+<span class="num">Q14</span>
+<div class="corpo">
+<p>O que imprime o código abaixo? Explique por quê.</p>
+<pre class="codigo"><code>x := 42
+p := &amp;x
+*p = 100
+fmt.Println(x)</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q15">
+<span class="num">Q15</span>
+<div class="corpo">
+<p>Qual a diferença entre um array <code>[5]int</code> e um slice <code>[]int</code>? Por que slices são mais usados no dia a dia?</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q16">
+<span class="num">Q16</span>
+<div class="corpo">
+<p>O que acontece quando <code>append</code> precisa aumentar a capacidade de um slice? Explique o mecanismo de realocação.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q17">
+<span class="num">Q17</span>
+<div class="corpo">
+<p>Escreva uma função que receba um slice de strings e retorne um novo slice sem duplicatas, preservando a ordem.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-2">
+<h2><span class="rotulo">MÓDULO 2</span> Estruturas de Dados e Coleções</h2>
+<p class="aulas-titulo">Artigos 09 a 14</p>
+<ul class="aulas">
+<li><span class="n">#09</span> Maps: criação, iteração e boas práticas</li>
+<li><span class="n">#10</span> Structs: definição, inicialização e campos embutidos</li>
+<li><span class="n">#11</span> Métodos em Structs: receivers por valor e por ponteiro</li>
+<li><span class="n">#12</span> Interfaces: contratos implícitos e polimorfismo</li>
+<li><span class="n">#13</span> Composição vs herança: o jeito Go de reutilizar código</li>
+<li><span class="n">#14</span> O tipo <code>error</code> e tratamento idiomático de falhas</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q18">
+<span class="num">Q18</span>
+<div class="corpo">
+<p>Por que a ordem de iteração sobre um map em Go é não garantida? O que fazer quando a ordem importa?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q19">
+<span class="num">Q19</span>
+<div class="corpo">
+<p>Qual é a diferença entre declarar <code>var m map[string]int</code> e <code>m := make(map[string]int)</code>? O que acontece ao escrever em cada um?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q20">
+<span class="num">Q20</span>
+<div class="corpo">
+<p>Explique o idioma 'comma ok' para maps: <code>v, ok := m["chave"]</code>. Quando ele é necessário?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q21">
+<span class="num">Q21</span>
+<div class="corpo">
+<p>O que são campos embutidos (embedding) em structs? Como eles diferem de herança?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q22">
+<span class="num">Q22</span>
+<div class="corpo">
+<p>Qual é a diferença entre um receiver por valor <code>(c Conta)</code> e por ponteiro <code>(c *Conta)</code>? Quando usar cada um?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q23">
+<span class="num">Q23</span>
+<div class="corpo">
+<p>Por que Go usa implementação implícita de interfaces? Que vantagem isso traz em relação ao <code>implements</code> explícito de Java?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q24">
+<span class="num">Q24</span>
+<div class="corpo">
+<p>O que é o tipo <code>error</code>? Como criar erros customizados que carregam informações estruturadas?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q25">
+<span class="num">Q25</span>
+<div class="corpo">
+<p>Qual a diferença entre <code>errors.Is</code> e <code>errors.As</code>? Dê um exemplo de uso de cada um.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q26">
+<span class="num">Q26</span>
+<div class="corpo">
+<p>O que é wrapping de erro com <code>%w</code> no <code>fmt.Errorf</code>? Por que isso é importante para a rastreabilidade?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q27">
+<span class="num">Q27</span>
+<div class="corpo">
+<p>Explique <code>panic</code> e <code>recover</code>. Em que situações seu uso é apropriado versus o retorno normal de <code>error</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q28">
+<span class="num">Q28</span>
+<div class="corpo">
+<p>Implemente um tipo <code>Pilha</code> genérica (stack) usando slice, com os métodos <code>Push</code>, <code>Pop</code> e <code>Tamanho</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q29">
+<span class="num">Q29</span>
+<div class="corpo">
+<p>Crie uma interface <code>Forma</code> com os métodos <code>Area() float64</code> e <code>Perimetro() float64</code>. Implemente-a para <code>Retangulo</code> e <code>Circulo</code>. Escreva uma função <code>descrever(f Forma)</code> que imprime área e perímetro.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q30">
+<span class="num">Q30</span>
+<div class="corpo">
+<p>O que imprime o código abaixo? Existe algum problema? Corrija se necessário.</p>
+<pre class="codigo"><code>var i interface{} = (*int)(nil)
+fmt.Println(i == nil)</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-3">
+<h2><span class="rotulo">MÓDULO 3</span> Pacotes, Módulos e Organização</h2>
+<p class="aulas-titulo">Artigos 15 a 18</p>
+<ul class="aulas">
+<li><span class="n">#15</span> Pacotes: visibilidade, nomenclatura e organização de projeto</li>
+<li><span class="n">#16</span> Go Modules: go.mod, go.sum e gerenciamento de dependências</li>
+<li><span class="n">#17</span> A biblioteca padrão: um tour pelas principais ferramentas</li>
+<li><span class="n">#18</span> Testes em Go: testing, tabelas de casos e benchmarks</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q31">
+<span class="num">Q31</span>
+<div class="corpo">
+<p>Como Go controla visibilidade de identificadores? Qual a regra que determina se algo é exportado?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q32">
+<span class="num">Q32</span>
+<div class="corpo">
+<p>Para que serve o diretório <code>internal/</code>? Quem pode importar pacotes dentro dele?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q33">
+<span class="num">Q33</span>
+<div class="corpo">
+<p>Qual a diferença entre <code>go.mod</code> e <code>go.sum</code>? Por que ambos devem ser commitados no repositório?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q34">
+<span class="num">Q34</span>
+<div class="corpo">
+<p>O que faz <code>go mod tidy</code>? Quando deve ser executado?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q35">
+<span class="num">Q35</span>
+<div class="corpo">
+<p>Explique o Minimum Version Selection (MVS) do Go. Por que ele é preferível a 'pegar a versão mais recente'?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q36">
+<span class="num">Q36</span>
+<div class="corpo">
+<p>Cite 5 pacotes da biblioteca padrão e suas responsabilidades principais.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q37">
+<span class="num">Q37</span>
+<div class="corpo">
+<p>Qual a diferença entre <code>json.Marshal</code> e <code>json.NewEncoder</code>? Quando usar cada um?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q38">
+<span class="num">Q38</span>
+<div class="corpo">
+<p>O que é <code>time.After</code> e como ele difere de <code>time.NewTimer</code>? Qual o problema de usar <code>time.After</code> dentro de loops?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q39">
+<span class="num">Q39</span>
+<div class="corpo">
+<p>Como funciona o padrão de tabela de casos em testes Go (<code>table-driven tests</code>)? Quais são suas vantagens?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q40">
+<span class="num">Q40</span>
+<div class="corpo">
+<p>O que faz <code>t.Helper()</code> em uma função de teste auxiliar? Por que é importante?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q41">
+<span class="num">Q41</span>
+<div class="corpo">
+<p>Escreva um teste de tabela de casos para a função <code>Palindromo(s string) bool</code> cobrindo pelo menos 6 casos, incluindo strings com espaços, maiúsculas e caracteres especiais.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q42">
+<span class="num">Q42</span>
+<div class="corpo">
+<p>Escreva uma função de benchmark para medir a performance de duas implementações de contagem de palavras: uma usando <code>strings.Split</code> e outra usando <code>strings.Fields</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-4">
+<h2><span class="rotulo">MÓDULO 4</span> Concorrência</h2>
+<p class="aulas-titulo">Artigos 19 a 25</p>
+<ul class="aulas">
+<li><span class="n">#19</span> Goroutines: concorrência leve e o modelo de execução do Go</li>
+<li><span class="n">#20</span> Channels: comunicação entre goroutines</li>
+<li><span class="n">#21</span> Select, timeouts e cancelamento de operações</li>
+<li><span class="n">#22</span> sync.WaitGroup e sync.Mutex: coordenando goroutines</li>
+<li><span class="n">#23</span> O pacote context: propagação de cancelamento e prazos</li>
+<li><span class="n">#24</span> Padrões de concorrência: fan-out, fan-in e pipelines</li>
+<li><span class="n">#25</span> Armadilhas da concorrência: race conditions e como detectá-las</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q43">
+<span class="num">Q43</span>
+<div class="corpo">
+<p>O que é uma goroutine? Em que ela difere de uma thread do sistema operacional em termos de uso de memória?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q44">
+<span class="num">Q44</span>
+<div class="corpo">
+<p>O que é o scheduler M:N do Go? Como ele mapeia goroutines para threads do SO?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q45">
+<span class="num">Q45</span>
+<div class="corpo">
+<p>Qual é a diferença entre um channel com buffer e sem buffer? Quando cada um deve ser usado?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q46">
+<span class="num">Q46</span>
+<div class="corpo">
+<p>O que é o padrão 'done channel'? Como <code>close(done)</code> difere de enviar um valor para <code>done</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q47">
+<span class="num">Q47</span>
+<div class="corpo">
+<p>Explique o padrão de pipeline com channels. Quais são os papéis de produtor, estágio e consumidor?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q48">
+<span class="num">Q48</span>
+<div class="corpo">
+<p>O que é fan-out? O que é fan-in? Como esses padrões são implementados com goroutines e channels?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q49">
+<span class="num">Q49</span>
+<div class="corpo">
+<p>Qual a diferença entre <code>sync.Mutex</code> e <code>sync.RWMutex</code>? Em que cenário <code>RWMutex</code> oferece vantagem?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q50">
+<span class="num">Q50</span>
+<div class="corpo">
+<p>O que é uma race condition? Como o detector de races do Go (<code>-race</code>) funciona?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q51">
+<span class="num">Q51</span>
+<div class="corpo">
+<p>Por que <code>sync.Once</code> é thread-safe? Como ele garante que a função seja executada exatamente uma vez?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q52">
+<span class="num">Q52</span>
+<div class="corpo">
+<p>Qual é o propósito do pacote <code>context</code>? Explique a árvore de contextos e como o cancelamento se propaga.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q53">
+<span class="num">Q53</span>
+<div class="corpo">
+<p>O que é uma goroutine leak? Cite 3 causas comuns e como evitá-las.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q54">
+<span class="num">Q54</span>
+<div class="corpo">
+<p>O que é o problema da variável de loop capturada em closures? Como ele foi corrigido no Go 1.22?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q55">
+<span class="num">Q55</span>
+<div class="corpo">
+<p>Implemente uma função <code>buscarConcorrente(urls []string) []Resultado</code> que faz requisições HTTP para todas as URLs simultaneamente e coleta os resultados. Use WaitGroup e channel.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q56">
+<span class="num">Q56</span>
+<div class="corpo">
+<p>O código abaixo tem uma race condition. Identifique-a e corrija usando sync/atomic ou Mutex.</p>
+<pre class="codigo"><code>var contador int
+
+for i := 0; i &lt; 1000; i++ {
+    go func() { contador++ }()
+}
+time.Sleep(time.Second)
+fmt.Println(contador)</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q57">
+<span class="num">Q57</span>
+<div class="corpo">
+<p>Implemente um semáforo usando channel com buffer que limita o número de goroutines simultâneas a N.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-5">
+<h2><span class="rotulo">MÓDULO 5</span> I/O, HTTP e APIs</h2>
+<p class="aulas-titulo">Artigos 26 a 31</p>
+<ul class="aulas">
+<li><span class="n">#26</span> Leitura e escrita de arquivos com os pacotes os e bufio</li>
+<li><span class="n">#27</span> Trabalhando com JSON: encode, decode e tags de struct</li>
+<li><span class="n">#28</span> Criando um servidor HTTP com net/http</li>
+<li><span class="n">#29</span> Roteamento avançado com Gorilla Mux ou Chi</li>
+<li><span class="n">#30</span> Consumindo APIs externas com http.Client</li>
+<li><span class="n">#31</span> Middlewares: logging, autenticação e CORS</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q58">
+<span class="num">Q58</span>
+<div class="corpo">
+<p>Qual a diferença entre <code>os.ReadFile</code> e <code>bufio.Scanner</code> para ler um arquivo? Quando usar cada abordagem?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q59">
+<span class="num">Q59</span>
+<div class="corpo">
+<p>Por que <code>bufio.Writer</code> melhora a performance de escrita? O que acontece se <code>Flush()</code> não for chamado?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q60">
+<span class="num">Q60</span>
+<div class="corpo">
+<p>Explique as tags de struct JSON: <code>json:"-"</code>, <code>json:"nome,omitempty"</code> e <code>json:",string"</code>. O que cada uma faz?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q61">
+<span class="num">Q61</span>
+<div class="corpo">
+<p>Qual a diferença entre <code>json.Marshal</code> e <code>json.MarshalIndent</code>? Quando <code>json.RawMessage</code> é útil?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q62">
+<span class="num">Q62</span>
+<div class="corpo">
+<p>Por que nunca usar <code>http.DefaultClient</code> em produção? O que pode acontecer sem timeout configurado?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q63">
+<span class="num">Q63</span>
+<div class="corpo">
+<p>Como o Go 1.22 melhorou o roteador <code>net/http</code>? Dê exemplos de padrões de rota que agora são suportados.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q64">
+<span class="num">Q64</span>
+<div class="corpo">
+<p>O que é um middleware em Go? Qual é sua assinatura padrão e como middlewares são encadeados?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q65">
+<span class="num">Q65</span>
+<div class="corpo">
+<p>Para que serve o pacote <code>net/http/httptest</code>? Como ele facilita testes de handlers HTTP?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q66">
+<span class="num">Q66</span>
+<div class="corpo">
+<p>O que é graceful shutdown de um servidor HTTP? Por que é importante e como é implementado?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q67">
+<span class="num">Q67</span>
+<div class="corpo">
+<p>Explique o padrão de retry com backoff exponencial e jitter. Por que o jitter é necessário?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q68">
+<span class="num">Q68</span>
+<div class="corpo">
+<p>Escreva um middleware de rate limiting simples que limita cada IP a 10 requisições por minuto, retornando HTTP 429 quando o limite é excedido.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q69">
+<span class="num">Q69</span>
+<div class="corpo">
+<p>Implemente uma função <code>lerCSVParaMap(caminho string) ([]map[string]string, error)</code> que lê um arquivo CSV e retorna cada linha como um mapa de nome-coluna → valor.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-6">
+<h2><span class="rotulo">MÓDULO 6</span> Banco de Dados</h2>
+<p class="aulas-titulo">Artigos 32 a 37</p>
+<ul class="aulas">
+<li><span class="n">#32</span> Introdução ao database/sql e drivers em Go</li>
+<li><span class="n">#33</span> Go com MySQL e MariaDB: conexão, queries e transações</li>
+<li><span class="n">#34</span> Go com SQLite: banco de dados embutido para aplicações leves</li>
+<li><span class="n">#35</span> Go com PostgreSQL: recursos avançados e o driver pgx</li>
+<li><span class="n">#36</span> Go com MongoDB: operações CRUD com o driver oficial</li>
+<li><span class="n">#37</span> GORM: ORM para Go, migrações e relacionamentos</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q70">
+<span class="num">Q70</span>
+<div class="corpo">
+<p>Por que nunca interpolar strings do usuário diretamente em queries SQL? Como placeholders (<code>?</code> ou <code>$1</code>) previnem SQL injection?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q71">
+<span class="num">Q71</span>
+<div class="corpo">
+<p>O que é o pool de conexões do <code>sql.DB</code>? Quais são as configurações mais importantes e o que cada uma controla?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q72">
+<span class="num">Q72</span>
+<div class="corpo">
+<p>Por que <code>rows.Close()</code> é obrigatório e deve usar <code>defer</code>? O que acontece se não for chamado?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q73">
+<span class="num">Q73</span>
+<div class="corpo">
+<p>Qual a diferença entre <code>QueryRowContext</code> e <code>QueryContext</code>? Quando usar cada um?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q74">
+<span class="num">Q74</span>
+<div class="corpo">
+<p>Explique o <code>_journal_mode=WAL</code> do SQLite. Que vantagem ele oferece sobre o modo padrão?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q75">
+<span class="num">Q75</span>
+<div class="corpo">
+<p>Por que <code>SetMaxOpenConns(1)</code> é recomendado para SQLite? O que acontece com escritas concorrentes sem isso?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q76">
+<span class="num">Q76</span>
+<div class="corpo">
+<p>Qual a diferença entre <code>lib/pq</code> e <code>pgx</code> como drivers PostgreSQL? Por que <code>pgx</code> é preferido para novos projetos?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q77">
+<span class="num">Q77</span>
+<div class="corpo">
+<p>Como transações ACID garantem consistência em operações que envolvem múltiplas tabelas? Dê um exemplo de transferência bancária.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q78">
+<span class="num">Q78</span>
+<div class="corpo">
+<p>O que é <code>bson.M</code> no MongoDB? Qual a diferença entre <code>bson.M</code> e <code>bson.D</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q79">
+<span class="num">Q79</span>
+<div class="corpo">
+<p>O que é <code>AutoMigrate</code> no GORM? O que ele faz e o que ele NÃO faz (para não quebrar produção)?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q80">
+<span class="num">Q80</span>
+<div class="corpo">
+<p>O que é soft delete no GORM? Como o <code>gorm.Model</code> implementa isso? Como buscar registros deletados?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q81">
+<span class="num">Q81</span>
+<div class="corpo">
+<p>Escreva uma função <code>transferir(ctx, db, origemID, destinoID int, centavos int64) error</code> usando transação SQL que garante atomicidade, verifica saldo e faz rollback em caso de falha.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q82">
+<span class="num">Q82</span>
+<div class="corpo">
+<p>Escreva um repositório em memória que implementa uma interface <code>UsuarioRepository</code> com os métodos <code>Criar</code>, <code>BuscarPorID</code>, <code>Listar</code> e <code>Deletar</code>. Esse repositório deve ser thread-safe.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-7">
+<h2><span class="rotulo">MÓDULO 7</span> Ferramentas, CLI e Qualidade</h2>
+<p class="aulas-titulo">Artigos 38 a 43</p>
+<ul class="aulas">
+<li><span class="n">#38</span> Criando ferramentas de linha de comando com flag e Cobra</li>
+<li><span class="n">#39</span> Logging estruturado com slog e Zerolog</li>
+<li><span class="n">#40</span> Variáveis de ambiente e configuração com Viper</li>
+<li><span class="n">#41</span> Linting, formatação e análise estática: gofmt, golangci-lint</li>
+<li><span class="n">#42</span> Documentação com godoc e boas práticas de comentário</li>
+<li><span class="n">#43</span> Profiling e otimização de performance em Go</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q83">
+<span class="num">Q83</span>
+<div class="corpo">
+<p>Qual a diferença entre o pacote <code>flag</code> da biblioteca padrão e o Cobra? Em que situações cada um é adequado?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q84">
+<span class="num">Q84</span>
+<div class="corpo">
+<p>O que é a flag <code>--config</code> no Viper e como ela interage com variáveis de ambiente? Qual é a ordem de precedência?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q85">
+<span class="num">Q85</span>
+<div class="corpo">
+<p>Qual a diferença entre <code>log/slog</code> e o pacote <code>log</code> padrão? Por que logging estruturado é preferível em produção?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q86">
+<span class="num">Q86</span>
+<div class="corpo">
+<p>O que faz <code>slog.With</code>? Como ele é usado para adicionar contexto a todos os logs de uma requisição?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q87">
+<span class="num">Q87</span>
+<div class="corpo">
+<p>Por que o Zerolog usa encadeamento de métodos (<code>logger.Info().Str(...).Msg(...)</code>)? Que vantagem de performance isso oferece?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q88">
+<span class="num">Q88</span>
+<div class="corpo">
+<p>Quais são os linters mais importantes do <code>golangci-lint</code>? O que cada um detecta?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q89">
+<span class="num">Q89</span>
+<div class="corpo">
+<p>O que é <code>go vet</code>? Cite 3 problemas que ele detecta que o compilador não detecta.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q90">
+<span class="num">Q90</span>
+<div class="corpo">
+<p>Quais são as regras do <code>godoc</code> para comentários de documentação? Qual é a convenção para funções, tipos e erros?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q91">
+<span class="num">Q91</span>
+<div class="corpo">
+<p>O que é <code>go tool pprof</code>? Quais tipos de perfis ele suporta e como cada um é coletado?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q92">
+<span class="num">Q92</span>
+<div class="corpo">
+<p>O que é escape analysis? Como a flag <code>-gcflags="-m"</code> ajuda a identificar alocações no heap?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q93">
+<span class="num">Q93</span>
+<div class="corpo">
+<p>Usando Cobra, crie a estrutura de um comando <code>app usuario criar --nome "João" --email joao@x.com --papel admin</code> com validação dos campos obrigatórios.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q94">
+<span class="num">Q94</span>
+<div class="corpo">
+<p>Crie um benchmark que compara duas versões de uma função que conta ocorrências de uma substring: uma usando <code>strings.Count</code> e outra usando um loop manual. Use <code>b.ResetTimer()</code> corretamente.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-8">
+<h2><span class="rotulo">MÓDULO 8</span> Arquitetura e Padrões</h2>
+<p class="aulas-titulo">Artigos 44 a 48</p>
+<ul class="aulas">
+<li><span class="n">#44</span> Clean Architecture em Go: camadas e dependências</li>
+<li><span class="n">#45</span> Domain-Driven Design aplicado a projetos Go</li>
+<li><span class="n">#46</span> Injeção de dependência sem frameworks</li>
+<li><span class="n">#47</span> Design Patterns em Go: Repository, Factory e Strategy</li>
+<li><span class="n">#48</span> APIs RESTful completas: projeto do zero ao deploy</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q95">
+<span class="num">Q95</span>
+<div class="corpo">
+<p>Qual é o princípio central da Clean Architecture? Como as dependências devem apontar entre as camadas?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q96">
+<span class="num">Q96</span>
+<div class="corpo">
+<p>Qual a diferença entre uma Entidade e um Value Object no DDD? Dê exemplos de cada um em um sistema de e-commerce.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q97">
+<span class="num">Q97</span>
+<div class="corpo">
+<p>O que é um Aggregate Root no DDD? Por que todas as modificações do agregado devem passar por ele?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q98">
+<span class="num">Q98</span>
+<div class="corpo">
+<p>O que são Bounded Contexts no DDD? Por que o mesmo conceito (ex: 'Cliente') pode ter modelos diferentes em contextos diferentes?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q99">
+<span class="num">Q99</span>
+<div class="corpo">
+<p>O que são eventos de domínio? Como eles diferem de eventos de infraestrutura?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q100">
+<span class="num">Q100</span>
+<div class="corpo">
+<p>O que é injeção de dependência? Por que Go prefere a abordagem manual em vez de frameworks de DI?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q101">
+<span class="num">Q101</span>
+<div class="corpo">
+<p>O que é o padrão de opções funcionais? Que problema ele resolve em relação a construtores com muitos parâmetros?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q102">
+<span class="num">Q102</span>
+<div class="corpo">
+<p>O que é a Composition Root? Por que toda instanciação de dependências deve acontecer lá?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q103">
+<span class="num">Q103</span>
+<div class="corpo">
+<p>Qual é a diferença entre o padrão Repository e um DAO (Data Access Object)?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q104">
+<span class="num">Q104</span>
+<div class="corpo">
+<p>Explique o padrão Decorator em Go. Como ele é usado para adicionar cache e logging a um repositório sem modificar sua implementação?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q105">
+<span class="num">Q105</span>
+<div class="corpo">
+<p>O que é o padrão Strategy? Como Go o implementa de forma mais simples que linguagens com herança?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q106">
+<span class="num">Q106</span>
+<div class="corpo">
+<p>Como o padrão Observer é implementado de forma idiomática em Go? Qual a vantagem de usar goroutines para notificação assíncrona?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q107">
+<span class="num">Q107</span>
+<div class="corpo">
+<p>Projete as camadas de uma aplicação de blog seguindo Clean Architecture. Desenhe (ou descreva em texto) quais pacotes existem, suas responsabilidades e como as dependências fluem entre eles.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q108">
+<span class="num">Q108</span>
+<div class="corpo">
+<p>Implemente um Value Object <code>Email</code> em Go que valide o formato, seja imutável e implemente igualdade por valor.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-9">
+<h2><span class="rotulo">MÓDULO 9</span> Deploy, Cloud e Carreira</h2>
+<p class="aulas-titulo">Artigos 49 a 52</p>
+<ul class="aulas">
+<li><span class="n">#49</span> Compilação cruzada, binários estáticos e Docker com Go</li>
+<li><span class="n">#50</span> Go na nuvem: deploy no Railway, Fly.io e Google Cloud Run</li>
+<li><span class="n">#51</span> gRPC e Protocol Buffers: comunicação eficiente entre serviços</li>
+<li><span class="n">#52</span> O ecossistema Go: comunidade, carreira e próximos passos</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q109">
+<span class="num">Q109</span>
+<div class="corpo">
+<p>O que fazem as flags <code>-w</code> e <code>-s</code> no <code>go build</code>? Por que <code>-trimpath</code> é importante para builds reproduzíveis?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q110">
+<span class="num">Q110</span>
+<div class="corpo">
+<p>Como funciona a compilação cruzada no Go? Quais variáveis de ambiente controlam o sistema e arquitetura alvo?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q111">
+<span class="num">Q111</span>
+<div class="corpo">
+<p>O que é <code>CGO_ENABLED=0</code>? Em que situações é necessário? Qual o impacto em drivers de banco de dados?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q112">
+<span class="num">Q112</span>
+<div class="corpo">
+<p>O que é um build multistage no Docker? Qual a vantagem de usar <code>distroless</code> como imagem final?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q113">
+<span class="num">Q113</span>
+<div class="corpo">
+<p>Como o pacote <code>embed</code> funciona? O que as diretivas <code>//go:embed</code> permitem incluir no binário?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q114">
+<span class="num">Q114</span>
+<div class="corpo">
+<p>Quais são as diferenças fundamentais entre Railway, Fly.io e Google Cloud Run? Quando cada um é mais adequado?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q115">
+<span class="num">Q115</span>
+<div class="corpo">
+<p>O que são Protocol Buffers? Por que gRPC usa serialização binária em vez de JSON?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q116">
+<span class="num">Q116</span>
+<div class="corpo">
+<p>Quais são os 4 tipos de RPC no gRPC? Dê um exemplo de caso de uso para cada um.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q117">
+<span class="num">Q117</span>
+<div class="corpo">
+<p>O que são interceptors no gRPC? Como eles se comparam a middlewares HTTP?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q118">
+<span class="num">Q118</span>
+<div class="corpo">
+<p>O que é <code>grpc-gateway</code>? Que problema ele resolve para equipes que precisam suportar tanto REST quanto gRPC?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q119">
+<span class="num">Q119</span>
+<div class="corpo">
+<p>Cite 5 ferramentas ou projetos famosos escritos em Go e explique por que Go foi escolhido para cada um.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q120">
+<span class="num">Q120</span>
+<div class="corpo">
+<p>O que são os <strong>iteradores</strong> (<em>range-over-func</em>, Go 1.23)? Escreva <code>Pares(n int) iter.Seq[int]</code>, que produz os pares menores que <code>n</code>, use-a num <code>for range</code> e explique o que acontece com o iterador quando o corpo do laço dá <code>break</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q121">
+<span class="num">Q121</span>
+<div class="corpo">
+<p>Escreva um Dockerfile multistage para uma API Go que: (1) compila com CGO_ENABLED=0, (2) usa distroless como imagem final, (3) embute versão e commit via ldflags, (4) roda como usuário não-root.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q122">
+<span class="num">Q122</span>
+<div class="corpo">
+<p>Defina em Proto3 um serviço <code>ProdutoService</code> com os métodos: <code>CriarProduto</code>, <code>BuscarProduto</code> (por ID), <code>ListarProdutos</code> (com paginação) e <code>AssistirEstoque</code> (streaming server-side que envia alertas quando estoque cai abaixo de um limite).</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="desafios">
+<h2><span class="rotulo">PARA IR ALÉM</span> Desafios integradores</h2>
+<p class="intro">Projetos maiores, que juntam vários módulos. Não há uma única resposta certa.</p>
+<div class="questao desafio" id="d1">
+<span class="num">D1</span>
+<div class="corpo">
+<p class="titulo">API REST de Tarefas Completa</p>
+<p>Construa uma API REST completa para gerenciamento de tarefas com: (a) Autenticação JWT com middleware; (b) CRUD de tarefas com PostgreSQL e pgx; (c) Paginação e filtros por status e prioridade; (d) Logging estruturado com slog; (e) Testes de integração usando banco SQLite em memória; (f) Dockerfile multistage. Descreva a estrutura de pacotes e as principais interfaces.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+<div class="questao desafio" id="d2">
+<span class="num">D2</span>
+<div class="corpo">
+<p class="titulo">Worker Pool Configurável</p>
+<p>Implemente um worker pool em Go que: (a) Receba tarefas via channel; (b) Processe com N workers configurável; (c) Respeite cancelamento via context; (d) Colete resultados e erros separadamente; (e) Exponha métricas (tarefas processadas, em fila, com erro); (f) Encerre graciosamente esperando workers terminarem. Escreva os testes de concorrência com -race.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+<div class="questao desafio" id="d3">
+<span class="num">D3</span>
+<div class="corpo">
+<p class="titulo">Sistema de Cache com TTL</p>
+<p>Projete e implemente um cache em memória thread-safe com: (a) Operações Get, Set, Delete; (b) TTL configurável por chave; (c) Eviction automática de entradas expiradas; (d) Limite máximo de entradas com política LRU; (e) Interface que permita substituição por Redis ou Memcached; (f) Benchmarks comparando com sync.Map.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+<div class="questao desafio" id="d4">
+<span class="num">D4</span>
+<div class="corpo">
+<p class="titulo">CLI de Deploy</p>
+<p>Crie uma ferramenta CLI usando Cobra que: (a) Tenha subcomandos <code>build</code>, <code>push</code> e <code>deploy</code>; (b) Leia configuração de arquivo YAML com Viper; (c) Execute compilação cruzada para múltiplos alvos; (d) Construa e empurre imagens Docker; (e) Faça deploy via API HTTP com retry e backoff; (f) Tenha output colorido e progress bars; (g) Gere completions para bash e zsh.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+<div class="questao desafio" id="d5">
+<span class="num">D5</span>
+<div class="corpo">
+<p class="titulo">Microserviço gRPC com Streaming</p>
+<p>Implemente um microserviço de monitoramento de preços que: (a) Exponha um serviço gRPC com streaming bidirecional; (b) Clientes subscrevem a alertas de produtos específicos; (c) Quando o preço muda, o servidor notifica todos os subscribers; (d) Use context para cancelamento e timeouts; (e) Implemente interceptors de autenticação e logging; (f) Exponha também uma interface REST via grpc-gateway.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+<div class="questao desafio" id="d6">
+<span class="num">D6</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora, duas interfaces</p>
+<p>Escreva uma calculadora com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada. Ela deve: (a) fazer as contas com <code>math/big</code>, para que <code>0,1 + 0,2</code> dê exatamente <code>0,3</code>, aceitando vírgula ou ponto e mostrando até 16 dígitos significativos; (b) guardar o último resultado em <code>ans</code>, que pode ser usado na conta seguinte; (c) devolver um <code>error</code> claro para divisão por zero, raiz de negativo, expoente fracionário e texto que não é número, <strong>sem encerrar o programa</strong>. Escreva o núcleo num pacote que não sabe nada de entrada e saída, e reaproveite-o em dois programas: um de <strong>terminal</strong> (com os comandos <code>hist</code> e <code>sair</code>) e uma interface <strong>gráfica no navegador</strong>, servida com <code>net/http</code>, com teclado na tela, visor e histórico.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+
+</section>
+<footer class="fim">
+<p><strong>Bom estudo e bons exercícios!</strong></p>
+<p>Dominando Go em 1 Ano · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</footer>
+</body>
+</html>

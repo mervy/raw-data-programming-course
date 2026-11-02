@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dominando Rust em 1 Ano · Caderno de Exercícios</title>
+<link rel="stylesheet" href="../caderno.css">
+</head>
+<body class="caderno exercicios">
+<header class="capa">
+<p class="serie">DOMINANDO RUST EM 1 ANO</p>
+<h1>Caderno de Exercícios</h1>
+<p class="subtitulo">53 aulas de prática, do #01 ao #53</p>
+<p class="subtitulo">Rust 1.98 · edição 2024 · Cargo · 11 módulos · 67 questões · 2 desafios integradores</p>
+<p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</header>
+<div class="ficha"><span>Nome do aluno:</span><span>Início:</span><span>Término:</span></div>
+<aside class="nota">
+<p><strong>Como usar este caderno</strong></p>
+<p>Cada módulo reúne um bloco de aulas do curso, com a lista dos artigos que ele cobre. As perguntas conceituais pedem explicações com as suas palavras; os exercícios de código pedem programas: escreva, compile e execute cada um.</p>
+<p>Tente sempre resolver sozinho antes de abrir o <strong>Caderno de Respostas</strong>. É no erro que o conhecimento fixa.</p>
+</aside>
+<h2 class="sumario-titulo">Sumário</h2>
+<table class="sumario">
+<thead><tr><th>Módulo</th><th>Tema</th><th>Aulas</th><th>Questões</th></tr></thead>
+<tbody>
+<tr><td>MÓDULO 1</td><td>Fundamentos da linguagem</td><td>#01–#04</td><td>Q1–Q6</td></tr>
+<tr><td>MÓDULO 2</td><td>Ownership e borrowing</td><td>#05–#06</td><td>Q7–Q11</td></tr>
+<tr><td>MÓDULO 3</td><td>Tipos próprios e erros</td><td>#07–#09</td><td>Q12–Q17</td></tr>
+<tr><td>MÓDULO 4</td><td>Coleções, iteradores e closures</td><td>#10–#11</td><td>Q18–Q23</td></tr>
+<tr><td>MÓDULO 5</td><td>Traits, generics e lifetimes</td><td>#12–#14</td><td>Q24–Q29</td></tr>
+<tr><td>MÓDULO 6</td><td>Módulos e testes</td><td>#15–#16</td><td>Q30–Q32</td></tr>
+<tr><td>MÓDULO 7</td><td>Recursos avançados</td><td>#17–#21</td><td>Q33–Q42</td></tr>
+<tr><td>MÓDULO 8</td><td>Ecossistema e web</td><td>#22–#26</td><td>Q43–Q48</td></tr>
+<tr><td>MÓDULO 9</td><td>Sistemas e baixo nível</td><td>#27–#36</td><td>Q49–Q56</td></tr>
+<tr><td>MÓDULO 10</td><td>Engenharia de projetos</td><td>#37–#41</td><td>Q57–Q61</td></tr>
+<tr><td>MÓDULO 11</td><td>Rust em domínios específicos e o futuro</td><td>#42–#53</td><td>Q62–Q67</td></tr>
+<tr><td>DESAFIOS</td><td>Desafios integradores</td><td>todas</td><td>D1–D2</td></tr>
+</tbody>
+</table>
+<aside class="legenda">
+<p>Legenda: nas perguntas, <code>assim</code> indica código, nomes de tipos e comandos. As linhas pautadas são para a sua resposta; nos exercícios de código, use também o computador: <strong>todo programa deve ser compilado e executado</strong>.</p>
+</aside>
+<section class="modulo" id="modulo-1">
+<h2><span class="rotulo">MÓDULO 1</span> Fundamentos da linguagem</h2>
+<p class="intro">Por que Rust existe, variáveis e imutabilidade, funções e expressões, e o controle de fluxo.</p>
+<p class="aulas-titulo">Artigos 01 a 04</p>
+<ul class="aulas">
+<li><span class="n">#01</span> Por que Rust existe e o que ele quer de você</li>
+<li><span class="n">#02</span> Variáveis, Tipos e a Arte da Imutabilidade</li>
+<li><span class="n">#03</span> Funções, Expressões e Como Rust Pensa Diferente sobre Retorno de Valores</li>
+<li><span class="n">#04</span> Controle de Fluxo — if, loop, while e for como você nunca viu antes</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q1">
+<span class="num">Q1</span>
+<div class="corpo">
+<p class="titulo">O que Rust quer de você</p>
+<p>O artigo #01 diz que Rust oferece segurança de memória sem coletor de lixo. Que duas classes de <em>bugs</em> comuns em C e C++ o compilador do Rust impede, e qual é o preço que o programador paga por isso?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q2">
+<span class="num">Q2</span>
+<div class="corpo">
+<p class="titulo">Imutável por padrão</p>
+<p>Por que <code>let x = 5; x = 6;</code> não compila em Rust? Qual a diferença entre <code>let mut</code>, <em>shadowing</em> (<code>let x = x + 1;</code>) e <code>const</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q3">
+<span class="num">Q3</span>
+<div class="corpo">
+<p class="titulo">Expressão ou instrução</p>
+<p>Por que a função abaixo não compila, e como corrigi-la com uma mudança de um caractere?</p>
+<pre class="codigo"><code>fn dobro(x: i32) -&gt; i32 {
+    x * 2;
+}</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q4">
+<span class="num">Q4</span>
+<div class="corpo">
+<p class="titulo">Estouro de inteiro</p>
+<p>O que acontece em <code>let x: u8 = 255; let y = x + 1;</code> no modo <em>debug</em> e no modo <em>release</em>? Que métodos tornam a intenção explícita?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q5">
+<span class="num">Q5</span>
+<div class="corpo">
+<p class="titulo">Tipos e conversões</p>
+<p>Escreva um programa que mostre: o maior <code>u8</code> e o menor <code>i16</code>; a conversão com <code>as</code> de <code>300_i32</code> para <code>u8</code> e de <code>-1_i32</code> para <code>u32</code>; a conversão segura com <code>u8::try_from</code>; e as quatro formas de somar <code>250_u8 + 10</code> (<code>checked</code>, <code>wrapping</code>, <code>saturating</code> e <code>overflowing</code>).</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q6">
+<span class="num">Q6</span>
+<div class="corpo">
+<p class="titulo">Expressões que devolvem valores</p>
+<p>Escreva <code>fn classificar(nota: u32) -&gt; &amp;'static str</code> usando <code>match</code> com faixas (<code>90..=100</code>), uma função <code>fn primeiro_divisor(n: u32) -&gt; u32</code> que use <code>loop</code> com <code>break valor</code>, e um laço com rótulo (<code>'externo</code>) que pare os dois laços quando achar o primeiro par <code>(a, b)</code> com <code>a * b == 42</code> e <code>a &lt; b</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-2">
+<h2><span class="rotulo">MÓDULO 2</span> Ownership e borrowing</h2>
+<p class="intro">Posse, movimento e cópia; referências, empréstimos mutáveis e imutáveis, e slices.</p>
+<p class="aulas-titulo">Artigos 05 a 06</p>
+<ul class="aulas">
+<li><span class="n">#05</span> Ownership — A Ideia que Muda Tudo</li>
+<li><span class="n">#06</span> Borrowing e Referências — Usando sem Possuir</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q7">
+<span class="num">Q7</span>
+<div class="corpo">
+<p class="titulo">As três regras da posse</p>
+<p>Enuncie as regras de <em>ownership</em> e explique por que <code>let s1 = String::from("oi"); let s2 = s1; println!("{s1}");</code> não compila, enquanto o mesmo código com <code>i32</code> compila.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q8">
+<span class="num">Q8</span>
+<div class="corpo">
+<p class="titulo">Uma mutável ou várias imutáveis</p>
+<p>Qual é a regra dos empréstimos, e que <em>bug</em> clássico de C++ ela impede no código abaixo?</p>
+<pre class="codigo"><code>let mut v = vec![1, 2, 3];
+let primeiro = &amp;v[0];
+v.push(4);
+println!("{primeiro}");</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q9">
+<span class="num">Q9</span>
+<div class="corpo">
+<p class="titulo">String e &amp;str</p>
+<p>Qual a diferença entre <code>String</code> e <code>&amp;str</code>? Por que uma função que só lê um texto deve receber <code>&amp;str</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q10">
+<span class="num">Q10</span>
+<div class="corpo">
+<p class="titulo">Movimento, cópia e empréstimo</p>
+<p>Escreva um programa que mostre: (a) uma <code>String</code> movida para uma função e devolvida no retorno; (b) a mesma função reescrita para receber <code>&amp;str</code>; (c) uma função que recebe <code>&amp;mut String</code> e acrescenta texto; (d) um <code>struct</code> com <code>#[derive(Clone, Copy)]</code> sendo copiado.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q11">
+<span class="num">Q11</span>
+<div class="corpo">
+<p class="titulo">Slices e a primeira palavra</p>
+<p>Escreva <code>fn primeira_palavra(s: &amp;str) -&gt; &amp;str</code> que devolva a primeira palavra (até o primeiro espaço) como uma fatia do texto original, sem alocar. Mostre que tentar esvaziar a <code>String</code> (<code>clear</code>) enquanto a fatia ainda está em uso não compila (em comentário), e use a função com um literal e com uma <code>String</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-3">
+<h2><span class="rotulo">MÓDULO 3</span> Tipos próprios e erros</h2>
+<p class="intro">Structs e métodos, enums e pattern matching, e o tratamento de erros com Result.</p>
+<p class="aulas-titulo">Artigos 07 a 09</p>
+<ul class="aulas">
+<li><span class="n">#07</span> Structs — Criando seus próprios tipos de dados</li>
+<li><span class="n">#08</span> Enums e Pattern Matching — O Sistema Mais Expressivo que Você Já Viu</li>
+<li><span class="n">#09</span> Tratamento de Erros com Result — Erros como Valores, não Exceções</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q12">
+<span class="num">Q12</span>
+<div class="corpo">
+<p class="titulo">Option no lugar de null</p>
+<p>Por que Rust não tem <code>null</code>? O que o <code>Option&lt;T&gt;</code> obriga o programador a fazer que um ponteiro nulo não obriga?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q13">
+<span class="num">Q13</span>
+<div class="corpo">
+<p class="titulo">O operador ?</p>
+<p>O que o operador <code>?</code> faz numa função que devolve <code>Result&lt;T, E&gt;</code>? Por que <code>unwrap()</code> é aceitável num exemplo e perigoso numa biblioteca?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q14">
+<span class="num">Q14</span>
+<div class="corpo">
+<p class="titulo">Enum com dados</p>
+<p>Como um <code>enum</code> do Rust difere de um <code>enum</code> do C? Mostre um <code>enum Mensagem</code> com quatro variantes de formatos diferentes.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q15">
+<span class="num">Q15</span>
+<div class="corpo">
+<p class="titulo">Uma struct com métodos</p>
+<p>Escreva <code>struct Retangulo { largura: f64, altura: f64 }</code> com um construtor associado <code>quadrado(lado)</code>, os métodos <code>area(&amp;self)</code>, <code>escalar(&amp;mut self, fator)</code> e <code>cabe_em(&amp;self, outro: &amp;Retangulo) -&gt; bool</code>, e implemente o <em>trait</em> <code>Display</code> para imprimi-lo como <code>3x4</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q16">
+<span class="num">Q16</span>
+<div class="corpo">
+<p class="titulo">Uma máquina de estados com enum</p>
+<p>Modele um pedido com <code>enum Estado { Novo, Pago { valor: u32 }, Enviado { codigo: String }, Cancelado { motivo: String } }</code> e escreva <code>fn avancar(estado: Estado, evento: Evento) -&gt; Result&lt;Estado, String&gt;</code> com <code>match</code> sobre a tupla <code>(estado, evento)</code>. Rode uma sequência válida e duas inválidas.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q17">
+<span class="num">Q17</span>
+<div class="corpo">
+<p class="titulo">Erros próprios e o operador ?</p>
+<p>Escreva <code>fn ler_config(texto: &amp;str) -&gt; Result&lt;Config, ErroConfig&gt;</code> que leia linhas <code>chave=valor</code> com as chaves <code>porta</code> (número de 1 a 65535) e <code>host</code> (obrigatório). Defina <code>enum ErroConfig</code> com as variantes <code>LinhaInvalida(usize)</code>, <code>Faltando(&amp;'static str)</code> e <code>Porta(std::num::ParseIntError)</code>, implemente <code>Display</code> e <code>From&lt;ParseIntError&gt;</code>, e use o <code>?</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-4">
+<h2><span class="rotulo">MÓDULO 4</span> Coleções, iteradores e closures</h2>
+<p class="intro">Vec, HashMap e HashSet, iteradores, adaptadores e closures.</p>
+<p class="aulas-titulo">Artigos 10 a 11</p>
+<ul class="aulas">
+<li><span class="n">#10</span> Coleções — Vec, HashMap e HashSet na Prática</li>
+<li><span class="n">#11</span> Iteradores e Closures — O Estilo Funcional de Rust</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q18">
+<span class="num">Q18</span>
+<div class="corpo">
+<p class="titulo">iter, iter_mut e into_iter</p>
+<p>Qual a diferença entre percorrer um <code>Vec&lt;String&gt;</code> com <code>v.iter()</code>, <code>v.iter_mut()</code> e <code>v.into_iter()</code> (ou <code>for x in v</code>)? O que acontece com <code>v</code> depois do último?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q19">
+<span class="num">Q19</span>
+<div class="corpo">
+<p class="titulo">Iteradores preguiçosos e de custo zero</p>
+<p>Por que <code>v.iter().map(|x| x * 2);</code> sozinho não faz nada (e o compilador avisa)? O que significa dizer que os iteradores do Rust são uma "abstração de custo zero"?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q20">
+<span class="num">Q20</span>
+<div class="corpo">
+<p class="titulo">Fn, FnMut e FnOnce</p>
+<p>Qual a diferença entre os <em>traits</em> <code>Fn</code>, <code>FnMut</code> e <code>FnOnce</code>? Dê uma closure de cada tipo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q21">
+<span class="num">Q21</span>
+<div class="corpo">
+<p class="titulo">Contando palavras com HashMap</p>
+<p>Conte a frequência das palavras de um texto (minúsculas, sem pontuação) com um <code>HashMap&lt;String, usize&gt;</code> e a API <code>entry</code>, mostre as três mais frequentes desempatando em ordem alfabética, e use um <code>HashSet</code> para listar as palavras que aparecem só uma vez, em ordem.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q22">
+<span class="num">Q22</span>
+<div class="corpo">
+<p class="titulo">Uma cadeia de iteradores</p>
+<p>Dado um vetor de pedidos (<code>cliente</code>, <code>valor</code> em centavos, <code>pago</code>), use só iteradores, sem laços explícitos, para obter: o total pago; o maior pedido pago (com <code>max_by_key</code>); os clientes com pedido pago, sem repetição e em ordem; os pedidos em lotes de 2 (<code>chunks</code>); e se algum pedido passa de R$ 150 (<code>any</code>).</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q23">
+<span class="num">Q23</span>
+<div class="corpo">
+<p class="titulo">Closures que capturam</p>
+<p>Escreva <code>fn criar_contador(inicio: i32, passo: i32) -&gt; impl FnMut() -&gt; i32</code>, que devolve uma closure com estado próprio; uma função genérica <code>fn aplicar_duas_vezes&lt;F: Fn(i32) -&gt; i32&gt;(f: F, x: i32) -&gt; i32</code>; e mostre o <code>move</code> necessário para devolver uma closure que captura uma variável local.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-5">
+<h2><span class="rotulo">MÓDULO 5</span> Traits, generics e lifetimes</h2>
+<p class="intro">Comportamento compartilhado com traits, código genérico e a anotação de lifetimes.</p>
+<p class="aulas-titulo">Artigos 12 a 14</p>
+<ul class="aulas">
+<li><span class="n">#12</span> Traits — Definindo Comportamento Compartilhado</li>
+<li><span class="n">#13</span> Generics — Código que Funciona para Qualquer Tipo</li>
+<li><span class="n">#14</span> Lifetimes — Quando o Compilador Precisa de Mais Informação</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q24">
+<span class="num">Q24</span>
+<div class="corpo">
+<p class="titulo">Genérico ou dyn Trait</p>
+<p>Compare <code>fn desenhar&lt;T: Forma&gt;(f: &amp;T)</code> e <code>fn desenhar(f: &amp;dyn Forma)</code>. Quando usar cada um?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q25">
+<span class="num">Q25</span>
+<div class="corpo">
+<p class="titulo">A regra do órfão</p>
+<p>Por que você pode implementar o seu <em>trait</em> <code>Resumo</code> para <code>Vec&lt;i32&gt;</code>, e o <em>trait</em> <code>Display</code> para o seu <code>struct Livro</code>, mas não pode implementar <code>Display</code> para <code>Vec&lt;i32&gt;</code>? Como contornar?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q26">
+<span class="num">Q26</span>
+<div class="corpo">
+<p class="titulo">Por que lifetimes</p>
+<p>Por que esta função não compila sem a anotação de <em>lifetime</em>? O que <code>'a</code> promete?</p>
+<pre class="codigo"><code>fn maior(a: &amp;str, b: &amp;str) -&gt; &amp;str {
+    if a.len() &gt;= b.len() { a } else { b }
+}</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q27">
+<span class="num">Q27</span>
+<div class="corpo">
+<p class="titulo">Um trait com método padrão</p>
+<p>Defina <code>trait Descrevivel</code> com <code>fn nome(&amp;self) -&gt; String</code> e um método <strong>padrão</strong> <code>fn descricao(&amp;self) -&gt; String</code> que use o <code>nome</code>. Implemente para <code>Livro</code> (sobrescrevendo a descrição) e para <code>Revista</code> (usando o padrão). Escreva uma função com <code>impl Descrevivel</code> e outra que percorra um <code>Vec&lt;Box&lt;dyn Descrevivel&gt;&gt;</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q28">
+<span class="num">Q28</span>
+<div class="corpo">
+<p class="titulo">Uma função genérica com restrições</p>
+<p>Escreva <code>fn maior_e_menor&lt;T: PartialOrd + Copy&gt;(itens: &amp;[T]) -&gt; Option&lt;(T, T)&gt;</code> e uma <code>struct Par&lt;T&gt;</code> com um método <code>maior(&amp;self) -&gt; &amp;T</code> disponível só quando <code>T: PartialOrd</code>. Teste com inteiros, <code>f64</code> e caracteres, e com um slice vazio.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q29">
+<span class="num">Q29</span>
+<div class="corpo">
+<p class="titulo">Uma struct que empresta</p>
+<p>Escreva <code>struct Analisador&lt;'a&gt; { texto: &amp;'a str }</code> com um método <code>palavras_longas(&amp;self, minimo: usize) -&gt; Vec&lt;&amp;'a str&gt;</code> que devolva fatias do texto original, e uma função <code>fn maior&lt;'a&gt;(a: &amp;'a str, b: &amp;'a str) -&gt; &amp;'a str</code>. Mostre (em comentário) o uso que o compilador recusa.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-6">
+<h2><span class="rotulo">MÓDULO 6</span> Módulos e testes</h2>
+<p class="intro">Módulos, visibilidade e organização de projetos; testes unitários, de integração e de documentação.</p>
+<p class="aulas-titulo">Artigos 15 a 16</p>
+<ul class="aulas">
+<li><span class="n">#15</span> Módulos e Organização de Código — Estruturando Projetos Reais</li>
+<li><span class="n">#16</span> Testes — Escrevendo Código que Prova que Seu Código Funciona</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q30">
+<span class="num">Q30</span>
+<div class="corpo">
+<p class="titulo">Crate, módulo e visibilidade</p>
+<p>Qual a diferença entre <em>crate</em>, <em>package</em> e módulo? O que <code>pub</code>, <code>pub(crate)</code> e a ausência de modificador significam para uma função dentro de <code>mod banco</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q31">
+<span class="num">Q31</span>
+<div class="corpo">
+<p class="titulo">Onde ficam os testes</p>
+<p>No Rust, por que os testes unitários ficam no mesmo arquivo do código (<code>#[cfg(test)] mod tests</code>), e os de integração na pasta <code>tests/</code>? O que um teste de integração não consegue acessar?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q32">
+<span class="num">Q32</span>
+<div class="corpo">
+<p class="titulo">Módulos e testes num arquivo só</p>
+<p>Num único <code>main.rs</code>, crie o módulo <code>carrinho</code> com a <code>struct Carrinho</code> pública, um campo privado com os itens, os métodos públicos <code>novo</code>, <code>adicionar</code> e <code>total</code>, e uma função privada <code>aplicar_desconto</code> (10% a partir de 3 itens). Escreva, dentro do módulo, um <code>mod tests</code> com três testes, inclusive um da função privada e um com <code>#[should_panic]</code>. Rode o programa e, separadamente, os testes com <code>rustc --test</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="modulo-7">
+<h2><span class="rotulo">MÓDULO 7</span> Recursos avançados</h2>
+<p class="intro">Closures avançadas, smart pointers (Box, Rc e RefCell), concorrência com threads e canais, async/await com Tokio e macros.</p>
+<p class="aulas-titulo">Artigos 17 a 21</p>
+<ul class="aulas">
+<li><span class="n">#17</span> Closures Avançadas e Programação Funcional — Indo Além do map e filter</li>
+<li><span class="n">#18</span> Smart Pointers — Box, Rc e RefCell</li>
+<li><span class="n">#19</span> Concorrência — Threads, Canais e a Promessa de Rust de Concorrência Sem Medo</li>
+<li><span class="n">#20</span> Async/Await — Concorrência sem Threads com Tokio</li>
+<li><span class="n">#21</span> Macros — Escrevendo Código que Escreve Código</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q33">
+<span class="num">Q33</span>
+<div class="corpo">
+<p class="titulo">Box, Rc e RefCell</p>
+<p>Para que serve cada um: <code>Box&lt;T&gt;</code>, <code>Rc&lt;T&gt;</code> e <code>RefCell&lt;T&gt;</code>? Por que <code>Rc&lt;RefCell&lt;T&gt;&gt;</code> é uma combinação comum, e qual é o risco dela?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q34">
+<span class="num">Q34</span>
+<div class="corpo">
+<p class="titulo">Send e Sync</p>
+<p>O que significam os <em>traits</em> <code>Send</code> e <code>Sync</code>? Por que <code>thread::spawn</code> recusa uma closure que captura um <code>Rc&lt;T&gt;</code>, e aceita uma com <code>Arc&lt;T&gt;</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q35">
+<span class="num">Q35</span>
+<div class="corpo">
+<p class="titulo">Thread ou async</p>
+<p>Quando usar threads e quando usar <code>async</code> com Tokio? Por que chamar uma função bloqueante (<code>std::thread::sleep</code>, leitura síncrona de arquivo grande) dentro de uma tarefa <code>async</code> é um erro?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q36">
+<span class="num">Q36</span>
+<div class="corpo">
+<p class="titulo">macro_rules ou função</p>
+<p>Quando uma macro declarativa (<code>macro_rules!</code>) é justificada, e quando uma função resolve? Por que <code>println!</code> e <code>vec!</code> precisam ser macros?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q37">
+<span class="num">Q37</span>
+<div class="corpo">
+<p class="titulo">Uma expressão recursiva com Box</p>
+<p>Defina <code>enum Expr { Num(f64), Soma(Box&lt;Expr&gt;, Box&lt;Expr&gt;), Mult(Box&lt;Expr&gt;, Box&lt;Expr&gt;), Neg(Box&lt;Expr&gt;) }</code>, uma função <code>avaliar(&amp;Expr) -&gt; f64</code> e uma <code>mostrar(&amp;Expr) -&gt; String</code> que imprima com parênteses. Monte e avalie <code>-(2 + 3) * 4</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q38">
+<span class="num">Q38</span>
+<div class="corpo">
+<p class="titulo">Uma árvore com Rc, RefCell e Weak</p>
+<p>Monte uma árvore de categorias (<code>Livros → Ficção → Romance</code>) em que cada nó tem <code>filhos: RefCell&lt;Vec&lt;Rc&lt;No&gt;&gt;&gt;</code> e <code>pai: RefCell&lt;Weak&lt;No&gt;&gt;</code>. Mostre o caminho de um nó até a raiz, as contagens forte e fraca, e que todos os nós são liberados no fim (com um <code>Drop</code> que imprime).</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q39">
+<span class="num">Q39</span>
+<div class="corpo">
+<p class="titulo">Soma em paralelo com scoped threads</p>
+<p>Some os números de 1 a 10 milhões dividindo o intervalo entre 4 threads com <code>std::thread::scope</code>, que permite às threads emprestar dados da pilha do <code>main</code> sem <code>Arc</code>. Depois faça um contador compartilhado com <code>Arc&lt;Mutex&lt;u64&gt;&gt;</code> e outro com <code>AtomicU64</code>, e confira os três resultados.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q40">
+<span class="num">Q40</span>
+<div class="corpo">
+<p class="titulo">Produtor e consumidor com canais</p>
+<p>Use <code>std::sync::mpsc</code> para que três produtores enviem pedidos (<code>(produtor, número)</code>) a um consumidor, que os processa até todos os produtores terminarem. Mostre como o consumidor sabe que acabou e por que o <code>drop</code> do transmissor original é necessário.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q41">
+<span class="num">Q41</span>
+<div class="corpo">
+<p class="titulo">Tarefas assíncronas com Tokio</p>
+<p>Num projeto Cargo com <code>tokio = { version = "1", features = ["full"] }</code>, escreva um programa que dispare três "consultas" a fornecedores com tempos diferentes (<code>tokio::time::sleep</code>), espere todas com <code>join!</code>, e outra rodada em que só vale a primeira que responder (<code>select!</code>), com um tempo limite (<code>timeout</code>) para a mais lenta.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q42">
+<span class="num">Q42</span>
+<div class="corpo">
+<p class="titulo">Uma macro declarativa</p>
+<p>Escreva <code>macro_rules! mapa</code> que crie um <code>HashMap</code> a partir de <code>mapa!{ "a" =&gt; 1, "b" =&gt; 2 }</code>, aceitando vírgula final, e uma macro <code>contar!</code> que conte quantos argumentos recebeu, em tempo de compilação. Use as duas.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-8">
+<h2><span class="rotulo">MÓDULO 8</span> Ecossistema e web</h2>
+<p class="intro">Cargo e as crates essenciais, uma API REST com Axum, banco de dados com SQLx, autenticação JWT e testes avançados.</p>
+<p class="aulas-titulo">Artigos 22 a 26</p>
+<ul class="aulas">
+<li><span class="n">#22</span> O Ecossistema Rust — Cargo, crates.io e as Bibliotecas Essenciais</li>
+<li><span class="n">#23</span> Construindo uma API REST com Axum</li>
+<li><span class="n">#24</span> Banco de Dados com SQLx — Persistência Real para sua API</li>
+<li><span class="n">#25</span> Autenticação JWT — Protegendo sua API com Tokens</li>
+<li><span class="n">#26</span> Testes Avançados — Propriedades, Mocks e Benchmarks</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q43">
+<span class="num">Q43</span>
+<div class="corpo">
+<p class="titulo">Cargo.toml e Cargo.lock</p>
+<p>O que significa <code>serde = "1.0"</code> no <code>Cargo.toml</code>? Por que o <code>Cargo.lock</code> é versionado num executável e, tradicionalmente, não era numa biblioteca?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q44">
+<span class="num">Q44</span>
+<div class="corpo">
+<p class="titulo">Extractors do Axum</p>
+<p>No Axum, um <em>handler</em> como <code>async fn criar(State(db): State&lt;Pool&gt;, Json(novo): Json&lt;NovoLivro&gt;) -&gt; impl IntoResponse</code> não lê a requisição manualmente. Como os parâmetros são preenchidos, e o que acontece quando o JSON do corpo é inválido?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q45">
+<span class="num">Q45</span>
+<div class="corpo">
+<p class="titulo">Consultas verificadas na compilação</p>
+<p>O que a macro <code>sqlx::query_as!</code> faz de diferente de uma consulta montada em texto? Qual a exigência dela para compilar?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q46">
+<span class="num">Q46</span>
+<div class="corpo">
+<p class="titulo">Testes de propriedade</p>
+<p>O que é um teste baseado em propriedades (com <code>proptest</code> ou <code>quickcheck</code>), e que propriedade testaria uma função que codifica e decodifica Base64?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q47">
+<span class="num">Q47</span>
+<div class="corpo">
+<p class="titulo">Uma API com Axum</p>
+<p>Escreva uma API Axum com <code>GET /livros</code>, <code>GET /livros/{id}</code> (404 quando não existe) e <code>POST /livros</code> (201 com o livro criado, ou 422 se o título estiver vazio), guardando os livros num <code>Arc&lt;Mutex&lt;Vec&lt;Livro&gt;&gt;&gt;</code> como estado. Use <code>serde</code> para o JSON.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q48">
+<span class="num">Q48</span>
+<div class="corpo">
+<p class="titulo">Um teste de propriedade feito à mão</p>
+<p>Sem bibliotecas, escreva um gerador pseudoaleatório simples (<em>xorshift</em>), uma função <code>codificar_rle(&amp;str) -&gt; String</code> e <code>decodificar_rle(&amp;str) -&gt; String</code> (codificação por repetição: "aaab" vira "3a1b"), e teste a propriedade de ida e volta em 1000 textos aleatórios feitos das letras <code>a</code>, <code>b</code> e <code>c</code>. Mostre o que acontece com um texto que contém dígitos, e por quê.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="modulo-9">
+<h2><span class="rotulo">MÓDULO 9</span> Sistemas e baixo nível</h2>
+<p class="intro">WebAssembly, programação de sistemas e de redes, parsing, criptografia, embarcados, unsafe, desempenho, FFI e macros procedurais.</p>
+<p class="aulas-titulo">Artigos 27 a 36</p>
+<ul class="aulas">
+<li><span class="n">#27</span> WebAssembly com Rust — Executando Rust no Navegador</li>
+<li><span class="n">#28</span> Programação de Sistemas — Arquivos, Processos e Sinais</li>
+<li><span class="n">#29</span> Programação de Redes — TCP, UDP e Sockets</li>
+<li><span class="n">#30</span> Parsing e Processamento de Texto — nom, pest e Expressões Regulares</li>
+<li><span class="n">#31</span> Criptografia e Segurança — Hashing, Criptografia Simétrica e TLS</li>
+<li><span class="n">#32</span> Embarcados e Bare Metal — Rust sem Sistema Operacional</li>
+<li><span class="n">#33</span> Unsafe Rust — Quando e Como Usar Código Inseguro com Responsabilidade</li>
+<li><span class="n">#34</span> Performance e Otimização — Profiling, SIMD e Técnicas Avançadas</li>
+<li><span class="n">#35</span> FFI — Integrando Rust com C e Outras Linguagens</li>
+<li><span class="n">#36</span> Macros Procedurais — Criando Derive Macros e Atributos Customizados</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q49">
+<span class="num">Q49</span>
+<div class="corpo">
+<p class="titulo">Quando unsafe</p>
+<p>O que um bloco <code>unsafe</code> permite que o Rust seguro não permite? Ele desliga o <em>borrow checker</em>? Qual a responsabilidade de quem escreve uma função segura que usa <code>unsafe</code> por dentro?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q50">
+<span class="num">Q50</span>
+<div class="corpo">
+<p class="titulo">no_std</p>
+<p>O que muda num programa <code>#![no_std]</code> para um microcontrolador? O que deixa de existir, e o que continua disponível?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q51">
+<span class="num">Q51</span>
+<div class="corpo">
+<p class="titulo">Um protocolo sobre TCP</p>
+<p>Por que um servidor TCP não pode assumir que um <code>read</code> traz uma mensagem completa? Que duas formas de delimitar mensagens são comuns?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q52">
+<span class="num">Q52</span>
+<div class="corpo">
+<p class="titulo">Medir antes de otimizar</p>
+<p>Que ferramentas o curso usa para achar o gargalo de um programa Rust lento, e por que olhar o código e "adivinhar" costuma falhar?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q53">
+<span class="num">Q53</span>
+<div class="corpo">
+<p class="titulo">Arquivos com buffer e processos</p>
+<p>Escreva um programa que grave 10 mil linhas num arquivo com <code>BufWriter</code>, releia contando as linhas e as que contêm "7" com <code>BufReader</code>, e execute um processo externo (<code>wc -l</code>) com <code>std::process::Command</code>, conferindo que a contagem bate. Trate os erros com <code>?</code> e <code>Box&lt;dyn Error&gt;</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q54">
+<span class="num">Q54</span>
+<div class="corpo">
+<p class="titulo">Um servidor TCP de eco por linhas</p>
+<p>Com <code>std::net</code>, suba um servidor TCP numa porta escolhida pelo sistema (<code>127.0.0.1:0</code>), que atenda cada conexão numa thread e responda cada linha recebida em maiúsculas, encerrando a conexão com a linha <code>sair</code>. No mesmo programa, conecte dois clientes e mostre as respostas.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q55">
+<span class="num">Q55</span>
+<div class="corpo">
+<p class="titulo">split_at_mut com unsafe</p>
+<p>A biblioteca padrão implementa <code>split_at_mut</code>, que divide um slice mutável em duas partes mutáveis. Escreva a sua versão, <code>dividir_mut(v: &amp;mut [i32], meio: usize) -&gt; (&amp;mut [i32], &amp;mut [i32])</code>, mostrando por que a versão segura não compila (em comentário) e usando <code>unsafe</code> com ponteiros crus e um comentário <code>SAFETY</code>. Use-a para alterar as duas metades.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q56">
+<span class="num">Q56</span>
+<div class="corpo">
+<p class="titulo">Chamando C com FFI</p>
+<p>Declare as funções <code>strlen</code> e <code>abs</code> da biblioteca C num bloco <code>unsafe extern "C"</code> (a sintaxe da edição 2024) e chame-as a partir do Rust, convertendo uma <code>&amp;str</code> com <code>CString</code>. Mostre o que acontece ao tentar criar uma <code>CString</code> com um <code>\0</code> no meio.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="modulo-10">
+<h2><span class="rotulo">MÓDULO 10</span> Engenharia de projetos</h2>
+<p class="intro">Padrões de projeto em Rust, compilação condicional e features, documentação e doc tests, publicação de crates e ferramentas de linha de comando.</p>
+<p class="aulas-titulo">Artigos 37 a 41</p>
+<ul class="aulas">
+<li><span class="n">#37</span> Design Patterns em Rust — Adaptando Padrões Clássicos à Linguagem</li>
+<li><span class="n">#38</span> Compilação Condicional e Feature Flags — Gerenciando Variações do Código</li>
+<li><span class="n">#39</span> Documentação e Doc Tests — Escrevendo Documentação que Não Fica Desatualizada</li>
+<li><span class="n">#40</span> Gerenciamento de Dependências e Publicação de Crates — Do Projeto Local ao crates.io</li>
+<li><span class="n">#41</span> Rust para CLI — Construindo Ferramentas de Linha de Comando Profissionais com clap</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q57">
+<span class="num">Q57</span>
+<div class="corpo">
+<p class="titulo">Padrões que mudam em Rust</p>
+<p>Por que alguns padrões clássicos da orientação a objetos mudam de forma em Rust? Dê o exemplo do Builder e do State (<em>typestate</em>).</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q58">
+<span class="num">Q58</span>
+<div class="corpo">
+<p class="titulo">Features no Cargo</p>
+<p>O que são <em>features</em> no <code>Cargo.toml</code>, e por que elas devem ser <strong>aditivas</strong>? Dê um exemplo de <em>feature</em> bem e mal projetada.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q59">
+<span class="num">Q59</span>
+<div class="corpo">
+<p class="titulo">Documentação que não mente</p>
+<p>O que são os <em>doc tests</em>, e por que eles evitam que a documentação fique desatualizada?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q60">
+<span class="num">Q60</span>
+<div class="corpo">
+<p class="titulo">Typestate: transições que não compilam</p>
+<p>Implemente um pedido com <em>typestate</em>: <code>struct Pedido&lt;E&gt; { id: u32, estado: E }</code> com os estados <code>Novo</code>, <code>Pago { valor: u32 }</code> e <code>Enviado { codigo: String }</code> como tipos, e os métodos <code>pagar</code> (só em <code>Pedido&lt;Novo&gt;</code>), <code>enviar</code> (só em <code>Pedido&lt;Pago&gt;</code>) e <code>rastreio</code> (só em <code>Pedido&lt;Enviado&gt;</code>). Mostre em comentários as chamadas que o compilador recusa.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q61">
+<span class="num">Q61</span>
+<div class="corpo">
+<p class="titulo">Uma CLI sem dependências</p>
+<p>Escreva o núcleo de uma ferramenta de linha de comando que conte linhas, palavras e bytes (como o <code>wc</code>), com as opções <code>-l</code>, <code>-w</code>, <code>-c</code> e <code>--help</code>, analisando os argumentos com um <code>match</code> sobre slices e devolvendo <code>Result</code> para opções inválidas. Para o exemplo ser reprodutível, passe os argumentos como um vetor e o texto como uma string.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-11">
+<h2><span class="rotulo">MÓDULO 11</span> Rust em domínios específicos e o futuro</h2>
+<p class="intro">Ciência de dados, jogos, sistemas distribuídos, compiladores, blockchain, machine learning, segurança, produção, comunidade, o futuro da linguagem e os projetos integradores.</p>
+<p class="aulas-titulo">Artigos 42 a 53</p>
+<ul class="aulas">
+<li><span class="n">#42</span> Rust para Data Science — Processamento de Dados com Polars e ndarray</li>
+<li><span class="n">#43</span> Rust para GameDev — Motores de Jogo, ECS e Bevy</li>
+<li><span class="n">#44</span> Sistemas Distribuídos — Consenso, Mensageria e Tolerância a Falhas</li>
+<li><span class="n">#45</span> Compiladores e Interpretadores — Construindo uma Linguagem com Rust</li>
+<li><span class="n">#46</span> Rust e Blockchain — Smart Contracts, Criptografia Aplicada e Web3</li>
+<li><span class="n">#47</span> Rust e Machine Learning — Inferência, ONNX e Aceleração de Modelos</li>
+<li><span class="n">#48</span> Segurança e Auditoria — Fuzzing, Análise Estática e Hardening de Código Rust</li>
+<li><span class="n">#49</span> Rust em Produção — Observabilidade, Métricas e Operação de Sistemas Rust</li>
+<li><span class="n">#50</span> Contribuindo com o Ecossistema Rust — Open Source, RFCs e a Comunidade</li>
+<li><span class="n">#51</span> O Futuro do Rust — Async Traits, GATs, Especialização e o Roadmap da Linguagem</li>
+<li><span class="n">#52</span> Projetos Integradores — Construindo Sistemas Completos do Zero</li>
+<li><span class="n">#53</span> Epílogo — O que Vem Depois, Como Continuar Crescendo, e a Filosofia do Rust</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q62">
+<span class="num">Q62</span>
+<div class="corpo">
+<p class="titulo">ECS no Bevy</p>
+<p>O Bevy organiza os jogos com ECS. Como um sistema do Bevy declara os dados de que precisa, e por que isso permite ao motor rodar sistemas em paralelo com segurança?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q63">
+<span class="num">Q63</span>
+<div class="corpo">
+<p class="titulo">Consenso</p>
+<p>Num sistema distribuído com três réplicas de um banco, por que é preciso um algoritmo de consenso como o Raft? O que acontece quando a rede separa uma réplica das outras duas?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q64">
+<span class="num">Q64</span>
+<div class="corpo">
+<p class="titulo">Fuzzing</p>
+<p>O que é <em>fuzzing</em>, e por que ele encontra <em>bugs</em> em código Rust "seguro"? Que tipo de função é a melhor candidata?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q65">
+<span class="num">Q65</span>
+<div class="corpo">
+<p class="titulo">Como o Rust evolui</p>
+<p>O que são as <strong>edições</strong> do Rust (2018, 2021, 2024), e como elas permitem mudar a linguagem sem quebrar o código existente? Qual o papel das RFCs?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q66">
+<span class="num">Q66</span>
+<div class="corpo">
+<p class="titulo">Uma cadeia de blocos com hash</p>
+<p>Para entender a ideia por trás de um <em>blockchain</em>, monte uma cadeia de blocos em que cada bloco guarda os dados e o <em>hash</em> do anterior, calculado com o <code>DefaultHasher</code> da biblioteca padrão (que <strong>não</strong> é criptográfico: serve só para o exemplo). Escreva <code>valida(&amp;cadeia) -&gt; Result&lt;(), usize&gt;</code> e mostre que alterar um bloco do meio invalida a cadeia a partir dele.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q67">
+<span class="num">Q67</span>
+<div class="corpo">
+<p class="titulo">Um interpretador de expressões</p>
+<p>Escreva um analisador de expressões aritméticas com precedência e parênteses, por <strong>descida recursiva</strong>: um <em>tokenizer</em> e as funções <code>expressao</code> (soma e subtração), <code>termo</code> (multiplicação e divisão) e <code>fator</code> (número, negativo ou parênteses), que devolvem <code>Result&lt;f64, String&gt;</code>. Avalie quatro expressões, uma com erro.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="desafios">
+<h2><span class="rotulo">PARA IR ALÉM</span> Desafios integradores</h2>
+<p class="intro">Projetos maiores, que juntam vários módulos. Não há uma única resposta certa: o gabarito mostra um caminho.</p>
+<div class="questao desafio" id="d1">
+<span class="num">D1</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora de terminal</p>
+<p>Escreva uma calculadora de terminal com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada (<code>raiz 2</code>). Ela deve: (a) aceitar vírgula ou ponto como separador decimal; (b) guardar o último resultado em <code>ans</code>, utilizável na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário, resultado infinito e texto que não é número com uma mensagem clara, <strong>sem encerrar o programa</strong>; (d) ter os comandos <code>hist</code> (histórico) e <code>sair</code>. Separe o núcleo (um módulo <code>calc</code>, sem E/S, com um <code>enum</code> de erros e <code>Result</code>) da interface (<code>main</code>), e escreva testes para o núcleo.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+<div class="questao desafio" id="d2">
+<span class="num">D2</span>
+<div class="corpo">
+<p class="titulo">Um servidor chave-valor concorrente</p>
+<p>Escreva um servidor TCP que guarde pares chave-valor em memória, com os comandos de texto <code>SET chave valor</code>, <code>GET chave</code>, <code>DEL chave</code> e <code>KEYS</code>, uma linha por comando, atendendo vários clientes ao mesmo tempo. Acrescente expiração opcional (<code>SET chave valor EX 10</code>), persistência num arquivo de log e testes de integração que conectem clientes reais.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+</section>
+<footer class="fim">
+<p><strong>Bom estudo e bons exercícios!</strong></p>
+<p>Dominando Rust em 1 Ano · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</footer>
+</body>
+</html>

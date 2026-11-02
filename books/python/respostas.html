@@ -1,0 +1,2641 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dominando o Python em 1 Ano · Caderno de Respostas</title>
+<link rel="stylesheet" href="../caderno.css">
+</head>
+<body class="caderno respostas">
+<header class="capa">
+<p class="serie">DOMINANDO O PYTHON EM 1 ANO</p>
+<h1>Caderno de Respostas</h1>
+<p class="subtitulo">Gabarito comentado das 52 aulas, do #01 ao #52</p>
+<p class="subtitulo">Python 3.13 · 9 módulos · 80 questões · 1 desafio integrador</p>
+<p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</header>
+<aside class="nota">
+<p><strong>Consulte este gabarito só depois de tentar.</strong></p>
+<p>As respostas são comentadas para ensinar, não só para conferir. Nas questões de código existem outras soluções igualmente válidas: o que importa é entender por que a sua funciona.</p>
+<p>Os programas com um quadro verde de <strong>Saída</strong> foram executados no Python 3.13 e a saída mostrada é a real.</p>
+</aside>
+<h2 class="sumario-titulo">Sumário</h2>
+<table class="sumario">
+<thead><tr><th>Módulo</th><th>Tema</th><th>Aulas</th><th>Questões</th></tr></thead>
+<tbody>
+<tr><td>MÓDULO 1</td><td>Fundamentos da Linguagem</td><td>#01–#06</td><td>Q1–Q10</td></tr>
+<tr><td>MÓDULO 2</td><td>Estruturas de Dados e Algoritmos</td><td>#07–#12</td><td>Q11–Q20</td></tr>
+<tr><td>MÓDULO 3</td><td>Orientação a Objetos</td><td>#13–#18</td><td>Q21–Q30</td></tr>
+<tr><td>MÓDULO 4</td><td>Arquivos, I/O e Banco de Dados</td><td>#19–#24</td><td>Q31–Q40</td></tr>
+<tr><td>MÓDULO 5</td><td>Python para Web</td><td>#25–#30</td><td>Q41–Q50</td></tr>
+<tr><td>MÓDULO 6</td><td>Automação e Scripts</td><td>#31–#34</td><td>Q51–Q56</td></tr>
+<tr><td>MÓDULO 7</td><td>Data Science e Machine Learning</td><td>#35–#42</td><td>Q57–Q66</td></tr>
+<tr><td>MÓDULO 8</td><td>Testes, Qualidade e Boas Práticas</td><td>#43–#47</td><td>Q67–Q74</td></tr>
+<tr><td>MÓDULO 9</td><td>Projetos Reais e Carreira</td><td>#48–#52</td><td>Q75–Q80</td></tr>
+<tr><td>DESAFIOS</td><td>Projetos integradores</td><td>todas</td><td>D1</td></tr>
+</tbody>
+</table>
+<section class="modulo" id="modulo-1">
+<h2><span class="rotulo">MÓDULO 1</span> Fundamentos da Linguagem</h2>
+<p class="aulas-titulo">Artigos 01 a 06</p>
+<ul class="aulas">
+<li><span class="n">#01</span> A História do Python e os Primeiros Passos</li>
+<li><span class="n">#02</span> Variáveis e Tipos de Dados</li>
+<li><span class="n">#03</span> Operadores e Expressões</li>
+<li><span class="n">#04</span> Estruturas de Controle: if, elif e else</li>
+<li><span class="n">#05</span> Laços de Repetição: for e while</li>
+<li><span class="n">#06</span> Funções: definição, parâmetros e escopo</li>
+</ul>
+<div class="questao" id="q1">
+<span class="num">Q1</span>
+<div class="corpo">
+<p class="titulo">Explique o Zen do Python e cite 3 princípios</p>
+<p>Explique com suas próprias palavras o que é o Zen do Python e cite 3 de seus princípios.</p>
+<p class="dica"><strong>Dica:</strong> Execute: python3 -c "import this"</p>
+</div>
+</div>
+<p>O Zen do Python é a filosofia oficial da linguagem, escrita por Tim Peters e acessível via 'import this'.</p>
+<p>Três princípios centrais:</p>
+<p>1. Explícito é melhor que implícito — prefira código que deixa clara sua intenção.</p>
+<p>2. Simples é melhor que complexo — evite soluções complicadas quando existe uma mais direta.</p>
+<p>3. Legibilidade conta — código é lido muito mais vezes do que escrito.</p>
+<p>Outros importantes: 'Bonito é melhor que feio', 'Plano é melhor que aninhado',</p>
+<p>'Se a implementação é difícil de explicar, é uma má ideia'.</p>
+<div class="questao" id="q2">
+<span class="num">Q2</span>
+<div class="corpo">
+<p class="titulo">Diferença entre tipagem dinâmica e estática</p>
+<p>Qual a diferença entre tipagem dinâmica e tipagem estática? Dê um exemplo em Python.</p>
+<p class="dica"><strong>Dica:</strong> Pense em como Python atribui tipos automaticamente.</p>
+</div>
+</div>
+<p>Tipagem estática (Java, C): o tipo é declarado na definição da variável e verificado em tempo de compilação.</p>
+<p>Tipagem dinâmica (Python): o tipo é inferido automaticamente a partir do valor atribuído.</p>
+<p>Em Python:</p>
+<p>x = 10      # int x = 'texto' # agora é str — válido!</p>
+<p>Isso permite código mais conciso mas exige atenção para não misturar tipos inadvertidamente.</p>
+<p>Type hints (PEP 484) permitem anotar tipos sem tornar a linguagem estaticamente tipada.</p>
+<div class="questao" id="q3">
+<span class="num">Q3</span>
+<div class="corpo">
+<p class="titulo">O que o código imprime?</p>
+<p>O que o código abaixo imprime? Justifique.</p>
+<pre class="codigo"><code>x = 10
+y = 3
+print(x // y)
+print(x % y)
+print(x ** y)
+print(x / y)</code></pre>
+<p class="dica"><strong>Dica:</strong> Analise cada linha antes de executar.</p>
+</div>
+</div>
+<p>x = 10, y = 3</p>
+<p>x // y  →  3    (divisão inteira — descarta a parte decimal)</p>
+<p>x % y   →  1    (módulo — resto da divisão: 10 = 3×3 + 1)</p>
+<p>x ** y  →  1000 (potenciação: 10³ = 1000)</p>
+<p>x / y   →  3.3333... (divisão real — sempre retorna float em Python 3)</p>
+<p>Diferença importante: em Python 2, 10/3 = 3 (divisão inteira era padrão).</p>
+<p>Python 3 corrigiu isso — / sempre retorna float.</p>
+<div class="questao" id="q4">
+<span class="num">Q4</span>
+<div class="corpo">
+<p class="titulo">Truthy ou falsy</p>
+<p>Sem executar, classifique cada valor abaixo como <em>truthy</em> ou <em>falsy</em>. Depois rode e explique os que você errou.</p>
+<pre class="codigo"><code>0    0.0    ""    "0"    " "    []    [0]    [[]]    None    set()    "False"    float("nan")</code></pre>
+<p class="dica"><strong>Dica:</strong> Só coleções vazias, zeros, <code>None</code> e <code>False</code> são falsy.</p>
+</div>
+</div>
+<pre class="codigo"><code>valores = [0, 0.0, "", "0", " ", [], [0], [[]], None, set(), "False", float("nan")]
+for v in valores:
+    print(f"{v!r:&gt;14} → {'truthy' if v else 'falsy'}")</code></pre>
+<pre class="saida"><code>             0 → falsy
+           0.0 → falsy
+            '' → falsy
+           '0' → truthy
+           ' ' → truthy
+            [] → falsy
+           [0] → truthy
+          [[]] → truthy
+          None → falsy
+         set() → falsy
+       'False' → truthy
+           nan → truthy</code></pre>
+<p>Falsy são só os "vazios": zeros (<code>0</code>, <code>0.0</code>), coleções vazias (<code>""</code>, <code>[]</code>, <code>set()</code>), <code>None</code> e <code>False</code>. As pegadinhas: <code>"0"</code>, <code>" "</code> e <code>"False"</code> são strings <strong>não vazias</strong>; <code>[0]</code> e <code>[[]]</code> são listas com um elemento (não importa qual); e <code>float("nan")</code> é diferente de zero, portanto verdadeiro. Em objetos seus, quem decide é <code>__bool__</code> ou, na falta dele, <code>__len__</code>.</p>
+<div class="questao" id="q5">
+<span class="num">Q5</span>
+<div class="corpo">
+<p class="titulo">A variável que sobrevive ao laço e o for/else</p>
+<p>O que o trecho abaixo imprime, e por quê? Em seguida, explique o <code>else</code> do <code>for</code> e use-o para escrever <code>eh_primo(n)</code>, listando os primos menores que 30.</p>
+<pre class="codigo"><code>for i in range(3):
+    pass
+print(i)</code></pre>
+<p class="dica"><strong>Dica:</strong> O <code>else</code> do laço roda quando ele termina sem <code>break</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>for i in range(3):
+    pass
+print(i)  # a variável do laço sobrevive ao laço
+
+
+def eh_primo(n: int) -&gt; bool:
+    if n &lt; 2:
+        return False
+    for d in range(2, int(n ** 0.5) + 1):
+        if n % d == 0:
+            break  # achou divisor: o else NÃO roda
+    else:
+        return True  # o laço terminou sem break
+    return False
+
+
+print([n for n in range(30) if eh_primo(n)])</code></pre>
+<pre class="saida"><code>2
+[2, 3, 5, 7, 11, 13, 17, 19, 23, 29]</code></pre>
+<p>Imprime <code>2</code>: em Python o laço não cria escopo, e <code>i</code> continua existindo com o último valor. O <code>else</code> do <code>for</code> roda quando o laço chega ao fim <strong>sem</strong> <code>break</code>: em <code>eh_primo</code>, isso quer dizer que nenhum divisor foi encontrado. Testar só até a raiz de <code>n</code> basta, porque todo divisor maior tem um par menor que ela.</p>
+<div class="questao" id="q6">
+<span class="num">Q6</span>
+<div class="corpo">
+<p class="titulo">O argumento padrão mutável</p>
+<p>A função abaixo tem um dos bugs mais famosos do Python. Mostre o que acontece ao chamá-la duas vezes seguidas, explique a causa e corrija.</p>
+<pre class="codigo"><code>def adicionar(item, lista=[]):
+    lista.append(item)
+    return lista</code></pre>
+<p class="dica"><strong>Dica:</strong> Quando o valor padrão de um parâmetro é criado?</p>
+</div>
+</div>
+<pre class="codigo"><code>def adicionar(item, lista=[]):  # o padrão é criado UMA vez, quando o def roda
+    lista.append(item)
+    return lista
+
+
+print(adicionar(1))
+print(adicionar(2))  # surpresa: a mesma lista da chamada anterior
+
+
+def adicionar_certo(item, lista=None):
+    if lista is None:
+        lista = []  # uma lista nova a cada chamada
+    lista.append(item)
+    return lista
+
+
+print(adicionar_certo(1))
+print(adicionar_certo(2))</code></pre>
+<pre class="saida"><code>[1]
+[1, 2]
+[1]
+[2]</code></pre>
+<p>O valor padrão é avaliado <strong>uma vez</strong>, quando o <code>def</code> é executado, e não a cada chamada. Todas as chamadas que não passam <code>lista</code> compartilham o mesmo objeto, e ele vai acumulando. A correção idiomática usa <code>None</code> como sentinela e cria a lista dentro da função. O mesmo vale para <code>{}</code>, <code>set()</code> e qualquer objeto mutável.</p>
+<div class="questao" id="q7">
+<span class="num">Q7</span>
+<div class="corpo">
+<p class="titulo">O que é escopo LEGB?</p>
+<p>O que é escopo LEGB? Escreva um exemplo que demonstre um conflito de escopo.</p>
+<p class="dica"><strong>Dica:</strong> L=Local, E=Enclosing, G=Global, B=Built-in</p>
+</div>
+</div>
+<p>LEGB define a ordem em que Python busca variáveis:</p>
+<p>L (Local)     — dentro da função atual</p>
+<p>E (Enclosing) — funções que envolvem a atual (closures)</p>
+<p>G (Global)    — nível do módulo</p>
+<p>B (Built-in)  — nomes nativos: print, len, range...</p>
+<p>Exemplo de conflito:</p>
+<pre class="codigo"><code>x = 'global'
+
+def externa():
+    x = 'enclosing'
+    def interna():
+        x = 'local'
+        print(x)  # 'local' — L ganha
+    interna()
+    print(x)  # 'enclosing'
+
+externa()
+print(x)  # 'global'</code></pre>
+<div class="questao" id="q8">
+<span class="num">Q8</span>
+<div class="corpo">
+<p class="titulo">Diferença entre == e is</p>
+<p>Qual a diferença entre '==' e 'is'? Quando usar cada um? Dê exemplos.</p>
+<p class="dica"><strong>Dica:</strong> is compara identidade de objeto na memória.</p>
+</div>
+</div>
+<p>== compara o CONTEÚDO (valor) dos objetos.</p>
+<p>is  compara a IDENTIDADE (endereço de memória) — se são o mesmo objeto.</p>
+<p>Uso correto:</p>
+<p>if x == 10:       # valor — correto para comparar dados if x is None:     # identidade — correto para None, True, False if x == None:     # funciona, mas a PEP 8 recomenda is</p>
+<p>Armadilha: inteiros pequenos (-5 a 256) são cacheados pelo Python, então a == b e a is b podem ser True simultaneamente nesse range.</p>
+<div class="questao" id="q9">
+<span class="num">Q9</span>
+<div class="corpo">
+<p class="titulo">Função com *args e **kwargs</p>
+<p>Escreva uma função com *args e **kwargs que receba qualquer número de argumentos e os imprima formatados.</p>
+<p class="dica"><strong>Dica:</strong> Explore args como tupla e kwargs como dicionário.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>def mostrar_tudo(*args, **kwargs):
+    """
+    *args   → tupla com argumentos posicionais
+    **kwargs → dicionário com argumentos nomeados
+    """
+    print("Posicionais:")
+    for i, v in enumerate(args, 1):
+        print(f"  {i}: {v!r}")
+
+    print("Nomeados:")
+    for k, v in kwargs.items():
+        print(f"  {k} = {v!r}")
+
+mostrar_tudo(1, 'texto', [1,2], nome='Ana', idade=25)
+# Posicionais:
+#   1: 1
+#   2: 'texto'
+#   3: [1, 2]
+# Nomeados:
+#   nome = 'Ana'
+#   idade = 25</code></pre>
+<div class="questao desafio" id="q10">
+<span class="num">Q10</span>
+<div class="corpo">
+<p class="titulo">★ Fibonacci recursivo vs iterativo</p>
+<p>Implemente a sequência de Fibonacci usando recursão e compare com a versão iterativa. Qual é mais eficiente? Por quê?</p>
+</div>
+</div>
+<p>Recursivo: mais legível, mas O(2^n) sem memoization — recalcula subproblemas.</p>
+<p>Iterativo: O(n) tempo e O(1) espaço — muito mais eficiente.</p>
+<p>Com @lru_cache, o recursivo fica O(n) também, mas usa O(n) de memória.</p>
+<pre class="codigo"><code>from functools import lru_cache
+
+# Recursivo puro — O(2^n) — lento para n grande
+def fib_recursivo(n):
+    if n &lt;= 1: return n
+    return fib_recursivo(n-1) + fib_recursivo(n-2)
+
+# Recursivo com memoization — O(n)
+@lru_cache(maxsize=None)
+def fib_memo(n):
+    if n &lt;= 1: return n
+    return fib_memo(n-1) + fib_memo(n-2)
+
+# Iterativo — O(n) tempo, O(1) espaço — mais eficiente
+def fib_iterativo(n):
+    if n &lt;= 1: return n
+    a, b = 0, 1
+    for _ in range(2, n+1):
+        a, b = b, a + b
+    return b
+
+print(fib_iterativo(50))  # 12586269025 — instantâneo</code></pre>
+</section>
+<section class="modulo" id="modulo-2">
+<h2><span class="rotulo">MÓDULO 2</span> Estruturas de Dados e Algoritmos</h2>
+<p class="aulas-titulo">Artigos 07 a 12</p>
+<ul class="aulas">
+<li><span class="n">#07</span> Listas: criação, manipulação e métodos</li>
+<li><span class="n">#08</span> Tuplas e Sets: imutabilidade e unicidade</li>
+<li><span class="n">#09</span> Dicionários: chave, valor e as estruturas do mundo real</li>
+<li><span class="n">#10</span> Strings em Profundidade: métodos, formatação e expressões regulares</li>
+<li><span class="n">#11</span> Algoritmos de Ordenação e Busca</li>
+<li><span class="n">#12</span> Recursão e Estruturas de Dados Avançadas: pilhas, filas e árvores</li>
+</ul>
+<div class="questao" id="q11">
+<span class="num">Q11</span>
+<div class="corpo">
+<p class="titulo">Diferença entre list.sort() e sorted()</p>
+<p>Qual a diferença entre list.sort() e sorted()? Em quais situações você preferiria cada um?</p>
+<p class="dica"><strong>Dica:</strong> Uma modifica a lista in-place, a outra retorna nova lista.</p>
+</div>
+</div>
+<p>list.sort():  modifica a lista IN-PLACE, retorna None, só funciona em listas.</p>
+<p>sorted():     retorna uma NOVA lista ordenada, não modifica o original, funciona em qualquer iterável.</p>
+<p>Quando usar cada um:</p>
+<p>sort()   — quando você quer modificar a lista e não precisa do original.</p>
+<p>sorted() — quando precisa preservar o original, ou está ordenando strings, tuplas, generators.</p>
+<p>Ambos aceitam key= e reverse=. A complexidade é O(n log n) — Timsort.</p>
+<div class="questao" id="q12">
+<span class="num">Q12</span>
+<div class="corpo">
+<p class="titulo">Reescrever loop com list comprehension</p>
+<p>Reescreva o código abaixo usando list comprehension em uma única linha.</p>
+<pre class="codigo"><code>resultado = []
+for n in range(1, 21):
+    if n % 2 == 0:
+        resultado.append(n ** 2)</code></pre>
+</div>
+</div>
+
+<pre class="codigo"><code># Forma original (4 linhas)
+resultado = []
+for n in range(1, 21):
+    if n % 2 == 0:
+        resultado.append(n ** 2)
+
+# Com list comprehension (1 linha)
+resultado = [n**2 for n in range(1, 21) if n % 2 == 0]
+
+# Resultado: [4, 16, 36, 64, 100, 144, 196, 256, 324, 400]</code></pre>
+<div class="questao" id="q13">
+<span class="num">Q13</span>
+<div class="corpo">
+<p class="titulo">O que acontece ao modificar uma tupla?</p>
+<p>O que acontece ao tentar modificar uma tupla? Por que esse comportamento é útil?</p>
+<p class="dica"><strong>Dica:</strong> Tente: t = (1,2,3); t[0] = 10</p>
+</div>
+</div>
+<p>Python lança TypeError: 'tuple' object does not support item assignment.</p>
+<p>Por que imutabilidade é útil:</p>
+<p>1. Pode ser usada como chave de dicionário (listas não podem).</p>
+<p>2. Protege dados que não devem mudar (coordenadas, cores RGB, configurações).</p>
+<p>4. Sinaliza intenção ao leitor — esses dados não mudam.</p>
+<p>Atenção: uma tupla contendo uma lista ainda permite modificar a lista internamente.</p>
+<p>t = ([1,2], 'a')  →  t[0].append(3)  # válido! a tupla em si não mudou.</p>
+<div class="questao" id="q14">
+<span class="num">Q14</span>
+<div class="corpo">
+<p class="titulo">Contar frequência de caracteres com dicionário</p>
+<p>Use um dicionário para contar a frequência de cada caractere na string abaixo.</p>
+<pre class="codigo"><code>frase = "python e uma linguagem incrivel"</code></pre>
+<p class="dica"><strong>Dica:</strong> Use dict.get() com valor padrão 0.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>frase = "python e uma linguagem incrivel"
+
+# Método 1 — dict com get()
+frequencia = {}
+for char in frase:
+    frequencia[char] = frequencia.get(char, 0) + 1
+
+# Método 2 — dict comprehension
+frequencia = {c: frase.count(c) for c in set(frase)}
+
+# Método 3 — Pythônico com Counter
+from collections import Counter
+frequencia = Counter(frase)
+
+# Top 5 mais comuns:
+print(Counter(frase).most_common(5))
+# [('e', 3), (' ', 4), ('a', 3), ('i', 3), ('n', 3)]</code></pre>
+<div class="questao" id="q15">
+<span class="num">Q15</span>
+<div class="corpo">
+<p class="titulo">Diferença entre set.remove() e set.discard()</p>
+<p>Explique com um exemplo prático a diferença entre set.remove() e set.discard().</p>
+<p class="dica"><strong>Dica:</strong> O que acontece quando o elemento não existe?</p>
+</div>
+</div>
+
+<pre class="codigo"><code>s = {1, 2, 3}
+
+# remove() — levanta KeyError se elemento não existe
+try:
+    s.remove(99)  # KeyError: 99
+except KeyError as e:
+    print(f"Erro: {e}")
+
+# discard() — silencioso se elemento não existe
+s.discard(99)  # Não faz nada, sem erro
+s.discard(2)   # Remove 2 normalmente
+
+print(s)  # {1, 3}
+
+# Regra: use discard() quando não tem certeza se o elemento existe.</code></pre>
+<div class="questao" id="q16">
+<span class="num">Q16</span>
+<div class="corpo">
+<p class="titulo">Busca binária iterativa com complexidade</p>
+<p>Implemente a busca binária iterativa. Qual sua complexidade de tempo e por quê?</p>
+<p class="dica"><strong>Dica:</strong> Divida o espaço de busca pela metade a cada iteração.</p>
+</div>
+</div>
+<p>Complexidade: O(log n) — a cada iteração divide o espaço de busca pela metade.</p>
+<p>Para 1 bilhão de elementos: no máximo 30 comparações. Comparado a O(n) busca linear = 1 bilhão.</p>
+<pre class="codigo"><code>def busca_binaria(lista, alvo):
+    """
+    Busca binária iterativa — O(log n).
+    Requer lista ordenada.
+    """
+    esquerda, direita = 0, len(lista) - 1
+
+    while esquerda &lt;= direita:
+        meio = (esquerda + direita) // 2  # int do Python não estoura
+
+        if lista[meio] == alvo:
+            return meio          # encontrado — retorna índice
+        elif lista[meio] &lt; alvo:
+            esquerda = meio + 1  # alvo está à direita
+        else:
+            direita = meio - 1   # alvo está à esquerda
+
+    return -1  # não encontrado
+
+ordenada = [2, 5, 8, 12, 16, 23, 38, 56]
+print(busca_binaria(ordenada, 23))   # 5
+print(busca_binaria(ordenada, 10))   # -1</code></pre>
+<div class="questao" id="q17">
+<span class="num">Q17</span>
+<div class="corpo">
+<p class="titulo">Verificar parênteses balanceados com pilha</p>
+<p>Escreva uma função que use uma pilha (list) para verificar se uma expressão tem parênteses balanceados.</p>
+<p class="dica"><strong>Dica:</strong> Push ao abrir, pop ao fechar. Compara pares.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>def balanceado(expressao: str) -&gt; bool:
+    """
+    Verifica balanceamento de (), [] e {}.
+    Usa pilha (list) para controlar abertura/fechamento.
+    """
+    pilha = []
+    pares = {')': '(', '}': '{', ']': '['}
+    abre  = set(pares.values())
+
+    for char in expressao:
+        if char in abre:
+            pilha.append(char)         # empilha abertura
+        elif char in pares:
+            if not pilha or pilha[-1] != pares[char]:
+                return False           # fechamento sem abertura ou par errado
+            pilha.pop()               # desempilha
+
+    return len(pilha) == 0            # vazio = tudo fechado
+
+print(balanceado("(a + [b * c])"))    # True
+print(balanceado("(a + [b * c)"))     # False
+print(balanceado("{[()]}"))           # True
+print(balanceado("{[(]}"))            # False</code></pre>
+<div class="questao" id="q18">
+<span class="num">Q18</span>
+<div class="corpo">
+<p class="titulo">Expressão regular para validar e-mails</p>
+<p>Escreva uma expressão regular que valide e-mails no formato usuario@dominio.com.</p>
+<p class="dica"><strong>Dica:</strong> Use o módulo re. Considere pontos, hífens e underscores.</p>
+</div>
+</div>
+<pre class="codigo"><code>import re
+
+# usuário: letras, dígitos e . _ % + -; domínio: um ou mais rótulos separados por ponto
+PADRAO_EMAIL = re.compile(r"[\w.%+-]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}")
+
+
+def validar_email(email: str) -&gt; bool:
+    return PADRAO_EMAIL.fullmatch(email) is not None
+
+
+testes = [
+    "usuario@email.com",
+    "nome.sobrenome@co.com.br",
+    "user+tag@dominio.org",
+    "invalido",
+    "sem@dominio",
+    "@semuser.com",
+    "dois@@arrobas.com",
+]
+for t in testes:
+    print(f"{validar_email(t)!s:5} — {t}")</code></pre>
+<pre class="saida"><code>True  — usuario@email.com
+True  — nome.sobrenome@co.com.br
+True  — user+tag@dominio.org
+False — invalido
+False — sem@dominio
+False — @semuser.com
+False — dois@@arrobas.com</code></pre>
+<p>O domínio precisa aceitar vários rótulos separados por ponto (<code>co.com.br</code>), por isso o grupo <code>(?:[A-Za-z0-9-]+\.)+</code>. <code>fullmatch</code> exige que o padrão cubra a string inteira, sem precisar de <code>^</code> e <code>$</code>. Nenhuma regex valida e-mail de verdade: a única prova de que o endereço existe é mandar uma mensagem e o dono confirmar.</p>
+<div class="questao" id="q19">
+<span class="num">Q19</span>
+<div class="corpo">
+<p class="titulo">Merge Sort passo a passo para [5, 2, 8, 1, 9]</p>
+<p>Explique o funcionamento do Merge Sort com um exemplo passo a passo para a lista [5, 2, 8, 1, 9].</p>
+<p class="dica"><strong>Dica:</strong> Divisão e conquista recursiva.</p>
+</div>
+</div>
+<p>Merge Sort — Divisão e Conquista — O(n log n) garantido:</p>
+<p>1. Dividir até listas de 1 elemento:</p>
+<p>[5, 2, 8, 1, 9]</p>
+<p>[5, 2, 8]    [1, 9]</p>
+<p>[5, 2] [8]   [1] [9]</p>
+<p>[5] [2]</p>
+<p>2. Mesclar comparando elementos um a um:</p>
+<p>merge([5],[2]) → [2, 5]</p>
+<p>merge([2,5],[8]) → [2, 5, 8]</p>
+<p>merge([1],[9]) → [1, 9]</p>
+<p>merge([2,5,8],[1,9]) → [1, 2, 5, 8, 9]</p>
+<p>Estável: mantém ordem relativa de iguais. Usa O(n) de memória extra.</p>
+<div class="questao desafio" id="q20">
+<span class="num">Q20</span>
+<div class="corpo">
+<p class="titulo">★ Árvore Binária de Busca completa</p>
+<p>Implemente uma Árvore Binária de Busca com os métodos inserir(), buscar() e percurso_em_ordem(). Demonstre com os valores [10, 5, 15, 3, 7, 20].</p>
+</div>
+</div>
+<p>BST: para cada nó, todos os valores à esquerda são menores, à direita são maiores.</p>
+<p>Busca em O(log n) para árvores balanceadas, O(n) no pior caso (degenerada).</p>
+<p>Percurso em-ordem retorna os valores em ordem crescente.</p>
+<pre class="codigo"><code>class No:
+    def __init__(self, valor):
+        self.valor = valor
+        self.esq = self.dir = None
+
+class BST:
+    def __init__(self):
+        self.raiz = None
+
+    def inserir(self, valor):
+        self.raiz = self._inserir(self.raiz, valor)
+
+    def _inserir(self, no, valor):
+        if no is None: return No(valor)
+        if valor &lt; no.valor: no.esq = self._inserir(no.esq, valor)
+        elif valor &gt; no.valor: no.dir = self._inserir(no.dir, valor)
+        return no
+
+    def buscar(self, valor):
+        no = self.raiz
+        while no:
+            if valor == no.valor: return True
+            no = no.esq if valor &lt; no.valor else no.dir
+        return False
+
+    def em_ordem(self):
+        resultado = []
+        def _visitar(no):
+            if no:
+                _visitar(no.esq)
+                resultado.append(no.valor)
+                _visitar(no.dir)
+        _visitar(self.raiz)
+        return resultado
+
+arvore = BST()
+for v in [10, 5, 15, 3, 7, 20]:
+    arvore.inserir(v)
+print(arvore.em_ordem())  # [3, 5, 7, 10, 15, 20]
+print(arvore.buscar(7))   # True
+print(arvore.buscar(99))  # False</code></pre>
+</section>
+<section class="modulo" id="modulo-3">
+<h2><span class="rotulo">MÓDULO 3</span> Orientação a Objetos</h2>
+<p class="aulas-titulo">Artigos 13 a 18</p>
+<ul class="aulas">
+<li><span class="n">#13</span> Classes e Objetos: os fundamentos da Orientação a Objetos</li>
+<li><span class="n">#14</span> Herança e Polimorfismo</li>
+<li><span class="n">#15</span> Interfaces, Protocolos e Composição</li>
+<li><span class="n">#16</span> Decoradores e Metaprogramação</li>
+<li><span class="n">#17</span> Tratamento de Exceções e Erros</li>
+<li><span class="n">#18</span> Módulos, Pacotes e Organização de Projetos</li>
+</ul>
+<div class="questao" id="q21">
+<span class="num">Q21</span>
+<div class="corpo">
+<p class="titulo">Encapsulamento: _ vs __</p>
+<p>O que é encapsulamento? Qual a diferença entre atributo com _ e com __ em Python?</p>
+<p class="dica"><strong>Dica:</strong> Name mangling: __attr vira _Classe__attr.</p>
+</div>
+</div>
+<p>Encapsulamento = esconder detalhes internos, expondo apenas interface necessária.</p>
+<p>_atributo   — convenção 'protegido': não acesse de fora, mas tecnicamente possível.</p>
+<p>__atributo  — 'privado' via name mangling: Python renomeia para _Classe__atributo.</p>
+<p>Evita colisão em herança, mas ainda acessível (com esforço).</p>
+<p>Boa prática: use _atributo para internal e @property para acesso controlado.</p>
+<p>Use __ apenas quando herança pode criar conflitos reais de nome.</p>
+<div class="questao" id="q22">
+<span class="num">Q22</span>
+<div class="corpo">
+<p class="titulo">Classe ContaBancaria com property e validação</p>
+<p>Crie uma classe ContaBancaria com saldo privado, métodos depositar(), sacar() e saldo (property). Valide valores negativos.</p>
+<p class="dica"><strong>Dica:</strong> Use @property para controle de acesso ao saldo.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>class ContaBancaria:
+    def __init__(self, titular: str, saldo_inicial: float = 0):
+        if saldo_inicial &lt; 0:
+            raise ValueError("Saldo inicial não pode ser negativo.")
+        self.titular = titular
+        self._saldo  = saldo_inicial
+
+    @property
+    def saldo(self) -&gt; float:
+        return self._saldo
+
+    def depositar(self, valor: float) -&gt; None:
+        if valor &lt;= 0:
+            raise ValueError("Valor de depósito deve ser positivo.")
+        self._saldo += valor
+        print(f"Depositado R${valor:.2f}. Saldo: R${self._saldo:.2f}")
+
+    def sacar(self, valor: float) -&gt; None:
+        if valor &lt;= 0:
+            raise ValueError("Valor de saque deve ser positivo.")
+        if valor &gt; self._saldo:
+            raise ValueError(f"Saldo insuficiente. Disponível: R${self._saldo:.2f}")
+        self._saldo -= valor
+        print(f"Sacado R${valor:.2f}. Saldo: R${self._saldo:.2f}")
+
+conta = ContaBancaria("Ana", 1000)
+conta.depositar(500)
+conta.sacar(200)
+print(conta.saldo)  # 1300</code></pre>
+<div class="questao" id="q23">
+<span class="num">Q23</span>
+<div class="corpo">
+<p class="titulo">Diferença entre __repr__ e __str__</p>
+<p>O que é o método __repr__ e quando ele é chamado? Como difere de __str__?</p>
+<p class="dica"><strong>Dica:</strong> repr() vs str() — quando cada um é usado?</p>
+</div>
+</div>
+<p>__str__:  representação legível para humanos — chamado por print() e str().</p>
+<p>__repr__: representação técnica/desambígua — chamado no console e por repr().</p>
+<p>Idealmente, eval(repr(obj)) deve recriar o objeto.</p>
+<p>Se só __repr__ estiver definido, str() usa-o como fallback.</p>
+<p>Se só __str__ estiver definido, repr() usa o default (&lt;Classe object at 0x...&gt;).</p>
+<p>Regra prática: sempre defina __repr__. Defina __str__ quando quiser exibição diferente.</p>
+<pre class="codigo"><code>class Ponto:
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+
+    def __repr__(self):
+        return f"Ponto({self.x!r}, {self.y!r})"  # técnico
+
+    def __str__(self):
+        return f"({self.x}, {self.y})"             # amigável
+
+p = Ponto(3, 4)
+print(str(p))   # (3, 4)
+print(repr(p))  # Ponto(3, 4)</code></pre>
+<div class="questao" id="q24">
+<span class="num">Q24</span>
+<div class="corpo">
+<p class="titulo">Princípio de Liskov e violação com herança</p>
+<p>Explique o princípio de Liskov e mostre um exemplo de violação com herança em Python.</p>
+<p class="dica"><strong>Dica:</strong> Subclasse deve poder substituir a superclasse.</p>
+</div>
+</div>
+<p>O Princípio de Substituição de Liskov diz que um objeto da subclasse deve poder entrar onde o programa espera a classe-mãe, sem quebrar o que ela promete. O exemplo clássico é o quadrado: matematicamente "é um" retângulo, mas um retângulo promete que largura e altura mudam independentemente, e um quadrado não pode cumprir isso.</p>
+<pre class="codigo"><code>class Retangulo:
+    def __init__(self, largura: float, altura: float):
+        self._largura = largura
+        self._altura = altura
+
+    @property
+    def largura(self) -&gt; float:
+        return self._largura
+
+    @largura.setter
+    def largura(self, v: float) -&gt; None:
+        self._largura = v
+
+    @property
+    def altura(self) -&gt; float:
+        return self._altura
+
+    @altura.setter
+    def altura(self, v: float) -&gt; None:
+        self._altura = v
+
+    def area(self) -&gt; float:
+        return self.largura * self.altura
+
+
+class Quadrado(Retangulo):  # VIOLAÇÃO do LSP
+    def __init__(self, lado: float):
+        super().__init__(lado, lado)
+
+    @Retangulo.largura.setter
+    def largura(self, v: float) -&gt; None:
+        self._largura = self._altura = v  # para continuar quadrado, mexe nas duas
+
+
+def dobrar_largura(r: Retangulo) -&gt; None:
+    """Contrato de Retangulo: dobrar a largura dobra a área."""
+    area_antes = r.area()
+    r.largura *= 2
+    assert r.area() == 2 * area_antes, f"área foi de {area_antes} para {r.area()}"
+
+
+dobrar_largura(Retangulo(2, 3))
+print("Retangulo: ok")
+try:
+    dobrar_largura(Quadrado(3))
+except AssertionError as e:
+    print("Quadrado:", e)</code></pre>
+<pre class="saida"><code>Retangulo: ok
+Quadrado: área foi de 9 para 36</code></pre>
+<p>A saída: não herdar. <code>Quadrado</code> e <code>Retangulo</code> podem ser classes independentes que satisfazem um <code>Protocol</code> com <code>area()</code>, ou imutáveis (sem setters, a promessa que quebrava deixa de existir). Sinal de violação: a subclasse precisa desligar ou distorcer um comportamento da mãe.</p>
+<div class="questao" id="q25">
+<span class="num">Q25</span>
+<div class="corpo">
+<p class="titulo">Decorador @medir_tempo</p>
+<p>Implemente um decorador @medir_tempo que calcula e imprime o tempo de execução de qualquer função.</p>
+<p class="dica"><strong>Dica:</strong> Use time.perf_counter() e @wraps.</p>
+</div>
+</div>
+<pre class="codigo"><code>import time
+from functools import wraps
+
+
+def medir_tempo(func):
+    @wraps(func)  # preserva __name__ e __doc__ da função original
+    def wrapper(*args, **kwargs):
+        inicio = time.perf_counter()
+        try:
+            return func(*args, **kwargs)
+        finally:  # mede mesmo se a função levantar exceção
+            print(f"[{func.__name__}] {(time.perf_counter() - inicio) * 1000:.2f} ms")
+    return wrapper
+
+
+@medir_tempo
+def soma_grande(n):
+    return sum(range(n))
+
+
+def _fib(n):
+    return n if n &lt;= 1 else _fib(n - 1) + _fib(n - 2)
+
+
+@medir_tempo  # decorar a recursiva mediria (e imprimiria) cada uma das 2,7 milhões de chamadas
+def fibonacci(n):
+    return _fib(n)
+
+
+print(soma_grande(1_000_000))
+print(fibonacci(30))</code></pre>
+<pre class="saida"><code>[soma_grande] 10.06 ms
+499999500000
+[fibonacci] 108.44 ms
+832040</code></pre>
+<p>O <code>try/finally</code> garante a medição mesmo quando a função levanta exceção, e o <code>@wraps</code> mantém o nome e a docstring da função original (sem ele, todas se chamariam <code>wrapper</code>). Decorar a própria <code>fib</code> recursiva seria um erro: o decorador envolve cada chamada recursiva, e <code>fib(30)</code> imprimiria 2.692.537 linhas. Os tempos variam de máquina para máquina.</p>
+<div class="questao" id="q26">
+<span class="num">Q26</span>
+<div class="corpo">
+<p class="titulo">@classmethod vs @staticmethod</p>
+<p>Qual a diferença entre @classmethod e @staticmethod? Crie um exemplo com cada um na mesma classe.</p>
+<p class="dica"><strong>Dica:</strong> classmethod recebe cls; staticmethod não recebe self nem cls.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>class Temperatura:
+    def __init__(self, celsius: float):
+        self.celsius = celsius
+
+    # classmethod — recebe a CLASSE como primeiro arg (cls)
+    # Usado para construtores alternativos (factory methods)
+    @classmethod
+    def de_fahrenheit(cls, f: float) -&gt; 'Temperatura':
+        return cls((f - 32) * 5/9)
+
+    @classmethod
+    def de_kelvin(cls, k: float) -&gt; 'Temperatura':
+        return cls(k - 273.15)
+
+    # staticmethod — não recebe self nem cls
+    # Função utilitária relacionada à classe, mas independente
+    @staticmethod
+    def celsius_para_fahrenheit(c: float) -&gt; float:
+        return c * 9/5 + 32
+
+    def __repr__(self):
+        return f"{self.celsius:.1f}°C"
+
+t1 = Temperatura.de_fahrenheit(212)
+print(t1)  # 100.0°C
+print(Temperatura.celsius_para_fahrenheit(100))  # 212.0</code></pre>
+<div class="questao" id="q27">
+<span class="num">Q27</span>
+<div class="corpo">
+<p class="titulo">Hierarquia de exceções para sistema de pagamentos</p>
+<p>Crie uma hierarquia de exceções customizadas para um sistema de pagamentos: ErroBase, ErroValidacao, ErroSaldoInsuficiente, ErroCartaoBloqueado.</p>
+<p class="dica"><strong>Dica:</strong> Herde de Exception. Adicione atributos relevantes.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>class ErroPagamento(Exception):
+    """Exceção base do domínio de pagamentos."""
+
+class ErroValidacao(ErroPagamento):
+    def __init__(self, campo: str, mensagem: str):
+        self.campo    = campo
+        self.mensagem = mensagem
+        super().__init__(f"Validação falhou: '{campo}' — {mensagem}")
+
+class ErroSaldoInsuficiente(ErroPagamento):
+    def __init__(self, saldo: float, solicitado: float):
+        self.saldo      = saldo
+        self.solicitado = solicitado
+        super().__init__(
+            f"Saldo insuficiente: R${saldo:.2f} / Solicitado: R${solicitado:.2f}"
+        )
+
+class ErroCartaoBloqueado(ErroPagamento):
+    def __init__(self, motivo: str = ""):
+        self.motivo = motivo
+        super().__init__(f"Cartão bloqueado. {motivo}")
+
+# Uso
+try:
+    raise ErroSaldoInsuficiente(50.0, 200.0)
+except ErroPagamento as e:  # captura qualquer erro do domínio
+    print(e)</code></pre>
+<div class="questao" id="q28">
+<span class="num">Q28</span>
+<div class="corpo">
+<p class="titulo">Corrigir herança errada usando composição</p>
+<p>Quando usar composição ao invés de herança? Reescreva o exemplo abaixo usando composição.</p>
+<pre class="codigo"><code>class Motor(Veiculo):  # errado!
+    def ligar(self): ...
+    def desligar(self): ...</code></pre>
+<p class="dica"><strong>Dica:</strong> Relação 'tem um' → composição. 'é um' → herança.</p>
+</div>
+</div>
+
+<pre class="codigo"><code># ERRADO — Motor herda de Veiculo (Motor NÃO É um Veiculo)
+class Motor(Veiculo):  # Errado!
+    ...
+
+# CORRETO — Composição: Veiculo TEM UM Motor
+class Motor:
+    def __init__(self, potencia_cv: int):
+        self.potencia = potencia_cv
+        self._ligado  = False
+
+    def ligar(self) -&gt; str:
+        self._ligado = True
+        return f"Motor {self.potencia}cv ligado."
+
+    def desligar(self) -&gt; str:
+        self._ligado = False
+        return "Motor desligado."
+
+class Veiculo:
+    def __init__(self, modelo: str, motor: Motor):
+        self.modelo = modelo
+        self._motor = motor   # composição — TEM UM Motor
+
+    def ligar(self): return self._motor.ligar()
+    def desligar(self): return self._motor.desligar()
+
+carro = Veiculo("Civic", Motor(150))
+print(carro.ligar())  # Motor 150cv ligado.</code></pre>
+<div class="questao" id="q29">
+<span class="num">Q29</span>
+<div class="corpo">
+<p class="titulo">@dataclass com validação em __post_init__</p>
+<p>Use @dataclass para criar uma classe Produto com nome, preco e estoque. Adicione um método desconto() e valide preco &gt;= 0 em __post_init__.</p>
+<p class="dica"><strong>Dica:</strong> from dataclasses import dataclass, field</p>
+</div>
+</div>
+
+<pre class="codigo"><code>from dataclasses import dataclass, field
+
+@dataclass
+class Produto:
+    nome:     str
+    preco:    float
+    estoque:  int  = 0
+    codigo:   str  = field(default="", repr=False)
+
+    def __post_init__(self):
+        if self.preco &lt; 0:
+            raise ValueError(f"Preco nao pode ser negativo: {self.preco}")
+        if len(self.nome) &lt; 2:
+            raise ValueError("Nome deve ter ao menos 2 caracteres.")
+        self.nome = self.nome.strip().title()
+
+    def desconto(self, percentual: float) -&gt; 'Produto':
+        """Retorna novo produto com desconto aplicado."""
+        novo_preco = self.preco * (1 - percentual / 100)
+        return Produto(self.nome, round(novo_preco, 2), self.estoque)
+
+    def disponivel(self) -&gt; bool:
+        return self.estoque &gt; 0
+
+p = Produto("teclado mecanico", 450.00, 15)
+print(p)              # Produto(nome='Teclado Mecanico', preco=450.0, estoque=15)
+print(p.desconto(10)) # Produto(nome='Teclado Mecanico', preco=405.0, estoque=15)</code></pre>
+<div class="questao desafio" id="q30">
+<span class="num">Q30</span>
+<div class="corpo">
+<p class="titulo">★ Singleton com decorator</p>
+<p>Implemente o padrão Singleton usando um decorator. Em seguida, crie uma classe ConfiguracaoApp que use o decorator e demonstre que múltiplas instâncias são o mesmo objeto.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>from functools import wraps
+
+def singleton(cls):
+    """Decorator que garante única instância da classe."""
+    instancias = {}
+
+    @wraps(cls)
+    def obter_instancia(*args, **kwargs):
+        if cls not in instancias:
+            instancias[cls] = cls(*args, **kwargs)
+        return instancias[cls]
+
+    return obter_instancia
+
+@singleton
+class ConfiguracaoApp:
+    def __init__(self):
+        self.debug   = False
+        self.versao  = "1.0.0"
+        self.tema    = "claro"
+
+    def __repr__(self):
+        return f"Config(versao={self.versao}, debug={self.debug})"
+
+# Demonstração
+c1 = ConfiguracaoApp()
+c2 = ConfiguracaoApp()
+
+print(c1 is c2)   # True — mesmo objeto!
+c1.debug = True
+print(c2.debug)   # True — mesma instância
+print(id(c1) == id(c2))  # True</code></pre>
+</section>
+<section class="modulo" id="modulo-4">
+<h2><span class="rotulo">MÓDULO 4</span> Arquivos, I/O e Banco de Dados</h2>
+<p class="aulas-titulo">Artigos 19 a 24</p>
+<ul class="aulas">
+<li><span class="n">#19</span> Leitura e Escrita de Arquivos</li>
+<li><span class="n">#20</span> Trabalhando com Datas e Horas</li>
+<li><span class="n">#21</span> Banco de Dados com SQLite e SQLAlchemy</li>
+<li><span class="n">#22</span> MySQL, MariaDB, PostgreSQL e MongoDB</li>
+<li><span class="n">#23</span> Consumindo APIs REST com requests e httpx</li>
+<li><span class="n">#24</span> Concorrência: threads, processos e async/await</li>
+</ul>
+<div class="questao" id="q31">
+<span class="num">Q31</span>
+<div class="corpo">
+<p class="titulo">Vantagem do 'with open()'</p>
+<p>Qual a vantagem de usar 'with open(...)' em vez de open()/close() manualmente? O que acontece se uma exceção ocorrer?</p>
+<p class="dica"><strong>Dica:</strong> O context manager garante fechamento mesmo com erros.</p>
+</div>
+</div>
+<p>O 'with' usa um context manager que garante o fechamento do arquivo ao sair do bloco, mesmo que uma exceção ocorra. Equivale a try/finally com f.close() no finally.</p>
+<p>Sem 'with': se uma exceção ocorrer entre open() e close(), o arquivo fica aberto, causando vazamento de recursos e possível corrupção de dados.</p>
+<div class="questao" id="q32">
+<span class="num">Q32</span>
+<div class="corpo">
+<p class="titulo">Leitura de CSV e geração de relatório JSON</p>
+<p>Escreva um script que leia um arquivo CSV de alunos (nome, nota) e gere um relatório JSON com média, maior e menor nota.</p>
+<p class="dica"><strong>Dica:</strong> Use csv.DictReader e json.dump com indent=2.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>import csv, json
+from pathlib import Path
+
+def gerar_relatorio(csv_path: str, json_path: str) -&gt; dict:
+    alunos = []
+    with open(csv_path, encoding='utf-8') as f:
+        for row in csv.DictReader(f):
+            alunos.append({'nome': row['nome'], 'nota': float(row['nota'])})
+
+    notas  = [a['nota'] for a in alunos]
+    relat  = {
+        'total':    len(alunos),
+        'media':    round(sum(notas)/len(notas), 2),
+        'maior':    max(notas),
+        'menor':    min(notas),
+        'aprovados': sum(1 for n in notas if n &gt;= 6),
+    }
+    Path(json_path).write_text(
+        json.dumps(relat, indent=2, ensure_ascii=False),
+        encoding='utf-8'
+    )
+    return relat</code></pre>
+<div class="questao" id="q33">
+<span class="num">Q33</span>
+<div class="corpo">
+<p class="titulo">datetime naive vs aware</p>
+<p>O que é um datetime 'naive' vs 'aware'? Por que essa distinção importa em sistemas distribuídos?</p>
+<p class="dica"><strong>Dica:</strong> Pense em fusos horários e servidores em diferentes regiões.</p>
+</div>
+</div>
+<p>Naive: sem informação de fuso horário (tzinfo=None). Ambíguo para sistemas distribuídos.</p>
+<p>Aware: com fuso horário definido (tzinfo preenchido). Comparações são seguras.</p>
+<p>Em sistemas distribuídos (servidores em diferentes fusos):</p>
+<p>naive: '2024-03-15 14:00' — qual fuso? São Paulo? UTC? Nova York?</p>
+<p>aware: '2024-03-15T14:00:00-03:00' — inequívoco.</p>
+<p>Boa prática: armazene sempre em UTC, exiba no fuso do usuário.</p>
+<p>Use: datetime.now(tz=ZoneInfo('UTC')) para criar aware.</p>
+<div class="questao" id="q34">
+<span class="num">Q34</span>
+<div class="corpo">
+<p class="titulo">Os 5 melhores de cada turma</p>
+<p>Escreva uma query SQL que liste, <strong>para cada turma</strong>, os 5 alunos com maior média de notas, com a posição de cada um na turma.</p>
+<p class="dica"><strong>Dica:</strong> Com <code>LIMIT 5</code> a lista inteira para em 5 linhas; para cortar dentro de cada turma, use uma função de janela.</p>
+</div>
+</div>
+<pre class="codigo"><code>WITH medias AS (
+    SELECT t.nome AS turma, a.nome AS aluno, ROUND(AVG(n.valor), 2) AS media,
+           ROW_NUMBER() OVER (PARTITION BY t.id ORDER BY AVG(n.valor) DESC) AS posicao
+    FROM alunos a
+    JOIN turmas t ON t.id = a.turma_id
+    JOIN notas  n ON n.aluno_id = a.id
+    GROUP BY t.id, t.nome, a.id, a.nome
+)
+SELECT turma, posicao, aluno, media
+FROM medias
+WHERE posicao &lt;= 5
+ORDER BY turma, posicao;</code></pre>
+<p>Testada no SQLite com duas turmas (seis alunos na A, três na B), a consulta devolve:</p>
+<pre class="saida"><code>A | 1 | Caio | 9.5
+A | 2 | Ana | 8.5
+A | 3 | Eva | 8.0
+A | 4 | Bia | 7.0
+A | 5 | Davi | 5.5
+B | 1 | Gil | 9.0
+B | 2 | Ines | 8.5
+B | 3 | Hugo | 7.0</code></pre>
+<p>O <code>ROW_NUMBER() OVER (PARTITION BY ...)</code> numera os alunos de cada turma separadamente, do maior para o menor, e o <code>WHERE posicao &lt;= 5</code> corta dentro de cada turma: o Fabio, sexto da A, fica de fora. Um <code>ORDER BY ... LIMIT 5</code> no fim pararia nas cinco primeiras linhas do resultado inteiro, todas da turma A. Funções de janela existem no SQLite desde a 3.25, no PostgreSQL e no MySQL 8.</p>
+<div class="questao" id="q35">
+<span class="num">Q35</span>
+<div class="corpo">
+<p class="titulo">SQL Injection — ataque e prevenção</p>
+<p>O que é SQL Injection? Como o uso de parâmetros (?) previne esse ataque? Dê um exemplo do ataque e da prevenção.</p>
+<p class="dica"><strong>Dica:</strong> Nunca concatene strings para montar SQL!</p>
+</div>
+</div>
+<p>SQL Injection: o atacante insere código SQL malicioso via input de usuário.</p>
+<p>ATAQUE:  SELECT * FROM users WHERE email = '' OR '1'='1' --'</p>
+<p>Isso retorna TODOS os usuários sem senha!</p>
+<p>PREVENÇÃO — nunca concatene strings para montar SQL:</p>
+<pre class="codigo"><code># ERRADO — vulnerável!
+query = f"SELECT * FROM users WHERE email = '{email}'"
+cursor.execute(query)
+
+# CORRETO — parâmetros escapam automaticamente
+cursor.execute(
+    "SELECT * FROM users WHERE email = ?",
+    (email,)  # SQLite
+)
+
+# PostgreSQL / psycopg2:
+cursor.execute(
+    "SELECT * FROM users WHERE email = %s",
+    (email,)
+)
+
+# SQLAlchemy ORM — seguro por padrão
+session.execute(select(User).where(User.email == email))</code></pre>
+<div class="questao" id="q36">
+<span class="num">Q36</span>
+<div class="corpo">
+<p class="titulo">threading vs multiprocessing vs asyncio</p>
+<p>Explique a diferença entre threading, multiprocessing e asyncio. Para cada um, cite um caso de uso ideal.</p>
+<p class="dica"><strong>Dica:</strong> I/O vs CPU vs alta concorrência.</p>
+</div>
+</div>
+<p>threading:       concorrência via threads, GIL limita paralelismo CPU.</p>
+<p>Ideal para: I/O bound com código legado ou bibliotecas não-async.</p>
+<p>multiprocessing: paralelismo real via processos separados, sem GIL.</p>
+<p>Ideal para: CPU bound — cálculos, processamento de imagem, ML.</p>
+<p>asyncio:         concorrência cooperativa em único thread via event loop.</p>
+<p>Ideal para: I/O massivo — APIs, scrapers, websockets (alta escala).</p>
+<p>Resumo: I/O simples → threading; I/O em escala → asyncio; CPU → multiprocessing.</p>
+<div class="questao" id="q37">
+<span class="num">Q37</span>
+<div class="corpo">
+<p class="titulo">Buscar 5 URLs em paralelo com asyncio + httpx</p>
+<p>Escreva uma função assíncrona que busque dados de 5 URLs em paralelo usando asyncio.gather() e httpx.</p>
+<p class="dica"><strong>Dica:</strong> Use async with httpx.AsyncClient() as client.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>import asyncio, httpx
+
+async def buscar(client: httpx.AsyncClient, url: str) -&gt; dict:
+    resp = await client.get(url, timeout=10.0)
+    return {'url': url, 'status': resp.status_code, 'bytes': len(resp.content)}
+
+async def buscar_paralelo(urls: list[str]) -&gt; list[dict]:
+    async with httpx.AsyncClient() as client:
+        tarefas    = [buscar(client, url) for url in urls]
+        resultados = await asyncio.gather(*tarefas, return_exceptions=True)
+    return [r for r in resultados if isinstance(r, dict)]
+
+urls = [
+    'https://httpbin.org/get',
+    'https://jsonplaceholder.typicode.com/posts/1',
+    'https://api.github.com',
+    'https://viacep.com.br/ws/01310100/json/',
+    'https://httpbin.org/status/200',
+]
+
+resultados = asyncio.run(buscar_paralelo(urls))
+for r in resultados:
+    print(f"{r['status']} — {r['url'][:40]}")</code></pre>
+<div class="questao" id="q38">
+<span class="num">Q38</span>
+<div class="corpo">
+<p class="titulo">Padrão Repository com Protocol</p>
+<p>O que é o padrão Repository? Escreva uma interface (Protocol) para um repositório de alunos com métodos salvar(), buscar(), listar() e deletar().</p>
+<p class="dica"><strong>Dica:</strong> from typing import Protocol</p>
+</div>
+</div>
+
+<pre class="codigo"><code>from typing import Protocol, Optional
+from dataclasses import dataclass
+
+@dataclass
+class Aluno:
+    id: int
+    nome: str
+    email: str
+
+class RepositorioAlunos(Protocol):
+    """Interface do repositório — independente de implementação."""
+
+    def salvar(self, aluno: Aluno) -&gt; Aluno: ...
+    def buscar(self, aluno_id: int) -&gt; Optional[Aluno]: ...
+    def listar(self, apenas_ativos: bool = True) -&gt; list[Aluno]: ...
+    def deletar(self, aluno_id: int) -&gt; None: ...
+
+# Implementação em memória (para testes)
+class RepositorioMemoria:
+    def __init__(self):
+        self._dados: dict[int, Aluno] = {}
+        self._seq = 1
+
+    def salvar(self, aluno: Aluno) -&gt; Aluno:
+        aluno.id = self._seq; self._seq += 1
+        self._dados[aluno.id] = aluno
+        return aluno
+
+    def buscar(self, aluno_id: int) -&gt; Optional[Aluno]:
+        return self._dados.get(aluno_id)
+
+    def listar(self, apenas_ativos: bool = True) -&gt; list[Aluno]:
+        return list(self._dados.values())
+
+    def deletar(self, aluno_id: int) -&gt; None:
+        self._dados.pop(aluno_id, None)</code></pre>
+<div class="questao" id="q39">
+<span class="num">Q39</span>
+<div class="corpo">
+<p class="titulo">MongoDB vs PostgreSQL</p>
+<p>Qual a diferença entre MongoDB e PostgreSQL? Em que situações você escolheria cada um?</p>
+<p class="dica"><strong>Dica:</strong> Documental vs relacional — pense em esquema e queries.</p>
+</div>
+</div>
+<p>PostgreSQL (relacional):</p>
+<p>+ Esquema rígido — garante integridade dos dados</p>
+<p>+ Transações ACID completas, JOINs eficientes</p>
+<p>+ Ideal: dados estruturados, relatórios, sistemas financeiros</p>
+<p>MongoDB (documental):</p>
+<p>+ Esquema flexível — documentos podem ter campos variáveis</p>
+<p>+ Escala horizontal mais simples, ótimo para dados semi-estruturados</p>
+<p>+ Ideal: catálogos de produtos (atributos variáveis), logs, IoT, APIs rápidas</p>
+<p>Escolha PostgreSQL quando: relações claras, queries complexas, dados críticos.</p>
+<p>Escolha MongoDB quando: esquema evolui rápido, dados semi-estruturados, alta escrita.</p>
+<div class="questao desafio" id="q40">
+<span class="num">Q40</span>
+<div class="corpo">
+<p class="titulo">★ Context manager com __enter__/__exit__ e log</p>
+<p>Implemente um gerenciador de contexto personalizado usando a classe __enter__/__exit__ que mede o tempo de execução de um bloco de código e registra em arquivo de log.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>import time, logging
+from pathlib import Path
+from datetime import datetime
+
+class Temporizador:
+    """Context manager que mede tempo e registra em arquivo."""
+
+    def __init__(self, operacao: str, log_file: str = 'tempos.log'):
+        self.operacao = operacao
+        self.log_file = log_file
+        self._inicio  = None
+
+    def __enter__(self):
+        self._inicio = time.perf_counter()
+        print(f"Iniciando: {self.operacao}")
+        return self   # permite: with Temporizador(...) as t:
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        duracao = (time.perf_counter() - self._inicio) * 1000
+        status  = 'ERRO' if exc_type else 'OK'
+        linha   = f"{datetime.now().isoformat()} | {self.operacao} | {duracao:.2f}ms | {status}\n"
+        Path(self.log_file).open('a').write(linha)
+        print(f"Concluido em {duracao:.2f}ms ({status})")
+        return False   # False = não suprime exceções
+
+with Temporizador('calcular_soma'):
+    resultado = sum(range(10_000_000))
+print(resultado)</code></pre>
+</section>
+<section class="modulo" id="modulo-5">
+<h2><span class="rotulo">MÓDULO 5</span> Python para Web</h2>
+<p class="aulas-titulo">Artigos 25 a 30</p>
+<ul class="aulas">
+<li><span class="n">#25</span> Introdução ao Desenvolvimento Web com Flask</li>
+<li><span class="n">#26</span> FastAPI: APIs modernas com tipagem e documentação automática</li>
+<li><span class="n">#27</span> Autenticação e Segurança em APIs Python</li>
+<li><span class="n">#28</span> Templates HTML com Jinja2 e Deploy com Docker</li>
+<li><span class="n">#29</span> WebSockets e Comunicação em Tempo Real em Python</li>
+<li><span class="n">#30</span> Celery: Filas de Tarefas e Processamento Assíncrono</li>
+</ul>
+<div class="questao" id="q41">
+<span class="num">Q41</span>
+<div class="corpo">
+<p class="titulo">Princípios REST e POST para tudo</p>
+<p>Quais são os princípios REST? Uma API que usa POST para tudo é RESTful? Justifique.</p>
+<p class="dica"><strong>Dica:</strong> GET=buscar, POST=criar, PUT=substituir, PATCH=atualizar, DELETE=remover.</p>
+</div>
+</div>
+<p>Os 6 princípios REST: interface uniforme, stateless, cacheable, client-server, sistema em camadas, code-on-demand (opcional).</p>
+<p>API que usa POST para tudo NÃO é RESTful. Viola a interface uniforme.</p>
+<p>REST mapeia operações CRUD a verbos HTTP:</p>
+<p>GET    /alunos      → listar       (idempotente, cacheável)</p>
+<p>POST   /alunos      → criar</p>
+<p>GET    /alunos/{id} → buscar por id</p>
+<p>PUT    /alunos/{id} → substituir   (idempotente)</p>
+<p>PATCH  /alunos/{id} → atualizar parcialmente</p>
+<p>DELETE /alunos/{id} → remover      (idempotente)</p>
+<p>Usar POST para tudo é o padrão RPC (Remote Procedure Call), não REST.</p>
+<div class="questao" id="q42">
+<span class="num">Q42</span>
+<div class="corpo">
+<p class="titulo">Endpoint FastAPI GET /alunos/{id} com Pydantic</p>
+<p>Crie um endpoint FastAPI GET /alunos/{id} que retorne 200 com o aluno ou 404 com mensagem de erro. Use Pydantic para o schema de resposta.</p>
+<p class="dica"><strong>Dica:</strong> HTTPException(status_code=404, detail=...)</p>
+</div>
+</div>
+
+<pre class="codigo"><code>from fastapi import FastAPI, HTTPException, status
+from pydantic import BaseModel
+from typing import Optional
+
+app = FastAPI()
+
+class AlunoResposta(BaseModel):
+    id:    int
+    nome:  str
+    email: str
+    nota:  float
+
+# Banco simulado
+_db = {
+    1: {'id': 1, 'nome': 'Ana', 'email': 'ana@email.com', 'nota': 9.5},
+    2: {'id': 2, 'nome': 'Bruno', 'email': 'bruno@email.com', 'nota': 7.0},
+}
+
+@app.get(
+    '/alunos/{aluno_id}',
+    response_model=AlunoResposta,
+    summary='Buscar aluno por ID',
+    responses={404: {'description': 'Aluno nao encontrado'}}
+)
+async def buscar_aluno(aluno_id: int):
+    aluno = _db.get(aluno_id)
+    if not aluno:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f'Aluno {aluno_id} nao encontrado.'
+        )
+    return aluno</code></pre>
+<div class="questao" id="q43">
+<span class="num">Q43</span>
+<div class="corpo">
+<p class="titulo">JWT — três partes e segurança do payload</p>
+<p>O que é JWT? Quais são suas três partes? Por que não armazenar dados sensíveis no payload?</p>
+<p class="dica"><strong>Dica:</strong> Header.Payload.Signature — o payload é apenas codificado, não criptografado.</p>
+</div>
+</div>
+<p>JWT (JSON Web Token) tem 3 partes separadas por ponto:</p>
+<p>1. HEADER:  algoritmo e tipo — { alg: 'HS256', typ: 'JWT' }</p>
+<p>2. PAYLOAD: dados (claims) — { sub: '123', email: 'ana@...', exp: 1710... }</p>
+<p>3. SIGNATURE: HMAC(header + payload, secret)</p>
+<p>O payload é apenas BASE64url encoded — qualquer pessoa pode decodificar!</p>
+<p>Não é criptografado. Por isso NUNCA armazene:</p>
+<p>• Senhas, CVV, número de cartão</p>
+<p>• Informações médicas ou sigilosas</p>
+<p>• Dados que não devem ser visíveis ao cliente</p>
+<p>O que o JWT garante: integridade (não foi alterado) + autenticidade (foi gerado pelo servidor).</p>
+<p>Para ocultar payload, use JWE (JSON Web Encryption) em vez de JWT.</p>
+<div class="questao" id="q44">
+<span class="num">Q44</span>
+<div class="corpo">
+<p class="titulo">Dependency Injection no FastAPI com get_db()</p>
+<p>Explique o que é Dependency Injection no FastAPI. Escreva uma dependência get_db() que fornece uma sessão SQLAlchemy.</p>
+<p class="dica"><strong>Dica:</strong> Depends() injeta a dependência automaticamente.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>from sqlalchemy.orm import Session
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from fastapi import FastAPI, Depends
+from typing import Annotated, Generator
+
+engine  = create_engine('postgresql://...')
+Session = sessionmaker(bind=engine)
+
+def get_db() -&gt; Generator[Session, None, None]:
+    """
+    Dependência que fornece uma sessão SQLAlchemy.
+    Garante commit/rollback e fechamento automático.
+    """
+    db = Session()
+    try:
+        yield db         # execução do endpoint acontece aqui
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
+    finally:
+        db.close()       # sempre fecha
+
+app = FastAPI()
+DbDep = Annotated[Session, Depends(get_db)]
+
+@app.get('/alunos')
+async def listar(db: DbDep):  # get_db() injetado automaticamente
+    return db.query(Aluno).all()</code></pre>
+<div class="questao" id="q45">
+<span class="num">Q45</span>
+<div class="corpo">
+<p class="titulo">Flask vs FastAPI — 3 vantagens de cada</p>
+<p>Qual a diferença entre Flask e FastAPI? Cite 3 vantagens de cada um.</p>
+<p class="dica"><strong>Dica:</strong> Performance, async, documentação automática, maturidade...</p>
+</div>
+</div>
+<p>Flask (vantagens):</p>
+<p>1. Maturidade — 15+ anos, ecossistema imenso de extensões (Flask-SQLAlchemy, etc.)</p>
+<p>2. Flexibilidade — estrutura mínima, você decide tudo</p>
+<p>3. Curva de aprendizado muito baixa — ideal para MVPs e protótipos rápidos</p>
+<p>FastAPI (vantagens):</p>
+<p>1. Performance — ASGI e async nativo, entre os frameworks Python mais rápidos</p>
+<p>2. Documentação automática — Swagger UI e ReDoc gerados automaticamente</p>
+<p>3. Validação automática — Pydantic valida request/response sem código extra</p>
+<p>Quando usar Flask: projetos legados, equipes já familiarizadas, apps simples.</p>
+<p>Quando usar FastAPI: APIs novas, alta performance, tipo de dados complexos.</p>
+<div class="questao" id="q46">
+<span class="num">Q46</span>
+<div class="corpo">
+<p class="titulo">CORS — conceito e configuração</p>
+<p>O que é CORS? Por que uma API precisa configurar CORS? Escreva a configuração para permitir apenas http://localhost:3000.</p>
+<p class="dica"><strong>Dica:</strong> Cross-Origin Resource Sharing — segurança do browser.</p>
+</div>
+</div>
+<p>CORS (Cross-Origin Resource Sharing): mecanismo de segurança do browser que bloqueia requisições de domínios diferentes do servidor.</p>
+<p>Ex: frontend em http://localhost:3000 requisita API em http://localhost:8000.</p>
+<p>Sem CORS configurado → o browser bloqueia a resposta.</p>
+<p>Configuração FastAPI para permitir apenas localhost:3000:</p>
+<pre class="codigo"><code>from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['http://localhost:3000'],  # apenas esta origem
+    allow_credentials=True,
+    allow_methods=['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allow_headers=['*'],
+)
+
+# Para produção:
+# allow_origins=['https://meusite.com', 'https://www.meusite.com']</code></pre>
+<div class="questao" id="q47">
+<span class="num">Q47</span>
+<div class="corpo">
+<p class="titulo">WebSockets vs HTTP</p>
+<p>O que são WebSockets e em que diferem do HTTP convencional? Cite 3 casos de uso.</p>
+<p class="dica"><strong>Dica:</strong> Full-duplex vs request-response.</p>
+</div>
+</div>
+<p>HTTP: request-response — cliente pergunta, servidor responde, conexão fecha.</p>
+<p>Half-duplex: só o cliente inicia comunicação.</p>
+<p>WebSocket: conexão persistente full-duplex — ambos podem enviar a qualquer momento.</p>
+<p>Começa com handshake HTTP (Upgrade: websocket) depois vira canal bidirecional.</p>
+<p>3 casos de uso:</p>
+<p>1. Chat em tempo real — mensagens instantâneas sem polling</p>
+<p>2. Dashboards ao vivo — métricas atualizadas sem refresh</p>
+<p>3. Jogos multiplayer — sincronização de estado em tempo real</p>
+<p>Alternativa mais simples para apenas servidor→cliente: SSE (Server-Sent Events).</p>
+<div class="questao" id="q48">
+<span class="num">Q48</span>
+<div class="corpo">
+<p class="titulo">Celery — broker vs backend</p>
+<p>Explique o que é o Celery e qual problema ele resolve. Qual a diferença entre broker e backend?</p>
+<p class="dica"><strong>Dica:</strong> Processamento assíncrono fora do ciclo request-response.</p>
+</div>
+</div>
+<p>Celery resolve o problema de execução assíncrona: tarefas pesadas (envio de e-mail, geração de relatório, ML) não devem bloquear a resposta HTTP.</p>
+<p>Broker: fila de mensagens que transporta as tarefas do producer ao worker.</p>
+<p>(Redis, RabbitMQ) — onde as tarefas ficam aguardando execução.</p>
+<p>Backend: armazena os RESULTADOS das tarefas para consulta posterior.</p>
+<p>(Redis, banco SQL) — permite verificar status e resultado via task.id.</p>
+<p>Fluxo: FastAPI → enfileira no Broker → Worker consome → salva resultado no Backend</p>
+<p>→ FastAPI consulta resultado via GET /tarefas/{task_id}</p>
+<div class="questao" id="q49">
+<span class="num">Q49</span>
+<div class="corpo">
+<p class="titulo">Dockerfile multi-stage para FastAPI</p>
+<p>Escreva um Dockerfile multi-stage para uma aplicação FastAPI. Explique por que multi-stage reduz o tamanho da imagem.</p>
+<p class="dica"><strong>Dica:</strong> FROM ... AS builder / FROM ... AS runtime</p>
+</div>
+</div>
+
+<pre class="codigo"><code># Stage 1: Builder — compila e instala dependências
+FROM python:3.13-slim AS builder
+WORKDIR /build
+COPY requirements.txt .
+# --prefix instala em /install em vez do sistema
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+
+# Stage 2: Runtime — imagem final mínima
+FROM python:3.13-slim AS runtime
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+WORKDIR /app
+
+# Copia apenas as dependências já instaladas
+COPY --from=builder /install /usr/local
+# Copia apenas o código (sem compiladores, cache pip, etc.)
+COPY app/ ./app/
+
+RUN adduser --disabled-password appuser
+USER appuser
+EXPOSE 8000
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+# Por que reduz o tamanho:
+# O estágio builder carrega o pip, o cache e o que mais a instalação precisar
+# (com dependências que compilam, acrescente ali build-essential); a imagem
+# final recebe só os pacotes prontos e o código.</code></pre>
+<div class="questao desafio" id="q50">
+<span class="num">Q50</span>
+<div class="corpo">
+<p class="titulo">★ API de biblioteca — design completo</p>
+<p>Projete uma API REST completa para um sistema de biblioteca: endpoints para livros, usuários e empréstimos. Desenhe os schemas Pydantic, as rotas e o modelo de banco. Implemente autenticação JWT.</p>
+</div>
+</div>
+<p>Schemas Pydantic principais:</p>
+<p>LivroCriar(titulo, isbn, autor_id, ano), LivroResposta(+ id, disponivel)</p>
+<p>EmprestimoCriar(livro_id, usuario_id), EmprestimoResposta(+ data, devolucao)</p>
+<p>Rotas:</p>
+<p>POST   /auth/login → TokenResposta</p>
+<p>GET    /livros → lista paginada</p>
+<p>POST   /livros → criar (admin)</p>
+<p>GET    /livros/{id} → detalhe</p>
+<p>POST   /emprestimos → criar empréstimo (requer auth)</p>
+<p>PATCH  /emprestimos/{id}/devolver → devolução</p>
+<p>GET    /usuarios/{id}/emprestimos → histórico</p>
+<p>Banco: tabelas livros, autores, usuarios, emprestimos (FK livro + usuario)</p>
+<p>Regra de negócio: livro.disponivel = not emprestimos.filter(devolvido=False).exists()</p>
+<pre class="codigo"><code># Resumo da estrutura SQLAlchemy
+class Livro(Base):
+    __tablename__ = 'livros'
+    id         = Column(Integer, primary_key=True)
+    titulo     = Column(String(200), nullable=False)
+    isbn       = Column(String(13), unique=True)
+    disponivel = Column(Boolean, default=True)
+    emprestimos = relationship('Emprestimo', back_populates='livro')
+
+class Emprestimo(Base):
+    __tablename__ = 'emprestimos'
+    id           = Column(Integer, primary_key=True)
+    livro_id     = Column(Integer, ForeignKey('livros.id'))
+    usuario_id   = Column(Integer, ForeignKey('usuarios.id'))
+    data_emp     = Column(DateTime, server_default=func.now())
+    data_dev     = Column(DateTime, nullable=True)
+    devolvido    = Column(Boolean, default=False)</code></pre>
+</section>
+<section class="modulo" id="modulo-6">
+<h2><span class="rotulo">MÓDULO 6</span> Automação e Scripts</h2>
+<p class="aulas-titulo">Artigos 31 a 34</p>
+<ul class="aulas">
+<li><span class="n">#31</span> Automação com Python: arquivos, pastas e sistema operacional</li>
+<li><span class="n">#32</span> Web Scraping com BeautifulSoup e Selenium</li>
+<li><span class="n">#33</span> Automação de Planilhas e PDFs</li>
+<li><span class="n">#34</span> Envio de E-mails e Integração com APIs de Comunicação</li>
+</ul>
+<div class="questao" id="q51">
+<span class="num">Q51</span>
+<div class="corpo">
+<p class="titulo">Script organizador de arquivos com modo simulação</p>
+<p>Escreva um script que organize arquivos de uma pasta por extensão, movendo para subpastas (Imagens/, Documentos/, etc.). Adicione modo de simulação.</p>
+<p class="dica"><strong>Dica:</strong> Use pathlib e shutil. simular=True só exibe o que faria.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>import shutil
+from pathlib import Path
+
+REGRAS = {
+    'Imagens':    {'.jpg', '.jpeg', '.png', '.gif', '.webp'},
+    'Documentos': {'.pdf', '.doc', '.docx', '.txt', '.md'},
+    'Planilhas':  {'.xls', '.xlsx', '.csv'},
+    'Videos':     {'.mp4', '.avi', '.mkv'},
+    'Codigo':     {'.py', '.js', '.ts', '.html'},
+}
+
+def organizar(pasta: str, simular: bool = True) -&gt; list[dict]:
+    raiz   = Path(pasta)
+    acoes  = []
+    for arquivo in raiz.iterdir():
+        if not arquivo.is_file(): continue
+        ext = arquivo.suffix.lower()
+        cat = next((c for c,exts in REGRAS.items() if ext in exts), 'Outros')
+        destino = raiz / cat / arquivo.name
+        acoes.append({'arquivo': arquivo.name, 'categoria': cat, 'destino': str(destino)})
+        if not simular:
+            destino.parent.mkdir(exist_ok=True)
+            shutil.move(str(arquivo), str(destino))
+    print(f"{'[SIMULACAO]' if simular else '[EXECUCAO]'} {len(acoes)} arquivos")
+    return acoes</code></pre>
+<div class="questao" id="q52">
+<span class="num">Q52</span>
+<div class="corpo">
+<p class="titulo">BeautifulSoup vs Selenium</p>
+<p>Qual a diferença entre BeautifulSoup e Selenium para web scraping? Quando usar cada um?</p>
+<p class="dica"><strong>Dica:</strong> HTML estático vs JavaScript dinâmico.</p>
+</div>
+</div>
+<p>BeautifulSoup: analisa HTML já carregado. Rápido e simples. Não executa JavaScript.</p>
+<p>Use quando: a página entrega HTML completo no primeiro load (sites estáticos, blogs).</p>
+<p>Selenium: controla um browser real (Chrome, Firefox). Executa JavaScript.</p>
+<p>Use quando: conteúdo é carregado dinamicamente (SPAs, React, Angular), ou quando precisa interagir com formulários, cliques, login.</p>
+<p>Fluxo recomendado: tente primeiro com requests+BS. Se o HTML não tiver os dados, inspecione o Network do browser — muitas SPAs têm APIs JSON que você pode chamar diretamente.</p>
+<p>Selenium é o último recurso — mais lento e frágil.</p>
+<div class="questao" id="q53">
+<span class="num">Q53</span>
+<div class="corpo">
+<p class="titulo">Scraping de books.toscrape.com</p>
+<p>Escreva um script de scraping que colete título e preço dos 5 primeiros livros de books.toscrape.com.</p>
+<p class="dica"><strong>Dica:</strong> Use requests + BeautifulSoup. Respeite robots.txt.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>import requests
+from bs4 import BeautifulSoup
+from dataclasses import dataclass
+
+@dataclass
+class Livro:
+    titulo: str
+    preco:  float
+
+def coletar_livros(n: int = 5) -&gt; list[Livro]:
+    url   = 'https://books.toscrape.com'
+    resp  = requests.get(url, timeout=15, headers={
+        'User-Agent': 'Mozilla/5.0 (Educational Scraper)'
+    })
+    resp.raise_for_status()
+    soup  = BeautifulSoup(resp.text, 'lxml')
+    livros = []
+    for art in soup.select('article.product_pod')[:n]:
+        titulo = art.find('h3').find('a')['title']
+        preco  = float(
+            art.find('p', class_='price_color').text
+            .replace('Â', '').replace('£', '').strip()
+        )
+        livros.append(Livro(titulo, preco))
+    return livros
+
+for l in coletar_livros():
+    print(f'  £{l.preco:.2f} — {l.titulo[:50]}')</code></pre>
+<div class="questao" id="q54">
+<span class="num">Q54</span>
+<div class="corpo">
+<p class="titulo">Script com argparse para relatório de arquivos</p>
+<p>Crie um script com argparse que aceite --entrada (pasta), --saida (pasta) e --formato (csv ou json) e gere relatório de arquivos.</p>
+<p class="dica"><strong>Dica:</strong> Use argparse com argumentos obrigatórios e opcionais.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>import argparse, json, csv
+from pathlib import Path
+from datetime import datetime
+
+def criar_relatorio(pasta: str, saida: str, formato: str):
+    p = Path(pasta)
+    arquivos = []
+    for f in p.rglob('*'):
+        if f.is_file():
+            s = f.stat()
+            arquivos.append({'nome': f.name, 'extensao': f.suffix,
+                             'tamanho_kb': round(s.st_size/1024, 2),
+                             'modificado': datetime.fromtimestamp(s.st_mtime).isoformat()})
+    if formato == 'json':
+        Path(saida).write_text(json.dumps(arquivos, indent=2, ensure_ascii=False))
+    elif formato == 'csv':
+        with open(saida, 'w', newline='', encoding='utf-8') as f:
+            w = csv.DictWriter(f, fieldnames=arquivos[0])
+            w.writeheader(); w.writerows(arquivos)
+    print(f'{len(arquivos)} arquivos exportados para {saida}')
+
+if __name__ == '__main__':
+    p = argparse.ArgumentParser()
+    p.add_argument('--entrada', required=True)
+    p.add_argument('--saida',   required=True)
+    p.add_argument('--formato', choices=['csv','json'], default='json')
+    args = p.parse_args()
+    criar_relatorio(args.entrada, args.saida, args.formato)</code></pre>
+<div class="questao" id="q55">
+<span class="num">Q55</span>
+<div class="corpo">
+<p class="titulo">Envio de e-mail HTML com anexo via smtplib</p>
+<p>Escreva o código para enviar um e-mail HTML com anexo usando smtplib. Quais cuidados de segurança são necessários?</p>
+<p class="dica"><strong>Dica:</strong> Use MIMEMultipart, MIMEText e MIMEBase. Senha em variável de ambiente.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>import smtplib, os
+from email.mime.multipart import MIMEMultipart
+from email.mime.text    import MIMEText
+from email.mime.base    import MIMEBase
+from email              import encoders
+from pathlib            import Path
+
+def enviar_email(destinatario, assunto, html, anexo=None):
+    msg = MIMEMultipart('alternative')
+    msg['From']    = os.getenv('EMAIL_USER')  # nunca hardcode!
+    msg['To']      = destinatario
+    msg['Subject'] = assunto
+    msg.attach(MIMEText(html, 'html', 'utf-8'))
+
+    if anexo and Path(anexo).exists():
+        with open(anexo, 'rb') as f:
+            parte = MIMEBase('application', 'octet-stream')
+            parte.set_payload(f.read())
+        encoders.encode_base64(parte)
+        parte.add_header('Content-Disposition', f'attachment; filename={Path(anexo).name}')
+        msg.attach(parte)
+
+    # Credenciais SEMPRE em variáveis de ambiente!
+    with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+        smtp.starttls()
+        smtp.login(os.getenv('EMAIL_USER'), os.getenv('EMAIL_PASS'))
+        smtp.sendmail(msg['From'], destinatario, msg.as_string())</code></pre>
+<div class="questao desafio" id="q56">
+<span class="num">Q56</span>
+<div class="corpo">
+<p class="titulo">★ Monitor de preços completo</p>
+<p>Crie um monitor de preços que: (1) coleta preços de 3 produtos em sites reais, (2) salva histórico em JSON, (3) envia alerta via e-mail quando o preço cai abaixo de um threshold configurável.</p>
+</div>
+</div>
+<p>Estrutura da solução:</p>
+<p>1. COLETOR: usa requests + BeautifulSoup para extrair preço de cada URL.</p>
+<p>2. HISTÓRICO: salva em JSON (preco_historico.json) com lista de {data, preco} por produto.</p>
+<p>3. ALERTA: verifica se preço atual &lt; threshold configurado por produto.</p>
+<p>4. NOTIFICAÇÃO: envia e-mail via smtplib quando alerta é disparado.</p>
+<p>5. AGENDAMENTO: usa schedule.every(6).hours.do(verificar_precos).</p>
+<p>Boas práticas:</p>
+<p>• Thresholds em config.json — configurável sem alterar código.</p>
+<p>• Headers User-Agent para evitar bloqueio.</p>
+<p>• try/except por produto — um erro não para todo o monitor.</p>
+<p>• Logs estruturados para auditoria de quando alertas foram disparados.</p>
+</section>
+<section class="modulo" id="modulo-7">
+<h2><span class="rotulo">MÓDULO 7</span> Data Science e Machine Learning</h2>
+<p class="aulas-titulo">Artigos 35 a 42</p>
+<ul class="aulas">
+<li><span class="n">#35</span> Introdução ao Data Science com Python</li>
+<li><span class="n">#36</span> Machine Learning com scikit-learn</li>
+<li><span class="n">#37</span> Redes Neurais com TensorFlow e Keras</li>
+<li><span class="n">#38</span> Processamento de Linguagem Natural (NLP)</li>
+<li><span class="n">#39</span> Visão Computacional com OpenCV e PIL</li>
+<li><span class="n">#40</span> Análise de Dados com Pandas Avançado e Plotly</li>
+<li><span class="n">#41</span> Séries Temporais e Previsão com Prophet e statsmodels</li>
+<li><span class="n">#42</span> MLOps: Versionamento de Modelos, MLflow e Deploy de ML</li>
+</ul>
+<div class="questao" id="q57">
+<span class="num">Q57</span>
+<div class="corpo">
+<p class="titulo">Média, mediana e moda — quando usar mediana</p>
+<p>Qual a diferença entre média, mediana e moda? Em qual situação a mediana é mais representativa do que a média?</p>
+<p class="dica"><strong>Dica:</strong> Pense em distribuições com outliers.</p>
+</div>
+</div>
+<p>Média:   soma / contagem. Sensível a outliers.</p>
+<p>Mediana: valor central ao ordenar. Robusta a outliers.</p>
+<p>Moda:    valor mais frequente. Para dados categóricos.</p>
+<p>A mediana é mais representativa quando há outliers extremos:</p>
+<p>Salários de 10 funcionários: [2k, 2k, 3k, 3k, 3k, 4k, 4k, 5k, 6k, 50k]</p>
+<p>Média = 8.2k — distorcida pelo CEO com 50k</p>
+<p>Mediana = 3.5k — representa melhor a maioria</p>
+<p>Regra prática: se média &gt;&gt; mediana, há outliers acima. Use mediana para comunicar.</p>
+<div class="questao" id="q58">
+<span class="num">Q58</span>
+<div class="corpo">
+<p class="titulo">Bug pandas — SettingWithCopyWarning</p>
+<p>O código abaixo tem um erro clássico de pandas. Identifique e corrija.</p>
+<pre class="codigo"><code>df_alunos = df[df['nota'] &gt;= 6]
+df_alunos['aprovado'] = True  # bug!</code></pre>
+<p class="dica"><strong>Dica:</strong> SettingWithCopyWarning — use .loc para atribuição.</p>
+</div>
+</div>
+<p>O autor queria marcar os aprovados em <code>df</code>, mas <code>df[df["nota"] &gt;= 6]</code> devolve <strong>outro</strong> DataFrame, e a coluna nova vai só para ele. No pandas 3.0, com o <em>Copy-on-Write</em> ligado por padrão, isso é garantido e silencioso: o original nunca muda e não há mais o <code>SettingWithCopyWarning</code> das versões 2.x, que avisava às vezes sim, às vezes não.</p>
+<pre class="codigo"><code>import pandas as pd
+
+df = pd.DataFrame({'nome': ['Ana', 'Bruno', 'Carla'], 'nota': [9.0, 4.5, 7.0]})
+df_alunos = df[df['nota'] &gt;= 6]
+df_alunos['aprovado'] = True
+print('df original tem aprovado?', 'aprovado' in df.columns)</code></pre>
+<pre class="saida"><code>df original tem aprovado? False</code></pre>
+<p>As correções, conforme a intenção:</p>
+<pre class="codigo"><code># marcar no próprio df
+df['aprovado'] = df['nota'] &gt;= 6
+
+# ou, filtrando e atribuindo no original
+df.loc[df['nota'] &gt;= 6, 'aprovado'] = True
+
+# trabalhar só com os aprovados, de propósito
+df_alunos = df[df['nota'] &gt;= 6].copy()
+df_alunos['aprovado'] = True</code></pre>
+<p>Conferido no pandas 3.0.6.</p>
+<div class="questao" id="q59">
+<span class="num">Q59</span>
+<div class="corpo">
+<p class="titulo">Overfitting, underfitting e cross-validation</p>
+<p>Explique overfitting e underfitting. Como cross-validation ajuda a detectar overfitting?</p>
+<p class="dica"><strong>Dica:</strong> Bias-variance tradeoff.</p>
+</div>
+</div>
+<p>Underfitting (alto bias): modelo muito simples, não captura padrões dos dados.</p>
+<p>Sinais: erro alto em treino E em teste.</p>
+<p>Overfitting (alta variância): modelo memoriza o treino, não generaliza.</p>
+<p>Sinais: erro baixo em treino, erro alto em teste.</p>
+<p>Cross-validation (K-Fold) detecta overfitting:</p>
+<p>Divide dados em K partes. Treina em K-1, testa em 1. Repete K vezes.</p>
+<p>Se score_treino &gt;&gt; score_cv_medio → overfitting.</p>
+<p>Diferença de &gt;10% entre treino e validação é sinal de alerta.</p>
+<p>Soluções para overfitting: mais dados, regularização (L1/L2), Dropout (redes), redução de features, simplificar o modelo.</p>
+<div class="questao" id="q60">
+<span class="num">Q60</span>
+<div class="corpo">
+<p class="titulo">TF-IDF vs contagem simples</p>
+<p>O que é TF-IDF? Por que é superior a simples contagem de palavras para classificação de texto?</p>
+<p class="dica"><strong>Dica:</strong> TF=frequência no doc, IDF=raridade no corpus.</p>
+</div>
+</div>
+<p>TF (Term Frequency): frequência de uma palavra em um documento específico.</p>
+<p>IDF (Inverse Document Frequency): log(N/df) — raridade da palavra no corpus.</p>
+<p>TF-IDF = TF × IDF</p>
+<p>Por que é superior à contagem simples:</p>
+<p>Contagem simples: 'de', 'a', 'o' aparecem muito → alto peso → ruído.</p>
+<p>TF-IDF: 'de' aparece em 99% dos docs → IDF ≈ 0 → peso baixo.</p>
+<p>'machine learning' aparece em poucos → IDF alto → peso alto.</p>
+<p>Resultado: palavras realmente discriminativas têm alto TF-IDF.</p>
+<p>Palavras comuns (stopwords) têm TF-IDF próximo de zero naturalmente.</p>
+<div class="questao" id="q61">
+<span class="num">Q61</span>
+<div class="corpo">
+<p class="titulo">Pipeline scikit-learn completo</p>
+<p>Escreva um pipeline scikit-learn completo: StandardScaler + RandomForestClassifier + GridSearchCV para um dataset de classificação.</p>
+<p class="dica"><strong>Dica:</strong> Pipeline([('scaler', ...), ('clf', ...)]) encadeia pré-processamento e modelo.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.datasets import make_classification
+import numpy as np
+
+# Dataset exemplo
+X, y = make_classification(n_samples=1000, n_features=20, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y)
+
+# Pipeline
+pipe = Pipeline([
+    ('scaler', StandardScaler()),
+    ('clf',    RandomForestClassifier(random_state=42))
+])
+
+# Grid de hiperparâmetros — prefixo 'clf__' referencia o passo 'clf'
+param_grid = {
+    'clf__n_estimators': [50, 100, 200],
+    'clf__max_depth':    [None, 5, 10],
+    'clf__min_samples_split': [2, 5],
+}
+
+grid = GridSearchCV(pipe, param_grid, cv=5, scoring='f1', n_jobs=-1)
+grid.fit(X_train, y_train)
+
+print(f'Melhores params: {grid.best_params_}')
+print(f'F1 melhor: {grid.best_score_:.4f}')
+print(f'F1 teste: {grid.score(X_test, y_test):.4f}')</code></pre>
+<div class="questao" id="q62">
+<span class="num">Q62</span>
+<div class="corpo">
+<p class="titulo">Curva ROC, AUC e datasets desbalanceados</p>
+<p>O que é a Curva ROC e o AUC? Por que AUC é melhor que acurácia para datasets desbalanceados?</p>
+<p class="dica"><strong>Dica:</strong> Considera todos os limiares de classificação.</p>
+</div>
+</div>
+<p>Curva ROC: plota TPR (Sensibilidade) vs FPR (1-Especificidade) para todos os limiares.</p>
+<p>AUC (Area Under Curve): probabilidade de o modelo ranquear um positivo acima de um negativo.</p>
+<p>AUC = 1.0 → perfeito | AUC = 0.5 → aleatório | AUC &lt; 0.5 → invertido</p>
+<p>Por que AUC &gt; acurácia em dados desbalanceados:</p>
+<p>Dataset: 95% negativos, 5% positivos.</p>
+<p>Modelo que prevê tudo como negativo: Acurácia = 95% — parece ótimo!</p>
+<p>Recall de positivos = 0% — detecta zero casos relevantes.</p>
+<p>AUC = 0.5 — revela que é um modelo inútil.</p>
+<p>Use F1, Precision, Recall e AUC para avaliação real de modelos desbalanceados.</p>
+<div class="questao" id="q63">
+<span class="num">Q63</span>
+<div class="corpo">
+<p class="titulo">Batch Normalization vs Dropout</p>
+<p>Qual a diferença entre Batch Normalization e Dropout em redes neurais? Quando usar cada um?</p>
+<p class="dica"><strong>Dica:</strong> BN normaliza ativações; Dropout desativa neurônios aleatoriamente.</p>
+</div>
+</div>
+<p>Batch Normalization:</p>
+<p>Normaliza as ativações de cada camada (média=0, desvio=1) por batch.</p>
+<p>Benefício: treino mais estável, permite taxas de aprendizado maiores.</p>
+<p>Use: em redes profundas, depois da camada densa ou convolucional (antes ou depois da ativação; as duas ordens aparecem na prática).</p>
+<p>Dropout:</p>
+<p>Desativa aleatoriamente neurônios durante o treino (taxa 0.2-0.5).</p>
+<p>Benefício: previne overfitting ao evitar co-adaptação de neurônios.</p>
+<p>Use: após camadas densas, especialmente com datasets pequenos.</p>
+<p>Atenção: só ativo durante treino — desabilitado na inferência automaticamente.</p>
+<p>Combinação típica: Dense → BatchNorm → Activation → Dropout</p>
+<div class="questao" id="q64">
+<span class="num">Q64</span>
+<div class="corpo">
+<p class="titulo">Transfer Learning e Fine-tuning</p>
+<p>O que é Transfer Learning? Explique Fine-tuning. Quando faz sentido congelar as camadas da base?</p>
+<p class="dica"><strong>Dica:</strong> Modelos pré-treinados como MobileNet, BERT, GPT-2.</p>
+</div>
+</div>
+<p>Transfer Learning: reusar um modelo pré-treinado em grande dataset (ImageNet, Wikipedia) como extrator de features para um novo problema com poucos dados.</p>
+<p>Congelar camadas base: quando seu dataset é pequeno (&lt;1000 amostras).</p>
+<p>As camadas iniciais aprenderam features genéricas (bordas, texturas) que são universais.</p>
+<p>Apenas treina o cabeçalho de classificação novo.</p>
+<p>Fine-tuning: descongelar as últimas N camadas da base e retreinar com learning rate baixo.</p>
+<p>Faz sentido quando: dataset maior, domínio diferente do pré-treino.</p>
+<p>Cuidado: learning rate muito alto destrói os pesos pré-treinados.</p>
+<p>Típico: lr 10x-100x menor no fine-tuning (ex: 1e-5 vs 1e-3 original).</p>
+<div class="questao" id="q65">
+<span class="num">Q65</span>
+<div class="corpo">
+<p class="titulo">MLflow — 5 coisas rastreadas e Model Registry</p>
+<p>O que é MLflow? Cite 5 coisas que ele rastreia automaticamente. O que é o Model Registry?</p>
+<p class="dica"><strong>Dica:</strong> Experimentos, parâmetros, métricas, artefatos, modelos.</p>
+</div>
+</div>
+<p>5 coisas que o MLflow rastreia:</p>
+<p>1. Parâmetros — hiperparâmetros do modelo (n_estimators, learning_rate)</p>
+<p>2. Métricas — acurácia, F1, AUC ao longo do treino</p>
+<p>3. Artefatos — arquivos (modelos .pkl, gráficos, datasets)</p>
+<p>4. Código — hash do commit Git (se configurado)</p>
+<p>5. Ambiente — versão do Python, dependências (requirements.txt)</p>
+<p>Model Registry: sistema de versionamento e ciclo de vida de modelos.</p>
+<p>Cada modelo registrado ganha versões numeradas, e <strong>aliases</strong> apontam para a versão em uso (<code>@champion</code>, <code>@challenger</code>): promover é mover o alias, e o código de produção carrega <code>models:/nome@champion</code>. Os antigos estágios fixos (Staging, Production, Archived) foram descontinuados no MLflow 2.9 em favor dos aliases.</p>
+<p>Permite comparar múltiplos experimentos e promover o melhor de forma controlada.</p>
+<div class="questao desafio" id="q66">
+<span class="num">Q66</span>
+<div class="corpo">
+<p class="titulo">★ Pipeline de análise de sentimentos</p>
+<p>Crie um pipeline completo de análise de sentimentos: (1) escreva 20 reviews de produtos, metade positivas e metade negativas; (2) pré-processe o texto (minúsculas, sem acentos, sem pontuação e sem <em>stopwords</em>); (3) vetorize com TF-IDF; (4) treine uma regressão logística; (5) avalie com F1 e matriz de confusão. O que o resultado diz sobre o tamanho do conjunto de dados?</p>
+</div>
+</div>
+<pre class="codigo"><code>import re
+import unicodedata
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, f1_score
+from sklearn.model_selection import StratifiedKFold, cross_val_predict
+from sklearn.pipeline import Pipeline
+
+reviews = [
+    ("Produto excelente, superou minhas expectativas", 1),
+    ("Ótima qualidade, recomendo muito", 1),
+    ("Chegou rápido e funciona perfeitamente", 1),
+    ("Adorei, vale cada centavo", 1),
+    ("Muito bom, a bateria dura o dia todo", 1),
+    ("Excelente acabamento e fácil de usar", 1),
+    ("Recomendo, atendimento ótimo e entrega rápida", 1),
+    ("Funciona muito bem, estou satisfeito", 1),
+    ("Bom custo-benefício, gostei bastante", 1),
+    ("Perfeito, exatamente como na descrição", 1),
+    ("Péssimo produto, não funciona", 0),
+    ("Muito ruim, decepcionante", 0),
+    ("Não recomendo, veio com defeito", 0),
+    ("Parou de funcionar em uma semana", 0),
+    ("Qualidade horrível, quebrou no primeiro uso", 0),
+    ("Entrega atrasada e produto ruim", 0),
+    ("Não vale o preço, muito fraco", 0),
+    ("Defeituoso, pedi reembolso", 0),
+    ("A bateria não dura nada, péssimo", 0),
+    ("Diferente da descrição, decepcionado", 0),
+]
+
+STOPWORDS = {"a", "o", "e", "de", "do", "da", "em", "no", "na", "um", "uma", "com", "minhas", "cada"}
+
+
+def preprocessar(texto: str) -&gt; str:
+    """Minúsculas, sem acentos nem pontuação e sem stopwords."""
+    sem_acento = unicodedata.normalize("NFKD", texto.lower()).encode("ascii", "ignore").decode()
+    palavras = re.findall(r"[a-z]+", sem_acento)
+    return " ".join(p for p in palavras if p not in STOPWORDS)
+
+
+textos, rotulos = zip(*reviews)
+
+modelo = Pipeline([
+    ("tfidf", TfidfVectorizer(preprocessor=preprocessar, ngram_range=(1, 2), sublinear_tf=True)),
+    ("clf", LogisticRegression(max_iter=1000)),
+])
+
+# Com 20 exemplos, um único corte treino/teste deixa 6 no teste e o resultado é sorte.
+# A validação cruzada prevê cada review com um modelo que não a viu no treino.
+folds = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+previsto = cross_val_predict(modelo, textos, rotulos, cv=folds)
+
+print(f"F1: {f1_score(rotulos, previsto):.2f}")
+print("Matriz de confusão (linhas = real neg/pos, colunas = previsto neg/pos):")
+print(confusion_matrix(rotulos, previsto))
+
+modelo.fit(textos, rotulos)  # o modelo final usa todos os dados
+print(modelo.predict(["Não funciona, péssimo", "Ótimo, recomendo"]))</code></pre>
+<pre class="saida"><code>F1: 0.42
+Matriz de confusão (linhas = real neg/pos, colunas = previsto neg/pos):
+[[5 5]
+ [6 4]]
+[0 1]</code></pre>
+<p>O F1 de 0,42 é o resultado real, e é a lição do desafio: com 20 frases o modelo quase não tem de onde aprender e fica perto de um chute. Com tão poucos exemplos, um único corte treino/teste deixaria 6 no teste e o número dependeria da sorte do sorteio, por isso a validação cruzada estratificada, que prevê cada review com um modelo que não a viu. O pipeline em si está pronto para crescer: com algumas centenas de reviews reais, o mesmo código passa a dar resultados úteis. Para as stopwords, a lista do NLTK (<code>nltk.corpus.stopwords.words("portuguese")</code>) é mais completa que a feita à mão.</p>
+</section>
+<section class="modulo" id="modulo-8">
+<h2><span class="rotulo">MÓDULO 8</span> Testes, Qualidade e Boas Práticas</h2>
+<p class="aulas-titulo">Artigos 43 a 47</p>
+<ul class="aulas">
+<li><span class="n">#43</span> Testes com pytest: fixtures, mocks e cobertura</li>
+<li><span class="n">#44</span> Qualidade de Código: linting, type hints e mypy</li>
+<li><span class="n">#45</span> CI/CD com GitHub Actions</li>
+<li><span class="n">#46</span> Logging, Monitoramento e Observabilidade</li>
+<li><span class="n">#47</span> Design Patterns em Python</li>
+</ul>
+<div class="questao" id="q67">
+<span class="num">Q67</span>
+<div class="corpo">
+<p class="titulo">Padrão AAA e teste de calcular_media() com lista vazia</p>
+<p>O que é o padrão AAA em testes? Escreva um teste pytest para a função calcular_media() que testa o caso de lista vazia.</p>
+<p class="dica"><strong>Dica:</strong> Arrange / Act / Assert.</p>
+</div>
+</div>
+
+<pre class="codigo"><code># src/calculadora.py
+def calcular_media(notas: list[float]) -&gt; float:
+    if not notas:
+        raise ValueError('A lista nao pode ser vazia.')
+    return sum(notas) / len(notas)
+
+# tests/test_calculadora.py
+import pytest
+from calculadora import calcular_media
+
+def test_media_lista_vazia_levanta_value_error():
+    # ARRANGE
+    lista_vazia = []
+
+    # ACT + ASSERT — captura a exceção esperada
+    with pytest.raises(ValueError, match='nao pode ser vazia'):
+        calcular_media(lista_vazia)
+
+def test_media_valores_normais():
+    # ARRANGE
+    notas = [7.0, 8.5, 9.0, 6.5]
+
+    # ACT
+    resultado = calcular_media(notas)
+
+    # ASSERT
+    assert resultado == pytest.approx(7.75)  # approx para float</code></pre>
+<div class="questao" id="q68">
+<span class="num">Q68</span>
+<div class="corpo">
+<p class="titulo">Fixtures pytest — escopo function vs session</p>
+<p>O que são fixtures no pytest? Qual a diferença de escopo function vs session? Escreva um exemplo.</p>
+<p class="dica"><strong>Dica:</strong> scope='function' recria a cada teste; 'session' cria uma vez.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>import pytest
+
+# scope='function' (padrão) — recria para CADA teste
+@pytest.fixture
+def banco_em_memoria():
+    db = {}  # fresco a cada teste
+    yield db
+    db.clear()  # cleanup
+
+# scope='session' — cria UMA VEZ para toda a sessão de testes
+@pytest.fixture(scope='session')
+def conexao_db_real():
+    conn = conectar_banco_teste()
+    yield conn
+    conn.close()  # fecha ao final de todos os testes
+
+# scope='module' — uma vez por arquivo de teste
+@pytest.fixture(scope='module')
+def dados_compartilhados():
+    return carregar_dataset_grande()
+
+# Usando fixtures
+def test_salvar(banco_em_memoria):
+    banco_em_memoria['a'] = 1
+    assert 'a' in banco_em_memoria
+
+def test_banco_limpo(banco_em_memoria):
+    assert len(banco_em_memoria) == 0  # sempre limpo!</code></pre>
+<div class="questao" id="q69">
+<span class="num">Q69</span>
+<div class="corpo">
+<p class="titulo">Teste com Mock — simular envio de e-mail</p>
+<p>O que é Mock? Escreva um teste que usa mocker.patch para simular o envio de e-mail em uma função de cadastro.</p>
+<p class="dica"><strong>Dica:</strong> Isola dependências externas dos testes unitários.</p>
+</div>
+</div>
+
+<pre class="codigo"><code># src/servico.py
+def cadastrar_usuario(nome, email, notificador):
+    usuario = {'id': 1, 'nome': nome, 'email': email}
+    notificador.enviar(email, f'Bem-vindo, {nome}!')
+    return usuario
+
+# tests/test_servico.py
+def test_cadastro_envia_email_boas_vindas(mocker):
+    # ARRANGE — cria mock do notificador
+    mock_notif = mocker.MagicMock()
+    mock_notif.enviar.return_value = True
+
+    # ACT
+    usuario = cadastrar_usuario('Ana', 'ana@email.com', mock_notif)
+
+    # ASSERT — verifica que foi chamado com args corretos
+    mock_notif.enviar.assert_called_once_with(
+        'ana@email.com',
+        'Bem-vindo, Ana!'
+    )
+    assert usuario['nome'] == 'Ana'
+
+# Mockando função externa com mocker.patch
+def test_com_patch(mocker):
+    mock_smtp = mocker.patch('smtplib.SMTP')  # substitui a classe real
+    # ... testa sem abrir conexão real</code></pre>
+<div class="questao" id="q70">
+<span class="num">Q70</span>
+<div class="corpo">
+<p class="titulo">5 type hints modernos Python 3.10+</p>
+<p>Escreva 5 type hints diferentes usando recursos modernos do Python 3.10+: union com |, list[] sem List, dict[] sem Dict.</p>
+<p class="dica"><strong>Dica:</strong> from __future__ import annotations pode ajudar.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>from __future__ import annotations  # habilita nova sintaxe em 3.9
+
+# 1. Union com | (Python 3.10+) — em vez de Union[str, int]
+def converter(valor: int | str | None) -&gt; float:
+    return float(valor or 0)
+
+# 2. list[] sem List (Python 3.9+)
+def processar(nomes: list[str]) -&gt; list[int]:
+    return [len(n) for n in nomes]
+
+# 3. dict[] sem Dict
+def mapear(config: dict[str, int | bool]) -&gt; dict[str, str]:
+    return {k: str(v) for k, v in config.items()}
+
+# 4. tuple[] para tuplas tipadas
+def coordenada() -&gt; tuple[float, float]:
+    return (1.0, 2.0)
+
+# 5. Callable tipado
+from collections.abc import Callable
+
+def aplicar(func: Callable[[int, int], int], a: int, b: int) -&gt; int:
+    return func(a, b)</code></pre>
+<div class="questao" id="q71">
+<span class="num">Q71</span>
+<div class="corpo">
+<p class="titulo">Ruff, black, mypy, bandit — o que cada um detecta</p>
+<p>O que detecta cada ferramenta: ruff, black, mypy e bandit? Qual a ordem recomendada para rodar em um pipeline CI?</p>
+<p class="dica"><strong>Dica:</strong> Linting, formatação, tipos, segurança.</p>
+</div>
+</div>
+<p>ruff:   linter rápido em Rust — detecta erros de estilo, imports não usados, variáveis não utilizadas, código simplificável, anti-patterns.</p>
+<p>black:  formatador — impõe um estilo único (indentação, aspas, espaçamento), com quase nenhuma opção: acaba com os debates de estilo na equipe. Hoje o <code>ruff format</code> faz o mesmo, compatível com o black, e muitos projetos usam só o ruff.</p>
+<p>mypy:   verificador de tipos estático — detecta incompatibilidades de tipo antes da execução. Requer type hints no código.</p>
+<p>bandit: analisador de segurança — detecta SQL Injection, senhas hardcoded, uso de módulos inseguros (pickle de fontes externas), HTTPS desabilitado.</p>
+<p>Ordem recomendada no CI, do mais rápido ao mais lento: <code>ruff check</code> → <code>ruff format --check</code> (ou black) → mypy → bandit → pytest. Falhar cedo no que custa segundos poupa minutos de testes.</p>
+<div class="questao" id="q72">
+<span class="num">Q72</span>
+<div class="corpo">
+<p class="titulo">Workflow GitHub Actions — CI completo</p>
+<p>Escreva um workflow GitHub Actions que rode em pull_request: instale dependências, execute ruff, mypy e pytest com cobertura.</p>
+<p class="dica"><strong>Dica:</strong> jobs &gt; steps &gt; run.</p>
+</div>
+</div>
+
+<pre class="codigo"><code># .github/workflows/ci.yml
+name: CI
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  qualidade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      - name: Instalar dependencias
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install ruff mypy pytest pytest-cov
+
+      - name: Ruff (linting)
+        run: ruff check src/ tests/
+
+      - name: mypy (tipos)
+        run: mypy src/ --ignore-missing-imports
+
+      - name: pytest (testes + cobertura)
+        run: |
+          pytest tests/ \
+            --cov=src \
+            --cov-report=term-missing \
+            --cov-fail-under=80 \
+            -v</code></pre>
+<div class="questao" id="q73">
+<span class="num">Q73</span>
+<div class="corpo">
+<p class="titulo">Três pilares da observabilidade e logs JSON</p>
+<p>O que são os três pilares da observabilidade? Qual a diferença entre log estruturado (JSON) e log em texto puro?</p>
+<p class="dica"><strong>Dica:</strong> Logs, métricas e traces.</p>
+</div>
+</div>
+<p>Os três pilares:</p>
+<p>1. Logs: eventos discretos — o que aconteceu e quando.</p>
+<p>2. Métricas: valores numéricos ao longo do tempo — contadores, histogramas.</p>
+<p>3. Traces: rastreamento de uma requisição por múltiplos serviços (distributed tracing).</p>
+<p>Log em texto puro: '2024-03-15 14:30:45 ERROR Failed to connect to DB'</p>
+<p>Pros: legível por humanos. Contras: difícil de filtrar, indexar e parsear.</p>
+<p>Log JSON estruturado:</p>
+<p>{"ts":"2024-03-15T14:30:45Z","nivel":"ERROR","msg":"Failed to connect","host":"db01","ms":150}</p>
+<p>Pros: facilmente indexável (Elasticsearch, Loki), filtros precisos, correlação de campos.</p>
+<p>Contras: menos legível diretamente no terminal.</p>
+<p>Para produção, sempre use logs JSON. Use jq no terminal para ler durante debug.</p>
+<div class="questao desafio" id="q74">
+<span class="num">Q74</span>
+<div class="corpo">
+<p class="titulo">★ Strategy + Observer + Command para pedidos</p>
+<p>Implemente os padrões Strategy, Observer e Command em um sistema de processamento de pedidos: Strategy para cálculo de frete, Observer para notificações, Command para histórico com undo.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>from abc import ABC, abstractmethod
+from typing import Protocol
+from collections import deque
+
+# STRATEGY — calcular frete
+class CalculadorFrete(Protocol):
+    def calcular(self, peso_kg: float, destino: str) -&gt; float: ...
+
+class FreteGratis:
+    def calcular(self, peso, destino): return 0.0
+
+class FretePAC:
+    def calcular(self, peso, destino): return peso * 5.5
+
+class FreteSEDEX:
+    def calcular(self, peso, destino): return peso * 12.0 + 15.0
+
+# OBSERVER — notificações
+class ObservadorPedido(ABC):
+    @abstractmethod
+    def on_evento(self, pedido: dict, evento: str): ...
+
+class NotificaEmail(ObservadorPedido):
+    def on_evento(self, pedido, evento):
+        print(f'[Email] Pedido {pedido["id"]}: {evento}')
+
+# COMMAND — com undo
+class ComandoConfirmarPedido:
+    def __init__(self, pedido, calculador):
+        self.pedido = pedido
+        self.calc   = calculador
+        self._frete_anterior = None
+
+    def executar(self):
+        self._frete_anterior = self.pedido.get('frete')
+        self.pedido['frete'] = self.calc.calcular(self.pedido['peso'], self.pedido['destino'])
+        self.pedido['status'] = 'confirmado'
+
+    def desfazer(self):
+        self.pedido['frete']  = self._frete_anterior
+        self.pedido['status'] = 'pendente'</code></pre>
+</section>
+<section class="modulo" id="modulo-9">
+<h2><span class="rotulo">MÓDULO 9</span> Projetos Reais e Carreira</h2>
+<p class="aulas-titulo">Artigos 48 a 52</p>
+<ul class="aulas">
+<li><span class="n">#48</span> Projeto 1: API REST Completa com FastAPI, PostgreSQL e Docker</li>
+<li><span class="n">#49</span> Projeto 2: Pipeline de Data Science do Zero ao Deploy</li>
+<li><span class="n">#50</span> Projeto 3: Bot de Automação com Scraping e Notificações</li>
+<li><span class="n">#51</span> Projeto 4: Dashboard Analítico com Dash e Banco de Dados Real</li>
+<li><span class="n">#52</span> Carreira: portfólio, GitHub, open source e o mercado Python</li>
+</ul>
+<div class="questao" id="q75">
+<span class="num">Q75</span>
+<div class="corpo">
+<p class="titulo">Arquitetura API e-commerce</p>
+<p>Projete a arquitetura de uma API REST de e-commerce: entidades, endpoints principais, autenticação e banco de dados.</p>
+<p class="dica"><strong>Dica:</strong> Pense em Produto, Carrinho, Pedido, Usuário.</p>
+</div>
+</div>
+<p>Entidades principais:</p>
+<p>Produto(id, nome, preco, estoque, categoria_id, imagens[])</p>
+<p>Usuario(id, nome, email, senha_hash, endereco[])</p>
+<p>Carrinho(id, usuario_id, itens[], criado_em)</p>
+<p>ItemCarrinho(carrinho_id, produto_id, quantidade, preco_snapshot)</p>
+<p>Pedido(id, usuario_id, status, total, frete, criado_em)</p>
+<p>ItemPedido(pedido_id, produto_id, quantidade, preco)</p>
+<p>Endpoints principais:</p>
+<p>GET    /produtos?categoria=&amp;preco_min=&amp;preco_max=&amp;page=</p>
+<p>POST   /carrinho/itens → adicionar ao carrinho</p>
+<p>DELETE /carrinho/itens/{id} → remover do carrinho</p>
+<p>POST   /pedidos → finalizar compra (cria pedido do carrinho)</p>
+<p>GET    /pedidos/{id} → status do pedido</p>
+<p>POST   /pedidos/{id}/pagamento → processar pagamento</p>
+<p>Autenticação: JWT Bearer. Admin: papel separado com RBAC.</p>
+<p>Banco: PostgreSQL (transações ACID para estoque e pedidos).</p>
+<p>Cache: Redis para sessões de carrinho e produtos populares.</p>
+<div class="questao" id="q76">
+<span class="num">Q76</span>
+<div class="corpo">
+<p class="titulo">Padrão Repository vs DAO</p>
+<p>O que é o padrão Repository e por que ele facilita testes? Qual a diferença entre Repository e DAO?</p>
+<p class="dica"><strong>Dica:</strong> Repository fala a linguagem do domínio; DAO fala SQL.</p>
+</div>
+</div>
+<p>DAO (Data Access Object): abstrai o banco de dados, fala SQL/ORM diretamente.</p>
+<p>Métodos: buscarPorId(), inserir(), atualizar(), deletar()</p>
+<p>Foco: operações de persistência.</p>
+<p>Repository: fala a linguagem do domínio de negócio.</p>
+<p>Métodos: buscar_alunos_aprovados(), encontrar_por_turma_com_media()</p>
+<p>Foco: conceitos do negócio, não da persistência.</p>
+<p>Por que facilita testes:</p>
+<p>Repository é uma interface (Protocol). Em testes, você injeta RepositorioMemoria.</p>
+<p>O serviço de negócio não sabe se está falando com PostgreSQL ou lista em memória.</p>
+<p>Isso permite testes unitários rápidos sem banco de dados real.</p>
+<p>Service → Repository (interface) ← RepositorioPostgres / RepositorioMemoria (teste)</p>
+<div class="questao" id="q77">
+<span class="num">Q77</span>
+<div class="corpo">
+<p class="titulo">README.md profissional para 'task-api'</p>
+<p>Escreva um README.md profissional para um projeto fictício 'task-api'. Inclua badges, instalação, uso e arquitetura.</p>
+<p class="dica"><strong>Dica:</strong> Siga a estrutura do artigo 52: badges, demo, quick start, arquitetura.</p>
+</div>
+</div>
+
+<pre class="codigo"><code># task-api
+
+API REST para gerenciamento de tarefas pessoais.
+
+[![CI](https://github.com/usuario/task-api/actions/workflows/ci.yml/badge.svg)]
+[![Coverage](https://codecov.io/gh/usuario/task-api/badge.svg)]
+[![Python 3.12](https://img.shields.io/badge/python-3.12-blue)]
+
+## Demo
+&gt; API ao vivo: https://task-api.onrender.com/docs
+
+## Funcionalidades
+- CRUD de tarefas com prioridade e prazo
+- Autenticacao JWT, categorias por usuario
+- Filtros, paginacao e ordenacao
+
+## Inicio Rapido
+```bash
+git clone https://github.com/usuario/task-api
+cd task-api &amp;&amp; cp .env.example .env
+docker compose up -d
+# Acesse: http://localhost:8000/docs
+```
+
+## Tecnologias
+FastAPI 0.104 | PostgreSQL 16 | Docker | pytest
+
+## Arquitetura
+app/ routers/ services/ repositories/ schemas/ models/
+
+## Decisoes Tecnicas
+- FastAPI: documentacao automatica + async nativo
+- Repository Pattern: desacopla servico do banco
+- Soft delete: tarefas deletadas ficam arquivadas</code></pre>
+<div class="questao" id="q78">
+<span class="num">Q78</span>
+<div class="corpo">
+<p class="titulo">5 perguntas técnicas comuns em entrevistas Python</p>
+<p>Quais são as 5 perguntas técnicas mais comuns em entrevistas Python? Responda cada uma em 2-3 frases.</p>
+<p class="dica"><strong>Dica:</strong> GIL, mutabilidade, decoradores, generators, *args/**kwargs.</p>
+</div>
+</div>
+<p>1. O que é o GIL?</p>
+<p>Global Interpreter Lock — mutex que garante que apenas uma thread execute bytecode por vez.</p>
+<p>Para I/O-bound: threads funcionam bem (GIL liberado durante I/O).</p>
+<p>Para CPU-bound: use multiprocessing. Desde o Python 3.13 existe um build opcional sem GIL (<em>free-threaded</em>, PEP 703), oficialmente suportado a partir do 3.14.</p>
+<p>2. Qual a diferença entre lista e tupla?</p>
+<p>Lista: mutável, pode adicionar/remover. Tupla: imutável, pode ser chave de dict.</p>
+<p>3. O que é um decorador?</p>
+<p>Função que recebe outra função e retorna uma nova com comportamento adicional.</p>
+<p>Açúcar sintático para: funcao = decorador(funcao).</p>
+<p>4. O que é um generator?</p>
+<p>Função que usa yield. Gera valores sob demanda (lazy): guarda só o estado atual, não a sequência inteira.</p>
+<p>vs list comprehension que cria tudo em memória de uma vez.</p>
+<p>5. *args vs **kwargs?</p>
+<p>*args: tupla de argumentos posicionais extras.</p>
+<p>**kwargs: dicionário de argumentos nomeados extras.</p>
+<p>Ordem: def f(normal, *args, keyword_only, **kwargs).</p>
+<div class="questao" id="q79">
+<span class="num">Q79</span>
+<div class="corpo">
+<p class="titulo">Two Sum em O(n) com hash map</p>
+<p>Implemente o algoritmo Two Sum em Python com complexidade O(n) usando hash map. Explique a solução.</p>
+<p class="dica"><strong>Dica:</strong> Para cada número, verifique se o complemento já foi visto.</p>
+</div>
+</div>
+
+<pre class="codigo"><code>def two_sum(nums: list[int], target: int) -&gt; list[int]:
+    """
+    Para cada numero, verificamos se seu COMPLEMENTO (target - num)
+    ja foi visto anteriormente. Se sim, encontramos o par.
+
+    Complexidade: O(n) tempo, O(n) espaco.
+    vs O(n^2) da abordagem de forca bruta com dois loops.
+    """
+    visto: dict[int, int] = {}  # {valor: indice}
+
+    for i, num in enumerate(nums):
+        complemento = target - num
+        if complemento in visto:
+            return [visto[complemento], i]
+        visto[num] = i
+
+    return []  # nenhum par encontrado
+
+# Testes
+print(two_sum([2, 7, 11, 15], 9))   # [0, 1] — 2+7=9
+print(two_sum([3, 2, 4], 6))        # [1, 2] — 2+4=6
+print(two_sum([3, 3], 6))           # [0, 1]
+print(two_sum([1, 2, 3], 10))       # [] — nenhum par</code></pre>
+<div class="questao desafio" id="q80">
+<span class="num">Q80</span>
+<div class="corpo">
+<p class="titulo">★ DESAFIO FINAL — TODO API completa</p>
+<p></p>
+<ol><li>FastAPI com CRUD completo (Criar, Listar, Atualizar, Deletar tarefas)</li><li>PostgreSQL via SQLAlchemy com migrations Alembic</li><li>Autenticação JWT (registro, login, refresh token)</li><li>Testes com pytest cobrindo todos os endpoints (mínimo 80%)</li><li>Dockerfile + docker-compose com PostgreSQL</li><li>GitHub Actions executando lint + testes a cada push</li><li>README.md profissional com instruções de instalação e uso</li></ol>
+<p>Projete e implemente um sistema completo de gestão de tarefas (TODO API) com:</p>
+<p><strong>Este é o exercício que vai para o seu portfólio.</strong></p>
+</div>
+</div>
+<p>Estrutura recomendada:</p>
+<p>app/</p>
+<p>main.py           → FastAPI app, lifespan, middleware</p>
+<p>config.py         → pydantic-settings</p>
+<p>database.py       → engine, Session, Base</p>
+<p>models/tarefa.py  → ORM: Tarefa(id, titulo, desc, prioridade, prazo, concluida, usuario_id)</p>
+<p>schemas/tarefa.py → TarefaCriar, TarefaAtualizar, TarefaResposta</p>
+<p>routers/tarefas.py→ GET/POST/PATCH/DELETE /tarefas</p>
+<p>routers/auth.py   → POST /auth/login, POST /auth/register, POST /auth/refresh</p>
+<p>dependencies.py   → get_db(), usuario_atual(), usuario_admin()</p>
+<p>Endpoints mínimos:</p>
+<p>POST /auth/register → cria usuário, retorna token</p>
+<p>POST /auth/login    → autentica, retorna access + refresh token</p>
+<p>POST /auth/refresh  → renova access token via refresh</p>
+<p>GET  /tarefas       → lista do usuário autenticado (paginação + filtros)</p>
+<p>POST /tarefas       → cria tarefa</p>
+<p>GET  /tarefas/{id}  → busca tarefa do usuário</p>
+<p>PATCH /tarefas/{id} → atualiza campos</p>
+<p>DELETE /tarefas/{id}→ remove (soft delete)</p>
+<p>Testes mínimos (80%+):</p>
+<p>test_auth.py: register, login, token inválido, token expirado test_tarefas.py: CRUD completo, acesso negado a tarefas de outro usuário</p>
+<p>Este projeto demonstra: FastAPI, PostgreSQL, Alembic, JWT, pytest, Docker, CI/CD.</p>
+<p>É suficiente para uma candidatura júnior/pleno com Python backend.</p>
+</section>
+<section class="modulo" id="desafios">
+<h2><span class="rotulo">PARA IR ALÉM</span> Desafios integradores</h2>
+<p class="intro">Projetos maiores, que juntam vários módulos. Não há uma única resposta certa: o gabarito mostra um caminho.</p>
+<div class="questao desafio" id="d1">
+<span class="num">D1</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora, duas interfaces</p>
+<p>Escreva uma calculadora com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada. Ela deve: (a) fazer as contas com <code>decimal.Decimal</code>, para que <code>0,1 + 0,2</code> dê exatamente <code>0,3</code>, aceitando vírgula ou ponto e limitando o resultado a 16 dígitos significativos; (b) guardar o último resultado em <code>ans</code>, que pode ser usado na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário e texto que não é número com uma exceção própria e uma mensagem clara, <strong>sem encerrar o programa</strong>. Escreva o núcleo num módulo que não sabe nada de entrada e saída, e reaproveite-o em duas interfaces: uma de <strong>terminal</strong> (com os comandos <code>hist</code> e <code>sair</code>) e uma <strong>gráfica</strong> com <code>tkinter</code>, com teclado na tela, visor e histórico.</p>
+</div>
+</div>
+<p><em><strong>Caminho da solução</strong></em></p>
+<ul><li><strong>Núcleo</strong>: <code>calculadora.py</code> tem a classe <code>Calculadora</code> e a exceção <code>ErroDeConta</code>. O <code>match</code> separa as duas formas da entrada (<code>["raiz", a]</code> e <code>[a, op, b]</code>) e escolhe a operação; o <code>localcontext</code> limita a precisão a 16 dígitos só dentro da conta, sem mexer no resto do programa.</li><li><strong>Erros</strong>: tudo o que o usuário pode errar vira <code>ErroDeConta</code>. O <code>Decimal</code> aceita <code>"nan"</code> e <code>"inf"</code> como números; a calculadora recusa os dois.</li><li><strong>Interfaces</strong>: o terminal lê com <code>input()</code> e trata o <code>EOFError</code> (Ctrl+D); a janela tkinter monta o mesmo texto ("12,5 + 3") com os botões e chama o mesmo <code>avaliar</code>. Nenhuma regra de conta aparece fora do núcleo.</li></ul>
+<p><code>calculadora.py</code>, o núcleo:</p>
+<pre class="codigo"><code>"""O núcleo da calculadora: não sabe nada de terminal nem de janela."""
+from decimal import Decimal, InvalidOperation, localcontext
+
+PRECISAO = 16  # dígitos significativos, como no visor de uma calculadora
+
+
+class ErroDeConta(Exception):
+    """Conta impossível ou mal escrita; a interface mostra a mensagem e segue."""
+
+
+class Calculadora:
+    def __init__(self) -&gt; None:
+        self.ans = Decimal(0)  # o último resultado
+
+    def avaliar(self, linha: str) -&gt; Decimal:
+        """Resolve "12,5 + 3", "2 ^ 10", "15 % 200" ou "raiz 2"; "ans" é o último resultado."""
+        with localcontext() as ctx:
+            ctx.prec = PRECISAO
+            match linha.split():
+                case ["raiz", a]:
+                    resultado = self._raiz(self._numero(a))
+                case [a, op, b]:
+                    resultado = self._calcular(op, self._numero(a), self._numero(b))
+                case _:
+                    raise ErroDeConta("use: número operação número, ou raiz número")
+            resultado = +resultado  # o + unário aplica a precisão do contexto
+        self.ans = resultado
+        return resultado
+
+    def _calcular(self, op: str, a: Decimal, b: Decimal) -&gt; Decimal:
+        match op:
+            case "+":
+                return a + b
+            case "-":
+                return a - b
+            case "*":
+                return a * b
+            case "/":
+                if b == 0:
+                    raise ErroDeConta("divisão por zero")
+                return a / b
+            case "%":  # "15 % 200" = 15% de 200
+                return a * b / 100
+            case "^":
+                if b != b.to_integral_value() or abs(b) &gt; 999:
+                    raise ErroDeConta("o expoente precisa ser inteiro, de -999 a 999")
+                if a == 0 and b &lt; 0:
+                    raise ErroDeConta("divisão por zero")
+                return a ** int(b)
+        raise ErroDeConta(f"operação desconhecida: {op}")
+
+    @staticmethod
+    def _raiz(a: Decimal) -&gt; Decimal:
+        if a &lt; 0:
+            raise ErroDeConta("raiz de número negativo")
+        return a.sqrt()
+
+    def _numero(self, texto: str) -&gt; Decimal:
+        if texto == "ans":
+            return self.ans
+        try:
+            valor = Decimal(texto.replace(",", "."))
+        except InvalidOperation:
+            raise ErroDeConta(f"não é um número: {texto}") from None
+        if not valor.is_finite():  # Decimal aceita "nan" e "inf", a calculadora não
+            raise ErroDeConta(f"não é um número: {texto}")
+        return valor
+
+
+def formatar(valor: Decimal) -&gt; str:
+    """Sem zeros à direita, com vírgula decimal e notação científica só para números enormes."""
+    v = valor.normalize()
+    texto = f"{v:E}" if v.adjusted() &gt;= PRECISAO else f"{v:f}"
+    return texto.replace(".", ",")</code></pre>
+<p><code>calculadora_terminal.py</code>:</p>
+<pre class="codigo"><code>from calculadora import Calculadora, ErroDeConta, formatar
+
+
+def main() -&gt; None:
+    calc = Calculadora()
+    historico: list[str] = []
+    print("Calculadora: + - * / ^ % raiz  |  ans, hist, sair")
+    while True:
+        try:
+            linha = input("&gt; ").strip()
+        except EOFError:  # fim da entrada (Ctrl+D)
+            break
+        match linha:
+            case "":
+                continue
+            case "sair":
+                break
+            case "hist":
+                print(*historico, sep="\n")
+                continue
+        try:
+            conta = f"{linha} = {formatar(calc.avaliar(linha))}"
+        except ErroDeConta as e:
+            print(f"erro: {e}")  # a conta errada não derruba o programa
+            continue
+        historico.append(conta)
+        print(conta)
+
+
+if __name__ == "__main__":
+    main()</code></pre>
+<p>Com a entrada redirecionada, o terminal não ecoa o que foi digitado e cada resultado aparece logo depois do <code>&gt;</code>:</p>
+<pre class="codigo"><code>printf '0,1 + 0,2\n10 / 3\nans * 3\n1 / 0\n2 ^ 100\nraiz 2\nans * ans\n15 %% 200\n2 ^ 0,5\nraiz -4\nabc + 1\nnan + 1\nhist\nsair\n' | python3 calculadora_terminal.py</code></pre>
+<pre class="saida"><code>Calculadora: + - * / ^ % raiz  |  ans, hist, sair
+&gt; 0,1 + 0,2 = 0,3
+&gt; 10 / 3 = 3,333333333333333
+&gt; ans * 3 = 9,999999999999999
+&gt; erro: divisão por zero
+&gt; 2 ^ 100 = 1,267650600228229E+30
+&gt; raiz 2 = 1,414213562373095
+&gt; ans * ans = 2
+&gt; 15 % 200 = 30
+&gt; erro: o expoente precisa ser inteiro, de -999 a 999
+&gt; erro: raiz de número negativo
+&gt; erro: não é um número: abc
+&gt; erro: não é um número: nan
+&gt; 0,1 + 0,2 = 0,3
+10 / 3 = 3,333333333333333
+ans * 3 = 9,999999999999999
+2 ^ 100 = 1,267650600228229E+30
+raiz 2 = 1,414213562373095
+ans * ans = 2
+15 % 200 = 30
+&gt;</code></pre>
+<p>Repare em <code>10 / 3</code> seguido de <code>ans * 3</code>: o resultado é <code>9,999999999999999</code>, e não <code>10</code>, porque <code>ans</code> guardou a dízima cortada em 16 dígitos. Para manter a conta exata, troque <code>Decimal</code> por <code>fractions.Fraction</code> no núcleo e arredonde só na hora de mostrar: <code>10 / 3</code> vira a fração 10/3, e <code>ans * 3</code> volta a 10.</p>
+<p><code>calculadora_tk.py</code>, a versão gráfica (o <code>tkinter</code> vem com o Python; em algumas distribuições Linux é o pacote <code>python3-tk</code>):</p>
+<pre class="codigo"><code>import tkinter as tk
+
+from calculadora import Calculadora, ErroDeConta, formatar
+
+# Cada botão só escreve no visor; quem entende a conta é o Calculadora.avaliar.
+TECLAS = [
+    ["7", "8", "9", " / ", "C"],
+    ["4", "5", "6", " * ", "raiz "],
+    ["1", "2", "3", " - ", " ^ "],
+    ["0", ",", "ans", " + ", " % "],
+]
+
+
+class Janela(tk.Tk):
+    def __init__(self) -&gt; None:
+        super().__init__()
+        self.title("Calculadora")
+        self.calc = Calculadora()  # o mesmo núcleo do terminal
+        self.visor = tk.Entry(self, font=("TkDefaultFont", 18), justify="right")
+        self.visor.grid(row=0, column=0, columnspan=5, sticky="ew", padx=8, pady=(8, 2))
+        self.visor.bind("&lt;Return&gt;", lambda _: self.calcular())
+        self.erro = tk.Label(self, fg="firebrick", anchor="w")
+        self.erro.grid(row=1, column=0, columnspan=5, sticky="ew", padx=8)
+        for lin, linha in enumerate(TECLAS, start=2):
+            for col, tecla in enumerate(linha):
+                tk.Button(self, text=tecla.strip(), width=5, height=2,
+                          command=lambda t=tecla: self.tecla(t)).grid(row=lin, column=col, padx=2, pady=2)
+        tk.Button(self, text="=", command=self.calcular).grid(
+            row=6, column=0, columnspan=5, sticky="ew", padx=8, pady=4)
+        self.historico = tk.Listbox(self, height=6)
+        self.historico.grid(row=7, column=0, columnspan=5, sticky="ew", padx=8, pady=(0, 8))
+        self.visor.focus()
+
+    def tecla(self, t: str) -&gt; None:
+        if t == "C":
+            self.visor.delete(0, tk.END)
+        else:
+            self.visor.insert(tk.END, t)
+
+    def calcular(self) -&gt; None:
+        conta = self.visor.get().strip()
+        if not conta:
+            return
+        try:
+            resultado = formatar(self.calc.avaliar(conta))
+        except ErroDeConta as e:
+            self.erro.config(text=f"erro: {e}")  # a janela continua aberta
+            return
+        self.historico.insert(0, f"{conta} = {resultado}")
+        self.visor.delete(0, tk.END)
+        self.visor.insert(0, resultado)  # a próxima conta continua dele
+        self.erro.config(text="")
+
+
+if __name__ == "__main__":
+    Janela().mainloop()</code></pre>
+<figure class="captura"><img src="img/calculadora-tk.png" alt="Janela tkinter da calculadora com o visor mostrando 1 / 0, a mensagem de erro divisão por zero, o teclado de 21 botões e o histórico de quatro contas" width="385" height="433"><figcaption>A janela depois de <code>10 / 3</code>, <code>* 3</code>, <code>2 ^ 100</code>, <code>raiz 2</code> e uma tentativa de <code>1 / 0</code>.</figcaption></figure>
+
+</section>
+<footer class="fim">
+<p><strong>Fim do gabarito.</strong></p>
+<p>Dominando o Python em 1 Ano · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</footer>
+</body>
+</html>

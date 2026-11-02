@@ -1,0 +1,2012 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estudar e realmente Aprender DevOps &amp; Cloud · Caderno de Respostas</title>
+<link rel="stylesheet" href="../caderno.css">
+</head>
+<body class="caderno respostas">
+<header class="capa">
+<p class="serie">ESTUDAR E REALMENTE APRENDER DEVOPS &amp; CLOUD</p>
+<h1>Caderno de Respostas</h1>
+<p class="subtitulo">Gabarito comentado: 66 aulas de prática, do #01 ao #66</p>
+<p class="subtitulo">Linux · Git · Docker · Terraform · Kubernetes · 12 módulos · 73 questões · 2 desafios integradores</p>
+<p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</header>
+<aside class="nota">
+<p><strong>Consulte este gabarito só depois de tentar.</strong></p>
+<p>As respostas são comentadas para ensinar, não só para conferir. Nos exercícios de código existem outras soluções igualmente válidas: o que importa é entender por que a sua funciona e o que ela troca em relação à mostrada aqui.</p>
+<p>Os programas com um quadro verde de <strong>Saída</strong> foram executados com o Bash 5.2, o Git 2.54 e o Python 3.13 no Linux (Debian), e a saída mostrada é a real.</p>
+</aside>
+<h2 class="sumario-titulo">Sumário</h2>
+<table class="sumario">
+<thead><tr><th>Módulo</th><th>Tema</th><th>Aulas</th><th>Questões</th></tr></thead>
+<tbody>
+<tr><td>MÓDULO 1</td><td>Linux e o terminal</td><td>#01–#06</td><td>Q1–Q10</td></tr>
+<tr><td>MÓDULO 2</td><td>Git e colaboração</td><td>#07–#11</td><td>Q11–Q17</td></tr>
+<tr><td>MÓDULO 3</td><td>Containers</td><td>#12–#18</td><td>Q18–Q23</td></tr>
+<tr><td>MÓDULO 4</td><td>CI/CD</td><td>#19–#24</td><td>Q24–Q28</td></tr>
+<tr><td>MÓDULO 5</td><td>Infraestrutura como código</td><td>#25–#30</td><td>Q29–Q35</td></tr>
+<tr><td>MÓDULO 6</td><td>Observabilidade</td><td>#31–#34</td><td>Q36–Q42</td></tr>
+<tr><td>MÓDULO 7</td><td>AWS na prática</td><td>#35–#38</td><td>Q43–Q48</td></tr>
+<tr><td>MÓDULO 8</td><td>Kubernetes</td><td>#39–#41</td><td>Q49–Q54</td></tr>
+<tr><td>MÓDULO 9</td><td>Segurança, custos, resiliência e cultura</td><td>#42–#47</td><td>Q55–Q61</td></tr>
+<tr><td>MÓDULO 10</td><td>Capstone: o sistema completo</td><td>#48–#52</td><td>Q62–Q64</td></tr>
+<tr><td>MÓDULO 11</td><td>Outras nuvens e plataformas</td><td>#53–#60</td><td>Q65–Q68</td></tr>
+<tr><td>MÓDULO 12</td><td>IA em operações e extras</td><td>#61–#66</td><td>Q69–Q73</td></tr>
+<tr><td>DESAFIOS</td><td>Desafios integradores</td><td>todas</td><td>D1–D2</td></tr>
+</tbody>
+</table>
+<section class="modulo" id="modulo-1">
+<h2><span class="rotulo">MÓDULO 1</span> Linux e o terminal</h2>
+<p class="intro">O terminal, o sistema de arquivos, permissões, processos e serviços, shell script e SSH.</p>
+<p class="aulas-titulo">Artigos 01 a 06</p>
+<ul class="aulas">
+<li><span class="n">#01</span> O Terminal Não é o Inimigo</li>
+<li><span class="n">#02</span> Navegando pelo Sistema de Arquivos com Confiança</li>
+<li><span class="n">#03</span> Permissões, Usuários e Grupos no Linux</li>
+<li><span class="n">#04</span> Processos, Serviços e o Comando <code>systemctl</code></li>
+<li><span class="n">#05</span> Shell Script do Zero</li>
+<li><span class="n">#06</span> SSH: Conectando e Gerenciando Servidores Remotos</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q1">
+<span class="num">Q1</span>
+<div class="corpo">
+<p class="titulo">Caminho absoluto e relativo</p>
+<p>Estando em <code>/home/ana/projetos</code>, para onde levam <code>cd ..</code>, <code>cd ../..</code>, <code>cd ~/docs</code>, <code>cd -</code> e <code>cd /var/log</code>? Por que um script agendado no cron deve usar caminhos absolutos?</p>
+</div>
+</div>
+<ul><li><code>cd ..</code>: <code>/home/ana</code> (o diretório pai).</li><li><code>cd ../..</code>: <code>/home</code>.</li><li><code>cd ~/docs</code>: <code>/home/ana/docs</code> (o <code>~</code> é o diretório pessoal do usuário).</li><li><code>cd -</code>: volta ao diretório <strong>anterior</strong>, onde se estava antes do último <code>cd</code>.</li><li><code>cd /var/log</code>: <code>/var/log</code>, porque um caminho que começa com <code>/</code> é absoluto e não depende de onde se está.</li></ul>
+<p>O cron executa os <em>scripts</em> com um diretório de trabalho e um <code>PATH</code> mínimos, diferentes do terminal interativo: um caminho relativo como <code>backups/</code> aponta para outro lugar (normalmente o diretório pessoal do usuário), e comandos fora de <code>/usr/bin</code> e <code>/bin</code> podem nem ser encontrados. Um <em>script</em> agendado usa caminhos absolutos ou começa com <code>cd "$(dirname "$0")"</code>.</p>
+<div class="questao" id="q2">
+<span class="num">Q2</span>
+<div class="corpo">
+<p class="titulo">Lendo permissões</p>
+<p>O que significa <code>-rwxr-x---</code> num arquivo, e qual o equivalente numérico? Por que <code>chmod 777</code> é quase sempre um erro, e o que o bit de execução significa num diretório?</p>
+</div>
+</div>
+<p>O primeiro caractere é o tipo (<code>-</code> arquivo, <code>d</code> diretório, <code>l</code> <em>link</em>). Depois vêm três trios: <strong>dono</strong> <code>rwx</code> (ler, escrever, executar), <strong>grupo</strong> <code>r-x</code> (ler e executar) e <strong>outros</strong> <code>---</code> (nada). Em octal, r=4, w=2 e x=1: <code>750</code>. O <code>chmod 777</code> dá escrita a <strong>qualquer usuário</strong> do sistema: um processo comprometido de outro serviço pode alterar o arquivo, e, se for um <em>script</em> executado por <em>root</em> ou um arquivo servido pelo site, isso vira escalada de privilégio ou <em>defacement</em>. Quase sempre o problema real é de <strong>dono</strong> ou de <strong>grupo</strong>, e se resolve com <code>chown</code> e permissões como <code>755</code> e <code>644</code>. Num diretório, o <code>x</code> é a permissão de <strong>atravessar</strong>: entrar nele e acessar o que há dentro pelo nome; o <code>r</code> só permite listar os nomes.</p>
+<div class="questao" id="q3">
+<span class="num">Q3</span>
+<div class="corpo">
+<p class="titulo">Processos e sinais</p>
+<p>Qual a diferença entre <code>kill PID</code> e <code>kill -9 PID</code>? Por que o primeiro deve ser sempre tentado antes, e o que é um processo zumbi?</p>
+</div>
+</div>
+<p>O <code>kill PID</code> envia o <strong>SIGTERM</strong> (15): um pedido educado para terminar. O processo pode tratá-lo, fechando arquivos, terminando a transação em andamento, apagando arquivos temporários e avisando os clientes. O <code>kill -9</code> envia o <strong>SIGKILL</strong>, que não pode ser tratado nem ignorado: o kernel encerra o processo na hora, sem nenhuma limpeza, o que pode deixar arquivos corrompidos, <em>locks</em> órfãos e transações pela metade. Por isso o SIGKILL é o último recurso, depois de alguns segundos de espera pelo SIGTERM, exatamente o que o <code>systemctl stop</code> e o <code>docker stop</code> fazem. Um <strong>zumbi</strong> é um processo que já terminou, mas cujo pai ainda não leu o código de saída (com <code>wait</code>): não consome CPU nem memória, só uma entrada na tabela de processos. Muitos zumbis indicam um pai com <em>bug</em>.</p>
+<div class="questao" id="q4">
+<span class="num">Q4</span>
+<div class="corpo">
+<p class="titulo">systemd</p>
+<p>O que é uma <em>unit</em> de serviço do systemd? O que <code>systemctl enable --now nginx</code> faz, e onde ver o <em>log</em> de um serviço que não sobe?</p>
+</div>
+</div>
+<p>Uma <em>unit</em> é um arquivo de configuração (em <code>/etc/systemd/system/</code> ou <code>/lib/systemd/system/</code>) que descreve um serviço: o comando que o inicia (<code>ExecStart</code>), o usuário, as dependências (<code>After=network.target</code>), a política de reinício (<code>Restart=on-failure</code>) e o ambiente. O <code>enable</code> cria os <em>links</em> para o serviço subir <strong>no boot</strong>; o <code>--now</code> também o inicia agora (sem ele, só no próximo boot). Os <em>logs</em> ficam no journal: <code>journalctl -u nginx -n 50</code> mostra as últimas 50 linhas, <code>-f</code> acompanha em tempo real, e <code>systemctl status nginx</code> mostra o estado e as últimas linhas. Depois de editar uma <em>unit</em>, é preciso <code>systemctl daemon-reload</code>.</p>
+<div class="questao" id="q5">
+<span class="num">Q5</span>
+<div class="corpo">
+<p class="titulo">set -euo pipefail</p>
+<p>O que cada opção de <code>set -euo pipefail</code> faz no início de um <em>script</em> Bash, e que problema cada uma evita?</p>
+</div>
+</div>
+<ul><li>**<code>-e</code><em>*: encerra o *script</em> no primeiro comando que falhar (saída diferente de zero). Sem ele, um <code>cd /pasta-errada</code> falha e o <code>rm -rf *</code> seguinte apaga o diretório atual.</li><li>**<code>-u</code>**: trata variável não definida como erro. Sem ele, um nome digitado errado vira texto vazio: <code>rm -rf "$DIRETORO/"</code> vira <code>rm -rf "/"</code>.</li><li>**<code>-o pipefail</code><em>*: o código de saída de um *pipe</em> passa a ser o do primeiro comando que falhou, e não só o do último. Sem ele, <code>comando_que_falha | grep x</code> "dá certo" se o <code>grep</code> der certo.</li></ul>
+<p>O <code>-e</code> tem exceções (comandos dentro de <code>if</code>, à esquerda de <code>&amp;&amp;</code> e <code>||</code>), por isso não substitui a verificação explícita onde importa.</p>
+<div class="questao" id="q6">
+<span class="num">Q6</span>
+<div class="corpo">
+<p class="titulo">SSH com chaves</p>
+<p>Por que autenticar no servidor com chave SSH é mais seguro que com senha? Que duas linhas do <code>sshd_config</code> todo servidor exposto à internet deveria ter?</p>
+</div>
+</div>
+<p>Com senha, qualquer um na internet pode tentar adivinhá-la, e os servidores recebem milhares de tentativas automáticas por dia; uma senha fraca ou reutilizada cai. Com chave, o servidor guarda só a chave <strong>pública</strong> (em <code>~/.ssh/authorized_keys</code>), e o cliente prova que tem a <strong>privada</strong> sem enviá-la: não há nada a adivinhar. A chave privada fica no seu computador, protegida por uma <em>passphrase</em>. No <code>sshd_config</code>: <code>PasswordAuthentication no</code> (só chaves) e <code>PermitRootLogin no</code> (entra-se como usuário comum e usa-se <code>sudo</code>, o que deixa rastro de quem fez o quê). Antes de aplicar, teste o acesso por chave numa <strong>segunda</strong> sessão aberta, para não ficar trancado do lado de fora.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q7">
+<span class="num">Q7</span>
+<div class="corpo">
+<p class="titulo">Permissões na prática</p>
+<p>Num diretório temporário, crie um arquivo e um diretório, mostre as permissões criadas com o <code>umask</code> padrão, depois aplique <code>chmod 640</code> ao arquivo e <code>chmod 750</code> ao diretório, e use a forma simbólica (<code>u+x</code>, <code>g-w</code>) para mais dois ajustes. Mostre as permissões com <code>stat</code> depois de cada passo.</p>
+</div>
+</div>
+<pre class="codigo"><code>cd "$(mktemp -d)"
+umask 022
+touch relatorio.txt
+mkdir publico
+mostrar() { stat -c '%A %a %n' relatorio.txt publico; echo "--"; }
+
+echo "umask $(umask):"
+mostrar
+
+chmod 640 relatorio.txt
+chmod 750 publico
+echo "depois de 640 e 750:"
+mostrar
+
+chmod u+x relatorio.txt
+chmod g-x,o+x publico
+echo "depois de u+x e g-x,o+x:"
+mostrar</code></pre>
+<pre class="saida"><code>umask 0022:
+-rw-r--r-- 644 relatorio.txt
+drwxr-xr-x 755 publico
+--
+depois de 640 e 750:
+-rw-r----- 640 relatorio.txt
+drwxr-x--- 750 publico
+--
+depois de u+x e g-x,o+x:
+-rwxr----- 740 relatorio.txt
+drwxr----x 741 publico
+--</code></pre>
+<p>Com <code>umask 022</code>, arquivos nascem com <code>644</code> (666 menos 022) e diretórios com <code>755</code> (777 menos 022): arquivos não recebem <code>x</code> por padrão. O resultado final do diretório, <code>741</code>, é estranho de propósito: o grupo pode listar os nomes (<code>r</code>), mas não entrar nem abrir nada (sem <code>x</code>); os outros podem entrar e abrir um arquivo cujo nome já conhecem (<code>x</code>), mas não listar. As formas simbólicas alteram só o que é citado, enquanto a octal define tudo de uma vez.</p>
+<div class="questao" id="q8">
+<span class="num">Q8</span>
+<div class="corpo">
+<p class="titulo">Processos em segundo plano e sinais</p>
+<p>Escreva um <em>script</em> que inicie um processo filho em segundo plano que trata o SIGTERM (com <code>trap</code>) para "limpar" antes de sair; o pai espera um pouco, envia <code>kill</code> (SIGTERM), espera o filho com <code>wait</code> e mostra o código de saída. Depois repita com um filho que <strong>ignora</strong> o SIGTERM e precisa do <code>kill -9</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>trabalhador() {
+  trap 'echo "  filho: recebi SIGTERM, limpando arquivos temporários"; exit 0' TERM
+  while true; do sleep 0.1; done
+}
+
+teimoso() {
+  trap '' TERM  # ignora o SIGTERM
+  while true; do sleep 0.1; done
+}
+
+trabalhador &amp;
+pid=$!
+sleep 0.3
+echo "pai: enviando SIGTERM para o filho"
+kill "$pid"
+wait "$pid"
+echo "pai: filho terminou com código $?"
+
+teimoso &amp;
+pid=$!
+sleep 0.3
+kill "$pid"
+sleep 0.3
+if kill -0 "$pid" 2&gt;/dev/null; then
+  echo "pai: o teimoso ignorou o SIGTERM, usando SIGKILL"
+  kill -9 "$pid"
+fi
+wait "$pid" 2&gt;/dev/null  # sem o aviso "Killed" que o Bash imprime com o PID
+echo "pai: teimoso terminou com código $? (128 + 9)"</code></pre>
+<pre class="saida"><code>pai: enviando SIGTERM para o filho
+  filho: recebi SIGTERM, limpando arquivos temporários
+pai: filho terminou com código 0
+pai: o teimoso ignorou o SIGTERM, usando SIGKILL
+pai: teimoso terminou com código 137 (128 + 9)</code></pre>
+<p>O <code>kill -0</code> não envia sinal nenhum: só testa se o processo existe e se temos permissão para sinalizá-lo. O código de saída de um processo morto por sinal é 128 mais o número do sinal: 137 para o SIGKILL, 143 para um SIGTERM não tratado. É assim que se reconhece, num <em>log</em> de contêiner, um processo morto por falta de memória (o OOM killer usa SIGKILL, daí os famosos <code>exit code 137</code>). O <code>trap</code> também serve para apagar arquivos temporários com <code>trap 'rm -f "$tmp"' EXIT</code>.</p>
+<div class="questao" id="q9">
+<span class="num">Q9</span>
+<div class="corpo">
+<p class="titulo">Um script de backup com rotação</p>
+<p>Escreva <code>backup.sh</code> com <code>set -euo pipefail</code>, que receba um diretório de origem e um de destino, valide os argumentos, crie um <code>.tar.gz</code> com a data no nome e apague os <em>backups</em> com mais de 7 dias, mantendo sempre os 3 mais recentes. Simule backups antigos com <code>touch -d</code> para testar a rotação.</p>
+</div>
+</div>
+<p><code>backup.sh</code>:</p>
+<pre class="codigo"><code>#!/usr/bin/env bash
+set -euo pipefail
+
+uso() { echo "uso: $0 ORIGEM DESTINO" &gt;&amp;2; exit 2; }
+[[ $# -eq 2 ]] || uso
+origem=$1
+destino=$2
+[[ -d $origem ]] || { echo "erro: origem '$origem' não existe" &gt;&amp;2; exit 1; }
+mkdir -p "$destino"
+
+hoje=${HOJE:-$(date +%F)}  # HOJE permite testar com uma data fixa
+arquivo="$destino/backup-$hoje.tar.gz"
+tar -czf "$arquivo" -C "$(dirname "$origem")" "$(basename "$origem")"
+echo "criado: $(basename "$arquivo")"
+
+# Os 3 mais recentes ficam sempre; dos demais, apaga os com mais de 7 dias.
+mapfile -t todos &lt; &lt;(ls -1t "$destino"/backup-*.tar.gz)
+for velho in "${todos[@]:3}"; do
+  if [[ -n $(find "$velho" -mtime +7) ]]; then
+    rm -- "$velho"
+    echo "removido: $(basename "$velho")"
+  fi
+done
+echo "restam: $(ls -1 "$destino" | wc -l) backup(s)"</code></pre>
+<pre class="codigo"><code>mkdir -p site/paginas dest
+echo "&lt;h1&gt;oi&lt;/h1&gt;" &gt; site/paginas/index.html
+for dias in 2 5 9 15 30; do
+  touch -d "$dias days ago" "dest/backup-antigo-${dias}d.tar.gz"
+done
+
+bash backup.sh site dest
+echo "---"
+bash backup.sh pasta-que-nao-existe dest 2&gt;&amp;1 || echo "(código de saída $?)"
+bash backup.sh 2&gt;&amp;1 || echo "(código de saída $?)"</code></pre>
+<pre class="saida"><code>criado: backup-2026-10-20.tar.gz
+removido: backup-antigo-9d.tar.gz
+removido: backup-antigo-15d.tar.gz
+removido: backup-antigo-30d.tar.gz
+restam: 3 backup(s)
+---
+erro: origem 'pasta-que-nao-existe' não existe
+(código de saída 1)
+uso: backup.sh ORIGEM DESTINO
+(código de saída 2)</code></pre>
+<p>Os <em>backups</em> de 2 e 5 dias ficaram: estão entre os 3 mais recentes, junto com o de hoje. O de 9 dias é o quarto mais recente e tem mais de 7 dias, então saiu, com os de 15 e 30. O <code>2&gt;&amp;1</code> no teste junta a saída de erro à normal, para as mensagens aparecerem na ordem em que acontecem. A regra "manter pelo menos N" protege contra o caso em que o <em>backup</em> parou de rodar há semanas: sem ela, a rotação apagaria <strong>todos</strong> os antigos, sem nenhum novo para substituí-los. As mensagens de erro vão para a saída de erro (<code>&gt;&amp;2</code>), e os códigos de saída distinguem "uso errado" (2) de "falha" (1). Um <em>backup</em> só está pronto quando a <strong>restauração</strong> foi testada: <code>tar -tzf</code> lista o conteúdo, e restaurar numa pasta temporária prova que funciona.</p>
+<div class="questao" id="q10">
+<span class="num">Q10</span>
+<div class="corpo">
+<p class="titulo">Analisando um log de acesso</p>
+<p>Dado um trecho de <em>log</em> de acesso do nginx, use <code>awk</code>, <code>sort</code>, <code>uniq</code> e <code>grep</code> para mostrar: (a) as requisições por código de status; (b) os 2 IPs com mais requisições; (c) as URLs que deram erro 5xx; (d) o total de bytes enviados.</p>
+</div>
+</div>
+<pre class="codigo"><code>cat &gt; access.log &lt;&lt;'LOG'
+192.168.0.10 - - [20/Oct/2026:10:00:01 -0300] "GET / HTTP/1.1" 200 5120 "-" "Mozilla/5.0"
+192.168.0.11 - - [20/Oct/2026:10:00:02 -0300] "GET /livros HTTP/1.1" 200 2048 "-" "Mozilla/5.0"
+10.0.0.5 - - [20/Oct/2026:10:00:03 -0300] "POST /login HTTP/1.1" 401 512 "-" "curl/8.5"
+10.0.0.5 - - [20/Oct/2026:10:00:04 -0300] "POST /login HTTP/1.1" 401 512 "-" "curl/8.5"
+10.0.0.5 - - [20/Oct/2026:10:00:05 -0300] "POST /login HTTP/1.1" 401 512 "-" "curl/8.5"
+192.168.0.10 - - [20/Oct/2026:10:00:06 -0300] "GET /checkout HTTP/1.1" 502 157 "-" "Mozilla/5.0"
+192.168.0.12 - - [20/Oct/2026:10:00:07 -0300] "GET /livros/7 HTTP/1.1" 404 300 "-" "Mozilla/5.0"
+192.168.0.11 - - [20/Oct/2026:10:00:08 -0300] "GET /api/estoque HTTP/1.1" 500 89 "-" "Mozilla/5.0"
+LOG
+
+echo "(a) por status:"
+awk '{print $9}' access.log | sort | uniq -c | sort -rn
+echo "(b) top 2 IPs:"
+awk '{print $1}' access.log | sort | uniq -c | sort -rn | head -2
+echo "(c) erros 5xx:"
+awk '$9 ~ /^5/ {print $9, $7}' access.log
+echo "(d) total de bytes:"
+awk '{total += $10} END {printf "%d bytes (%.1f KB)\n", total, total / 1024}' access.log</code></pre>
+<pre class="saida"><code>(a) por status:
+      3 401
+      2 200
+      1 502
+      1 500
+      1 404
+(b) top 2 IPs:
+      3 10.0.0.5
+      2 192.168.0.11
+(c) erros 5xx:
+502 /checkout
+500 /api/estoque
+(d) total de bytes:
+9250 bytes (9.0 KB)</code></pre>
+<p>O <code>awk</code> divide cada linha por espaços: <code>$1</code> é o IP, <code>$7</code> a URL, <code>$9</code> o status e <code>$10</code> os bytes. O <code>uniq -c</code> só conta linhas <strong>vizinhas</strong> iguais, por isso o <code>sort</code> antes dele é obrigatório. As três tentativas de login com 401 vindas do mesmo IP, com <code>curl</code>, são o padrão de uma tentativa de força bruta: é esse tipo de análise que ferramentas como o fail2ban automatizam, bloqueando o IP no <em>firewall</em>. Num servidor real, o mesmo vale com <code>zcat access.log.*.gz</code> para os <em>logs</em> já rotacionados.</p>
+</section>
+<section class="modulo" id="modulo-2">
+<h2><span class="rotulo">MÓDULO 2</span> Git e colaboração</h2>
+<p class="intro">Git na prática, Git Flow, a primeira automação com GitHub Actions, branches protegidas e pull requests, Semantic Versioning e tags.</p>
+<p class="aulas-titulo">Artigos 07 a 11</p>
+<ul class="aulas">
+<li><span class="n">#07</span> Git na Prática: Commits, Branches e Merges sem Medo</li>
+<li><span class="n">#08</span> Trabalhando em Equipe com Git Flow</li>
+<li><span class="n">#09</span> GitHub Actions: Sua Primeira Automação de CI/CD</li>
+<li><span class="n">#10</span> Protegendo Branches e Revisando Código com Pull Requests</li>
+<li><span class="n">#11</span> Semantic Versioning e Tags de Release</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q11">
+<span class="num">Q11</span>
+<div class="corpo">
+<p class="titulo">As três áreas do Git</p>
+<p>Explique o diretório de trabalho, a <em>staging area</em> (índice) e o repositório. O que <code>git add -p</code> permite, e por que a <em>staging area</em> existe?</p>
+</div>
+</div>
+<p>O <strong>diretório de trabalho</strong> são os arquivos como estão no disco, com as alterações em andamento. A <strong>staging area</strong> é o rascunho do próximo <em>commit</em>: só entra nele o que foi adicionado com <code>git add</code>. O <strong>repositório</strong> (<code>.git</code>) guarda os <em>commits</em> já feitos. A <em>staging area</em> existe para que um <em>commit</em> contenha <strong>uma</strong> mudança coerente, mesmo que o diretório de trabalho tenha várias misturadas: você corrigiu um <em>bug</em> e, de passagem, ajustou a formatação de outro arquivo; são dois <em>commits</em>. O <code>git add -p</code> vai além e mostra cada trecho alterado de um arquivo, perguntando se ele entra, o que permite separar duas mudanças feitas <strong>no mesmo arquivo</strong>.</p>
+<div class="questao" id="q12">
+<span class="num">Q12</span>
+<div class="corpo">
+<p class="titulo">merge, rebase e o histórico</p>
+<p>Qual a diferença entre integrar uma <em>branch</em> com <code>git merge --no-ff</code> e com <code>git rebase</code>? Por que nunca se faz <em>rebase</em> de <em>commits</em> já publicados?</p>
+</div>
+</div>
+<p>O <code>merge --no-ff</code> cria um <strong>commit de merge</strong> com dois pais, mesmo quando um avanço rápido (<em>fast-forward</em>) seria possível: o histórico mostra que houve uma <em>branch</em>, quais <em>commits</em> eram dela e quando entrou. O <code>rebase</code> <strong>reescreve</strong> os <em>commits</em> da <em>branch</em> como se tivessem sido feitos depois da ponta da outra: o histórico fica linear, mas os <em>commits</em> ganham novos <em>hashes</em>, porque são <em>commits</em> novos. Se alguém já baixou os antigos, os dois históricos divergem, e a pessoa tem de reconciliar <em>commits</em> "duplicados", o que exigiria um <code>push --force</code> que apaga o trabalho de outros. Daí a regra: <em>rebase</em> só em <em>commits</em> locais, ainda não enviados; o que já foi publicado se integra com <em>merge</em>.</p>
+<div class="questao" id="q13">
+<span class="num">Q13</span>
+<div class="corpo">
+<p class="titulo">Branches protegidas</p>
+<p>Que regras de proteção a <em>branch</em> <code>main</code> de um projeto em equipe deve ter no GitHub, e por quê?</p>
+</div>
+</div>
+<ul><li><strong>Exigir <em>pull request</strong></em> para qualquer mudança: nada vai direto para a <code>main</code>.</li><li><strong>Exigir aprovação</strong> de pelo menos um revisor, e invalidá-la se novos <em>commits</em> chegarem depois.</li><li><strong>Exigir que as verificações do CI passem</strong> (testes, <em>lint</em>, <em>build</em>) antes do <em>merge</em>.</li><li><strong>Proibir <em>force push</strong></em> e a exclusão da <em>branch</em>.</li><li><strong>Exigir a <em>branch</em> atualizada</strong> com a <code>main</code> antes do <em>merge</em>, para que o CI tenha testado a combinação real.</li></ul>
+<p>Juntas, elas garantem que a <code>main</code> esteja sempre num estado que passou nos testes e foi vista por mais de uma pessoa, e que o histórico não possa ser reescrito. Também valem para administradores (a opção de não permitir exceções), senão a regra é só uma sugestão.</p>
+<div class="questao" id="q14">
+<span class="num">Q14</span>
+<div class="corpo">
+<p class="titulo">Semantic Versioning</p>
+<p>Dada a versão <code>2.4.1</code> de uma biblioteca, qual é a próxima versão em cada caso: (a) corrigiu um <em>bug</em> sem mudar a API; (b) acrescentou uma função nova; (c) removeu um parâmetro de uma função existente. O que significa <code>^2.4.1</code> num <code>composer.json</code> ou <code>package.json</code>?</p>
+</div>
+</div>
+<ul><li>(a) <strong>2.4.2</strong>: correção, incrementa o PATCH.</li><li>(b) <strong>2.5.0</strong>: funcionalidade nova compatível, incrementa o MINOR e zera o PATCH.</li><li>(c) <strong>3.0.0</strong>: mudança incompatível, incrementa o MAJOR e zera os outros dois.</li></ul>
+<p>O <code>^2.4.1</code> aceita qualquer versão <strong>compatível</strong> segundo o SemVer: a partir de 2.4.1 e abaixo de 3.0.0. É uma promessa do autor da biblioteca, não uma garantia: por isso o <em>lockfile</em> fixa as versões exatas que foram testadas.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q15">
+<span class="num">Q15</span>
+<div class="corpo">
+<p class="titulo">Um fluxo com branches e merge --no-ff</p>
+<p>Num repositório novo, crie a <code>main</code> com um <em>commit</em>, a <em>branch</em> <code>dev</code> a partir dela, uma <em>branch</em> <code>feature/busca</code> a partir da <code>dev</code> com dois <em>commits</em>, e integre-a na <code>dev</code> com <code>git merge --no-ff</code>. Mostre o grafo com <code>git log --graph --oneline</code> (sem os <em>hashes</em>) e liste os <em>commits</em> de <em>merge</em>.</p>
+</div>
+</div>
+<pre class="codigo"><code>export GIT_AUTHOR_NAME=Ana GIT_AUTHOR_EMAIL=ana@exemplo.com GIT_COMMITTER_NAME=Ana GIT_COMMITTER_EMAIL=ana@exemplo.com
+git init -q -b main loja &amp;&amp; cd loja
+echo "# Loja" &gt; README.md
+git add README.md &amp;&amp; git commit -q -m "chore: commit inicial"
+git switch -q -c dev
+
+git switch -q -c feature/busca
+echo "busca simples" &gt; busca.txt
+git add busca.txt &amp;&amp; git commit -q -m "feat: busca por título"
+echo "busca por autor" &gt;&gt; busca.txt
+git commit -q -am "feat: busca por autor"
+
+git switch -q dev
+git merge -q --no-ff feature/busca -m "Merge branch 'feature/busca' into dev"
+git branch -q -d feature/busca
+
+echo "grafo:"
+git log --graph --format='%s' --all
+echo "merges:"
+git log --merges --format='%s'</code></pre>
+<pre class="saida"><code>grafo:
+*   Merge branch 'feature/busca' into dev
+|\
+| * feat: busca por autor
+| * feat: busca por título
+|/
+* chore: commit inicial
+merges:
+Merge branch 'feature/busca' into dev</code></pre>
+<p>O grafo mostra a "bolha" da <em>branch</em>: os dois <em>commits</em> de busca ficam num ramo lateral, unidos à <code>dev</code> pelo <em>commit</em> de <em>merge</em>. Com um <em>fast-forward</em> (o padrão quando a <code>dev</code> não andou), os dois <em>commits</em> entrariam direto na linha da <code>dev</code>, sem nenhum registro de que formaram uma unidade. O <code>git branch -d</code> só apaga <em>branches</em> já integradas; o <code>-D</code>, que apaga mesmo as não integradas, perde trabalho.</p>
+<div class="questao" id="q16">
+<span class="num">Q16</span>
+<div class="corpo">
+<p class="titulo">Uma tag anotada e o changelog</p>
+<p>No mesmo estilo, crie três <em>commits</em> seguindo o Conventional Commits (<code>feat:</code>, <code>fix:</code>, <code>docs:</code>), crie a <em>tag</em> anotada <code>v1.0.0</code>, mais dois <em>commits</em> (um <code>feat:</code> e um <code>fix:</code>), e gere, com <code>git log</code>, a lista das mudanças desde a <em>tag</em>, agrupada por tipo. Com base nela, diga qual deve ser a próxima versão.</p>
+</div>
+</div>
+<pre class="codigo"><code>export GIT_AUTHOR_NAME=Ana GIT_AUTHOR_EMAIL=ana@exemplo.com GIT_COMMITTER_NAME=Ana GIT_COMMITTER_EMAIL=ana@exemplo.com
+git init -q -b main lib &amp;&amp; cd lib
+for msg in "feat: cálculo de frete" "fix: frete negativo para CEP vazio" "docs: README com exemplos"; do
+  git commit -q --allow-empty -m "$msg"
+done
+git tag -a v1.0.0 -m "primeira versão estável"
+
+git commit -q --allow-empty -m "feat: frete grátis acima de um valor"
+git commit -q --allow-empty -m "fix: arredondamento do frete por peso"
+
+ultima=$(git describe --tags --abbrev=0)
+echo "mudanças desde $ultima:"
+for tipo in feat fix; do
+  git log "$ultima..HEAD" --format='%s' | grep "^$tipo:" | sed "s/^$tipo: /  [$tipo] /"
+done
+if git log "$ultima..HEAD" --format='%s%n%b' | grep -q 'BREAKING CHANGE\|^[a-z]*!:'; then nivel=major
+elif git log "$ultima..HEAD" --format='%s' | grep -q '^feat'; then nivel=minor
+else nivel=patch; fi
+echo "próxima versão: incremento $nivel"
+git tag -n1</code></pre>
+<pre class="saida"><code>mudanças desde v1.0.0:
+  [feat] frete grátis acima de um valor
+  [fix] arredondamento do frete por peso
+próxima versão: incremento minor
+v1.0.0          primeira versão estável</code></pre>
+<p>Houve um <code>feat</code> e nenhuma mudança incompatível: a próxima versão é <strong>v1.1.0</strong>. É exatamente o que ferramentas como o <em>semantic-release</em> e o <em>release-please</em> fazem, lendo as mensagens: a convenção dos <em>commits</em> vira versão e <em>changelog</em> automáticos. A <em>tag</em> anotada (<code>-a</code>) guarda autor, data e mensagem, como um <em>commit</em>; a leve (sem <code>-a</code>) é só um nome para um <em>hash</em>, e o <code>git describe</code> a ignora por padrão.</p>
+<div class="questao" id="q17">
+<span class="num">Q17</span>
+<div class="corpo">
+<p class="titulo">Uma primeira pipeline do GitHub Actions</p>
+<p>Escreva <code>.github/workflows/ci.yml</code> que rode em todo <em>push</em> e <em>pull request</em> para <code>main</code> e <code>dev</code>: faça o <em>checkout</em>, configure o PHP 8.5 com cache das dependências do Composer, rode <code>composer install</code>, o <em>lint</em> e os testes. Depois confira, com Python, que o arquivo é YAML válido e liste os gatilhos e os passos.</p>
+</div>
+</div>
+<p><code>ci.yml</code>:</p>
+<pre class="codigo"><code>name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.5"
+          coverage: none
+
+      - name: Cache do Composer
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+
+      - name: Dependências
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Lint
+        run: find src tests -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: Testes
+        run: vendor/bin/phpunit</code></pre>
+<pre class="codigo"><code>import yaml
+
+with open("ci.yml", encoding="utf-8") as f:
+    wf = yaml.safe_load(f)
+
+gatilhos = wf[True]  # o YAML 1.1 lê a chave "on" como o booleano True
+print("gatilhos:", ", ".join(f"{ev} -&gt; {cfg['branches']}" for ev, cfg in gatilhos.items()))
+for nome, job in wf["jobs"].items():
+    print(f"job {nome} em {job['runs-on']} (até {job['timeout-minutes']} min):")
+    for passo in job["steps"]:
+        print("  -", passo.get("name") or passo["uses"])</code></pre>
+<pre class="saida"><code>gatilhos: push -&gt; ['main', 'dev'], pull_request -&gt; ['main', 'dev']
+job testes em ubuntu-latest (até 10 min):
+  - actions/checkout@v4
+  - shivammathur/setup-php@v2
+  - Cache do Composer
+  - Dependências
+  - Lint
+  - Testes</code></pre>
+<p>A curiosidade do <code>wf[True]</code> é real: no YAML 1.1, que o PyYAML segue, <code>on</code>, <code>yes</code> e <code>off</code> são booleanos, e a chave <code>on:</code> vira <code>True</code>. O GitHub trata o arquivo do jeito certo, mas ferramentas genéricas de YAML tropeçam nisso. A chave do cache inclui o <em>hash</em> do <code>composer.lock</code>: o cache só é reaproveitado enquanto as dependências não mudam. O <code>timeout-minutes</code> impede que um teste travado consuma horas de execução. Com a proteção de <em>branch</em> da pergunta anterior, este <em>job</em> vira o portão do <em>merge</em>.</p>
+</section>
+<section class="modulo" id="modulo-3">
+<h2><span class="rotulo">MÓDULO 3</span> Containers</h2>
+<p class="intro">O que é um container, os primeiros containers, o Dockerfile, volumes e redes, Docker Compose, boas práticas de imagens e a publicação em registries.</p>
+<p class="aulas-titulo">Artigos 12 a 18</p>
+<ul class="aulas">
+<li><span class="n">#12</span> O Que é um Container e Por Que Isso Mudou Tudo</li>
+<li><span class="n">#13</span> Instalando e Rodando Seus Primeiros Containers</li>
+<li><span class="n">#14</span> Escrevendo um Dockerfile do Zero</li>
+<li><span class="n">#15</span> Docker Volumes e Redes: Persistência e Comunicação</li>
+<li><span class="n">#16</span> Docker Compose: Orquestrando Múltiplos Serviços Localmente</li>
+<li><span class="n">#17</span> Boas Práticas de Imagens: Leveza, Segurança e Camadas</li>
+<li><span class="n">#18</span> Publicando Imagens no Docker Hub e GitHub Container Registry</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q18">
+<span class="num">Q18</span>
+<div class="corpo">
+<p class="titulo">Container não é máquina virtual</p>
+<p>Qual a diferença entre um container e uma máquina virtual? Que recursos do kernel Linux tornam o container possível?</p>
+</div>
+</div>
+<p>Uma <strong>máquina virtual</strong> emula um computador inteiro, com o próprio kernel e o próprio sistema operacional, sobre um <em>hypervisor</em>: isola muito bem, mas cada VM ocupa gigabytes e leva dezenas de segundos para subir. Um <strong>container</strong> é um processo comum do Linux, que <strong>compartilha o kernel</strong> do hospedeiro, mas enxerga uma visão isolada do sistema. Quem cria esse isolamento são os <strong>namespaces</strong> (PID, rede, pontos de montagem, usuários, <em>hostname</em>: o processo vê só os seus processos, a sua rede e o seu sistema de arquivos) e os <strong>cgroups</strong> (limites e contabilidade de CPU, memória e E/S). O sistema de arquivos vem de uma <strong>imagem</strong> em camadas. Resultado: sobe em milissegundos e ocupa megabytes, com um isolamento mais fraco que o de uma VM, já que um <em>bug</em> no kernel afeta todos os containers.</p>
+<div class="questao" id="q19">
+<span class="num">Q19</span>
+<div class="corpo">
+<p class="titulo">Imagem, container e camadas</p>
+<p>Qual a diferença entre imagem e container? Por que a ordem das instruções no Dockerfile afeta o tempo de <em>build</em>?</p>
+</div>
+</div>
+<p>A <strong>imagem</strong> é um modelo somente leitura: um conjunto de <strong>camadas</strong>, uma por instrução que altera arquivos (<code>RUN</code>, <code>COPY</code>, <code>ADD</code>), mais os metadados (comando inicial, variáveis, porta). O <strong>container</strong> é uma instância em execução de uma imagem, com uma camada gravável por cima, que desaparece com ele. No <em>build</em>, cada instrução vira uma camada guardada em cache; quando uma instrução muda (ou os arquivos que ela copia mudam), <strong>ela e todas as seguintes</strong> são refeitas. Por isso o que muda pouco vem primeiro (instalar pacotes do sistema, copiar o arquivo de dependências e instalá-las) e o código da aplicação, que muda a cada <em>commit</em>, vem por último.</p>
+<div class="questao" id="q20">
+<span class="num">Q20</span>
+<div class="corpo">
+<p class="titulo">Volume ou bind mount</p>
+<p>Para o banco de dados de um container MySQL, por que usar um volume nomeado? E quando um <em>bind mount</em> (uma pasta do hospedeiro) é a escolha certa?</p>
+</div>
+</div>
+<p>Os dados gravados na camada do container <strong>somem</strong> quando ele é removido, e atualizar a imagem do MySQL exige recriar o container. Um <strong>volume nomeado</strong> (<code>-v dados_mysql:/var/lib/mysql</code>) é administrado pelo Docker, sobrevive à remoção do container, tem bom desempenho e permissões corretas. O <strong><em>bind mount</strong></em> (<code>-v ./src:/var/www/html</code>) liga uma pasta específica do hospedeiro: é o certo em <strong>desenvolvimento</strong>, para editar o código no seu editor e ver a mudança no container na hora, e para entregar arquivos de configuração. Para dados de produção, o volume; para código em desenvolvimento, o <em>bind mount</em>.</p>
+<div class="questao" id="q21">
+<span class="num">Q21</span>
+<div class="corpo">
+<p class="titulo">Uma imagem mínima e segura</p>
+<p>Cite quatro práticas que deixam uma imagem menor e mais segura, e por que rodar o processo como <em>root</em> dentro do container é um risco.</p>
+</div>
+</div>
+<ul><li><strong>Imagem base pequena</strong> e com versão fixa (<code>php:8.5-fpm-alpine</code>, <em>distroless</em>), nunca <code>latest</code>: menos pacotes significam menos vulnerabilidades e <em>downloads</em> menores.</li><li><strong><em>Build</em> em múltiplos estágios</strong>: compiladores, ferramentas de <em>build</em> e o cache do Composer ficam no estágio de <em>build</em>, e a imagem final recebe só o resultado.</li><li>**<code>.dockerignore</code>**: <code>.git</code>, <code>.env</code>, <code>node_modules</code> e <em>logs</em> nunca entram no contexto, o que evita vazar segredos e invalidar o cache.</li><li><strong>Usuário sem privilégios</strong> (<code>USER app</code>) e nenhum segredo em <code>ENV</code> ou <code>ARG</code> (eles ficam gravados nas camadas e aparecem no <code>docker history</code>).</li></ul>
+<p>Como <em>root</em>, o processo tem o <em>root</em> do kernel compartilhado; com uma falha de escape de container, ou um volume montado por engano, o atacante ganha o <em>root</em> do hospedeiro. Um usuário comum limita o estrago.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q22">
+<span class="num">Q22</span>
+<div class="corpo">
+<p class="titulo">Um Dockerfile em múltiplos estágios para PHP</p>
+<p>Escreva um <code>Dockerfile</code> para uma aplicação PHP com Composer: um estágio que instala as dependências sem as de desenvolvimento, e um estágio final com <code>php:8.5-apache</code>, a extensão <code>pdo_mysql</code>, o OPcache, o código, um usuário sem privilégios e o <code>DocumentRoot</code> apontando para <code>public/</code>. Escreva também o <code>.dockerignore</code>. Mostre o caminho equivalente sem Docker, num servidor Debian.</p>
+</div>
+</div>
+<pre class="codigo"><code># Estágio 1: dependências (o Composer não vai para a imagem final)
+FROM composer:2 AS deps
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --prefer-dist --no-interaction --optimize-autoloader
+
+# Estágio 2: aplicação
+FROM php:8.5-apache
+RUN docker-php-ext-install pdo_mysql opcache \
+ &amp;&amp; a2enmod rewrite \
+ &amp;&amp; sed -ri 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
+COPY docker/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+WORKDIR /var/www/html
+COPY --from=deps /app/vendor ./vendor
+COPY . .
+RUN chown -R www-data:www-data storage
+USER www-data</code></pre>
+<pre class="codigo"><code># .dockerignore
+.git
+.env
+vendor
+storage/logs/*
+tests
+node_modules
+*.md</code></pre>
+<p>O <code>COPY composer.json composer.lock</code> vem antes do <code>COPY . .</code> para que o <code>composer install</code> só rode de novo quando as dependências mudarem. O <code>vendor</code> local fica fora do contexto (<code>.dockerignore</code>) porque a imagem tem o seu, montado no estágio 1; e o <code>.env</code> nunca entra na imagem: as variáveis chegam na execução (<code>docker run --env-file .env</code>). Com <code>USER www-data</code>, o Apache não consegue escutar na porta 80, que exige privilégio: num arranjo real, mude a porta para 8080 em <code>ports.conf</code> e no <em>virtual host</em>, ou deixe o Apache iniciar como <em>root</em> (ele próprio troca para <code>www-data</code> nos processos que atendem as requisições) e retire o <code>USER</code>.</p>
+<p>Sem Docker, num Debian, o mesmo resultado sai de: <code>sudo apt install apache2 libapache2-mod-php8.5 php8.5-mysql php8.5-opcache composer</code> (o PHP 8.5 pode exigir o repositório de pacotes de Ondřej Surý, que traz as versões novas), <code>sudo a2enmod rewrite</code>, o código em <code>/var/www/livraria</code> com <code>composer install --no-dev -o</code>, o <code>DocumentRoot /var/www/livraria/public</code> no <em>virtual host</em> em <code>/etc/apache2/sites-available/</code>, <code>sudo chown -R www-data: /var/www/livraria/storage</code> e <code>sudo systemctl reload apache2</code>.</p>
+<div class="questao" id="q23">
+<span class="num">Q23</span>
+<div class="corpo">
+<p class="titulo">Um docker-compose para a aplicação</p>
+<p>Escreva um <code>compose.yaml</code> com três serviços: a aplicação PHP (construída do Dockerfile anterior, porta 8080), um MySQL 8.4 com volume nomeado e um <em>healthcheck</em>, e um Redis. A aplicação só deve subir depois que o MySQL estiver saudável, e a senha do banco deve vir de um arquivo <code>.env</code>. Confira com Python a estrutura: a ordem de dependência e os volumes declarados.</p>
+</div>
+</div>
+<p><code>compose.yaml</code>:</p>
+<pre class="codigo"><code>services:
+  app:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      DB_HOST: db
+      DB_NAME: livraria
+      DB_USER: livraria
+      DB_PASS: ${DB_PASS:?defina DB_PASS no .env}
+      REDIS_HOST: cache
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_started
+
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: livraria
+      MYSQL_USER: livraria
+      MYSQL_PASSWORD: ${DB_PASS:?defina DB_PASS no .env}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    volumes:
+      - dados_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  cache:
+    image: redis:7-alpine
+
+volumes:
+  dados_mysql:</code></pre>
+<pre class="codigo"><code>import yaml
+
+with open("compose.yaml", encoding="utf-8") as f:
+    c = yaml.safe_load(f)
+
+servicos = c["services"]
+for nome, s in servicos.items():
+    origem = s.get("image") or "build " + s["build"]
+    deps = s.get("depends_on", {})
+    condicoes = ", ".join(f"{d} ({cfg['condition']})" for d, cfg in deps.items()) or "nenhuma"
+    print(f"{nome:5} {origem:15} depende de: {condicoes}")
+
+usados = {v.split(":")[0] for s in servicos.values() for v in s.get("volumes", [])}
+print("volumes usados e declarados batem?", usados == set(c["volumes"]))
+print("porta publicada só na app?", [n for n, s in servicos.items() if "ports" in s] == ["app"])</code></pre>
+<pre class="saida"><code>app   build .         depende de: db (service_healthy), cache (service_started)
+db    mysql:8.4       depende de: nenhuma
+cache redis:7-alpine  depende de: nenhuma
+volumes usados e declarados batem? True
+porta publicada só na app? True</code></pre>
+<p>O <code>depends_on</code> com <code>service_healthy</code> espera o <em>healthcheck</em> do MySQL passar, o que leva alguns segundos depois de o container subir; sem isso, a aplicação tentaria conectar a um banco que ainda está inicializando. Só a aplicação publica porta: o MySQL e o Redis ficam acessíveis apenas na rede interna do Compose, pelos nomes <code>db</code> e <code>cache</code>. O <code>${DB_PASS:?...}</code> faz o <code>docker compose up</code> falhar com uma mensagem clara se a variável não estiver definida, em vez de subir o banco com senha vazia. Sem Docker, o equivalente é instalar <code>mysql-server</code> (ou <code>mariadb-server</code>) e <code>redis-server</code> com o <code>apt</code>, criar o banco e o usuário com <code>CREATE DATABASE</code> e <code>CREATE USER</code>, e apontar o <code>.env</code> da aplicação para <code>127.0.0.1</code>.</p>
+</section>
+<section class="modulo" id="modulo-4">
+<h2><span class="rotulo">MÓDULO 4</span> CI/CD</h2>
+<p class="intro">O que é CI/CD, pipelines de build, teste e deploy, testes no pipeline, variáveis e secrets, deploy automático e monitoramento do pipeline.</p>
+<p class="aulas-titulo">Artigos 19 a 24</p>
+<ul class="aulas">
+<li><span class="n">#19</span> O Que é CI/CD e Por Que Sua Empresa Precisa Disso</li>
+<li><span class="n">#20</span> Pipeline com GitHub Actions: Build, Test e Deploy Automático</li>
+<li><span class="n">#21</span> Testes Automatizados no Pipeline: Qualidade sem Atrito</li>
+<li><span class="n">#22</span> Variáveis de Ambiente e Secrets em Pipelines</li>
+<li><span class="n">#23</span> Deploy Automático para Servidores com GitHub Actions</li>
+<li><span class="n">#24</span> Notificações, Logs e Monitoramento do Pipeline</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q24">
+<span class="num">Q24</span>
+<div class="corpo">
+<p class="titulo">Integração, entrega e implantação contínuas</p>
+<p>Diferencie integração contínua, entrega contínua e implantação contínua. O que precisa ser verdade sobre os testes para que a implantação contínua seja segura?</p>
+</div>
+</div>
+<ul><li><strong>Integração contínua (CI)</strong>: todo <em>push</em> é integrado à <em>branch</em> principal com frequência (pelo menos diariamente) e verificado automaticamente: <em>build</em>, testes e <em>lint</em>. Os problemas de integração aparecem em minutos, e não na véspera da entrega.</li><li><strong>Entrega contínua</strong>: além disso, todo <em>commit</em> que passa no pipeline gera um artefato <strong>pronto para produção</strong>; o deploy é um botão, apertado por uma pessoa quando o negócio quiser.</li><li><strong>Implantação contínua</strong>: o botão some; todo <em>commit</em> que passa vai para produção sozinho.</li></ul>
+<p>Para a implantação contínua ser segura, a suíte de testes precisa ser <strong>confiável</strong> (sem testes intermitentes que todos ignoram), cobrir os fluxos críticos e rodar rápido; e o deploy precisa de rede de proteção: monitoramento, <em>rollback</em> automático e, de preferência, liberação gradual (<em>canary</em>) ou <em>feature flags</em>.</p>
+<div class="questao" id="q25">
+<span class="num">Q25</span>
+<div class="corpo">
+<p class="titulo">Secrets no pipeline</p>
+<p>Como o GitHub Actions protege os <em>secrets</em>, e por que um <em>pull request</em> vindo de um <em>fork</em> não recebe os <em>secrets</em> do repositório? Que erro comum ainda vaza um segredo?</p>
+</div>
+</div>
+<p>Os <em>secrets</em> ficam cifrados nas configurações do repositório ou do ambiente e só são entregues ao <em>job</em> em execução, como variáveis; o GitHub mascara os valores conhecidos nos <em>logs</em> (aparecem como <code>***</code>). Um PR de <em>fork</em> roda código escrito por <strong>qualquer pessoa</strong>: se recebesse os <em>secrets</em>, bastaria um <code>curl</code> no <em>workflow</em> alterado para enviá-los ao atacante; por isso o evento <code>pull_request</code> de <em>forks</em> roda sem eles (e o <code>pull_request_target</code>, que os tem, exige muito cuidado para nunca executar o código do PR). Erros que ainda vazam: imprimir o segredo <strong>transformado</strong> (codificado em Base64, cortado, dentro de uma URL), que a máscara não reconhece; gravá-lo num artefato ou numa imagem Docker; e usar <em>actions</em> de terceiros sem fixar a versão pelo <em>hash</em> do <em>commit</em>.</p>
+<div class="questao" id="q26">
+<span class="num">Q26</span>
+<div class="corpo">
+<p class="titulo">O pipeline como portão</p>
+<p>Num pipeline com as etapas <em>lint</em>, testes unitários, <em>build</em> da imagem, testes de integração, deploy em homologação e deploy em produção, em que ordem e com que dependências elas devem rodar? O que deve acontecer se os testes de integração falharem?</p>
+</div>
+</div>
+<p>Do mais <strong>barato e rápido</strong> para o mais caro: <em>lint</em> e testes unitários primeiro (podem rodar em paralelo, levam segundos e pegam a maioria dos erros); depois o <em>build</em> da imagem, <strong>uma vez só</strong>; os testes de integração usam essa imagem; o deploy em homologação usa a <strong>mesma</strong> imagem; e a produção, também a mesma, depois de uma aprovação manual ou de verificações automáticas em homologação. Se os testes de integração falharem, o pipeline <strong>para</strong>: nada é implantado, o autor é notificado e a imagem não é promovida. "Construir uma vez, promover a mesma" garante que o que foi testado é exatamente o que chega à produção.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q27">
+<span class="num">Q27</span>
+<div class="corpo">
+<p class="titulo">Um deploy por SSH com rollback</p>
+<p>Escreva <code>deploy.sh</code>, que simule localmente a estratégia de <em>releases</em> com <em>symlink</em>: cria <code>releases/&lt;versão&gt;</code>, copia o código, troca o <em>symlink</em> <code>current</code> de forma atômica, roda uma verificação de saúde e, se ela falhar, volta o <em>symlink</em> para a versão anterior. Mantenha só as 3 últimas <em>releases</em>. Teste um deploy bom, um ruim e mais três bons.</p>
+</div>
+</div>
+<p><code>deploy.sh</code>:</p>
+<pre class="codigo"><code>#!/usr/bin/env bash
+set -euo pipefail
+
+base=$(realpath -m "$1") versao=$2 codigo=$3  # absoluto: o symlink não pode depender de onde se está
+releases="$base/releases"
+nova="$releases/$versao"
+mkdir -p "$releases"
+anterior=$(readlink "$base/current" 2&gt;/dev/null || true)
+
+cp -r "$codigo" "$nova"
+ln -sfn "$nova" "$base/current.tmp"
+mv -T "$base/current.tmp" "$base/current"  # rename é atômico: nunca existe um "current" pela metade
+echo "[$versao] ativa"
+
+if ! grep -q "OK" "$base/current/health.txt"; then
+  echo "[$versao] verificação de saúde falhou"
+  if [[ -n $anterior ]]; then
+    ln -sfn "$anterior" "$base/current.tmp" &amp;&amp; mv -T "$base/current.tmp" "$base/current"
+    echo "[$versao] rollback para $(basename "$anterior")"
+  fi
+  rm -rf "$nova"
+  exit 1
+fi
+
+ls -1d "$releases"/* | sort | head -n -3 | xargs -r rm -rf  # mantém as 3 mais recentes</code></pre>
+<pre class="codigo"><code>mkdir -p codigo
+for v in v1.0.0 v1.1.0 v1.2.0 v1.3.0 v1.4.0; do
+  if [[ $v == v1.1.0 ]]; then echo "ERRO" &gt; codigo/health.txt; else echo "OK" &gt; codigo/health.txt; fi
+  bash deploy.sh srv "$v" codigo || echo "  (deploy de $v falhou com código $?)"
+  echo "  current -&gt; $(basename "$(readlink srv/current)")"
+done
+echo "releases guardadas: $(ls srv/releases | tr '\n' ' ')"</code></pre>
+<pre class="saida"><code>[v1.0.0] ativa
+  current -&gt; v1.0.0
+[v1.1.0] ativa
+[v1.1.0] verificação de saúde falhou
+[v1.1.0] rollback para v1.0.0
+  (deploy de v1.1.0 falhou com código 1)
+  current -&gt; v1.0.0
+[v1.2.0] ativa
+  current -&gt; v1.2.0
+[v1.3.0] ativa
+  current -&gt; v1.3.0
+[v1.4.0] ativa
+  current -&gt; v1.4.0
+releases guardadas: v1.2.0 v1.3.0 v1.4.0</code></pre>
+<p>A troca em dois passos (<code>ln -sfn</code> num nome temporário e <code>mv -T</code> por cima do <code>current</code>) é o que torna a mudança atômica: o <code>mv</code> é um <em>rename</em>, uma operação única do sistema de arquivos, e o servidor web nunca encontra o <em>link</em> inexistente ou apontando para uma pasta incompleta. A <em>release</em> com falha nem fica guardada, e o <em>rollback</em> é só trocar o <em>symlink</em> de volta. No servidor de verdade, o <em>script</em> roda via <code>ssh deploy@servidor 'bash -s' &lt; deploy.sh</code>, a verificação é um <code>curl -fsS http://localhost/health</code>, e o código chega por <code>rsync</code> ou <code>git archive</code>. As versões têm um só dígito em cada parte; com <code>v1.10.0</code>, o <code>sort</code> simples erraria a ordem, e o certo seria <code>sort -V</code>.</p>
+<div class="questao" id="q28">
+<span class="num">Q28</span>
+<div class="corpo">
+<p class="titulo">Testes com serviços no pipeline</p>
+<p>Escreva um <em>job</em> do GitHub Actions que rode os testes de integração contra um MySQL 8.4 de verdade, usando <code>services</code> com <em>healthcheck</em>, e passe as credenciais por variáveis de ambiente, com a senha vinda de um <em>secret</em>. Confira com Python que o serviço tem <em>healthcheck</em> e que nenhuma senha está escrita em texto no arquivo.</p>
+</div>
+</div>
+<p><code>integracao.yml</code>:</p>
+<pre class="codigo"><code>name: Integração
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  integracao:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_DATABASE: livraria_teste
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_TESTE_PASS }}
+        ports:
+          - 3306:3306
+        options: &gt;-
+          --health-cmd "mysqladmin ping -h 127.0.0.1"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    env:
+      DB_HOST: 127.0.0.1
+      DB_NAME: livraria_teste
+      DB_USER: root
+      DB_PASS: ${{ secrets.MYSQL_TESTE_PASS }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.5"
+      - run: composer install --no-interaction
+      - run: mysql -h 127.0.0.1 -uroot -p"$DB_PASS" livraria_teste &lt; schema.sql
+      - run: vendor/bin/phpunit --testsuite integracao</code></pre>
+<pre class="codigo"><code>import re
+import yaml
+
+texto = open("integracao.yml", encoding="utf-8").read()
+job = yaml.safe_load(texto)["jobs"]["integracao"]
+mysql = job["services"]["mysql"]
+
+print("tem healthcheck?", "--health-cmd" in mysql["options"])
+print("variáveis do job:", ", ".join(job["env"]))
+senhas = [v for k, v in {**mysql["env"], **job["env"]}.items() if "PASS" in k]
+print("todas as senhas vêm de secrets?", all(re.fullmatch(r"\$\{\{ secrets\.\w+ \}\}", s) for s in senhas))</code></pre>
+<pre class="saida"><code>tem healthcheck? True
+variáveis do job: DB_HOST, DB_NAME, DB_USER, DB_PASS
+todas as senhas vêm de secrets? True</code></pre>
+<p>O contêiner de serviço sobe antes dos passos, e o runner espera o <em>healthcheck</em> passar. O MySQL de teste é descartado ao fim do <em>job</em>: cada execução começa com um banco limpo, carregado do <code>schema.sql</code>. Para um banco que só existe durante o teste, a senha poderia até estar no arquivo, mas manter o hábito de usar <em>secrets</em> evita que o mesmo arquivo seja copiado um dia para algo que importa. A verificação em Python é o embrião de uma política automática: ferramentas como o <code>gitleaks</code> e o <em>secret scanning</em> do GitHub fazem o mesmo em todo o repositório.</p>
+</section>
+<section class="modulo" id="modulo-5">
+<h2><span class="rotulo">MÓDULO 5</span> Infraestrutura como código</h2>
+<p class="intro">Terraform (recursos na AWS, módulos e o state), Ansible e a combinação dos dois.</p>
+<p class="aulas-titulo">Artigos 25 a 30</p>
+<ul class="aulas">
+<li><span class="n">#25</span> Introdução ao Terraform: Infraestrutura que Você Pode Versionar</li>
+<li><span class="n">#26</span> Seus Primeiros Recursos na AWS com Terraform</li>
+<li><span class="n">#27</span> Módulos no Terraform: Reusabilidade e Organização</li>
+<li><span class="n">#28</span> State do Terraform: Entendendo o Arquivo Mais Crítico do Projeto</li>
+<li><span class="n">#29</span> Ansible: Configurando Servidores de Forma Declarativa</li>
+<li><span class="n">#30</span> Terraform + Ansible: Do Provisionamento à Configuração</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q29">
+<span class="num">Q29</span>
+<div class="corpo">
+<p class="titulo">Declarativo ou imperativo</p>
+<p>O Terraform é <strong>declarativo</strong>; um <em>script</em> Bash que chama a CLI da AWS é <strong>imperativo</strong>. Explique a diferença com o exemplo "quero 3 servidores", e o que acontece em cada caso quando já existem 2.</p>
+</div>
+</div>
+<p>No <strong>imperativo</strong>, você descreve os <strong>passos</strong>: "crie 3 servidores". Rodando o <em>script</em> com 2 já existentes, ele cria mais 3, e passam a existir 5, a menos que você escreva a lógica de verificar o que existe, contar e criar só a diferença. No <strong>declarativo</strong>, você descreve o <strong>estado desejado</strong>: "devem existir 3 servidores". O Terraform compara esse desejo com o que existe (registrado no <em>state</em> e consultado na nuvem), calcula a diferença e cria <strong>1</strong>. Rodar de novo não faz nada. É essa propriedade (convergir para o estado desejado, de forma idempotente) que permite versionar a infraestrutura no Git e aplicá-la quantas vezes for preciso.</p>
+<div class="questao" id="q30">
+<span class="num">Q30</span>
+<div class="corpo">
+<p class="titulo">O arquivo de state</p>
+<p>O que o <code>terraform.tfstate</code> guarda? Por que ele não deve ir para o Git, e por que um <em>backend</em> remoto com <em>lock</em> é obrigatório numa equipe?</p>
+</div>
+</div>
+<p>O <em>state</em> é o mapa entre os recursos do código (<code>aws_instance.web</code>) e os objetos reais na nuvem (o id <code>i-0abc...</code>), com os atributos conhecidos de cada um. Sem ele, o Terraform não sabe o que já criou. Ele não vai para o Git porque guarda <strong>segredos em texto puro</strong> (senhas de banco geradas, chaves) e porque versões diferentes em <em>branches</em> diferentes levariam a aplicar sobre um mapa desatualizado, criando duplicatas ou destruindo recursos. O <em>backend</em> remoto (um <em>bucket</em> S3, com o <em>lock</em> nativo do S3 ou uma tabela do DynamoDB nas versões antigas; o Terraform Cloud; o GitLab) guarda uma cópia única, cifrada e versionada, e o <strong>lock</strong> impede que duas pessoas rodem <code>apply</code> ao mesmo tempo e corrompam o <em>state</em>.</p>
+<div class="questao" id="q31">
+<span class="num">Q31</span>
+<div class="corpo">
+<p class="titulo">Ler o plano antes de aplicar</p>
+<p>Num <code>terraform plan</code>, o que significam os símbolos <code>+</code>, <code>-</code>, <code>~</code> e <code>-/+</code>? Por que um <code>-/+</code> num banco de dados deve parar tudo?</p>
+</div>
+</div>
+<ul><li><code>+</code>: o recurso será <strong>criado</strong>.</li><li><code>-</code>: será <strong>destruído</strong>.</li><li><code>~</code>: será <strong>alterado no lugar</strong>, sem recriar.</li><li><code>-/+</code>: será <strong>destruído e recriado</strong>, porque um atributo que não pode ser alterado no lugar mudou (o nome do banco, a zona de disponibilidade, o tipo de disco em alguns casos).</li></ul>
+<p>Num banco de dados, <code>-/+</code> significa <strong>apagar o banco e criar um vazio</strong>: todos os dados se perdem, salvo <em>snapshot</em>. O plano mostra qual atributo força a recriação (<code># forces replacement</code>). A defesa é ler todo plano antes do <code>apply</code> e, para recursos com estado, usar <code>lifecycle { prevent_destroy = true }</code>, que faz o Terraform recusar qualquer plano que destrua o recurso.</p>
+<div class="questao" id="q32">
+<span class="num">Q32</span>
+<div class="corpo">
+<p class="titulo">Terraform e Ansible juntos</p>
+<p>Por que o curso combina Terraform e Ansible, em vez de usar só um deles? Qual é a fronteira entre os dois?</p>
+</div>
+</div>
+<p>Cada um é melhor numa camada. O <strong>Terraform</strong> provisiona a <strong>infraestrutura</strong>: rede, máquinas, banco gerenciado, DNS, permissões, recursos que a API da nuvem cria e destrói, e cujo ciclo de vida ele acompanha pelo <em>state</em>. O <strong>Ansible</strong> configura <strong>o que roda dentro</strong> das máquinas: pacotes, arquivos de configuração, usuários, serviços. Ele se conecta por SSH, não precisa de agente nem de <em>state</em> e é idempotente por módulo. A fronteira típica: o Terraform cria as VMs e gera, como saída, o inventário (os IPs) que o Ansible usa para instalá-las e configurá-las. Quando a aplicação roda em containers ou em serviços gerenciados, a parte do Ansible encolhe ou desaparece: a configuração vai para a imagem.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q33">
+<span class="num">Q33</span>
+<div class="corpo">
+<p class="titulo">Uma VPC e um servidor com Terraform</p>
+<p>Escreva o Terraform para criar, na AWS, uma VPC <code>10.0.0.0/16</code> com uma sub-rede pública, um <em>security group</em> que libere a porta 443 para a internet e a 22 só para o seu IP (recebido como variável), e uma instância <code>t3.micro</code> com Debian. Use variáveis, <em>tags</em> comuns e uma saída com o IP público.</p>
+</div>
+</div>
+<pre class="codigo"><code>terraform {
+  required_version = "&gt;= 1.9"
+  required_providers {
+    aws = { source = "hashicorp/aws", version = "~&gt; 6.0" }
+  }
+}
+
+provider "aws" {
+  region = var.regiao
+  default_tags {
+    tags = { projeto = "livraria", ambiente = var.ambiente, gerenciado_por = "terraform" }
+  }
+}
+
+variable "regiao" {
+  type    = string
+  default = "sa-east-1"
+}
+variable "ambiente" {
+  type    = string
+  default = "homologacao"
+}
+variable "meu_ip" {
+  type        = string
+  description = "IP liberado para SSH, no formato 203.0.113.10/32"
+  validation {
+    condition     = can(cidrhost(var.meu_ip, 0)) &amp;&amp; endswith(var.meu_ip, "/32")
+    error_message = "Informe um único IP, com /32."
+  }
+}
+
+resource "aws_vpc" "principal" {
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_hostnames = true
+}
+
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.principal.id
+}
+
+resource "aws_subnet" "publica" {
+  vpc_id                  = aws_vpc.principal.id
+  cidr_block              = cidrsubnet(aws_vpc.principal.cidr_block, 8, 1) # 10.0.1.0/24
+  map_public_ip_on_launch = true
+}
+
+resource "aws_route_table" "publica" {
+  vpc_id = aws_vpc.principal.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.gw.id
+  }
+}
+
+resource "aws_route_table_association" "publica" {
+  subnet_id      = aws_subnet.publica.id
+  route_table_id = aws_route_table.publica.id
+}
+
+resource "aws_security_group" "web" {
+  vpc_id = aws_vpc.principal.id
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [var.meu_ip]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+data "aws_ami" "debian" {
+  most_recent = true
+  owners      = ["136693071363"] # conta oficial do Debian na AWS
+  filter {
+    name   = "name"
+    values = ["debian-13-amd64-*"]
+  }
+}
+
+resource "aws_instance" "web" {
+  ami                    = data.aws_ami.debian.id
+  instance_type          = "t3.micro"
+  subnet_id              = aws_subnet.publica.id
+  vpc_security_group_ids = [aws_security_group.web.id]
+}
+
+output "ip_publico" {
+  value = aws_instance.web.public_ip
+}</code></pre>
+<p>Fluxo: <code>terraform init</code> (baixa o <em>provider</em>), <code>terraform plan -var meu_ip=203.0.113.10/32 -out plano</code> (mostra o que vai acontecer), <code>terraform apply plano</code> (aplica exatamente o plano revisado) e, ao fim do estudo, <code>terraform destroy</code>, para não pagar pelo que ficou ligado. Sem uma sub-rede pública com rota para o <em>internet gateway</em>, a instância teria IP público e mesmo assim seria inalcançável: é o erro mais comum nos primeiros passos. O <code>validation</code> recusa um <code>0.0.0.0/0</code> na porta 22 antes de chegar à AWS. O código não foi aplicado numa conta real para este caderno; o <code>terraform validate</code> confere a sintaxe e as referências sem criar nada.</p>
+<div class="questao" id="q34">
+<span class="num">Q34</span>
+<div class="corpo">
+<p class="titulo">Uma política contra destruição no plano</p>
+<p>O <code>terraform show -json plano</code> gera o plano em JSON. Escreva um <em>script</em> Python que leia esse JSON e <strong>reprove</strong> o plano (código de saída 1) se ele destruir ou recriar qualquer recurso dos tipos <code>aws_db_instance</code> ou <code>aws_s3_bucket</code>, listando as ações de todos os recursos. Teste com um plano de exemplo.</p>
+</div>
+</div>
+<pre class="codigo"><code>import json
+import sys
+
+# Trecho no formato de "terraform show -json plano" (só os campos usados aqui).
+plano = json.loads("""
+{"resource_changes": [
+  {"address": "aws_instance.web",         "type": "aws_instance",    "change": {"actions": ["update"]}},
+  {"address": "aws_db_instance.principal","type": "aws_db_instance", "change": {"actions": ["delete", "create"]}},
+  {"address": "aws_s3_bucket.capas",      "type": "aws_s3_bucket",   "change": {"actions": ["no-op"]}},
+  {"address": "aws_security_group.web",   "type": "aws_security_group", "change": {"actions": ["create"]}}
+]}
+""")
+
+PROTEGIDOS = {"aws_db_instance", "aws_s3_bucket"}
+SIMBOLO = {("create",): "+", ("delete",): "-", ("update",): "~", ("no-op",): " ",
+           ("delete", "create"): "-/+", ("create", "delete"): "+/-"}
+
+violacoes = []
+for rc in plano["resource_changes"]:
+    acoes = tuple(rc["change"]["actions"])
+    print(f"{SIMBOLO.get(acoes, '?'):&gt;3} {rc['address']}")
+    if rc["type"] in PROTEGIDOS and "delete" in acoes:
+        violacoes.append(rc["address"])
+
+if violacoes:
+    print("REPROVADO: o plano destrói recursos protegidos:", ", ".join(violacoes))
+    sys.exit(1)
+print("aprovado")</code></pre>
+<pre class="saida"><code>  ~ aws_instance.web
+-/+ aws_db_instance.principal
+    aws_s3_bucket.capas
+  + aws_security_group.web
+REPROVADO: o plano destrói recursos protegidos: aws_db_instance.principal</code></pre>
+<p>Num pipeline, essa verificação roda entre o <code>plan</code> e o <code>apply</code>: um código de saída diferente de zero para tudo antes que alguém aprove sem ler. É uma "política como código" mínima; ferramentas como o OPA (com o Conftest) e o Sentinel do Terraform Cloud fazem o mesmo com uma linguagem própria. A sequência <code>["delete", "create"]</code> é o <code>-/+</code> do plano em texto; com <code>create_before_destroy</code> no recurso, ela vira <code>["create", "delete"]</code>.</p>
+<div class="questao" id="q35">
+<span class="num">Q35</span>
+<div class="corpo">
+<p class="titulo">Idempotência como no Ansible</p>
+<p>O módulo <code>lineinfile</code> do Ansible garante que uma linha exista num arquivo, e só altera o arquivo se precisar, informando <code>changed</code> ou <code>ok</code>. Escreva em Bash a função <code>garantir_linha ARQUIVO REGEX LINHA</code>, com o mesmo comportamento: se uma linha casar com a expressão regular, ela é substituída pela nova (se for diferente); senão, a linha é acrescentada. Rode-a duas vezes sobre um <code>sshd_config</code> de exemplo e mostre que a segunda não muda nada.</p>
+</div>
+</div>
+<pre class="codigo"><code>garantir_linha() {
+  local arquivo=$1 regex=$2 linha=$3
+  if grep -qxF -- "$linha" "$arquivo"; then
+    echo "ok:      $linha"
+  elif grep -qE -- "$regex" "$arquivo"; then
+    sed -i -E "s|$regex.*|$linha|" "$arquivo"
+    echo "changed: $linha (substituída)"
+  else
+    echo "$linha" &gt;&gt; "$arquivo"
+    echo "changed: $linha (acrescentada)"
+  fi
+}
+
+cat &gt; sshd_config &lt;&lt;'CFG'
+Port 22
+#PermitRootLogin prohibit-password
+PasswordAuthentication yes
+CFG
+
+for rodada in 1 2; do
+  echo "rodada $rodada:"
+  garantir_linha sshd_config '^#?PermitRootLogin' 'PermitRootLogin no'
+  garantir_linha sshd_config '^#?PasswordAuthentication' 'PasswordAuthentication no'
+  garantir_linha sshd_config '^#?MaxAuthTries' 'MaxAuthTries 3'
+done
+echo "--- resultado:"
+cat sshd_config</code></pre>
+<pre class="saida"><code>rodada 1:
+changed: PermitRootLogin no (substituída)
+changed: PasswordAuthentication no (substituída)
+changed: MaxAuthTries 3 (acrescentada)
+rodada 2:
+ok:      PermitRootLogin no
+ok:      PasswordAuthentication no
+ok:      MaxAuthTries 3
+--- resultado:
+Port 22
+PermitRootLogin no
+PasswordAuthentication no
+MaxAuthTries 3</code></pre>
+<p>A segunda rodada só diz <code>ok</code>: o arquivo já está no estado desejado. Isso permite rodar o <em>playbook</em> inteiro a cada mudança, sem medo, e o relatório de <code>changed</code> vira um detector de desvios: se alguém editou o servidor à mão, a próxima execução mostra e corrige. No Ansible, a mesma tarefa é <code>ansible.builtin.lineinfile</code> com <code>regexp</code>, <code>line</code> e um <code>notify</code> para reiniciar o <code>sshd</code> <strong>só</strong> quando algo mudou. Antes de reiniciar, <code>sshd -t</code> valida a configuração; um erro aqui tranca todos do lado de fora.</p>
+</section>
+<section class="modulo" id="modulo-6">
+<h2><span class="rotulo">MÓDULO 6</span> Observabilidade</h2>
+<p class="intro">Métricas, logs e traces; Grafana, dashboards e alertas; rastreamento distribuído com OpenTelemetry; alertas inteligentes e resposta a incidentes.</p>
+<p class="aulas-titulo">Artigos 31 a 34</p>
+<ul class="aulas">
+<li><span class="n">#31</span> Introdução ao Monitoramento: Métricas, Logs e Traces</li>
+<li><span class="n">#32</span> Grafana: Dashboards e Alertas que Fazem Sentido</li>
+<li><span class="n">#33</span> Rastreamento Distribuído com OpenTelemetry</li>
+<li><span class="n">#34</span> Alertas Inteligentes e Cultura de Resposta a Incidentes</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q36">
+<span class="num">Q36</span>
+<div class="corpo">
+<p class="titulo">Os três pilares</p>
+<p>Qual pergunta cada pilar da observabilidade responde melhor: métricas, <em>logs</em> e <em>traces</em>? Dê um exemplo de uso de cada um durante um incidente de lentidão no <em>checkout</em>.</p>
+</div>
+</div>
+<ul><li><strong>Métricas</strong> respondem <strong>"o quê e quanto"</strong>: números agregados ao longo do tempo, baratos de guardar. "A latência p95 do <em>checkout</em> subiu de 300 ms para 4 s às 14h10, e a taxa de erros foi para 8%."</li><li><strong><em>Traces</strong></em> respondem <strong>"onde"</strong>: o caminho de uma requisição pelos serviços, com o tempo de cada etapa. "Das 4 s, 3,7 s foram gastos na chamada ao serviço de frete."</li><li><strong><em>Logs</strong></em> respondem <strong>"por quê"</strong>: o detalhe de um evento. "O serviço de frete registrou <em>timeout</em> ao consultar a transportadora, com o id da requisição."</li></ul>
+<p>O fluxo típico vai da métrica (o alerta disparou) ao <em>trace</em> (onde está a demora) e ao <em>log</em> (qual foi o erro), e o identificador de <em>trace</em> presente nos <em>logs</em> é o que liga um ao outro.</p>
+<div class="questao" id="q37">
+<span class="num">Q37</span>
+<div class="corpo">
+<p class="titulo">Por que percentis, e não a média</p>
+<p>Por que um painel deve mostrar a latência p95 ou p99, e não a média? Dê um exemplo numérico.</p>
+</div>
+</div>
+<p>A média esconde a cauda. Com 100 requisições, 95 em 100 ms e 5 em 5 s, a média é 345 ms, um número que não descreve a experiência de <strong>ninguém</strong>: a maioria teve 100 ms, e 5 usuários esperaram 5 segundos. O p95 diz que "95% das requisições levaram até X", e o p99 mostra a cauda que afeta os usuários mais azarados, que muitas vezes são os mais valiosos (os carrinhos maiores fazem mais consultas). E um usuário que carrega uma página com 20 requisições quase certamente encontra pelo menos uma lenta da cauda. Percentis também não se somam nem se tiram médias entre servidores: calcule-os a partir de histogramas.</p>
+<div class="questao" id="q38">
+<span class="num">Q38</span>
+<div class="corpo">
+<p class="titulo">SLO e orçamento de erro</p>
+<p>O que são SLI, SLO e orçamento de erro? Se o SLO de disponibilidade do <em>checkout</em> é 99,9% por mês, quanto tempo de indisponibilidade o mês permite, e o que a equipe faz quando o orçamento acaba?</p>
+</div>
+</div>
+<p>O <strong>SLI</strong> (<em>indicador</em>) é a medida: a proporção de requisições do <em>checkout</em> que responderam com sucesso em menos de 1 s. O <strong>SLO</strong> (<em>objetivo</em>) é a meta para o SLI: 99,9% num mês. O <strong>orçamento de erro</strong> é o que sobra: 0,1%, que num mês de 30 dias são 43,2 minutos de indisponibilidade total (ou o equivalente em requisições com falha). Enquanto há orçamento, a equipe pode arriscar (implantar com frequência, fazer experimentos). Quando ele acaba, a prioridade muda por acordo prévio: congelam-se as funcionalidades novas e o esforço vai para a confiabilidade até o orçamento se recompor. O SLO transforma "o sistema precisa ser estável" numa regra objetiva que produto e engenharia aceitam juntos.</p>
+<div class="questao" id="q39">
+<span class="num">Q39</span>
+<div class="corpo">
+<p class="titulo">Alertas que acordam alguém</p>
+<p>Por que alertar sobre "CPU acima de 80%" costuma ser um alerta ruim, e "taxa de erros do <em>checkout</em> consumindo o orçamento de erro 14 vezes mais rápido que o normal por 1 hora" é um bom? O que é fadiga de alertas?</p>
+</div>
+</div>
+<p>CPU alta é uma <strong>causa possível</strong>, não um sintoma que o usuário sente: o sistema pode estar ótimo com 90% de CPU (é para isso que ela existe) e péssimo com 20% (travado esperando o banco). Um alerta deve disparar quando <strong>o usuário está sendo afetado</strong> e alguém precisa agir agora. O alerta por <strong>taxa de consumo do orçamento</strong> (<em>burn rate</em>) mede justamente isso: a esse ritmo, o orçamento do mês acaba em uns 2 dias, e não é ruído passageiro, porque se sustentou por uma hora. A <strong>fadiga de alertas</strong> acontece quando chegam tantos alertas sem ação que as pessoas passam a ignorá-los, inclusive o que importa. Regra: todo alerta que acorda alguém deve ser urgente, real e acionável; o resto vira painel ou <em>ticket</em>.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q40">
+<span class="num">Q40</span>
+<div class="corpo">
+<p class="titulo">Percentis de latência</p>
+<p>Dado um conjunto de 20 latências (em ms) de um <em>endpoint</em>, calcule a média, a mediana, o p95 e o p99 com Python, e mostre como uma única requisição muito lenta afeta a média e o p99, mas não a mediana.</p>
+</div>
+</div>
+<pre class="codigo"><code>import statistics
+
+def percentil(dados, p):
+    """Percentil pelo método do "posto mais próximo": o menor valor com p% dos dados até ele."""
+    ordenados = sorted(dados)
+    posto = max(1, -(-p * len(ordenados) // 100))  # teto de p*n/100
+    return ordenados[posto - 1]
+
+latencias = [92, 101, 95, 110, 98, 105, 97, 120, 99, 102,
+             96, 103, 100, 94, 108, 115, 97, 101, 450, 99]
+
+def resumo(rotulo, dados):
+    print(f"{rotulo:&lt;16} média {statistics.mean(dados):6.1f} | mediana {statistics.median(dados):5.1f} | "
+          f"p95 {percentil(dados, 95):5} | p99 {percentil(dados, 99):5}")
+
+resumo("normal", latencias)
+resumo("com 1 de 8 s", latencias[:-1] + [8000])</code></pre>
+<pre class="saida"><code>normal           média  119.1 | mediana 100.5 | p95   120 | p99   450
+com 1 de 8 s     média  514.1 | mediana 101.0 | p95   450 | p99  8000</code></pre>
+<p>Uma única requisição de 8 s levou a média de 120 para mais de 500 ms, quando 19 das 20 requisições levaram cerca de 100 ms: a média "acusa" uma lentidão que quase ninguém viveu e, no caso normal, esconde a de 450 ms. A mediana nem se mexe. O p95 mostra o que 1 em cada 20 usuários sente; o p99, com só 20 amostras, é o próprio pior caso. Percentis exigem volume para fazer sentido, e é por isso que os sistemas de monitoramento os calculam sobre milhares de requisições, a partir de histogramas.</p>
+<div class="questao" id="q41">
+<span class="num">Q41</span>
+<div class="corpo">
+<p class="titulo">Orçamento de erro e burn rate</p>
+<p>Escreva um <em>script</em> Python que, para um SLO de 99,9% num mês de 30 dias, calcule o orçamento de erro em minutos e em requisições (para 10 milhões de requisições no mês), e, dada a taxa de erros da última hora, a <em>burn rate</em> e em quantos dias o orçamento acabaria. Classifique em "página alguém" (burn rate ≥ 14,4), "abre ticket" (≥ 6) ou "normal".</p>
+</div>
+</div>
+<pre class="codigo"><code>SLO = 0.999
+DIAS = 30
+REQUISICOES_MES = 10_000_000
+
+orcamento = 1 - SLO
+print(f"orçamento: {orcamento * DIAS * 24 * 60:.1f} minutos ou {orcamento * REQUISICOES_MES:,.0f} requisições com erro por mês")
+
+for taxa_erros in [0.0005, 0.008, 0.02]:
+    burn = taxa_erros / orcamento  # 1,0 = gasta o orçamento exatamente em 30 dias
+    dias = DIAS / burn
+    acao = "página alguém" if burn &gt;= 14.4 else "abre ticket" if burn &gt;= 6 else "normal"
+    print(f"erros {taxa_erros:6.2%} -&gt; burn rate {burn:5.1f}x, orçamento acaba em {dias:5.1f} dias: {acao}")</code></pre>
+<pre class="saida"><code>orçamento: 43.2 minutos ou 10,000 requisições com erro por mês
+erros  0.05% -&gt; burn rate   0.5x, orçamento acaba em  60.0 dias: normal
+erros  0.80% -&gt; burn rate   8.0x, orçamento acaba em   3.8 dias: abre ticket
+erros  2.00% -&gt; burn rate  20.0x, orçamento acaba em   1.5 dias: página alguém</code></pre>
+<p>Os limiares 14,4 e 6 vêm do livro <em>The Site Reliability Workbook</em>, do Google: 14,4 vezes por uma hora consome 2% do orçamento mensal, o que justifica acordar alguém; 6 vezes por seis horas consome 5%. Na prática, o alerta combina uma janela longa (a taxa se sustentou) com uma curta (e ainda está acontecendo), para não disparar por um pico que já passou nem demorar a detectar. Uma taxa de 0,05% de erros parece ruim, mas está dentro do orçamento: o SLO dá à equipe um critério para <strong>não</strong> reagir a tudo.</p>
+<div class="questao" id="q42">
+<span class="num">Q42</span>
+<div class="corpo">
+<p class="titulo">Logs estruturados com correlação</p>
+<p>Configure o <code>logging</code> do Python para emitir uma linha JSON por evento, com data em ISO 8601 UTC, nível, mensagem, o nome do serviço e um <code>trace_id</code> que acompanha todos os <em>logs</em> de uma mesma requisição. Simule duas requisições, uma com erro, e mostre como filtrar os <em>logs</em> de uma delas.</p>
+</div>
+</div>
+<pre class="codigo"><code>import contextvars
+import json
+import logging
+from datetime import datetime, timezone
+
+trace_atual = contextvars.ContextVar("trace_id", default="-")
+
+class FormatoJson(logging.Formatter):
+    def format(self, r):
+        evento = {
+            "ts": datetime.fromtimestamp(r.created, timezone.utc).isoformat(timespec="milliseconds"),
+            "nivel": r.levelname,
+            "servico": "checkout",
+            "trace_id": trace_atual.get(),
+            "msg": r.getMessage(),
+        }
+        evento.update(getattr(r, "campos", {}))
+        return json.dumps(evento, ensure_ascii=False)
+
+saida = logging.StreamHandler()
+saida.setFormatter(FormatoJson())
+log = logging.getLogger("checkout")
+log.addHandler(saida)
+log.setLevel(logging.INFO)
+
+def finalizar(pedido, trace_id, falha=False):
+    trace_atual.set(trace_id)
+    log.info("finalizando pedido", extra={"campos": {"pedido": pedido}})
+    if falha:
+        log.error("frete indisponível", extra={"campos": {"pedido": pedido, "dependencia": "frete"}})
+    else:
+        log.info("pedido finalizado", extra={"campos": {"pedido": pedido, "total": 149.7}})
+
+import io, sys
+buffer = io.StringIO()
+saida.setStream(buffer)  # captura para filtrar em seguida
+finalizar(1041, "a1b2")
+finalizar(1042, "c3d4", falha=True)
+
+linhas = [json.loads(l) for l in buffer.getvalue().splitlines()]
+print("eventos da requisição c3d4:")
+for e in linhas:
+    if e["trace_id"] == "c3d4":
+        sem_data = {k: v for k, v in e.items() if k != "ts"}
+        print(" ", json.dumps(sem_data, ensure_ascii=False))
+print("formato da data:", "ok" if linhas[0]["ts"].endswith("+00:00") else "?")</code></pre>
+<pre class="saida"><code>eventos da requisição c3d4:
+  {"nivel": "INFO", "servico": "checkout", "trace_id": "c3d4", "msg": "finalizando pedido", "pedido": 1042}
+  {"nivel": "ERROR", "servico": "checkout", "trace_id": "c3d4", "msg": "frete indisponível", "pedido": 1042, "dependencia": "frete"}
+formato da data: ok</code></pre>
+<p>Com uma linha JSON por evento, a ferramenta de <em>logs</em> (Loki, Elasticsearch, CloudWatch) indexa cada campo, e a busca vira <code>trace_id = "c3d4"</code> ou <code>nivel = "ERROR" and dependencia = "frete"</code>, em vez de expressões regulares sobre texto livre. O <code>ContextVar</code> mantém o <code>trace_id</code> da requisição em andamento, inclusive em código assíncrono, sem passá-lo de função em função. Com o OpenTelemetry, esse id é o mesmo do <em>trace</em>, e o Grafana salta do <em>log</em> para o <em>trace</em> com um clique. A data em UTC evita a confusão de horários entre servidores em fusos diferentes e no horário de verão.</p>
+</section>
+<section class="modulo" id="modulo-7">
+<h2><span class="rotulo">MÓDULO 7</span> AWS na prática</h2>
+<p class="intro">EC2, VPC e IAM; ECS e Lambda; RDS, ElastiCache e estratégias de dados; Route 53, CloudFront e ACM.</p>
+<p class="aulas-titulo">Artigos 35 a 38</p>
+<ul class="aulas">
+<li><span class="n">#35</span> AWS na Prática: EC2, VPC e IAM em Profundidade</li>
+<li><span class="n">#36</span> ECS e Lambda: Containers e Serverless na AWS</li>
+<li><span class="n">#37</span> RDS, ElastiCache e Estratégias de Dados na AWS</li>
+<li><span class="n">#38</span> Route53, CloudFront e ACM: Rede e Entrega de Conteúdo</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q43">
+<span class="num">Q43</span>
+<div class="corpo">
+<p class="titulo">Sub-rede pública e privada</p>
+<p>Numa VPC, o que torna uma sub-rede "pública" ou "privada"? Em qual delas ficam o <em>load balancer</em>, os servidores da aplicação e o banco RDS, e como os servidores privados baixam atualizações da internet?</p>
+</div>
+</div>
+<p>Não é uma propriedade da sub-rede em si, mas da <strong>tabela de rotas</strong> associada a ela: uma sub-rede é pública se a rota <code>0.0.0.0/0</code> aponta para um <em>internet gateway</em>; é privada se não aponta. O <strong>load balancer</strong> fica nas públicas (recebe o tráfego da internet); os <strong>servidores da aplicação</strong> e o <strong>RDS</strong>, nas privadas, sem IP público, alcançáveis só de dentro da VPC. Para sair para a internet (atualizações, APIs externas), as privadas apontam <code>0.0.0.0/0</code> para um <strong>NAT gateway</strong> que fica numa sub-rede pública: a conexão de saída funciona, mas ninguém de fora consegue iniciar uma conexão de entrada. O NAT gateway é cobrado por hora e por GB, um custo que surpreende em ambientes de estudo.</p>
+<div class="questao" id="q44">
+<span class="num">Q44</span>
+<div class="corpo">
+<p class="titulo">IAM e o menor privilégio</p>
+<p>Por que a aplicação na EC2 deve usar uma <strong>role</strong> do IAM, e não chaves de acesso (<code>AWS_ACCESS_KEY_ID</code>) gravadas no servidor? O que é o princípio do menor privilégio numa política?</p>
+</div>
+</div>
+<p>Chaves de acesso são credenciais <strong>permanentes</strong>: gravadas num arquivo ou no código, vazam (num <em>commit</em>, num <em>backup</em>, numa imagem) e continuam valendo até alguém as revogar. Uma <strong>role</strong> associada à instância fornece credenciais <strong>temporárias</strong>, renovadas automaticamente pelo serviço de metadados, que nunca aparecem em arquivo nenhum; o SDK as encontra sozinho. O <strong>menor privilégio</strong> é conceder só as ações e os recursos necessários: a aplicação que grava capas no S3 recebe <code>s3:PutObject</code> e <code>s3:GetObject</code> no <em>bucket</em> <code>livraria-capas</code>, e não <code>s3:*</code> em <code>*</code>. Se a aplicação for comprometida, o estrago fica limitado ao que ela podia fazer.</p>
+<div class="questao" id="q45">
+<span class="num">Q45</span>
+<div class="corpo">
+<p class="titulo">ECS ou Lambda</p>
+<p>Para cada parte da livraria, escolha entre ECS Fargate e Lambda: (a) a API principal, com tráfego constante; (b) o redimensionamento das capas enviadas; (c) um relatório que roda uma vez por noite e leva 40 minutos.</p>
+</div>
+</div>
+<ul><li>(a) <strong>ECS Fargate</strong>: um serviço com containers sempre ligados atende o tráfego constante com latência previsível, sem <em>cold start</em>, e o custo por hora é menor que o da Lambda com carga contínua.</li><li>(b) <strong>Lambda</strong>: disparada pelo evento de <em>upload</em> no S3, roda alguns segundos por imagem, escala sozinha com o volume e não custa nada quando não há <em>uploads</em>.</li><li>(c) <strong>ECS</strong> (uma tarefa agendada pelo EventBridge): a Lambda tem limite de <strong>15 minutos</strong> por execução, então 40 minutos não cabem nela.</li></ul>
+<p>A regra prática: Lambda para trabalho curto, orientado a eventos e intermitente; containers para serviços de longa duração ou carga contínua.</p>
+<div class="questao" id="q46">
+<span class="num">Q46</span>
+<div class="corpo">
+<p class="titulo">CDN e cache</p>
+<p>O que o CloudFront faz por um site com usuários no Brasil todo e servidor em São Paulo? Por que as URLs de arquivos estáticos costumam ter um <em>hash</em> no nome (<code>app.3f9a2c.css</code>)?</p>
+</div>
+</div>
+<p>O CloudFront é uma <strong>CDN</strong>: guarda cópias do conteúdo em pontos de presença espalhados pelo mundo, perto dos usuários. A primeira requisição numa região vai à origem; as seguintes são servidas pela cópia local, com menos latência e sem carregar o servidor. Também termina o TLS perto do usuário e absorve picos e ataques de volume. O <em>hash</em> no nome resolve o problema da <strong>invalidação</strong>: o arquivo pode ser servido com cache de um ano (<code>Cache-Control: max-age=31536000, immutable</code>), porque, quando o conteúdo muda, o nome muda junto e o HTML passa a apontar para um arquivo novo, sem esperar o cache expirar nem pagar por invalidações manuais. O HTML, que aponta para eles, tem cache curto.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q47">
+<span class="num">Q47</span>
+<div class="corpo">
+<p class="titulo">Planejando sub-redes</p>
+<p>Com o módulo <code>ipaddress</code> do Python, divida a VPC <code>10.0.0.0/16</code> em sub-redes <code>/20</code> e reserve as seis primeiras: pública, aplicação e dados, em duas zonas de disponibilidade. Mostre, para cada uma, o intervalo, o número de endereços utilizáveis na AWS (que reserva 5 por sub-rede) e verifique que não há sobreposição.</p>
+</div>
+</div>
+<pre class="codigo"><code>import ipaddress
+from itertools import combinations
+
+vpc = ipaddress.ip_network("10.0.0.0/16")
+subredes = vpc.subnets(new_prefix=20)
+camadas = ["publica", "aplicacao", "dados"]
+zonas = ["sa-east-1a", "sa-east-1b"]
+
+plano = {}
+for camada in camadas:
+    for zona in zonas:
+        plano[f"{camada}-{zona[-1]}"] = next(subredes)
+
+for nome, rede in plano.items():
+    print(f"{nome:12} {str(rede):15} {rede[0]} - {rede[-1]}  ({rede.num_addresses - 5} utilizáveis)")
+
+sobrepostas = [(a, b) for (a, ra), (b, rb) in combinations(plano.items(), 2) if ra.overlaps(rb)]
+print("sobreposições:", sobrepostas or "nenhuma")
+print("sub-redes /20 livres na VPC:", sum(1 for _ in subredes))</code></pre>
+<pre class="saida"><code>publica-a    10.0.0.0/20     10.0.0.0 - 10.0.15.255  (4091 utilizáveis)
+publica-b    10.0.16.0/20    10.0.16.0 - 10.0.31.255  (4091 utilizáveis)
+aplicacao-a  10.0.32.0/20    10.0.32.0 - 10.0.47.255  (4091 utilizáveis)
+aplicacao-b  10.0.48.0/20    10.0.48.0 - 10.0.63.255  (4091 utilizáveis)
+dados-a      10.0.64.0/20    10.0.64.0 - 10.0.79.255  (4091 utilizáveis)
+dados-b      10.0.80.0/20    10.0.80.0 - 10.0.95.255  (4091 utilizáveis)
+sobreposições: nenhuma
+sub-redes /20 livres na VPC: 10</code></pre>
+<p>Os 5 endereços reservados pela AWS em cada sub-rede são o da rede, o do roteador da VPC, o do DNS, um reservado para uso futuro e o de <em>broadcast</em>. Deixar 10 blocos <code>/20</code> livres é proposital: acrescentar uma zona ou uma camada depois é fácil, e mudar o CIDR de uma VPC em uso não é. Evite também sobrepor a faixa da VPC à da rede do escritório ou de outras VPCs, senão um <em>peering</em> ou uma VPN entre elas fica impossível.</p>
+<div class="questao" id="q48">
+<span class="num">Q48</span>
+<div class="corpo">
+<p class="titulo">Auditando uma política do IAM</p>
+<p>Escreva um <em>script</em> Python que analise uma política do IAM (JSON) e aponte: declarações com <code>"Action": "*"</code> ou serviço inteiro (<code>"s3:*"</code>), <code>"Resource": "*"</code> em ações de escrita, e ausência de condição em <code>iam:PassRole</code>. Teste com uma política ruim e uma boa.</p>
+</div>
+</div>
+<pre class="codigo"><code>import json
+
+def auditar(nome, politica):
+    problemas = []
+    for i, d in enumerate(politica["Statement"], 1):
+        if d.get("Effect") != "Allow":
+            continue
+        acoes = d["Action"] if isinstance(d["Action"], list) else [d["Action"]]
+        recursos = d["Resource"] if isinstance(d["Resource"], list) else [d["Resource"]]
+        for a in acoes:
+            if a == "*" or a.endswith(":*"):
+                problemas.append(f"#{i}: ação ampla demais '{a}'")
+            escrita = any(p in a for p in ("Put", "Delete", "Create", "Update", "*"))
+            if escrita and "*" in recursos:
+                problemas.append(f"#{i}: '{a}' em qualquer recurso")
+            if a == "iam:PassRole" and "Condition" not in d:
+                problemas.append(f"#{i}: iam:PassRole sem condição")
+    print(f"{nome}: {'aprovada' if not problemas else 'reprovada'}")
+    for p in problemas:
+        print("   -", p)
+
+ruim = json.loads("""{"Version": "2012-10-17", "Statement": [
+  {"Effect": "Allow", "Action": "s3:*", "Resource": "*"},
+  {"Effect": "Allow", "Action": ["iam:PassRole"], "Resource": "*"}
+]}""")
+
+boa = json.loads("""{"Version": "2012-10-17", "Statement": [
+  {"Effect": "Allow", "Action": ["s3:GetObject", "s3:PutObject"],
+   "Resource": "arn:aws:s3:::livraria-capas/*"}
+]}""")
+
+auditar("política ruim", ruim)
+auditar("política boa", boa)</code></pre>
+<pre class="saida"><code>política ruim: reprovada
+   - #1: ação ampla demais 's3:*'
+   - #1: 's3:*' em qualquer recurso
+   - #2: iam:PassRole sem condição
+política boa: aprovada</code></pre>
+<p>O <code>iam:PassRole</code> sem restrição é especialmente perigoso: permite entregar <strong>qualquer</strong> <em>role</em> (inclusive uma de administrador) a um serviço, como uma Lambda que a própria aplicação cria, uma escalada de privilégio clássica. A versão boa restringe as ações e o recurso a um prefixo de um <em>bucket</em>. Na AWS, o IAM Access Analyzer faz essa análise com muito mais regras e ainda sugere políticas a partir do uso real registrado no CloudTrail.</p>
+</section>
+<section class="modulo" id="modulo-8">
+<h2><span class="rotulo">MÓDULO 8</span> Kubernetes</h2>
+<p class="intro">Orquestrando containers em escala, EKS e Kubernetes em produção: segurança, GitOps e deploys avançados.</p>
+<p class="aulas-titulo">Artigos 39 a 41</p>
+<ul class="aulas">
+<li><span class="n">#39</span> Introdução ao Kubernetes: Orquestrando Containers em Escala</li>
+<li><span class="n">#40</span> EKS: Kubernetes Gerenciado na AWS</li>
+<li><span class="n">#41</span> Kubernetes em Produção: Segurança, GitOps e Deploys Avançados</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q49">
+<span class="num">Q49</span>
+<div class="corpo">
+<p class="titulo">Pod, Deployment e Service</p>
+<p>Explique o papel de um Pod, de um Deployment e de um Service. Por que nunca se cria um Pod diretamente em produção?</p>
+</div>
+</div>
+<p>O <strong>Pod</strong> é a menor unidade: um ou mais containers que compartilham rede e volumes, agendados juntos num nó. É <strong>efêmero</strong>: se o nó cai, o Pod morre e ninguém o recria. O <strong>Deployment</strong> declara o estado desejado ("3 réplicas desta imagem") e, por meio de um ReplicaSet, mantém esse número de Pods, recriando os que morrem e fazendo a troca gradual de versão (<em>rolling update</em>). O <strong>Service</strong> dá um nome de DNS e um IP estáveis a um conjunto de Pods selecionados por <em>labels</em>, distribuindo o tráfego entre eles, mesmo que os Pods mudem de IP a cada recriação. Um Pod criado diretamente não tem quem o recrie, não escala e não faz atualização gradual: é o equivalente a rodar um processo sem nenhum supervisor.</p>
+<div class="questao" id="q50">
+<span class="num">Q50</span>
+<div class="corpo">
+<p class="titulo">Liveness e readiness</p>
+<p>Qual a diferença entre a <em>liveness probe</em> e a <em>readiness probe</em>? Por que usar a mesma verificação, que testa o banco de dados, nas duas pode derrubar o sistema inteiro?</p>
+</div>
+</div>
+<p>A <strong><em>readiness</strong></em> responde "este Pod pode receber tráfego agora?". Se falha, o Pod é <strong>retirado do Service</strong> (não recebe requisições), mas continua vivo, por exemplo enquanto aquece o cache ou espera uma dependência. A <strong><em>liveness</strong></em> responde "este processo travou e precisa ser reiniciado?". Se falha, o kubelet <strong>mata e reinicia</strong> o container. Se a <em>liveness</em> testar o banco, uma lentidão do banco faz <strong>todos</strong> os Pods falharem na verificação ao mesmo tempo, e o Kubernetes reinicia todos, e de novo, e de novo: uma falha parcial vira indisponibilidade total, e os reinícios ainda sobrecarregam o banco que estava se recuperando. A <em>liveness</em> deve testar só o próprio processo (o servidor HTTP responde?); as dependências ficam, com cuidado, na <em>readiness</em>.</p>
+<div class="questao" id="q51">
+<span class="num">Q51</span>
+<div class="corpo">
+<p class="titulo">requests e limits</p>
+<p>O que são <code>requests</code> e <code>limits</code> de CPU e memória num container? O que acontece quando um container passa do limite de memória, e quando passa do de CPU?</p>
+</div>
+</div>
+<p>O <strong>request</strong> é a reserva: o agendador só coloca o Pod num nó que tenha esse tanto livre, e ele é a base para o autoscaler calcular a utilização. O <strong>limit</strong> é o teto. Passando do limite de <strong>memória</strong>, o container é <strong>morto</strong> pelo kernel (OOMKilled, o código de saída 137 do módulo 1) e reiniciado. Passando do de <strong>CPU</strong>, ele não morre: é <strong>estrangulado</strong> (<em>throttled</em>), recebendo menos tempo de processador e ficando lento. Sem <code>requests</code>, o agendador amontoa Pods num nó que não os comporta; sem limite de memória, um vazamento num Pod derruba os vizinhos do mesmo nó. Muitas equipes definem limite de memória igual ao <em>request</em> e deixam a CPU sem limite, para não sofrer <em>throttling</em> desnecessário.</p>
+<div class="questao" id="q52">
+<span class="num">Q52</span>
+<div class="corpo">
+<p class="titulo">GitOps</p>
+<p>O que é GitOps, e qual a diferença entre o pipeline "empurrar" (o CI roda <code>kubectl apply</code> no cluster) e o modelo "puxar" do Argo CD ou do Flux?</p>
+</div>
+</div>
+<p>GitOps é usar um repositório Git como <strong>fonte única da verdade</strong> do estado do cluster: os manifestos declarados ali são o que deve estar rodando, e toda mudança passa por <em>commit</em> e <em>pull request</em>. No modelo <strong>empurrar</strong>, o CI tem credenciais de administrador do cluster e aplica as mudanças; se alguém alterar o cluster à mão, nada percebe a divergência, e as credenciais poderosas ficam no CI. No modelo <strong>puxar</strong>, um agente <strong>dentro</strong> do cluster (Argo CD, Flux) observa o repositório e reconcilia continuamente: aplica o que mudou no Git e <strong>desfaz</strong> alterações manuais (<em>drift</em>). O CI só precisa de permissão para escrever no repositório, a auditoria é o próprio histórico do Git, e o <em>rollback</em> é um <code>git revert</code>.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q53">
+<span class="num">Q53</span>
+<div class="corpo">
+<p class="titulo">Um Deployment pronto para produção</p>
+<p>Escreva os manifestos de um Deployment da API da livraria (3 réplicas, imagem com <em>tag</em> fixa, <code>requests</code> e <code>limits</code>, <em>readiness</em> e <em>liveness</em> em rotas diferentes, usuário sem privilégios e sistema de arquivos somente leitura) e do Service. Depois valide com Python: as probes usam rotas diferentes, todos os containers têm limite de memória e nenhuma imagem usa <code>latest</code>.</p>
+</div>
+</div>
+<p><code>api.yaml</code>:</p>
+<pre class="codigo"><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: livraria-api
+  labels: {app: livraria-api}
+spec:
+  replicas: 3
+  selector:
+    matchLabels: {app: livraria-api}
+  strategy:
+    rollingUpdate: {maxUnavailable: 0, maxSurge: 1}
+  template:
+    metadata:
+      labels: {app: livraria-api}
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+      containers:
+        - name: api
+          image: ghcr.io/livraria/api:1.4.2
+          ports:
+            - containerPort: 8080
+          resources:
+            requests: {cpu: 250m, memory: 256Mi}
+            limits: {memory: 256Mi}
+          readinessProbe:
+            httpGet: {path: /ready, port: 8080}
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: {path: /health, port: 8080}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+          envFrom:
+            - secretRef: {name: livraria-api-env}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: livraria-api
+spec:
+  selector: {app: livraria-api}
+  ports:
+    - port: 80
+      targetPort: 8080</code></pre>
+<pre class="codigo"><code>import yaml
+
+docs = list(yaml.safe_load_all(open("api.yaml", encoding="utf-8")))
+deploy = next(d for d in docs if d["kind"] == "Deployment")
+service = next(d for d in docs if d["kind"] == "Service")
+containers = deploy["spec"]["template"]["spec"]["containers"]
+
+for c in containers:
+    rd, lv = c["readinessProbe"]["httpGet"]["path"], c["livenessProbe"]["httpGet"]["path"]
+    print(f"{c['name']}: readiness {rd}, liveness {lv} -&gt; {'ok' if rd != lv else 'mesma rota!'}")
+    print(f"  limite de memória: {c['resources'].get('limits', {}).get('memory', 'AUSENTE')}")
+    tag = c["image"].rsplit(":", 1)[-1] if ":" in c["image"].split("/")[-1] else "latest"
+    print(f"  imagem {c['image']} -&gt; tag {'proibida' if tag == 'latest' else tag}")
+
+seletor = service["spec"]["selector"]
+rotulos = deploy["spec"]["template"]["metadata"]["labels"]
+print("o Service encontra os Pods?", all(rotulos.get(k) == v for k, v in seletor.items()))</code></pre>
+<pre class="saida"><code>api: readiness /ready, liveness /health -&gt; ok
+  limite de memória: 256Mi
+  imagem ghcr.io/livraria/api:1.4.2 -&gt; tag 1.4.2
+o Service encontra os Pods? True</code></pre>
+<p>O <code>maxUnavailable: 0</code> com <code>maxSurge: 1</code> faz a atualização subir um Pod novo, esperar a <em>readiness</em> dele e só então desligar um antigo: a capacidade nunca cai durante o deploy. O sistema de arquivos somente leitura impede que um invasor grave ferramentas no container; se a aplicação precisar de uma pasta temporária, monta-se um volume <code>emptyDir</code> em <code>/tmp</code>. O erro mais comum de iniciante, o seletor do Service que não casa com os <em>labels</em> dos Pods, faz o Service existir sem nenhum destino; a última verificação pega isso. No cluster, <code>kubectl apply -f api.yaml</code> e <code>kubectl rollout status deployment/livraria-api</code> acompanham a troca.</p>
+<div class="questao" id="q54">
+<span class="num">Q54</span>
+<div class="corpo">
+<p class="titulo">A conta do autoscaler</p>
+<p>O HPA (<em>Horizontal Pod Autoscaler</em>) calcula as réplicas desejadas com <code>desejadas = teto(atuais × métrica_atual / métrica_alvo)</code>, ignora variações dentro de uma tolerância de 10% e respeita os limites mínimo e máximo. Implemente o cálculo em Python e simule uma rampa de carga com alvo de 60% de CPU, mínimo de 2 e máximo de 10 réplicas.</p>
+</div>
+</div>
+<pre class="codigo"><code>import math
+
+def desejadas(atuais, uso, alvo=60, minimo=2, maximo=10, tolerancia=0.10):
+    razao = uso / alvo
+    if abs(razao - 1) &lt;= tolerancia:
+        return atuais  # dentro da tolerância: não mexe
+    return max(minimo, min(maximo, math.ceil(atuais * razao)))
+
+replicas = 2
+print("minuto  uso médio  réplicas")
+for minuto, uso in enumerate([30, 64, 90, 120, 95, 70, 40, 20], 1):
+    nova = desejadas(replicas, uso)
+    seta = "=" if nova == replicas else ("↑" if nova &gt; replicas else "↓")
+    print(f"{minuto:6}  {uso:8}%  {replicas:2} {seta} {nova}")
+    replicas = nova</code></pre>
+<pre class="saida"><code>minuto  uso médio  réplicas
+     1        30%   2 = 2
+     2        64%   2 = 2
+     3        90%   2 ↑ 3
+     4       120%   3 ↑ 6
+     5        95%   6 ↑ 10
+     6        70%  10 = 10
+     7        40%  10 ↓ 7
+     8        20%   7 ↓ 3</code></pre>
+<p>No minuto 2, 64% está a menos de 10% do alvo, e nada muda. No minuto 6, o cálculo pediria 12 réplicas (10 × 70/60, arredondado para cima), e o máximo segurou em 10. Depois que a carga cai, o uso médio <strong>por réplica</strong> despenca (a mesma carga dividida por mais Pods), e o HPA reduz em saltos. Na prática, a redução é amortecida por uma janela de estabilização (5 minutos por padrão), para não desligar Pods numa queda momentânea e religá-los em seguida. O uso é medido em relação ao <strong>request</strong> de CPU, por isso um Deployment sem <code>requests</code> não pode ser escalado pelo HPA por CPU.</p>
+</section>
+<section class="modulo" id="modulo-9">
+<h2><span class="rotulo">MÓDULO 9</span> Segurança, custos, resiliência e cultura</h2>
+<p class="intro">DevSecOps, compliance e auditoria, FinOps, chaos engineering, platform engineering e a cultura DevOps.</p>
+<p class="aulas-titulo">Artigos 42 a 47</p>
+<ul class="aulas">
+<li><span class="n">#42</span> DevSecOps: Integrando Segurança em Todo o Pipeline</li>
+<li><span class="n">#43</span> Compliance e Auditoria: LGPD, SOC2 e Evidências Automatizadas</li>
+<li><span class="n">#44</span> Performance e FinOps: Otimizando Custo e Velocidade na Cloud</li>
+<li><span class="n">#45</span> Resiliência e Chaos Engineering</li>
+<li><span class="n">#46</span> Platform Engineering: Construindo a Plataforma Interna de Desenvolvimento</li>
+<li><span class="n">#47</span> Cultura DevOps: Maturidade, Postmortems e Melhoria Contínua</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q55">
+<span class="num">Q55</span>
+<div class="corpo">
+<p class="titulo">Shift left</p>
+<p>O que significa "levar a segurança para a esquerda" num pipeline? Cite quatro verificações automáticas e em que etapa cada uma roda.</p>
+</div>
+</div>
+<p>Significa encontrar os problemas de segurança <strong>o mais cedo possível</strong> no ciclo (à esquerda, numa linha do tempo que vai do código à produção), quando corrigir custa minutos, e não depois do deploy, quando custa um incidente. Verificações:</p>
+<ul><li><strong>Varredura de segredos</strong> (gitleaks, <em>secret scanning</em>): no <em>pre-commit</em> e em todo <em>push</em>, antes que a chave chegue ao histórico.</li><li><strong>SAST</strong> (análise estática do código, como o Semgrep e o CodeQL): no <em>pull request</em>, aponta injeção de SQL, XSS e uso inseguro de APIs.</li><li><strong>SCA</strong> (análise de dependências, como <code>composer audit</code>, <code>npm audit</code> e o Dependabot): no PR e diariamente, porque vulnerabilidades novas surgem em versões antigas.</li><li><strong>Varredura da imagem</strong> (Trivy, Grype): depois do <em>build</em>, nos pacotes do sistema dentro do container; e <strong>DAST</strong> (OWASP ZAP) contra o ambiente de homologação.</li></ul>
+<p>O cuidado é calibrar: um pipeline que bloqueia por qualquer alerta de baixa gravidade ensina a equipe a ignorá-lo.</p>
+<div class="questao" id="q56">
+<span class="num">Q56</span>
+<div class="corpo">
+<p class="titulo">LGPD na infraestrutura</p>
+<p>Que obrigações da LGPD afetam diretamente decisões de infraestrutura e de operação? Cite três exemplos práticos.</p>
+</div>
+</div>
+<ul><li><strong>Segurança e prevenção</strong> (art. 46): dados pessoais cifrados em trânsito (TLS) e em repouso (discos e <em>backups</em>), controle de acesso com menor privilégio e registro de quem acessou o quê.</li><li><strong>Minimização e retenção</strong>: não guardar dado pessoal sem finalidade, e apagá-lo quando a finalidade acaba, inclusive nos <em>logs</em> (CPF e e-mail não vão para o <em>log</em> de aplicação) e nos <em>backups</em>, com política de expiração.</li><li><strong>Comunicação de incidentes</strong> (art. 48): avisar a ANPD e os titulares quando um incidente puder causar risco ou dano relevante. Isso exige saber <strong>o que</strong> vazou, o que depende de <em>logs</em> de auditoria e de um inventário dos dados.</li></ul>
+<p>Também pesa a <strong>transferência internacional</strong>: hospedar dados de brasileiros fora do país exige base legal e garantias contratuais, o que influencia a escolha da região da nuvem.</p>
+<div class="questao" id="q57">
+<span class="num">Q57</span>
+<div class="corpo">
+<p class="titulo">Onde o dinheiro vaza</p>
+<p>Cite quatro fontes comuns de desperdício numa conta de nuvem e a correção de cada uma.</p>
+</div>
+</div>
+<ul><li><strong>Recursos ociosos</strong>: ambientes de homologação ligados de noite e no fim de semana, volumes e IPs órfãos de máquinas já apagadas, <em>snapshots</em> antigos. Correção: desligar por agendamento, <em>tags</em> obrigatórias com dono e ambiente, e limpeza periódica.</li><li><strong>Superdimensionamento</strong>: instâncias e bancos escolhidos "por garantia", usando 10% da CPU. Correção: <em>right-sizing</em> com base nas métricas reais.</li><li><strong>Preço sob demanda para carga constante</strong>: o que roda 24 horas por dia, o ano todo, custa bem menos com <em>Savings Plans</em> ou instâncias reservadas.</li><li><strong>Transferência de dados</strong>: NAT gateway processando tráfego que poderia ir por um <em>VPC endpoint</em> (para o S3, por exemplo), tráfego entre zonas e saída para a internet sem CDN.</li></ul>
+<p>O primeiro passo de FinOps não é cortar: é tornar o custo <strong>visível</strong> por equipe e por produto, para que quem decide a arquitetura veja o preço da decisão.</p>
+<div class="questao" id="q58">
+<span class="num">Q58</span>
+<div class="corpo">
+<p class="titulo">Chaos engineering</p>
+<p>O que é chaos engineering, e por que ele começa com uma hipótese e um "raio de explosão" pequeno? Dê um experimento para a livraria.</p>
+</div>
+</div>
+<p>É provocar falhas <strong>de propósito</strong>, de forma controlada, para descobrir as fraquezas antes que elas apareçam sozinhas numa sexta-feira à noite. Começa com uma <strong>hipótese</strong> sobre o estado estável ("se o Redis cair, o site continua respondendo, mais lento, com p95 abaixo de 1 s, porque a aplicação cai para o banco"), mede o sistema antes, injeta a falha e compara. O <strong>raio de explosão</strong> pequeno (um Pod, uma fração do tráfego, primeiro em homologação) e um botão de abortar garantem que o experimento não vire o incidente que ele queria prevenir. Experimento para a livraria: derrubar o serviço de frete por 5 minutos e verificar se o <em>checkout</em> continua aceitando pedidos com frete estimado, em vez de falhar.</p>
+<div class="questao" id="q59">
+<span class="num">Q59</span>
+<div class="corpo">
+<p class="titulo">Postmortem sem culpados</p>
+<p>Por que um postmortem deve ser "sem culpados" (<em>blameless</em>)? Que seções ele precisa ter para gerar aprendizado, e não só um relato?</p>
+</div>
+</div>
+<p>Porque, se o resultado de um erro for a punição de quem errou, as pessoas passam a <strong>esconder</strong> erros e informações, e a organização perde exatamente o que precisava saber. A pergunta útil não é "quem errou", mas "por que o sistema permitiu que um erro humano previsível causasse o incidente": um comando destrutivo sem confirmação, um alerta que não existia, um <em>runbook</em> desatualizado. Seções: resumo e impacto (quem foi afetado, por quanto tempo, quanto custou); linha do tempo com os horários (detecção, mitigação, resolução); causas contribuintes (geralmente mais de uma); o que funcionou e o que atrapalhou; e <strong>ações</strong> com dono e prazo, acompanhadas até o fim. Um postmortem cujas ações ninguém executa é só um relato.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q60">
+<span class="num">Q60</span>
+<div class="corpo">
+<p class="titulo">Varredura de segredos</p>
+<p>Escreva um <em>script</em> Python que procure segredos em arquivos de texto com expressões regulares: chaves de acesso da AWS (<code>AKIA</code> seguido de 16 caracteres), chaves privadas PEM, <em>tokens</em> do GitHub (<code>ghp_</code>) e atribuições do tipo <code>senha = "..."</code> ou <code>password: ...</code>. Mostre arquivo e linha, mascarando o valor encontrado, e devolva código 1 se achar algo.</p>
+</div>
+</div>
+<pre class="codigo"><code>import re
+import sys
+
+REGRAS = {
+    "chave AWS": re.compile(r"\bAKIA[0-9A-Z]{16}\b"),
+    "chave privada": re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"),
+    "token GitHub": re.compile(r"\bghp_[A-Za-z0-9]{36}\b"),
+    "senha no código": re.compile(r"(?i)\b(?:senha|password|pass|secret)\s*[:=]\s*['\"]?([^'\"\s]{6,})"),
+}
+
+arquivos = {
+    "config.php": "&lt;?php\n$db = 'livraria';\n$senha = \"Sup3rS3cret0!\";\n",
+    ".env.example": "DB_PASS=troque-aqui\nAWS_KEY=\n",
+    "deploy.sh": "export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE\n",
+    "README.md": "Rode `composer install` e configure o .env.\n",
+}
+
+def mascarar(s):
+    return s[:4] + "*" * (len(s) - 4)
+
+achados = 0
+for nome, conteudo in arquivos.items():
+    for n, linha in enumerate(conteudo.splitlines(), 1):
+        for regra, rx in REGRAS.items():
+            if m := rx.search(linha):
+                valor = m.group(1) if m.groups() else m.group(0)
+                if regra == "senha no código" and valor in {"troque-aqui", "changeme"}:
+                    continue  # placeholder conhecido do .env.example
+                print(f"{nome}:{n}: {regra}: {mascarar(valor)}")
+                achados += 1
+
+print(f"{achados} possível(is) segredo(s)")
+sys.exit(1 if achados else 0)</code></pre>
+<pre class="saida"><code>config.php:3: senha no código: Sup3*********
+deploy.sh:1: chave AWS: AKIA****************
+2 possível(is) segredo(s)</code></pre>
+<p>O <code>.env.example</code> não acusou nada porque <code>troque-aqui</code> está na lista de valores de exemplo: sem essa exceção, a ferramenta reclamaria do próprio modelo de configuração, e a equipe aprenderia a ignorá-la. A chave do <code>deploy.sh</code> é a chave de exemplo da documentação da AWS (<code>AKIAIOSFODNN7EXAMPLE</code>); uma real deveria ser <strong>revogada</strong> imediatamente, porque apagar o arquivo não a tira do histórico do Git. Ferramentas como o gitleaks usam centenas de regras e a entropia do texto para achar segredos sem formato conhecido.</p>
+<div class="questao" id="q61">
+<span class="num">Q61</span>
+<div class="corpo">
+<p class="titulo">Comparando preços de instâncias</p>
+<p>Escreva um <em>script</em> Python que compare o custo mensal de 4 servidores ligados o mês inteiro, em três modelos: sob demanda (US$ 0,0832 por hora cada), plano de economia de 1 ano (37% de desconto) e uma combinação de 2 reservados com 2 <em>spot</em> (70% de desconto, mas podem ser interrompidos). Calcule também o custo de um ambiente de homologação de 2 servidores sob demanda ligado só em horário comercial (10 h por dia, 22 dias por mês).</p>
+</div>
+</div>
+<pre class="codigo"><code>HORA = 0.0832
+HORAS_MES = 730  # média de horas num mês
+DESC_PLANO, DESC_SPOT = 0.37, 0.70
+
+def mensal(qtd, preco_hora, horas=HORAS_MES):
+    return qtd * preco_hora * horas
+
+cenarios = {
+    "sob demanda": mensal(4, HORA),
+    "plano de 1 ano": mensal(4, HORA * (1 - DESC_PLANO)),
+    "2 plano + 2 spot": mensal(2, HORA * (1 - DESC_PLANO)) + mensal(2, HORA * (1 - DESC_SPOT)),
+}
+base = cenarios["sob demanda"]
+for nome, custo in cenarios.items():
+    print(f"{nome:17} US$ {custo:7.2f}/mês  ({1 - custo / base:5.1%} de economia)")
+
+sempre_ligada = mensal(2, HORA)
+comercial = mensal(2, HORA, horas=10 * 22)
+print(f"homologação 24x7:      US$ {sempre_ligada:6.2f}/mês")
+print(f"homologação comercial: US$ {comercial:6.2f}/mês ({1 - comercial / sempre_ligada:.0%} a menos)")</code></pre>
+<pre class="saida"><code>sob demanda       US$  242.94/mês  ( 0.0% de economia)
+plano de 1 ano    US$  153.05/mês  (37.0% de economia)
+2 plano + 2 spot  US$  112.97/mês  (53.5% de economia)
+homologação 24x7:      US$ 121.47/mês
+homologação comercial: US$  36.61/mês (70% a menos)</code></pre>
+<p>Desligar a homologação fora do expediente economiza mais, em proporção, que qualquer desconto: o servidor desligado não custa nada (os discos continuam cobrados). As instâncias <em>spot</em> só servem a cargas que toleram interrupção com 2 minutos de aviso: <em>workers</em> de fila, processamento em lote, réplicas extras atrás de um <em>load balancer</em>, nunca o único servidor do banco. Os preços são ilustrativos: a tabela real muda por região e por geração de instância, e a calculadora da AWS é a fonte certa.</p>
+</section>
+<section class="modulo" id="modulo-10">
+<h2><span class="rotulo">MÓDULO 10</span> Capstone: o sistema completo</h2>
+<p class="intro">Arquitetura, provisionamento, microsserviços, o pipeline completo e as operações em produção.</p>
+<p class="aulas-titulo">Artigos 48 a 52</p>
+<ul class="aulas">
+<li><span class="n">#48</span> Projeto Capstone: Arquitetura do Sistema Completo</li>
+<li><span class="n">#49</span> Capstone: Provisionando a Infraestrutura Completa</li>
+<li><span class="n">#50</span> Capstone: Implementando os Microsserviços</li>
+<li><span class="n">#51</span> Capstone: Pipeline Completo de CI/CD</li>
+<li><span class="n">#52</span> Capstone: Operações em Produção e Retrospectiva da Jornada</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q62">
+<span class="num">Q62</span>
+<div class="corpo">
+<p class="titulo">Microsserviços: quando vale a pena</p>
+<p>O capstone divide o sistema em microsserviços. Que problemas eles resolvem, que custos trazem, e por que muitas equipes deveriam começar com um monólito bem modularizado?</p>
+</div>
+</div>
+<p>Resolvem problemas de <strong>organização e escala</strong>: equipes diferentes implantam serviços diferentes sem coordenar cada deploy, cada parte escala conforme a sua carga (o catálogo recebe 100 vezes mais leituras que o <em>checkout</em>), e uma falha fica contida num serviço. Os custos são reais: chamadas de rede no lugar de chamadas de função (latência e falhas parciais), consistência eventual entre bancos separados, pipelines, monitoramento e <em>tracing</em> distribuído para cada serviço, versionamento de contratos e muito mais infraestrutura para operar. Uma equipe pequena paga todos esses custos sem colher os benefícios. Um <strong>monólito modular</strong> (módulos com fronteiras claras e sem acessar as tabelas uns dos outros) é rápido de desenvolver e simples de operar, e permite extrair um serviço depois, quando houver um motivo concreto: carga, equipe ou ciclo de deploy diferentes.</p>
+<div class="questao" id="q63">
+<span class="num">Q63</span>
+<div class="corpo">
+<p class="titulo">Implantação gradual</p>
+<p>Explique os deploys <em>blue-green</em> e <em>canary</em>. Que métricas decidem se o <em>canary</em> avança ou volta?</p>
+</div>
+</div>
+<p>No <strong><em>blue-green</strong></em>, a versão nova (verde) sobe completa ao lado da atual (azul); depois dos testes, o tráfego troca <strong>de uma vez</strong> para a verde, e a azul fica de prontidão para um retorno instantâneo. Exige o dobro de capacidade durante a troca. No <strong><em>canary</strong></em>, a versão nova recebe uma <strong>fração</strong> do tráfego (1%, 5%, 25%...), e cada etapa só avança se ela se comportar tão bem quanto a atual: o estrago de um defeito fica limitado à fração. Métricas de decisão: <strong>taxa de erros</strong> e <strong>latência</strong> (p95, p99) do <em>canary</em> comparadas com as da versão estável <strong>no mesmo período</strong>, além de métricas de negócio (taxa de conversão do <em>checkout</em>). Ferramentas como o Argo Rollouts e o Flagger automatizam a análise e o retorno.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q64">
+<span class="num">Q64</span>
+<div class="corpo">
+<p class="titulo">Decidindo um canary</p>
+<p>Escreva uma função Python que receba as contagens de requisições e erros e a latência p95 da versão estável e do <em>canary</em> num intervalo, e decida entre "avançar", "aguardar" (amostra pequena demais, menos de 500 requisições no <em>canary</em>) e "reverter" (taxa de erros do <em>canary</em> acima de 1,5 vez a da estável <strong>e</strong> acima de 0,5% em termos absolutos, ou p95 mais de 20% pior). Teste quatro cenários.</p>
+</div>
+</div>
+<pre class="codigo"><code>def decidir(estavel, canary, min_amostra=500):
+    if canary["req"] &lt; min_amostra:
+        return "aguardar", f"só {canary['req']} requisições no canary"
+    erro_e = estavel["erros"] / estavel["req"]
+    erro_c = canary["erros"] / canary["req"]
+    if erro_c &gt; 1.5 * erro_e and erro_c &gt; 0.005:
+        return "reverter", f"erros {erro_c:.2%} contra {erro_e:.2%}"
+    if canary["p95"] &gt; 1.2 * estavel["p95"]:
+        return "reverter", f"p95 {canary['p95']} ms contra {estavel['p95']} ms"
+    return "avançar", f"erros {erro_c:.2%}, p95 {canary['p95']} ms"
+
+estavel = {"req": 95_000, "erros": 190, "p95": 310}
+cenarios = {
+    "saudável":       {"req": 5_000, "erros": 9, "p95": 318},
+    "começou agora":  {"req": 120, "erros": 3, "p95": 900},
+    "mais erros":     {"req": 5_000, "erros": 60, "p95": 305},
+    "mais lento":     {"req": 5_000, "erros": 10, "p95": 420},
+}
+for nome, canary in cenarios.items():
+    decisao, motivo = decidir(estavel, canary)
+    print(f"{nome:14} -&gt; {decisao:8} ({motivo})")</code></pre>
+<pre class="saida"><code>saudável       -&gt; avançar  (erros 0.18%, p95 318 ms)
+começou agora  -&gt; aguardar (só 120 requisições no canary)
+mais erros     -&gt; reverter (erros 1.20% contra 0.20%)
+mais lento     -&gt; reverter (p95 420 ms contra 310 ms)</code></pre>
+<p>O cenário "começou agora" tem 2,5% de erros e p95 de 900 ms, e mesmo assim a decisão é aguardar: com 120 requisições, 3 erros podem ser acaso, e reverter por isso tornaria todo deploy instável. A exigência dupla para os erros (relativa <strong>e</strong> absoluta) evita reverter um <em>canary</em> que passou de 0,01% para 0,02%: "o dobro de quase nada" ainda é quase nada. Uma análise rigorosa usa testes estatísticos, como fazem o Kayenta (do Spinnaker) e o Argo Rollouts com consultas ao Prometheus.</p>
+</section>
+<section class="modulo" id="modulo-11">
+<h2><span class="rotulo">MÓDULO 11</span> Outras nuvens e plataformas</h2>
+<p class="intro">Azure para quem conhece AWS, compute, storage e redes no Azure, AKS, Azure DevOps, GitLab CI/CD, GitLab self-hosted, Bitbucket e Gitea.</p>
+<p class="aulas-titulo">Artigos 53 a 60</p>
+<ul class="aulas">
+<li><span class="n">#53</span> Azure para Quem Já Conhece AWS</li>
+<li><span class="n">#54</span> Compute, Storage e Redes no Azure</li>
+<li><span class="n">#55</span> Azure Kubernetes Service (AKS)</li>
+<li><span class="n">#56</span> Azure DevOps: Pipelines e Repositórios</li>
+<li><span class="n">#57</span> GitLab CI/CD: A Alternativa Enterprise ao GitHub Actions</li>
+<li><span class="n">#58</span> GitLab Self-Hosted: Soberania Total sobre Código e Pipelines</li>
+<li><span class="n">#59</span> Bitbucket e o Ecossistema Atlassian</li>
+<li><span class="n">#60</span> Gitea: Self-Hosted Leve para Times Menores</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q65">
+<span class="num">Q65</span>
+<div class="corpo">
+<p class="titulo">AWS para Azure</p>
+<p>Para quem conhece a AWS, qual o equivalente no Azure de: VPC, EC2, S3, RDS para PostgreSQL, IAM <em>roles</em> para aplicações, EKS e CloudWatch? Que conceito do Azure não tem equivalente direto?</p>
+</div>
+</div>
+<ul><li>VPC → <strong>Virtual Network (VNet)</strong>.</li><li>EC2 → <strong>Virtual Machines</strong>.</li><li>S3 → <strong>Blob Storage</strong> (dentro de uma <em>Storage Account</em>).</li><li>RDS para PostgreSQL → <strong>Azure Database for PostgreSQL (Flexible Server)</strong>.</li><li><em>Roles</em> do IAM para aplicações → <strong>Managed Identities</strong>, com permissões dadas pelo RBAC do Azure.</li><li>EKS → <strong>AKS</strong>.</li><li>CloudWatch → <strong>Azure Monitor</strong>, com o Log Analytics e o Application Insights.</li></ul>
+<p>O conceito sem equivalente direto é o <strong>Resource Group</strong>: todo recurso do Azure pertence a um, que agrupa o ciclo de vida (apagar o grupo apaga tudo dentro), as permissões e a contabilidade de custos. A organização acima dele (<em>subscriptions</em> e <em>management groups</em>) também é diferente da estrutura de contas da AWS.</p>
+<div class="questao" id="q66">
+<span class="num">Q66</span>
+<div class="corpo">
+<p class="titulo">GitLab CI e GitHub Actions</p>
+<p>Compare a estrutura de um <code>.gitlab-ci.yml</code> com a de um <em>workflow</em> do GitHub Actions. O que são <em>stages</em> e o que a palavra-chave <code>needs</code> muda?</p>
+</div>
+</div>
+<p>No GitHub Actions, um <em>workflow</em> tem <em>jobs</em> que rodam <strong>em paralelo</strong> por padrão, e a ordem vem do <code>needs</code>. No GitLab CI, o arquivo declara uma lista de <strong><em>stages</strong></em> (<code>build</code>, <code>test</code>, <code>deploy</code>), e cada <em>job</em> pertence a um <em>stage</em>: os <em>jobs</em> de um <em>stage</em> rodam em paralelo, e o <em>stage</em> seguinte só começa quando <strong>todos</strong> os do anterior terminam. O <code>needs</code> no GitLab quebra essa barreira: um <em>job</em> passa a depender só dos <em>jobs</em> listados e pode começar assim que eles terminam, formando um grafo (DAG) e encurtando o pipeline. O GitLab também tem <em>runners</em> próprios fáceis de hospedar, registro de containers e <em>pipelines</em> de <em>merge request</em> integrados na mesma plataforma.</p>
+<div class="questao" id="q67">
+<span class="num">Q67</span>
+<div class="corpo">
+<p class="titulo">Hospedar a própria forja</p>
+<p>Quando faz sentido hospedar o próprio GitLab ou Gitea, em vez de usar o GitHub ou o GitLab.com? Que responsabilidades a equipe assume?</p>
+</div>
+</div>
+<p>Faz sentido quando há exigência de <strong>soberania</strong> (o código não pode sair da infraestrutura da empresa, por contrato ou regulação), rede isolada da internet, integração com sistemas internos, ou custo, quando há muitos usuários e as funcionalidades pagas do serviço hospedado não compensam. O Gitea é leve (um binário, roda numa VM pequena) e serve bem a times menores; o GitLab traz tudo (CI, registro, <em>issues</em>), mas pede bem mais recursos. A equipe assume <strong>tudo</strong> o que o serviço hospedado fazia: atualizações de segurança em dia (uma forja exposta e desatualizada é um alvo valioso), <em>backups</em> testados do banco e dos repositórios, alta disponibilidade, monitoramento, capacidade de disco e dos <em>runners</em>, e o suporte aos usuários.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q68">
+<span class="num">Q68</span>
+<div class="corpo">
+<p class="titulo">Um pipeline do GitLab com needs</p>
+<p>Escreva um <code>.gitlab-ci.yml</code> com os <em>stages</em> <code>build</code>, <code>test</code> e <code>deploy</code>: um <em>job</em> de <em>build</em>, dois de teste (unitários e <em>lint</em>), em que o <em>lint</em> não depende do <em>build</em>, e um deploy manual só na <em>branch</em> <code>main</code>. Use Python para calcular a ordem real de execução a partir do <code>needs</code>.</p>
+</div>
+</div>
+<p><code>gitlab-ci.yml</code>:</p>
+<pre class="codigo"><code>stages: [build, test, deploy]
+
+default:
+  image: php:8.5-cli
+
+build:
+  stage: build
+  script:
+    - composer install --no-dev -o
+  artifacts:
+    paths: [vendor/]
+
+lint:
+  stage: test
+  needs: []  # não espera o build: começa junto com ele
+  script:
+    - find src -name '*.php' -print0 | xargs -0 -n1 php -l
+
+unitarios:
+  stage: test
+  needs: [build]
+  script:
+    - vendor/bin/phpunit
+
+deploy_producao:
+  stage: deploy
+  needs: [unitarios, lint]
+  script:
+    - ./deploy.sh
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: manual</code></pre>
+<pre class="codigo"><code>import yaml
+
+ci = yaml.safe_load(open("gitlab-ci.yml", encoding="utf-8"))
+stages = ci["stages"]
+jobs = {k: v for k, v in ci.items() if isinstance(v, dict) and "script" in v}
+
+def dependencias(nome):
+    j = jobs[nome]
+    if "needs" in j:
+        return j["needs"]
+    anteriores = stages[: stages.index(j["stage"])]  # sem needs: espera todos os stages anteriores
+    return [n for n, o in jobs.items() if o["stage"] in anteriores]
+
+onda, feitos = 1, set()
+while len(feitos) &lt; len(jobs):
+    prontos = sorted(n for n in jobs if n not in feitos and set(dependencias(n)) &lt;= feitos)
+    print(f"onda {onda}: {', '.join(prontos)}")
+    feitos |= set(prontos)
+    onda += 1
+
+regra = jobs["deploy_producao"]["rules"][0]
+print(f"deploy: {regra['when']} quando {regra['if']}")</code></pre>
+<pre class="saida"><code>onda 1: build, lint
+onda 2: unitarios
+onda 3: deploy_producao
+deploy: manual quando $CI_COMMIT_BRANCH == "main"</code></pre>
+<p>Sem o <code>needs: []</code>, o <em>lint</em> esperaria o <em>stage</em> <code>build</code> inteiro, embora não use nada dele: o pipeline ficaria uma etapa mais longo à toa. O <em>artifact</em> <code>vendor/</code> é o que leva as dependências do <em>job</em> de <em>build</em> para o de testes, que rodam em containers diferentes. O <code>when: manual</code> cria um botão no pipeline: a entrega é contínua, a implantação não. O arquivo real se chama <code>.gitlab-ci.yml</code>, na raiz do repositório, e o GitLab oferece um validador (<em>CI Lint</em>) no próprio painel.</p>
+</section>
+<section class="modulo" id="modulo-12">
+<h2><span class="rotulo">MÓDULO 12</span> IA em operações e extras</h2>
+<p class="intro">AIOps, pipelines e infraestrutura gerados com IA, detecção de anomalias em logs, geradores de senhas seguras e a instalação manual do MySQL.</p>
+<p class="aulas-titulo">Artigos 61 a 66</p>
+<ul class="aulas">
+<li><span class="n">#61</span> AIOps na Prática: O Que a IA Já Faz em Operações Hoje</li>
+<li><span class="n">#62</span> Gerando e Revisando Pipelines com IA</li>
+<li><span class="n">#63</span> Detecção de Anomalias e Análise Inteligente de Logs com IA</li>
+<li><span class="n">#64</span> Geração de Infraestrutura com IA</li>
+<li><span class="n">#65</span> Geradores de Senhas Seguras: Implementações em 5 Linguagens de Programação</li>
+<li><span class="n">#66</span> Instalação Manual do MySQL no Debian, Arch, Fedora e openSUSE</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q69">
+<span class="num">Q69</span>
+<div class="corpo">
+<p class="titulo">Revisando o que a IA gerou</p>
+<p>Um assistente de IA gerou um <em>workflow</em> do GitHub Actions e um módulo Terraform para você. Que verificações são obrigatórias antes de aceitá-los, e por que "funcionou no primeiro teste" não basta?</p>
+</div>
+</div>
+<ul><li><strong>Ler linha a linha</strong>, como se fosse o PR de um colega novo: a IA produz código plausível, que pode usar versões de <em>actions</em> inexistentes ou antigas, opções que não existem, ou portas e permissões abertas demais (<code>0.0.0.0/0</code> no SSH, <code>permissions: write-all</code>, <code>s3:*</code>).</li><li><strong>Fixar versões e conferir as fontes</strong>: <em>actions</em> de terceiros pela <em>tag</em> ou pelo <em>hash</em> do <em>commit</em>, <em>providers</em> com versão restrita, nomes de pacotes conferidos no registro oficial. Um nome de pacote "inventado" pela IA pode ter sido registrado por um atacante (<em>slopsquatting</em>).</li><li><strong>Rodar as ferramentas de sempre</strong>: <code>terraform validate</code> e <code>plan</code> lido com atenção, <code>actionlint</code>, as verificações de segredos e de políticas do pipeline.</li><li><strong>Nunca colar segredos</strong> no <em>prompt</em>.</li></ul>
+<p>"Funcionou no primeiro teste" só prova o caminho feliz: as falhas de segurança e de custo aparecem quando alguém as explora ou quando chega a fatura.</p>
+<div class="questao" id="q70">
+<span class="num">Q70</span>
+<div class="corpo">
+<p class="titulo">Anomalia não é incidente</p>
+<p>Um sistema de AIOps detecta uma "anomalia" no volume de <em>logs</em> de erro. Por que nem toda anomalia deve virar alerta, e o que diferencia a detecção por limiar fixo da detecção por desvio do padrão?</p>
+</div>
+</div>
+<p>Uma anomalia é algo <strong>estatisticamente incomum</strong>, não necessariamente ruim: o pico de acessos na Black Friday, um <em>deploy</em> que muda o formato dos <em>logs</em>, um robô de busca. Transformar toda anomalia em alerta reproduz a fadiga de alertas do módulo 6. O <strong>limiar fixo</strong> ("mais de 100 erros por minuto") é simples e explicável, mas não acompanha a sazonalidade: alto demais de madrugada, baixo demais no horário de pico. A <strong>detecção por desvio</strong> aprende o comportamento normal (a média e a dispersão de uma janela recente, ou por hora do dia) e sinaliza o que se afasta muito dele. O uso sensato é tratar anomalias como <strong>contexto</strong> para a investigação e como sinal fraco, combinado com os alertas de sintomas baseados em SLO.</p>
+<div class="questao" id="q71">
+<span class="num">Q71</span>
+<div class="corpo">
+<p class="titulo">Instalando um banco sem contêiner</p>
+<p>O artigo #66 instala o MySQL manualmente em quatro famílias de distribuições. Quais são os pacotes e os comandos de serviço no Debian e no Fedora, e que passo de segurança nenhuma instalação deve pular?</p>
+</div>
+</div>
+<ul><li><strong>Debian/Ubuntu</strong>: <code>sudo apt install mariadb-server</code> (o Debian traz o MariaDB nos repositórios oficiais; o MySQL da Oracle vem do repositório APT dela, <code>mysql-apt-config</code>), depois <code>sudo systemctl enable --now mariadb</code>.</li><li><strong>Fedora</strong>: <code>sudo dnf install community-mysql-server</code> (ou <code>mariadb-server</code>), depois <code>sudo systemctl enable --now mysqld</code> (ou <code>mariadb</code>).</li></ul>
+<p>No Arch, o pacote oficial é o <code>mariadb</code>, que exige <code>mariadb-install-db</code> antes de iniciar o serviço; no openSUSE, <code>zypper install mariadb</code>. O passo que não se pula é o <strong>endurecimento inicial</strong>, com <code>mysql_secure_installation</code> (ou <code>mariadb-secure-installation</code>): remove os usuários anônimos e o banco <code>test</code> e impede o <em>root</em> remoto. Depois, cria-se um usuário próprio para a aplicação, com permissões só no banco dela, e o servidor escuta apenas em <code>127.0.0.1</code> (<code>bind-address</code>), a menos que outra máquina precise acessá-lo.</p>
+<h3>Exercícios de código — respostas</h3>
+<div class="questao" id="q72">
+<span class="num">Q72</span>
+<div class="corpo">
+<p class="titulo">Detectando anomalias com z-score</p>
+<p>Dada a contagem de erros por minuto ao longo de uma hora, calcule, para cada minuto, o <em>z-score</em> em relação à média e ao desvio padrão dos 15 minutos <strong>anteriores</strong>, e sinalize os minutos com z acima de 3. Compare com a hora inteira como referência, e com uma versão robusta, baseada na mediana e no desvio absoluto mediano (MAD).</p>
+</div>
+</div>
+<pre class="codigo"><code>import statistics
+
+erros = [4, 5, 3, 6, 4, 5, 4, 3, 5, 6, 4, 5, 4, 3, 5,   # minutos 0-14: normal
+         4, 6, 5, 4, 30, 5, 4, 3, 5, 4, 6, 5, 4, 5, 4,   # minuto 19: pico isolado
+         12, 14, 13, 15, 14, 13, 15, 14, 16, 15, 14, 13]  # a partir do 30: novo patamar
+
+JANELA, LIMITE = 15, 3.0
+for minuto in range(JANELA, len(erros)):
+    anteriores = erros[minuto - JANELA:minuto]
+    media, desvio = statistics.mean(anteriores), statistics.stdev(anteriores)
+    z = (erros[minuto] - media) / desvio
+    if z &gt; LIMITE:
+        print(f"minuto {minuto:2}: {erros[minuto]:2} erros, média {media:4.1f}, z = {z:5.1f}  &lt;- anomalia")
+
+print("versão robusta (mediana e MAD):")
+for minuto in range(JANELA, len(erros)):
+    anteriores = erros[minuto - JANELA:minuto]
+    mediana = statistics.median(anteriores)
+    mad = statistics.median(abs(x - mediana) for x in anteriores) or 1
+    z_robusto = 0.6745 * (erros[minuto] - mediana) / mad
+    if z_robusto &gt; 3.5:
+        print(f"  minuto {minuto:2}: {erros[minuto]:2} erros, mediana {mediana}, z robusto = {z_robusto:5.1f}")
+
+media_hora = statistics.mean(erros)
+desvio_hora = statistics.stdev(erros)
+print(f"com a hora inteira: média {media_hora:.1f}, desvio {desvio_hora:.1f}, "
+      f"z do minuto 19 = {(30 - media_hora) / desvio_hora:.1f}")</code></pre>
+<pre class="saida"><code>minuto 19: 30 erros, média  4.5, z =  27.9  &lt;- anomalia
+versão robusta (mediana e MAD):
+  minuto 19: 30 erros, mediana 4, z robusto =  17.5
+  minuto 30: 12 erros, mediana 5, z robusto =   4.7
+  minuto 31: 14 erros, mediana 5, z robusto =   6.1
+  minuto 32: 13 erros, mediana 5, z robusto =   5.4
+  minuto 33: 15 erros, mediana 5, z robusto =   6.7
+  minuto 34: 14 erros, mediana 5, z robusto =   6.1
+  minuto 35: 13 erros, mediana 5, z robusto =   5.4
+  minuto 36: 15 erros, mediana 5, z robusto =   6.7
+com a hora inteira: média 7.8, desvio 5.7, z do minuto 19 = 3.9</code></pre>
+<p>A versão com média e desvio padrão detectou o pico do minuto 19, mas <strong>não</strong> a mudança de patamar do minuto 30, que é o problema real: o próprio pico, ainda dentro da janela, inflou o desvio padrão, e um salto de 4 para 12 erros por minuto ficou com z abaixo de 3. Com a hora inteira como referência é pior ainda: até o pico fica com z de só 3,9. A versão robusta usa a mediana e o MAD, que um valor extremo quase não altera, e acusa o novo patamar do minuto 30 ao 36; a partir do 37, quando a maior parte da janela já está no patamar novo, ele passa a ser o "normal" e deixa de ser sinalizado, o que é bom (um alerta tocando por horas pela mesma causa não ajuda) e perigoso (se ninguém olhou, a degradação foi aceita em silêncio). O fator 0,6745 torna o MAD comparável ao desvio padrão, e o limite 3,5 é o usual para esse z robusto. Contagens de erros são pequenas e assimétricas: em produção, os modelos também consideram a hora do dia e o dia da semana.</p>
+<div class="questao" id="q73">
+<span class="num">Q73</span>
+<div class="corpo">
+<p class="titulo">Um gerador de senhas no terminal</p>
+<p>O artigo #65 gera senhas seguras em cinco linguagens. Escreva em Bash <code>gerar_senha TAMANHO</code>, que use <code>/dev/urandom</code> e garanta pelo menos uma minúscula, uma maiúscula, um dígito e um símbolo, recusando tamanhos menores que 12. Gere 1000 senhas e confira (sem imprimi-las) que todas cumprem as regras e que não há repetidas.</p>
+</div>
+</div>
+<pre class="codigo"><code>gerar_senha() {
+  local tamanho=${1:-16}
+  if (( tamanho &lt; 12 )); then
+    echo "tamanho mínimo é 12" &gt;&amp;2
+    return 1
+  fi
+  local senha
+  while true; do
+    senha=$(LC_ALL=C tr -dc 'A-Za-z0-9!@#%^&amp;*_+=-' &lt; /dev/urandom | head -c "$tamanho")
+    # sorteia de novo até ter as quatro classes: não enfraquece a senha, só descarta as que faltam
+    [[ $senha =~ [a-z] &amp;&amp; $senha =~ [A-Z] &amp;&amp; $senha =~ [0-9] &amp;&amp; $senha =~ [^A-Za-z0-9] ]] &amp;&amp; break
+  done
+  printf '%s\n' "$senha"
+}
+
+gerar_senha 8 2&gt;&amp;1 || echo "(recusado, código $?)"
+
+for i in $(seq 1000); do gerar_senha 16; done &gt; senhas.txt
+total=$(wc -l &lt; senhas.txt)
+unicas=$(sort -u senhas.txt | wc -l)
+validas=$(grep -c -E '^.{16}$' senhas.txt)
+com_classes=$(grep '[a-z]' senhas.txt | grep '[A-Z]' | grep '[0-9]' | grep -c '[^A-Za-z0-9]')
+echo "geradas: $total | únicas: $unicas | com 16 caracteres: $validas | com as 4 classes: $com_classes"</code></pre>
+<pre class="saida"><code>tamanho mínimo é 12
+(recusado, código 1)
+geradas: 1000 | únicas: 1000 | com 16 caracteres: 1000 | com as 4 classes: 1000</code></pre>
+<p>O <code>/dev/urandom</code> é a fonte de aleatoriedade criptográfica do kernel; o <code>$RANDOM</code> do Bash não serve para senhas, porque é previsível e só tem 15 bits. O <code>LC_ALL=C</code> faz o <code>tr</code> tratar a entrada como bytes, e não como caracteres de um <em>locale</em> UTF-8, onde bytes inválidos poderiam causar erro. Com 75 símbolos possíveis e 16 posições, cada senha tem cerca de 99 bits de entropia: adivinhá-la por força bruta está fora de alcance. O <code>printf '%s\n'</code> em vez de <code>echo</code> evita que uma senha começando com <code>-n</code> seja interpretada como opção.</p>
+</section>
+<section class="modulo" id="desafios">
+<h2><span class="rotulo">PARA IR ALÉM</span> Desafios integradores</h2>
+<p class="intro">Projetos maiores, que juntam vários módulos. Não há uma única resposta certa: o gabarito mostra um caminho.</p>
+<div class="questao desafio" id="d1">
+<span class="num">D1</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora de terminal em Bash</p>
+<p>Escreva uma calculadora de terminal em Bash com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada (<code>raiz 2</code>). Ela deve: (a) aceitar vírgula ou ponto como separador decimal; (b) guardar o último resultado em <code>ans</code>, utilizável na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário, resultado infinito e texto que não é número com uma mensagem clara, <strong>sem encerrar o programa</strong>; (d) ter os comandos <code>hist</code> (histórico) e <code>sair</code>. Separe o núcleo (<code>calc_nucleo.sh</code>, só funções, sem leitura de teclado) da interface (<code>calc.sh</code>). Como o Bash só faz contas com inteiros, use o <code>awk</code> para as contas decimais.</p>
+</div>
+</div>
+<p><strong>Caminho da solução</strong></p>
+<ul><li><strong>Núcleo</strong>: a função <code>calc_avaliar</code> recebe a linha e preenche as variáveis <code>RESULTADO</code> ou <code>ERRO</code>, devolvendo 0 ou 1, como um comando comum. Ela não lê nada nem imprime nada, por isso pode ser testada com um <em>script</em> de testes ou usada por outra interface.</li><li><strong>Números</strong>: a validação é uma expressão regular do próprio Bash (<code>=~</code>); a vírgula vira ponto antes de ir para o <code>awk</code>, que faz a conta com <code>double</code> e devolve o resultado com 15 algarismos significativos, ou <code>inf</code> e <code>nan</code>, que o núcleo recusa.</li><li><strong>Interface</strong>: lê com <code>read -r</code> (o <code>-r</code> preserva barras invertidas), guarda o histórico num array e troca o ponto pela vírgula na exibição.</li></ul>
+<p><code>calc_nucleo.sh</code>:</p>
+<pre class="codigo"><code># Núcleo da calculadora: só funções, sem entrada nem saída.
+ANS=0
+
+_numero() {  # converte "12,5" ou "ans" para "12.5"; falha se não for número
+  local t=$1
+  [[ $t == ans ]] &amp;&amp; { REPLY=$ANS; return 0; }
+  [[ $t =~ ^-?[0-9]+([.,][0-9]+)?$ ]] || return 1
+  REPLY=${t/,/.}
+}
+
+_conta() {  # executa a expressão awk com a e b e confere o resultado
+  local r
+  r=$(awk -v a="$1" -v b="$2" "BEGIN { printf \"%.15g\", $3 }")
+  [[ $r == *inf* || $r == *nan* ]] &amp;&amp; { ERRO="resultado fora do alcance"; return 1; }
+  RESULTADO=$r
+}
+
+calc_avaliar() {
+  RESULTADO="" ERRO=""
+  local -a p
+  read -r -a p &lt;&lt;&lt; "$1"
+  local a b
+  if [[ ${#p[@]} -eq 2 &amp;&amp; ${p[0]} == raiz ]]; then
+    _numero "${p[1]}" || { ERRO="\"${p[1]}\" não é um número"; return 1; }
+    a=$REPLY
+    awk -v a="$a" 'BEGIN { exit !(a &lt; 0) }' &amp;&amp; { ERRO="raiz de número negativo"; return 1; }
+    _conta "$a" 0 'sqrt(a)' || return 1
+  elif [[ ${#p[@]} -eq 3 ]]; then
+    _numero "${p[0]}" || { ERRO="\"${p[0]}\" não é um número"; return 1; }
+    a=$REPLY
+    _numero "${p[2]}" || { ERRO="\"${p[2]}\" não é um número"; return 1; }
+    b=$REPLY
+    case ${p[1]} in
+      +) _conta "$a" "$b" 'a + b' ;;
+      -) _conta "$a" "$b" 'a - b' ;;
+      '*') _conta "$a" "$b" 'a * b' ;;
+      /) awk -v b="$b" 'BEGIN { exit !(b == 0) }' &amp;&amp; { ERRO="divisão por zero"; return 1; }
+         _conta "$a" "$b" 'a / b' ;;
+      %) _conta "$a" "$b" 'a * b / 100' ;;
+      ^) [[ $b =~ ^-?[0-9]+$ ]] || { ERRO="o expoente precisa ser inteiro"; return 1; }
+         _conta "$a" "$b" 'a ^ b' ;;
+      *) ERRO="operação desconhecida \"${p[1]}\" (use + - * / ^ % ou raiz)"; return 1 ;;
+    esac || return 1
+  else
+    ERRO='use "a op b" ou "raiz a"'
+    return 1
+  fi
+  ANS=$RESULTADO  # só um resultado válido substitui o ans
+}</code></pre>
+<p><code>calc.sh</code>:</p>
+<pre class="codigo"><code>#!/usr/bin/env bash
+source "$(dirname "$0")/calc_nucleo.sh"
+
+historico=()
+echo "Calculadora: + - * / ^ % e raiz. Comandos: hist, sair."
+while printf '&gt; ' &amp;&amp; read -r linha; do
+  case $linha in
+    sair) break ;;
+    hist) for i in "${!historico[@]}"; do echo "  $((i + 1)). ${historico[i]}"; done; continue ;;
+    '') continue ;;
+  esac
+  if calc_avaliar "$linha"; then
+    historico+=("$linha = ${RESULTADO//./,}")
+    echo "${historico[-1]}"
+  else
+    echo "erro: $ERRO"
+  fi
+done
+echo</code></pre>
+<p class="rotulo-entrada">Entrada digitada:</p>
+<pre class="codigo"><code>2 + 3
+0,1 + 0,2
+ans * 10
+10 / 0
+2 ^ 0,5
+raiz -4
+raiz 2
+ans * ans
+10 / 3
+15 % 200
+abc + 1
+2 ^ 10000
+2 $ 3
+hist
+sair</code></pre>
+<pre class="saida"><code>Calculadora: + - * / ^ % e raiz. Comandos: hist, sair.
+&gt; 2 + 3 = 5
+&gt; 0,1 + 0,2 = 0,3
+&gt; ans * 10 = 3
+&gt; erro: divisão por zero
+&gt; erro: o expoente precisa ser inteiro
+&gt; erro: raiz de número negativo
+&gt; raiz 2 = 1,4142135623731
+&gt; ans * ans = 2,00000000000001
+&gt; 10 / 3 = 3,33333333333333
+&gt; 15 % 200 = 30
+&gt; erro: "abc" não é um número
+&gt; erro: resultado fora do alcance
+&gt; erro: operação desconhecida "$" (use + - * / ^ % ou raiz)
+&gt;   1. 2 + 3 = 5
+  2. 0,1 + 0,2 = 0,3
+  3. ans * 10 = 3
+  4. raiz 2 = 1,4142135623731
+  5. ans * ans = 2,00000000000001
+  6. 10 / 3 = 3,33333333333333
+  7. 15 % 200 = 30
+&gt;</code></pre>
+<p>Com a entrada redirecionada, o terminal não ecoa o que foi digitado, e cada resposta aparece logo depois do <code>&gt;</code>.</p>
+<p>O <code>%.15g</code> do <code>awk</code> esconde o mesmo ruído do <code>double</code> visto nos cadernos de C e de C++: <code>0,1 + 0,2</code> mostra 0,3, mas guarda 0,30000000000000004. A operação <code>*</code> precisa de aspas no <code>case</code>, senão seria o padrão "qualquer coisa", e todas as operações desconhecidas virariam multiplicação. O <code>2 ^ 10000</code> estoura o <code>double</code> e vira <code>inf</code>, que o núcleo recusa. O <code>bc -l</code>, quando instalado, faz contas com precisão arbitrária e seria a alternativa para resultados exatos.</p>
+<p>Uma versão "gráfica" no próprio terminal fica como extensão, com o <code>whiptail</code> (presente na maioria das distribuições): um laço com <code>whiptail --inputbox "Conta:" 8 50 3&gt;&amp;1 1&gt;&amp;2 2&gt;&amp;3</code> para ler a conta e <code>whiptail --msgbox</code> para mostrar o resultado ou o erro, chamando o mesmo <code>calc_avaliar</code>. O núcleo não muda uma linha.</p>
+<div class="questao desafio" id="d2">
+<span class="num">D2</span>
+<div class="corpo">
+<p class="titulo">Da máquina vazia ao deploy automatizado</p>
+<p>Monte, de ponta a ponta, a entrega de uma aplicação web simples (a API de livros do caderno de PHP serve): o código no Git com <em>branches</em> protegidas; um pipeline que roda <em>lint</em>, testes e varredura de segredos, constrói a imagem e a publica num <em>registry</em> com a <em>tag</em> do <em>commit</em>; a infraestrutura de uma VM criada com Terraform e configurada com Ansible (Docker, usuário de deploy, <em>firewall</em>); o deploy automático com verificação de saúde e <em>rollback</em>; e um painel com latência, taxa de erros e um alerta baseado em SLO.</p>
+</div>
+</div>
+<p><strong>Caminho da solução</strong></p>
+<ul><li><strong>Repositório</strong>: <code>main</code> protegida (PR, revisão, CI obrigatório), <code>dev</code> para integração, Conventional Commits e <em>tags</em> SemVer gerando <em>releases</em> (módulo 2).</li><li><strong>CI</strong>: <em>jobs</em> de <em>lint</em> e testes em paralelo; varredura de segredos e de dependências; <em>build</em> da imagem em múltiplos estágios com <em>cache</em>; publicação no GHCR com duas <em>tags</em>, o <em>hash</em> curto do <em>commit</em> (imutável, usado no deploy) e a versão da <em>release</em> (módulos 2 a 4 e 9).</li><li><strong>Infraestrutura</strong>: o Terraform cria a VPC, a sub-rede, o <em>security group</em> (443 aberto, 22 só do IP do <em>runner</em> ou de uma VPN) e a VM, com o <em>state</em> num <em>backend</em> remoto com <em>lock</em>; a saída com o IP alimenta o inventário do Ansible, que instala o Docker, cria o usuário <code>deploy</code> sem senha e só com chave, configura o <em>firewall</em> e o <code>sshd</code> endurecido (módulos 5 e 1).</li><li><strong>Deploy</strong>: o <em>job</em> de deploy, só na <code>main</code> e com aprovação do ambiente <code>producao</code>, entra por SSH com uma chave guardada como <em>secret</em>, faz o <code>docker pull</code> da imagem pela <em>tag</em> do <em>commit</em>, troca o container com o <code>compose</code>, roda o <code>curl -fsS /health</code> e, se falhar, volta para a <em>tag</em> anterior, guardada num arquivo no servidor (módulo 4).</li><li><strong>Sem Docker no servidor</strong>: a mesma estrutura funciona com o PHP e o nginx instalados pelo Ansible, e o deploy por <em>releases</em> com <em>symlink</em> do módulo 4.</li><li><strong>Observabilidade</strong>: o nginx com <em>log</em> em JSON; o Prometheus (com o <em>node exporter</em> e as métricas da aplicação) e o Grafana no mesmo servidor ou num serviço gerenciado; um painel com taxa de requisições, erros e p95; um SLO de 99,5% de disponibilidade e alertas por <em>burn rate</em> enviados ao canal da equipe (módulo 6).</li><li><strong>Documentação</strong>: um <code>README</code> com a arquitetura e os comandos, um <em>runbook</em> para "o deploy falhou" e "o site caiu", e um <em>postmortem</em> de um incidente simulado, por exemplo parando o container de propósito (módulo 9).</li></ul>
+<p>O critério de pronto é <strong>reprodutibilidade</strong>: apagar tudo com <code>terraform destroy</code> e recriar o ambiente inteiro com um <code>apply</code>, um <em>playbook</em> e um <em>push</em>, sem nenhum passo manual que só existe na memória de alguém.</p>
+</section>
+<footer class="fim">
+<p><strong>Fim do gabarito.</strong></p>
+<p>Estudar e realmente Aprender DevOps &amp; Cloud · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</footer>
+</body>
+</html>

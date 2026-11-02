@@ -1,0 +1,883 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dominando o JavaScript em 1 Ano · Caderno de Exercícios</title>
+<link rel="stylesheet" href="../caderno.css">
+</head>
+<body class="caderno exercicios">
+<header class="capa">
+<p class="serie">DOMINANDO O JAVASCRIPT EM 1 ANO</p>
+<h1>Caderno de Exercícios</h1>
+<p class="subtitulo">Exercícios teóricos e práticos do curso</p>
+<p class="subtitulo">Node.js e navegador · 9 módulos · 77 exercícios · 1 desafio integrador</p>
+<p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</header>
+<div class="ficha"><span>Nome do aluno:</span><span>Início:</span><span>Término:</span></div>
+<aside class="nota">
+<p><strong>Como usar este caderno</strong></p>
+<p>Cada módulo reúne um bloco de assuntos do curso, com a lista dos artigos do site que tratam deles. Os exercícios são <strong>teóricos</strong> (explique com as suas palavras), <strong>práticos</strong> (escreva e rode o código, no Node.js ou no navegador) ou <strong>mistos</strong>.</p>
+<p>Tente sempre resolver sozinho antes de abrir o <strong>Caderno de Respostas</strong>. É no erro que o conhecimento fixa.</p>
+</aside>
+<h2 class="sumario-titulo">Sumário</h2>
+<table class="sumario">
+<thead><tr><th>Módulo</th><th>Tema</th><th>Artigos</th><th>Exercícios</th></tr></thead>
+<tbody>
+<tr><td>MÓDULO 1</td><td>Fundamentos do JavaScript</td><td>#01–#06, #11–#13, #15</td><td>1.1–1.11</td></tr>
+<tr><td>MÓDULO 2</td><td>JavaScript Moderno (ES6+)</td><td>#07–#09, #18–#22, #27</td><td>2.1–2.10</td></tr>
+<tr><td>MÓDULO 3</td><td>Node.js e Back-end</td><td>#30–#35</td><td>3.1–3.8</td></tr>
+<tr><td>MÓDULO 4</td><td>APIs Avançadas</td><td>#33–#36</td><td>4.1–4.8</td></tr>
+<tr><td>MÓDULO 5</td><td>Qualidade de Código</td><td>#36–#40</td><td>5.1–5.8</td></tr>
+<tr><td>MÓDULO 6</td><td>React e Front-end Moderno</td><td>#41–#45</td><td>6.1–6.8</td></tr>
+<tr><td>MÓDULO 7</td><td>Deploy e Infraestrutura</td><td>#46–#49</td><td>7.1–7.7</td></tr>
+<tr><td>MÓDULO 8</td><td>Arquitetura e Padrões</td><td>#50–#52</td><td>8.1–8.8</td></tr>
+<tr><td>MÓDULO 9</td><td>Tópicos Avançados</td><td>#53–#55</td><td>9.1–9.9</td></tr>
+<tr><td>DESAFIOS</td><td>Projetos integradores</td><td>todos</td><td>D1</td></tr>
+</tbody>
+</table>
+<aside class="legenda">
+<p>Legenda: os exercícios são numerados por módulo (<strong>3.2</strong> é o segundo do módulo 3). As linhas pautadas são para a sua resposta; nos práticos, use também o computador: <strong>todo programa deve ser executado</strong>.</p>
+</aside>
+<section class="modulo" id="modulo-1">
+<h2><span class="rotulo">MÓDULO 1</span> Fundamentos do JavaScript</h2>
+<p class="intro">Variáveis, tipos, operadores, controle de fluxo, funções, arrays, objetos, DOM e eventos. A base sobre a qual todo o resto é construído.</p>
+<p class="aulas-titulo">Artigos do site</p>
+<ul class="aulas">
+<li><span class="n">#01</span> O que é JavaScript e por que aprender?</li>
+<li><span class="n">#02</span> Condicionais: if, else e switch</li>
+<li><span class="n">#03</span> Laços de Repetição: for, while e do...while</li>
+<li><span class="n">#04</span> Funções: declaração, expressão e arrow functions</li>
+<li><span class="n">#05</span> Arrays: criando e manipulando listas</li>
+<li><span class="n">#06</span> Objetos: estruturando dados do mundo real</li>
+<li><span class="n">#11</span> O que é o DOM e como o JavaScript interage com o HTML</li>
+<li><span class="n">#12</span> Eventos: click, input, submit e muito mais</li>
+<li><span class="n">#13</span> Criando e Removendo Elementos Dinamicamente</li>
+<li><span class="n">#15</span> LocalStorage e SessionStorage</li>
+</ul>
+<h3>Variáveis, Tipos e Controle de Fluxo</h3>
+<div class="questao" id="q1-1">
+<span class="num">1.1</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Explique a diferença entre var, let e const. Em quais situações você usaria cada um? Por que var é considerado problemático no JavaScript moderno?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q1-2">
+<span class="num">1.2</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>O que é coerção de tipos em JavaScript? Explique a diferença entre == e === com dois exemplos práticos que ilustrem situações onde o resultado seria diferente.</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q1-3">
+<span class="num">1.3</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Escreva uma função chamada classificarIdade(idade) que receba um número e retorne:</p>
+<ul><li>Se idade &lt; 0: "Valor inválido"</li><li>Se 0 ≤ idade &lt; 13: "Criança"</li><li>Se 13 ≤ idade &lt; 18: "Adolescente"</li><li>Se 18 ≤ idade &lt; 60: "Adulto"</li><li>Se idade ≥ 60: "Idoso"</li></ul>
+<p class="dica"><strong>Dica:</strong> Use if/else if ou switch. Teste com os valores: -1, 5, 15, 30, 65.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q1-4">
+<span class="num">1.4</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>(a) Imprima os números ímpares de 1 a 20 com <code>for</code> e depois com <code>while</code>, sem testar número por número. (b) Sem executar, diga o que o código abaixo imprime; depois rode, explique o resultado e corrija trocando uma única palavra.</p>
+<pre class="codigo"><code>for (var i = 0; i &lt; 3; i++) setTimeout(() =&gt; console.log(i));</code></pre>
+<p class="dica"><strong>Dica:</strong> qual é o escopo de <code>var</code>, e quando os callbacks do <code>setTimeout</code> rodam?</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>Funções, Arrays e Objetos</h3>
+<div class="questao" id="q1-5">
+<span class="num">1.5</span>
+<div class="corpo">
+<p class="tipo">misto</p>
+<p>Explique o que é closure e para que serve. Depois implemente uma função criarContador() que retorna um objeto com três métodos: incrementar(), decrementar() e valor(). Cada chamada deve manter o estado interno sem usar variáveis globais.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q1-6">
+<span class="num">1.6</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Dado o array de produtos abaixo, use os métodos de array para:</p>
+<ul><li>Filtrar apenas os produtos com estoque &gt; 0 (filter)</li><li>Obter um array com apenas os nomes dos produtos disponíveis (map)</li><li>Calcular o valor total do estoque disponível — preço × estoque (reduce)</li><li>Encontrar o produto mais caro (reduce ou sort)</li></ul>
+<p class="dica"><strong>Dica:</strong> const produtos = [{nome:"Teclado",preco:250,estoque:5},{nome:"Mouse",preco:80,estoque:0},{nome:"Monitor",preco:1200,estoque:3},{nome:"Webcam",preco:300,estoque:0}]</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q1-7">
+<span class="num">1.7</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Crie um objeto livro com as propriedades: titulo, autor, anoPublicacao, paginas e disponivel. Depois escreva uma função formatarLivro(livro) que retorne uma string formatada: "Titulo (Ano) - Autor | X páginas | [Disponível/Indisponível]". Use destructuring na função.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>DOM e Eventos</h3>
+<div class="questao" id="q1-8">
+<span class="num">1.8</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>O que é o DOM (Document Object Model)? Explique a diferença entre getElementById, querySelector e querySelectorAll. Quando você usaria cada um?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q1-9">
+<span class="num">1.9</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Escreva o código JavaScript para criar dinamicamente uma lista &lt;ul&gt; com 5 itens de sua escolha e adicioná-la ao body da página. Use createElement e appendChild. Cada item deve ter um evento de clique que exibe um alert com o texto do item clicado.</p>
+<p class="dica"><strong>Dica:</strong> Você pode testar no console do navegador.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q1-10">
+<span class="num">1.10</span>
+<div class="corpo">
+<p class="tipo">misto</p>
+<p>Explique o que é event delegation e por que ela é mais eficiente do que adicionar um listener em cada elemento de uma lista. Depois reescreva o código do exercício 1.9 usando event delegation — um único listener no &lt;ul&gt; em vez de um em cada &lt;li&gt;.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>Projeto: To-do List</h3>
+<div class="questao" id="q1-11">
+<span class="num">1.11</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Implemente uma to-do list funcional no navegador (HTML + JS). Deve ter:</p>
+<ul><li>Campo de texto + botão para adicionar tarefas</li><li>Cada tarefa exibida com checkbox e botão de remover</li><li>Clicar no checkbox risca o texto da tarefa (classList.toggle)</li><li>Contador de tarefas pendentes atualizado em tempo real</li><li>Botão "Limpar concluídas" que remove todas as marcadas como feitas</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="modulo-2">
+<h2><span class="rotulo">MÓDULO 2</span> JavaScript Moderno (ES6+)</h2>
+<p class="intro">Arrow functions, destructuring, spread/rest, Promises, async/await, Fetch API, módulos ES e classes. O JavaScript como é escrito profissionalmente hoje.</p>
+<p class="aulas-titulo">Artigos do site</p>
+<ul class="aulas">
+<li><span class="n">#07</span> Desestruturação, Spread e Rest Operator</li>
+<li><span class="n">#08</span> Escopo, Hoisting e Closures</li>
+<li><span class="n">#09</span> Tratamento de Erros com try, catch e finally</li>
+<li><span class="n">#18</span> O que é Programação Assíncrona? O Event Loop Explicado</li>
+<li><span class="n">#19</span> Callbacks: o começo de tudo</li>
+<li><span class="n">#20</span> Promises: resolvendo o Callback Hell</li>
+<li><span class="n">#21</span> Async/Await: escrevendo código assíncrono de forma limpa</li>
+<li><span class="n">#22</span> Fetch API: consumindo dados da internet</li>
+<li><span class="n">#27</span> Tratamento de erros em requisições HTTP</li>
+</ul>
+<h3>ES6+ Sintaxe Moderna</h3>
+<div class="questao" id="q2-1">
+<span class="num">2.1</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Reescreva as funções abaixo usando arrow functions. Depois explique em qual situação arrow functions NÃO devem ser usadas (dica: relacionado ao this).</p>
+<ul><li>function dobrar(n) { return n * 2; }</li><li>function saudar(nome) { return "Olá, " + nome + "!"; }</li><li>function soma(a, b) { return a + b; }</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q2-2">
+<span class="num">2.2</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Dado o objeto usuario abaixo, use destructuring para extrair as propriedades em variáveis separadas. Depois use spread para criar um novo objeto com a propriedade ativo: true adicionada, sem modificar o original.</p>
+<p class="dica"><strong>Dica:</strong> const usuario = { id: 1, nome: "Ana", email: "ana@email.com", cidade: "São Paulo" }</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q2-3">
+<span class="num">2.3</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Escreva uma função somaTudo(...numeros) que aceite qualquer quantidade de argumentos numéricos e retorne a soma de todos. Use o parâmetro rest. Teste com: somaTudo(1,2,3), somaTudo(10,20,30,40,50), somaTudo().</p>
+<p class="dica"><strong>Dica:</strong> somaTudo() sem argumentos deve retornar 0.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>Promises, Async/Await e Fetch</h3>
+<div class="questao" id="q2-4">
+<span class="num">2.4</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Explique o que é o Event Loop do JavaScript e por que a linguagem é "single-threaded mas não bloqueante". O que significa uma Promise estar em estado "pending", "fulfilled" ou "rejected"?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q2-5">
+<span class="num">2.5</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Escreva uma função aguardar(ms) que retorna uma Promise que resolve após o número de milissegundos informado. Depois use async/await para escrever uma sequência que: aguarda 1s, loga "passo 1", aguarda 500ms, loga "passo 2", aguarda 200ms, loga "passo 3".</p>
+<p class="dica"><strong>Dica:</strong> Use new Promise(resolve =&gt; setTimeout(resolve, ms)).</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q2-6">
+<span class="num">2.6</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Use a Fetch API para consumir o endpoint público https://jsonplaceholder.typicode.com/users e:</p>
+<ul><li>Exibir no console o nome e email de cada usuário</li><li>Tratar erros com try/catch</li><li>Adicionar um timeout de 5 segundos (use Promise.race com uma promise de timeout)</li><li>Exibir uma mensagem "Carregando..." antes da requisição e removê-la após</li></ul>
+<p class="dica"><strong>Dica:</strong> jsonplaceholder.typicode.com é uma API pública gratuita para testes.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>Módulos e Classes</h3>
+<div class="questao" id="q2-7">
+<span class="num">2.7</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Explique a diferença entre export default e export nomeado. Quando você usaria cada um? Como você importaria um módulo que tem tanto um export default quanto exports nomeados?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q2-8">
+<span class="num">2.8</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Crie uma classe ContaBancaria com:</p>
+<ul><li>Propriedade privada #saldo inicializada no constructor</li><li>Método depositar(valor) que valida valor &gt; 0</li><li>Método sacar(valor) que valida valor &gt; 0 e saldo suficiente</li><li>Getter saldo que retorna o saldo atual</li><li>Método extrato() que retorna um array com o histórico de transações</li><li>Método estático criarContaZerada() que retorna uma nova conta com saldo 0</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>Tratamento de Erros</h3>
+<div class="questao" id="q2-9">
+<span class="num">2.9</span>
+<div class="corpo">
+<p class="tipo">misto</p>
+<p>Explique a diferença entre erros síncronos e assíncronos em JavaScript. Por que um try/catch comum não captura erros dentro de callbacks assíncronos sem await? Depois escreva um exemplo demonstrando o comportamento correto com async/await e o comportamento problemático com callbacks.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q2-10">
+<span class="num">2.10</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Crie classes de erro customizadas: ErroValidacao, ErroNaoEncontrado e ErroAutenticacao, todas estendendo Error. Cada uma deve ter: mensagem, código HTTP correspondente (422, 404, 401) e o nome da classe como propriedade name. Escreva uma função tratarErro(erro) que identifica o tipo e retorna um objeto { status, mensagem } adequado.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="modulo-3">
+<h2><span class="rotulo">MÓDULO 3</span> Node.js e Back-end</h2>
+<p class="intro">Node.js, NPM, Express, middlewares, JWT, MongoDB, Mongoose e API REST completa. Construindo servidores profissionais.</p>
+<p class="aulas-titulo">Artigos do site</p>
+<ul class="aulas">
+<li><span class="n">#30</span> Introdução ao Node.js: JavaScript fora do navegador</li>
+<li><span class="n">#31</span> NPM: gerenciando pacotes e dependências</li>
+<li><span class="n">#32</span> Criando um servidor HTTP com Node.js puro</li>
+<li><span class="n">#33</span> Express.js: o framework web do Node</li>
+<li><span class="n">#34</span> MongoDB e Mongoose: banco de dados com Node</li>
+<li><span class="n">#35</span> Projeto: API REST com autenticação JWT</li>
+</ul>
+<h3>Node.js e NPM</h3>
+<div class="questao" id="q3-1">
+<span class="num">3.1</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Explique as diferenças entre require() (CommonJS) e import/export (ESModules) no Node.js. Quando você usaria cada um? O que é necessário configurar no package.json para usar ESModules?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q3-2">
+<span class="num">3.2</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Escreva um script Node.js que:</p>
+<ul><li>Leia um arquivo chamado dados.json do disco</li><li>Adicione um novo objeto com id, nome e data de criação ao array existente</li><li>Salve o arquivo atualizado no disco</li><li>Lide com erros: arquivo inexistente, JSON malformado, sem permissão de escrita</li></ul>
+<p class="dica"><strong>Dica:</strong> Use fs.promises (a versão assíncrona com async/await).</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>Express e Middlewares</h3>
+<div class="questao" id="q3-3">
+<span class="num">3.3</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>O que é um middleware no Express? Explique o ciclo req → middleware → middleware → rota → res. O que acontece se um middleware não chamar next()? Qual a diferença entre app.use() e router.use()?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q3-4">
+<span class="num">3.4</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Implemente os seguintes middlewares do zero (sem bibliotecas):</p>
+<ul><li>logger: registra método HTTP, URL, status e tempo de resposta</li><li>autenticar: verifica se há um header Authorization com o valor "Bearer token-secreto"</li><li>limitarTamanho: rejeita requisições com body maior que 1KB</li><li>naoEncontrado: responde com 404 JSON para rotas não definidas</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q3-5">
+<span class="num">3.5</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Implemente autenticação JWT do zero. Crie os endpoints:</p>
+<ul><li>POST /auth/registrar — recebe nome, email, senha; salva em array em memória; retorna JWT</li><li>POST /auth/login — verifica credenciais; retorna JWT</li><li>GET /auth/perfil — rota protegida; retorna dados do usuário a partir do token</li><li>Use bcryptjs para senha e jsonwebtoken para o token. Não use banco de dados neste exercício.</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>MongoDB e API REST</h3>
+<div class="questao" id="q3-6">
+<span class="num">3.6</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Explique a diferença entre banco de dados relacional (SQL) e não-relacional (NoSQL) como MongoDB. Quais são as vantagens e desvantagens de cada abordagem? Em que tipo de projeto você escolheria um em vez do outro?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q3-7">
+<span class="num">3.7</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Crie um schema Mongoose para Produto com:</p>
+<ul><li>nome (string, obrigatório, min 2 chars)</li><li>preco (number, obrigatório, min 0)</li><li>categoria (enum: ["eletronico","roupa","alimento","outro"])</li><li>estoque (number, default 0)</li><li>ativo (boolean, default true)</li><li>criadoEm (Date, default Date.now)</li><li>Um método de instância resumo() que retorna "Nome — R$ preço (estoque un.)"</li><li>Um índice composto em categoria + ativo</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q3-8">
+<span class="num">3.8</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Implemente um CRUD completo em Express + Mongoose para o modelo Produto do exercício anterior:</p>
+<ul><li>GET /produtos — listar todos com filtro opcional por ?categoria=</li><li>GET /produtos/:id — buscar por ID com tratamento de ID inválido</li><li>POST /produtos — criar com validação</li><li>PUT /produtos/:id — atualizar parcialmente com $set</li><li>DELETE /produtos/:id — remover com confirmação no retorno</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="modulo-4">
+<h2><span class="rotulo">MÓDULO 4</span> APIs Avançadas</h2>
+<p class="intro">Relacionamentos, validação com Zod, upload de arquivos, paginação, testes com Jest/Supertest e documentação com Swagger.</p>
+<p class="aulas-titulo">Artigos do site</p>
+<ul class="aulas">
+<li><span class="n">#33</span> Express.js: o framework web do Node</li>
+<li><span class="n">#34</span> MongoDB e Mongoose: banco de dados com Node</li>
+<li><span class="n">#35</span> Projeto: API REST com autenticação JWT</li>
+<li><span class="n">#36</span> Testes automatizados com Jest</li>
+</ul>
+<h3>Relacionamentos e Validação</h3>
+<div class="questao" id="q4-1">
+<span class="num">4.1</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Explique as três formas de modelar relacionamentos no MongoDB: embedding (documentos aninhados), referência (populate) e arrays de IDs. Quando você usaria cada abordagem? Dê um exemplo prático para cada.</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q4-2">
+<span class="num">4.2</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Crie um schema Mongoose para Pedido que referencia Usuario e contém um array de itens com referência a Produto. O pedido deve ter status (enum), total calculado e método calcularTotal() que soma preco × quantidade de cada item. Implemente uma rota GET /pedidos/:id que popula usuario e produtos dos itens.</p>
+<p class="dica"><strong>Dica:</strong> Use .populate("usuario", "nome email") para trazer apenas os campos necessários.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q4-3">
+<span class="num">4.3</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Usando a biblioteca Zod, crie schemas de validação para:</p>
+<ul><li>Cadastro de usuário: nome (min 2), email (válido), senha (min 8, com número e maiúscula), confirmarSenha (igual à senha)</li><li>Produto: nome, preco (positivo), categoria (enum), estoque (inteiro &gt;= 0)</li><li>Um middleware validar(schema) genérico que pode ser usado em qualquer rota</li><li>Teste o middleware na rota POST /usuarios</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>Upload e Paginação</h3>
+<div class="questao" id="q4-4">
+<span class="num">4.4</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Configure Multer para aceitar upload de imagens com:</p>
+<ul><li>Tipos aceitos: jpeg, jpg, png, webp</li><li>Tamanho máximo: 5MB</li><li>Renomear o arquivo para: timestamp-nomeoriginal</li><li>Rota POST /produtos/:id/imagem que atualiza o campo imagemUrl do produto</li><li>Tratamento de erro quando o tipo de arquivo não é aceito</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q4-5">
+<span class="num">4.5</span>
+<div class="corpo">
+<p class="tipo">misto</p>
+<p>Explique o problema de performance do uso de skip/limit em coleções muito grandes no MongoDB. Depois implemente paginação baseada em cursor para a rota GET /produtos usando o campo _id como cursor: a resposta deve incluir os dados, um campo nextCursor e hasMore.</p>
+<p class="dica"><strong>Dica:</strong> Cursor: produtos com _id &gt; lastId, limitado por pageSize.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>Testes e Documentação</h3>
+<div class="questao" id="q4-6">
+<span class="num">4.6</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Explique a diferença entre testes unitários, de integração e end-to-end (E2E). Quais são as vantagens e limitações de cada nível? O que é a "pirâmide de testes" e por que ela recomenda mais testes unitários?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q4-7">
+<span class="num">4.7</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Escreva testes com Jest para uma função calculadoraFrete(peso, distancia, expresso) que retorna o custo do frete. Cubra:</p>
+<ul><li>Frete padrão: R$ 2,50/kg + R$ 0,01/km</li><li>Frete expresso: 3× o padrão, mínimo R$ 15,00</li><li>Retirada em loja: sempre R$ 0,00</li><li>Erros: peso negativo, distância negativa, tipo inválido</li><li>Use describe para agrupar, it para cada caso, e toBeCloseTo para floats</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q4-8">
+<span class="num">4.8</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Escreva testes de integração com Supertest para as rotas de Produto. Cubra ao menos:</p>
+<ul><li>POST /produtos com dados válidos — espera 201</li><li>POST /produtos com dados inválidos — espera 422 com mensagem de erro</li><li>GET /produtos/:id com ID inexistente — espera 404</li><li>DELETE /produtos/:id de outro usuário — espera 403</li><li>Use beforeAll/afterAll para conectar/desconectar o banco de teste</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="modulo-5">
+<h2><span class="rotulo">MÓDULO 5</span> Qualidade de Código</h2>
+<p class="intro">TypeScript, ESLint, Prettier, Git avançado, commits semânticos e TDD. Código que o time consegue manter.</p>
+<p class="aulas-titulo">Artigos do site</p>
+<ul class="aulas">
+<li><span class="n">#36</span> Testes automatizados com Jest</li>
+<li><span class="n">#37</span> ESLint e Prettier: código limpo e padronizado</li>
+<li><span class="n">#38</span> Git avançado e fluxo de trabalho em equipe</li>
+<li><span class="n">#39</span> Introdução ao TypeScript</li>
+<li><span class="n">#40</span> Revisão + Projeto: API tipada e testada</li>
+</ul>
+<h3>TypeScript</h3>
+<div class="questao" id="q5-1">
+<span class="num">5.1</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Explique a diferença entre interface e type em TypeScript. Em quais situações cada um é mais adequado? O que são union types e intersection types? Dê um exemplo prático de cada.</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q5-2">
+<span class="num">5.2</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Crie os seguintes tipos TypeScript para a API de tarefas:</p>
+<ul><li>Interface Tarefa com: id, titulo, descricao?, status (union type), prioridade (enum), prazo?, usuarioId, criadoEm</li><li>Type TarefaInput = Omit&lt;Tarefa, "id" | "criadoEm"&gt;</li><li>Type TarefaAtualizar = Partial&lt;TarefaInput&gt;</li><li>Interface PaginaResultado&lt;T&gt; genérica com dados, total, pagina, totalPaginas</li><li>Função tipada buscarTarefas(filtros: Partial&lt;Tarefa&gt;): Promise&lt;PaginaResultado&lt;Tarefa&gt;&gt;</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q5-3">
+<span class="num">5.3</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Implemente uma função genérica validarOuLancar&lt;T&gt;(valor: unknown, schema: ZodSchema&lt;T&gt;): T que recebe um valor desconhecido, valida com um schema Zod e retorna o valor tipado ou lança um ErroValidacao customizado. Demonstre o uso em uma rota Express tipada.</p>
+<p class="dica"><strong>Dica:</strong> Use z.safeParse() para capturar o erro sem lançar exceção diretamente.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>ESLint, Prettier e Git</h3>
+<div class="questao" id="q5-4">
+<span class="num">5.4</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>O que é linting e por que ele é importante em projetos de equipe? Qual a diferença entre erros e warnings no ESLint? Explique o que é o prettier e como ele difere do ESLint conceitualmente.</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q5-5">
+<span class="num">5.5</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>O que é um commit semântico (Conventional Commits)? Explique os tipos: feat, fix, docs, style, refactor, test, chore. Por que eles são importantes para geração automática de CHANGELOG e versionamento semântico?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q5-6">
+<span class="num">5.6</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Para cada situação abaixo, escreva a mensagem de commit semântico correta:</p>
+<ul><li>Adicionar autenticação JWT às rotas de usuário</li><li>Corrigir bug onde o total do pedido não incluía o frete</li><li>Atualizar a documentação do endpoint de produtos</li><li>Refatorar o serviço de email para usar Clean Architecture</li><li>Adicionar testes unitários para a entidade Tarefa</li><li>Configurar ESLint e Prettier no projeto</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>TDD e Testes Avançados</h3>
+<div class="questao" id="q5-7">
+<span class="num">5.7</span>
+<div class="corpo">
+<p class="tipo">misto</p>
+<p>Explique o ciclo Red → Green → Refactor do TDD. Quais são os benefícios e as desvantagens de escrever testes antes do código? Quando o TDD é mais valioso e quando pode ser uma sobrecarga desnecessária?</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q5-8">
+<span class="num">5.8</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Aplique TDD para implementar uma função processarPagamento(valor, cartao, config). Comece escrevendo os testes para os seguintes cenários ANTES de implementar a função:</p>
+<ul><li>Pagamento aprovado com cartão válido</li><li>Rejeitar valor negativo ou zero</li><li>Rejeitar cartão expirado (data de vencimento passada)</li><li>Rejeitar CVV com menos de 3 dígitos</li><li>Simular falha de gateway com jest.fn() retornando erro</li></ul>
+<p class="dica"><strong>Dica:</strong> Escreva os testes primeiro, veja-os falhar (red), implemente o mínimo para passar (green), depois refatore.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="modulo-6">
+<h2><span class="rotulo">MÓDULO 6</span> React e Front-end Moderno</h2>
+<p class="intro">Componentes, JSX, hooks, estado global com Zustand, dados do servidor com React Query e SPAs com React Router.</p>
+<p class="aulas-titulo">Artigos do site</p>
+<ul class="aulas">
+<li><span class="n">#41</span> Introdução ao React</li>
+<li><span class="n">#42</span> React Hooks em profundidade</li>
+<li><span class="n">#43</span> Estado global com Zustand e React Query</li>
+<li><span class="n">#44</span> React Router: navegação em SPAs</li>
+<li><span class="n">#45</span> Revisão + Projeto Final: SPA Completa</li>
+</ul>
+<h3>Componentes e Hooks</h3>
+<div class="questao" id="q6-1">
+<span class="num">6.1</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Explique o que são "re-renders" no React e como o Virtual DOM funciona. Quando um componente re-renderiza? Quais hooks existem para evitar re-renders desnecessários e como funcionam?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q6-2">
+<span class="num">6.2</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Crie um componente React ListaTarefas que:</p>
+<ul><li>Mantém o estado de uma lista de tarefas com useState</li><li>Permite adicionar novas tarefas (input controlado)</li><li>Permite marcar tarefas como concluídas (toggle)</li><li>Permite remover tarefas</li><li>Exibe contagem de pendentes / total</li><li>É extraído em subcomponentes: ItemTarefa, FormNovaTarefa, ContadorTarefas</li></ul>
+<p class="dica"><strong>Dica:</strong> Use useCallback para as funções passadas como props.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q6-3">
+<span class="num">6.3</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Implemente um hook customizado useDebounce(valor, delay) que retorna o valor "estabilizado" após o delay. Depois implemente useLocalStorage(chave, valorInicial) que persiste e lê do localStorage. Demonstre os dois em um componente de busca que salva o termo no localStorage.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>Zustand e React Query</h3>
+<div class="questao" id="q6-4">
+<span class="num">6.4</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Explique a diferença entre "estado de UI" e "estado de servidor". Por que React Query (ou SWR) é mais adequado para estado de servidor do que useState ou Zustand? O que é "stale time" e "cache time"?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q6-5">
+<span class="num">6.5</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Configure uma store Zustand para autenticação com:</p>
+<ul><li>Estado: usuario, token, carregando, erro</li><li>Ação login(email, senha): chama a API, salva token no localStorage</li><li>Ação logout: limpa estado e localStorage</li><li>Ação verificarToken: verifica se há token salvo e restaura sessão</li><li>Middleware persist para sobreviver a reload da página</li><li>Selector para saber se o usuário é admin</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q6-6">
+<span class="num">6.6</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Usando React Query, implemente:</p>
+<ul><li>useQuery para listar tarefas com filtros (status, prioridade) como queryKey</li><li>useMutation para criar tarefa com invalidação do cache na conclusão</li><li>useMutation com update otimista para toggle de status (concluir/reabrir)</li><li>Tratamento de loading e erro em todos os casos</li><li>Refetch automático quando a janela recebe foco</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>React Router e Projeto</h3>
+<div class="questao" id="q6-7">
+<span class="num">6.7</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Implemente um sistema de rotas com React Router v6:</p>
+<ul><li>Rota pública /login com redirecionamento para /dashboard se já logado</li><li>Rotas protegidas /dashboard, /tarefas, /perfil que redirecionam para /login se não autenticado</li><li>Rota /tarefas/:id para detalhes, com useParams</li><li>Rota 404 com componente NaoEncontrado</li><li>Lazy loading em todas as páginas com React.lazy e Suspense</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q6-8">
+<span class="num">6.8</span>
+<div class="corpo">
+<p class="tipo">misto</p>
+<p>Explique o que é "prop drilling" e como o Context API resolve esse problema. Quando você usaria Context em vez de Zustand? Implemente um tema claro/escuro usando Context API puro (sem Zustand), com um hook useTheme() e um componente ThemeProvider.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="modulo-7">
+<h2><span class="rotulo">MÓDULO 7</span> Deploy e Infraestrutura</h2>
+<p class="intro">Deploy em Vercel e Railway, MongoDB Atlas, segurança (OWASP, JWT, bcrypt), performance (Web Vitals, bundle, índices) e CI/CD.</p>
+<p class="aulas-titulo">Artigos do site</p>
+<ul class="aulas">
+<li><span class="n">#46</span> Deploy: do código ao ar</li>
+<li><span class="n">#47</span> Segurança em aplicações web</li>
+<li><span class="n">#48</span> Performance em aplicações web</li>
+<li><span class="n">#49</span> Revisão + Projeto Final: Produção Real</li>
+</ul>
+<h3>Deploy</h3>
+<div class="questao" id="q7-1">
+<span class="num">7.1</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Explique a diferença entre deployment de front-end (arquivos estáticos em CDN) e back-end (processo Node.js em servidor). Por que uma SPA precisa de um arquivo de configuração especial (vercel.json / netlify.toml / nginx.conf) para o roteamento funcionar corretamente?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q7-2">
+<span class="num">7.2</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Escreva o arquivo .github/workflows/deploy.yml para um pipeline CI/CD que:</p>
+<ul><li>Roda npm run test em todo Pull Request aberto</li><li>Faz deploy automático na Vercel (front) e Railway (back) apenas em push para main</li><li>O deploy do front-end aguarda o deploy do back-end terminar (needs)</li><li>Verifica o health check da API antes de declarar sucesso</li><li>Usa secrets do GitHub para tokens sensíveis</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>Segurança</h3>
+<div class="questao" id="q7-3">
+<span class="num">7.3</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Explique os seguintes vetores de ataque e suas defesas:</p>
+<ul><li>SQL/NoSQL Injection: como ocorre e como validar/sanitizar</li><li>XSS (Cross-Site Scripting): como React protege por padrão e quando não protege</li><li>CSRF: por que JWT em Authorization header é imune por design</li><li>Timing attacks em comparação de senhas: por que usar bcrypt.compare e não ===</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q7-4">
+<span class="num">7.4</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Implemente as seguintes proteções de segurança em uma API Express:</p>
+<ul><li>Rate limiting de 5 requisições por 15 minutos apenas no endpoint /auth/login</li><li>Middleware que valida se o usuário só acessa seus próprios recursos (ownership check)</li><li>Configuração CORS que permite apenas a URL do front-end em produção</li><li>Configuração do Helmet com Content-Security-Policy básica</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>Performance</h3>
+<div class="questao" id="q7-5">
+<span class="num">7.5</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Explique os três Core Web Vitals: LCP, INP e CLS. O que mede cada um, qual o valor considerado "bom" e quais técnicas ajudam a melhorar cada métrica?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q7-6">
+<span class="num">7.6</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Dado o código React abaixo com problemas de performance, identifique e corrija todos os problemas:</p>
+<ul><li>const ListaProdutos = ({ produtos, onComprar }) =&gt; { ... }: componente re-renderiza toda vez que o pai renderiza mesmo com os mesmos produtos</li><li>Dentro da lista, const precoFormatado = produtos.map(p =&gt; formatarMoeda(p.preco)): recalculado a cada render</li><li>O handler onComprarClick é recriado a cada render e passado para ItemProduto</li><li>Uma lista de 1000 produtos é toda renderizada no DOM de uma vez</li></ul>
+<p class="dica"><strong>Dica:</strong> Use React.memo, useMemo, useCallback e virtualização para resolver.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q7-7">
+<span class="num">7.7</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Escreva a query MongoDB e o índice necessário para buscar tarefas de um usuário específico filtradas por status, ordenadas por prazo. Use .explain("executionStats") para verificar que usa IXSCAN e não COLLSCAN. Depois otimize a query com .lean() e .select() mostrando os campos corretos.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="modulo-8">
+<h2><span class="rotulo">MÓDULO 8</span> Arquitetura e Padrões</h2>
+<p class="intro">Padrões de projeto (GoF), princípios SOLID, Clean Architecture e Domain-Driven Design. Organizando código para durar.</p>
+<p class="aulas-titulo">Artigos do site</p>
+<ul class="aulas">
+<li><span class="n">#50</span> Padrões de Projeto em JavaScript</li>
+<li><span class="n">#51</span> Arquitetura de Software: SOLID, Clean Architecture e DDD</li>
+<li><span class="n">#52</span> Revisão do Módulo 8 + Projeto: Refatoração com Clean Architecture</li>
+</ul>
+<h3>Padrões de Projeto</h3>
+<div class="questao" id="q8-1">
+<span class="num">8.1</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Explique os padrões abaixo e dê um exemplo real de onde cada um é usado no ecossistema JavaScript/Node.js:</p>
+<ul><li>Singleton: onde o Node.js já o usa por padrão?</li><li>Observer: qual API nativa do Node.js implementa este padrão?</li><li>Strategy: cite um exemplo no Express ou em bibliotecas populares</li><li>Adapter: por que ele é essencial ao integrar APIs de pagamento externas?</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q8-2">
+<span class="num">8.2</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Implemente o padrão Builder para construção de emails. A classe EmailBuilder deve ter métodos encadeáveis: para(destinatario), assunto(texto), corpo(html), cc(emails), cco(emails), prioridade(nivel), build(). O método build() deve validar que para e assunto foram definidos antes de retornar o objeto email final.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q8-3">
+<span class="num">8.3</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Implemente o padrão Observer para um sistema de eventos de domínio:</p>
+<ul><li>Classe EventEmitter com on(evento, handler), off(evento, handler), emit(evento, dados)</li><li>Os handlers devem rodar em paralelo com Promise.allSettled</li><li>Erros em um handler não devem cancelar os outros</li><li>Método once(evento, handler) para handlers que disparam apenas uma vez</li><li>Demonstre com os eventos: tarefa:criada, tarefa:concluida, tarefa:atrasada</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>SOLID</h3>
+<div class="questao" id="q8-4">
+<span class="num">8.4</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Cada trecho abaixo viola um princípio SOLID (o da letra indicada). Explique a violação e como corrigi-la:</p>
+<ul><li>S: class ServicoUsuario { cadastrar(dados) { /* valida */ /* salva no banco */ /* envia email */ /* gera PDF */ } }</li><li>O: function calcularDesconto(tipo) { if(tipo==="vip") ... else if(tipo==="regular") ... } // adicionar "premium" exige modificar a função</li><li>D: class ServicoTarefa { constructor() { this.db = new MongoDB(); this.email = new Nodemailer(); } }</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q8-5">
+<span class="num">8.5</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Refatore o código abaixo aplicando o Dependency Inversion Principle. O ServicoRelatorio deve receber suas dependências via constructor em vez de instanciá-las internamente:</p>
+<pre class="codigo"><code>class ServicoRelatorio {
+  async gerar(tipo) {
+    const db = new MongoDB(process.env.MONGO_URL);
+    const dados = await db.query("SELECT * FROM pedidos");
+    const pdf = new PDFGenerator();
+    return pdf.gerar(dados);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>Clean Architecture</h3>
+<div class="questao" id="q8-6">
+<span class="num">8.6</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Descreva as quatro camadas da Clean Architecture e a responsabilidade de cada uma. Por que a regra de dependência afirma que as dependências sempre apontam para dentro? O que aconteceria se a camada de domínio importasse algo do Express ou do Mongoose?</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q8-7">
+<span class="num">8.7</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Implemente a feature de "criar produto" completa em Clean Architecture:</p>
+<ul><li>domain/entities/Produto.js: entidade com validações invariantes (preço &gt; 0, nome min 2)</li><li>domain/repositories/IProdutoRepository.js: interface com salvar(), buscarPorId()</li><li>application/useCases/CriarProduto.js: orquestra entidade + repositório + evento</li><li>infrastructure/database/MongoProdutoRepository.js: implementação com Mongoose</li><li>interfaces/http/controllers/ProdutoController.js: traduz HTTP → caso de uso</li></ul>
+<p class="dica"><strong>Dica:</strong> O domínio não deve ter nenhum require() para express, mongoose ou qualquer biblioteca externa.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q8-8">
+<span class="num">8.8</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Escreva testes unitários para a entidade Produto e para o caso de uso CriarProduto criados no exercício anterior. Os testes não devem usar banco de dados — use um RepositorioEmMemoria que implemente a interface IProdutoRepository. Cubra pelo menos: criação válida, validação de preço negativo, validação de nome curto, emissão de evento ao criar.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="modulo-9">
+<h2><span class="rotulo">MÓDULO 9</span> Tópicos Avançados</h2>
+<p class="intro">WebSockets com Socket.IO, filas de tarefas com BullMQ/Redis e projeto final integrando toda a série.</p>
+<p class="aulas-titulo">Artigos do site</p>
+<ul class="aulas">
+<li><span class="n">#53</span> WebSockets e Comunicação em Tempo Real</li>
+<li><span class="n">#54</span> Filas de Tarefas e Processamento Assíncrono</li>
+<li><span class="n">#55</span> Projeto Final: Revisão Completa e Aplicação de Produção</li>
+</ul>
+<h3>WebSockets</h3>
+<div class="questao" id="q9-1">
+<span class="num">9.1</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Compare HTTP (requisição-resposta) com WebSocket (conexão persistente bidirecional). Em quais situações cada protocolo é mais adequado? Explique também quando usar Server-Sent Events (SSE) em vez de WebSocket.</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q9-2">
+<span class="num">9.2</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Configure Socket.IO em um servidor Express existente com:</p>
+<ul><li>Autenticação JWT no middleware de conexão (handshake)</li><li>O usuário entra automaticamente em uma sala "usuario:ID" ao conectar</li><li>Evento entrar:projeto que verifica permissão e entra na sala "projeto:ID"</li><li>Evento tarefa:criada broadcast para todos na sala do projeto EXCETO o criador</li><li>Handler de disconnect que loga o motivo</li></ul>
+<p class="dica"><strong>Dica:</strong> Não é necessário front-end — teste com o cliente Socket.IO em Node.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q9-3">
+<span class="num">9.3</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Escreva o hook React useSocket() que:</p>
+<ul><li>Mantém uma instância singleton da conexão</li><li>Recebe o token do Zustand e conecta ao servidor</li><li>Oferece funções emitir(evento, dados) e ouvir(evento, callback)</li><li>A função ouvir retorna um cleanup function para remover o listener</li><li>Reconecta automaticamente quando o token muda (usuário faz login)</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>Filas de Tarefas</h3>
+<div class="questao" id="q9-4">
+<span class="num">9.4</span>
+<div class="corpo">
+<p class="tipo">teórico</p>
+<p>Explique o padrão produtor-consumidor e por que ele é fundamental para sistemas escaláveis. Quais problemas surgem quando processamos tarefas longas de forma síncrona na requisição HTTP? Cite pelo menos quatro cenários reais onde filas de tarefas são essenciais.</p>
+</div>
+</div>
+<div class="linhas" style="--n:6"></div>
+<div class="questao" id="q9-5">
+<span class="num">9.5</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Configure uma fila BullMQ para envio de emails:</p>
+<ul><li>Crie a fila filaEmail com: 3 tentativas, backoff exponencial de 1s, removeOnComplete após 24h</li><li>Implemente o worker com templates para: boasVindas, redefinirSenha, tarefaCriada</li><li>Adicione rate limiting: máximo 10 emails por segundo</li><li>Registre eventos de completed e failed para logging</li><li>Crie a função enfileirarEmail(tipo, para, dados) para uso nos controllers</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q9-6">
+<span class="num">9.6</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Implemente um job recorrente com BullMQ que:</p>
+<ul><li>Roda todo dia às 8h (horário de Brasília) via cron pattern</li><li>Busca todas as tarefas com prazo nas próximas 24 horas</li><li>Enfileira um email de lembrete para cada usuário afetado</li><li>Usa jobId único para evitar duplicatas se o servidor reiniciar</li><li>Loga quantas notificações foram enviadas ao final</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<h3>Projeto Final</h3>
+<div class="questao" id="q9-7">
+<span class="num">9.7</span>
+<div class="corpo">
+<p class="tipo">misto</p>
+<p>Faça uma revisão da arquitetura completa do projeto final. Responda:</p>
+<ul><li>Por que o index.js inicia a conexão com o banco ANTES de criar as rotas?</li><li>Por que o Socket.IO compartilha a mesma porta que o Express em vez de usar uma porta diferente?</li><li>Por que o container.js é o único arquivo que conhece as implementações concretas (MongoDB, Redis)?</li><li>Como os WebSockets e a API REST colaboram sem se duplicar?</li><li>Por que o deploy do front-end aguarda o deploy do back-end no CI/CD?</li></ul>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q9-8">
+<span class="num">9.8</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Implemente o módulo completo de "Projetos" seguindo Clean Architecture, integrando:</p>
+<ul><li>Entidade Projeto com: nome, descricao, membros (array de userId), status, criadoPor</li><li>Casos de uso: CriarProjeto, AdicionarMembro, ArquivarProjeto</li><li>Ao criar um projeto: enfileira email de confirmação + emite evento WebSocket para todos os membros</li><li>Rota protegida: apenas o criador pode arquivar</li><li>Testes unitários para a entidade e o caso de uso CriarProjeto</li></ul>
+<p class="dica"><strong>Dica:</strong> Este é o exercício de maior escopo da série — dedique tempo adequado.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+<div class="questao" id="q9-9">
+<span class="num">9.9</span>
+<div class="corpo">
+<p class="tipo">prático</p>
+<p>Escreva o checklist pessoal de deploy para o seu projeto final, adaptando o checklist do Artigo 52 para o seu contexto. Para cada item, documente:</p>
+<ul><li>O que verificar e como verificar</li><li>Qual o impacto se este item falhar em produção</li><li>Como você automatizaria a verificação no CI/CD</li></ul>
+<p class="dica"><strong>Dica:</strong> Este exercício é reflexivo — não há resposta certa, apenas uma análise pessoal do sistema.</p>
+</div>
+</div>
+<div class="linhas" style="--n:14"></div>
+</section>
+<section class="modulo" id="desafios">
+<h2><span class="rotulo">PARA IR ALÉM</span> Desafios integradores</h2>
+<p class="intro">Projetos maiores, que juntam vários módulos. Não há uma única resposta certa.</p>
+<div class="questao desafio" id="d1">
+<span class="num">D1</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora, duas interfaces</p>
+<p>Escreva uma calculadora com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada. Ela deve: (a) acertar <code>0,1 + 0,2 = 0,3</code>, o que o <code>Number</code> do JavaScript não faz sozinho, aceitando vírgula ou ponto e mostrando até 16 dígitos significativos; (b) guardar o último resultado em <code>ans</code>, que pode ser usado na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário e texto que não é número com um erro próprio (de <code>name</code> <code>"ErroDeConta"</code>) e uma mensagem clara, <strong>sem encerrar o programa</strong>. Escreva o núcleo num módulo ES que não sabe nada de entrada e saída, e reaproveite-o em duas interfaces: uma de <strong>terminal</strong> com Node.js (comandos <code>hist</code> e <code>sair</code>) e uma página <strong>no navegador</strong>, com teclado na tela, visor e histórico. O artigo #10, "Mini Projeto: Calculadora no Console", é o ponto de partida.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+
+</section>
+<footer class="fim">
+<p><strong>Bom estudo e bons exercícios!</strong></p>
+<p>Dominando o JavaScript em 1 Ano · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</footer>
+</body>
+</html>

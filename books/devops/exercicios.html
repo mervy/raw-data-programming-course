@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estudar e realmente Aprender DevOps &amp; Cloud · Caderno de Exercícios</title>
+<link rel="stylesheet" href="../caderno.css">
+</head>
+<body class="caderno exercicios">
+<header class="capa">
+<p class="serie">ESTUDAR E REALMENTE APRENDER DEVOPS &amp; CLOUD</p>
+<h1>Caderno de Exercícios</h1>
+<p class="subtitulo">66 aulas de prática, do #01 ao #66</p>
+<p class="subtitulo">Linux · Git · Docker · Terraform · Kubernetes · 12 módulos · 73 questões · 2 desafios integradores</p>
+<p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</header>
+<div class="ficha"><span>Nome do aluno:</span><span>Início:</span><span>Término:</span></div>
+<aside class="nota">
+<p><strong>Como usar este caderno</strong></p>
+<p>Cada módulo reúne um bloco de aulas do curso, com a lista dos artigos que ele cobre. As perguntas conceituais pedem explicações com as suas palavras; os exercícios de código pedem programas: escreva, compile e execute cada um.</p>
+<p>Tente sempre resolver sozinho antes de abrir o <strong>Caderno de Respostas</strong>. É no erro que o conhecimento fixa.</p>
+</aside>
+<h2 class="sumario-titulo">Sumário</h2>
+<table class="sumario">
+<thead><tr><th>Módulo</th><th>Tema</th><th>Aulas</th><th>Questões</th></tr></thead>
+<tbody>
+<tr><td>MÓDULO 1</td><td>Linux e o terminal</td><td>#01–#06</td><td>Q1–Q10</td></tr>
+<tr><td>MÓDULO 2</td><td>Git e colaboração</td><td>#07–#11</td><td>Q11–Q17</td></tr>
+<tr><td>MÓDULO 3</td><td>Containers</td><td>#12–#18</td><td>Q18–Q23</td></tr>
+<tr><td>MÓDULO 4</td><td>CI/CD</td><td>#19–#24</td><td>Q24–Q28</td></tr>
+<tr><td>MÓDULO 5</td><td>Infraestrutura como código</td><td>#25–#30</td><td>Q29–Q35</td></tr>
+<tr><td>MÓDULO 6</td><td>Observabilidade</td><td>#31–#34</td><td>Q36–Q42</td></tr>
+<tr><td>MÓDULO 7</td><td>AWS na prática</td><td>#35–#38</td><td>Q43–Q48</td></tr>
+<tr><td>MÓDULO 8</td><td>Kubernetes</td><td>#39–#41</td><td>Q49–Q54</td></tr>
+<tr><td>MÓDULO 9</td><td>Segurança, custos, resiliência e cultura</td><td>#42–#47</td><td>Q55–Q61</td></tr>
+<tr><td>MÓDULO 10</td><td>Capstone: o sistema completo</td><td>#48–#52</td><td>Q62–Q64</td></tr>
+<tr><td>MÓDULO 11</td><td>Outras nuvens e plataformas</td><td>#53–#60</td><td>Q65–Q68</td></tr>
+<tr><td>MÓDULO 12</td><td>IA em operações e extras</td><td>#61–#66</td><td>Q69–Q73</td></tr>
+<tr><td>DESAFIOS</td><td>Desafios integradores</td><td>todas</td><td>D1–D2</td></tr>
+</tbody>
+</table>
+<aside class="legenda">
+<p>Legenda: nas perguntas, <code>assim</code> indica código, nomes de tipos e comandos. As linhas pautadas são para a sua resposta; nos exercícios de código, use também o computador: <strong>todo programa deve ser compilado e executado</strong>.</p>
+</aside>
+<section class="modulo" id="modulo-1">
+<h2><span class="rotulo">MÓDULO 1</span> Linux e o terminal</h2>
+<p class="intro">O terminal, o sistema de arquivos, permissões, processos e serviços, shell script e SSH.</p>
+<p class="aulas-titulo">Artigos 01 a 06</p>
+<ul class="aulas">
+<li><span class="n">#01</span> O Terminal Não é o Inimigo</li>
+<li><span class="n">#02</span> Navegando pelo Sistema de Arquivos com Confiança</li>
+<li><span class="n">#03</span> Permissões, Usuários e Grupos no Linux</li>
+<li><span class="n">#04</span> Processos, Serviços e o Comando <code>systemctl</code></li>
+<li><span class="n">#05</span> Shell Script do Zero</li>
+<li><span class="n">#06</span> SSH: Conectando e Gerenciando Servidores Remotos</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q1">
+<span class="num">Q1</span>
+<div class="corpo">
+<p class="titulo">Caminho absoluto e relativo</p>
+<p>Estando em <code>/home/ana/projetos</code>, para onde levam <code>cd ..</code>, <code>cd ../..</code>, <code>cd ~/docs</code>, <code>cd -</code> e <code>cd /var/log</code>? Por que um script agendado no cron deve usar caminhos absolutos?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q2">
+<span class="num">Q2</span>
+<div class="corpo">
+<p class="titulo">Lendo permissões</p>
+<p>O que significa <code>-rwxr-x---</code> num arquivo, e qual o equivalente numérico? Por que <code>chmod 777</code> é quase sempre um erro, e o que o bit de execução significa num diretório?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q3">
+<span class="num">Q3</span>
+<div class="corpo">
+<p class="titulo">Processos e sinais</p>
+<p>Qual a diferença entre <code>kill PID</code> e <code>kill -9 PID</code>? Por que o primeiro deve ser sempre tentado antes, e o que é um processo zumbi?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q4">
+<span class="num">Q4</span>
+<div class="corpo">
+<p class="titulo">systemd</p>
+<p>O que é uma <em>unit</em> de serviço do systemd? O que <code>systemctl enable --now nginx</code> faz, e onde ver o <em>log</em> de um serviço que não sobe?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q5">
+<span class="num">Q5</span>
+<div class="corpo">
+<p class="titulo">set -euo pipefail</p>
+<p>O que cada opção de <code>set -euo pipefail</code> faz no início de um <em>script</em> Bash, e que problema cada uma evita?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q6">
+<span class="num">Q6</span>
+<div class="corpo">
+<p class="titulo">SSH com chaves</p>
+<p>Por que autenticar no servidor com chave SSH é mais seguro que com senha? Que duas linhas do <code>sshd_config</code> todo servidor exposto à internet deveria ter?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q7">
+<span class="num">Q7</span>
+<div class="corpo">
+<p class="titulo">Permissões na prática</p>
+<p>Num diretório temporário, crie um arquivo e um diretório, mostre as permissões criadas com o <code>umask</code> padrão, depois aplique <code>chmod 640</code> ao arquivo e <code>chmod 750</code> ao diretório, e use a forma simbólica (<code>u+x</code>, <code>g-w</code>) para mais dois ajustes. Mostre as permissões com <code>stat</code> depois de cada passo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q8">
+<span class="num">Q8</span>
+<div class="corpo">
+<p class="titulo">Processos em segundo plano e sinais</p>
+<p>Escreva um <em>script</em> que inicie um processo filho em segundo plano que trata o SIGTERM (com <code>trap</code>) para "limpar" antes de sair; o pai espera um pouco, envia <code>kill</code> (SIGTERM), espera o filho com <code>wait</code> e mostra o código de saída. Depois repita com um filho que <strong>ignora</strong> o SIGTERM e precisa do <code>kill -9</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q9">
+<span class="num">Q9</span>
+<div class="corpo">
+<p class="titulo">Um script de backup com rotação</p>
+<p>Escreva <code>backup.sh</code> com <code>set -euo pipefail</code>, que receba um diretório de origem e um de destino, valide os argumentos, crie um <code>.tar.gz</code> com a data no nome e apague os <em>backups</em> com mais de 7 dias, mantendo sempre os 3 mais recentes. Simule backups antigos com <code>touch -d</code> para testar a rotação.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q10">
+<span class="num">Q10</span>
+<div class="corpo">
+<p class="titulo">Analisando um log de acesso</p>
+<p>Dado um trecho de <em>log</em> de acesso do nginx, use <code>awk</code>, <code>sort</code>, <code>uniq</code> e <code>grep</code> para mostrar: (a) as requisições por código de status; (b) os 2 IPs com mais requisições; (c) as URLs que deram erro 5xx; (d) o total de bytes enviados.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="modulo-2">
+<h2><span class="rotulo">MÓDULO 2</span> Git e colaboração</h2>
+<p class="intro">Git na prática, Git Flow, a primeira automação com GitHub Actions, branches protegidas e pull requests, Semantic Versioning e tags.</p>
+<p class="aulas-titulo">Artigos 07 a 11</p>
+<ul class="aulas">
+<li><span class="n">#07</span> Git na Prática: Commits, Branches e Merges sem Medo</li>
+<li><span class="n">#08</span> Trabalhando em Equipe com Git Flow</li>
+<li><span class="n">#09</span> GitHub Actions: Sua Primeira Automação de CI/CD</li>
+<li><span class="n">#10</span> Protegendo Branches e Revisando Código com Pull Requests</li>
+<li><span class="n">#11</span> Semantic Versioning e Tags de Release</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q11">
+<span class="num">Q11</span>
+<div class="corpo">
+<p class="titulo">As três áreas do Git</p>
+<p>Explique o diretório de trabalho, a <em>staging area</em> (índice) e o repositório. O que <code>git add -p</code> permite, e por que a <em>staging area</em> existe?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q12">
+<span class="num">Q12</span>
+<div class="corpo">
+<p class="titulo">merge, rebase e o histórico</p>
+<p>Qual a diferença entre integrar uma <em>branch</em> com <code>git merge --no-ff</code> e com <code>git rebase</code>? Por que nunca se faz <em>rebase</em> de <em>commits</em> já publicados?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q13">
+<span class="num">Q13</span>
+<div class="corpo">
+<p class="titulo">Branches protegidas</p>
+<p>Que regras de proteção a <em>branch</em> <code>main</code> de um projeto em equipe deve ter no GitHub, e por quê?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q14">
+<span class="num">Q14</span>
+<div class="corpo">
+<p class="titulo">Semantic Versioning</p>
+<p>Dada a versão <code>2.4.1</code> de uma biblioteca, qual é a próxima versão em cada caso: (a) corrigiu um <em>bug</em> sem mudar a API; (b) acrescentou uma função nova; (c) removeu um parâmetro de uma função existente. O que significa <code>^2.4.1</code> num <code>composer.json</code> ou <code>package.json</code>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q15">
+<span class="num">Q15</span>
+<div class="corpo">
+<p class="titulo">Um fluxo com branches e merge --no-ff</p>
+<p>Num repositório novo, crie a <code>main</code> com um <em>commit</em>, a <em>branch</em> <code>dev</code> a partir dela, uma <em>branch</em> <code>feature/busca</code> a partir da <code>dev</code> com dois <em>commits</em>, e integre-a na <code>dev</code> com <code>git merge --no-ff</code>. Mostre o grafo com <code>git log --graph --oneline</code> (sem os <em>hashes</em>) e liste os <em>commits</em> de <em>merge</em>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q16">
+<span class="num">Q16</span>
+<div class="corpo">
+<p class="titulo">Uma tag anotada e o changelog</p>
+<p>No mesmo estilo, crie três <em>commits</em> seguindo o Conventional Commits (<code>feat:</code>, <code>fix:</code>, <code>docs:</code>), crie a <em>tag</em> anotada <code>v1.0.0</code>, mais dois <em>commits</em> (um <code>feat:</code> e um <code>fix:</code>), e gere, com <code>git log</code>, a lista das mudanças desde a <em>tag</em>, agrupada por tipo. Com base nela, diga qual deve ser a próxima versão.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q17">
+<span class="num">Q17</span>
+<div class="corpo">
+<p class="titulo">Uma primeira pipeline do GitHub Actions</p>
+<p>Escreva <code>.github/workflows/ci.yml</code> que rode em todo <em>push</em> e <em>pull request</em> para <code>main</code> e <code>dev</code>: faça o <em>checkout</em>, configure o PHP 8.5 com cache das dependências do Composer, rode <code>composer install</code>, o <em>lint</em> e os testes. Depois confira, com Python, que o arquivo é YAML válido e liste os gatilhos e os passos.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-3">
+<h2><span class="rotulo">MÓDULO 3</span> Containers</h2>
+<p class="intro">O que é um container, os primeiros containers, o Dockerfile, volumes e redes, Docker Compose, boas práticas de imagens e a publicação em registries.</p>
+<p class="aulas-titulo">Artigos 12 a 18</p>
+<ul class="aulas">
+<li><span class="n">#12</span> O Que é um Container e Por Que Isso Mudou Tudo</li>
+<li><span class="n">#13</span> Instalando e Rodando Seus Primeiros Containers</li>
+<li><span class="n">#14</span> Escrevendo um Dockerfile do Zero</li>
+<li><span class="n">#15</span> Docker Volumes e Redes: Persistência e Comunicação</li>
+<li><span class="n">#16</span> Docker Compose: Orquestrando Múltiplos Serviços Localmente</li>
+<li><span class="n">#17</span> Boas Práticas de Imagens: Leveza, Segurança e Camadas</li>
+<li><span class="n">#18</span> Publicando Imagens no Docker Hub e GitHub Container Registry</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q18">
+<span class="num">Q18</span>
+<div class="corpo">
+<p class="titulo">Container não é máquina virtual</p>
+<p>Qual a diferença entre um container e uma máquina virtual? Que recursos do kernel Linux tornam o container possível?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q19">
+<span class="num">Q19</span>
+<div class="corpo">
+<p class="titulo">Imagem, container e camadas</p>
+<p>Qual a diferença entre imagem e container? Por que a ordem das instruções no Dockerfile afeta o tempo de <em>build</em>?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q20">
+<span class="num">Q20</span>
+<div class="corpo">
+<p class="titulo">Volume ou bind mount</p>
+<p>Para o banco de dados de um container MySQL, por que usar um volume nomeado? E quando um <em>bind mount</em> (uma pasta do hospedeiro) é a escolha certa?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q21">
+<span class="num">Q21</span>
+<div class="corpo">
+<p class="titulo">Uma imagem mínima e segura</p>
+<p>Cite quatro práticas que deixam uma imagem menor e mais segura, e por que rodar o processo como <em>root</em> dentro do container é um risco.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q22">
+<span class="num">Q22</span>
+<div class="corpo">
+<p class="titulo">Um Dockerfile em múltiplos estágios para PHP</p>
+<p>Escreva um <code>Dockerfile</code> para uma aplicação PHP com Composer: um estágio que instala as dependências sem as de desenvolvimento, e um estágio final com <code>php:8.5-apache</code>, a extensão <code>pdo_mysql</code>, o OPcache, o código, um usuário sem privilégios e o <code>DocumentRoot</code> apontando para <code>public/</code>. Escreva também o <code>.dockerignore</code>. Mostre o caminho equivalente sem Docker, num servidor Debian.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q23">
+<span class="num">Q23</span>
+<div class="corpo">
+<p class="titulo">Um docker-compose para a aplicação</p>
+<p>Escreva um <code>compose.yaml</code> com três serviços: a aplicação PHP (construída do Dockerfile anterior, porta 8080), um MySQL 8.4 com volume nomeado e um <em>healthcheck</em>, e um Redis. A aplicação só deve subir depois que o MySQL estiver saudável, e a senha do banco deve vir de um arquivo <code>.env</code>. Confira com Python a estrutura: a ordem de dependência e os volumes declarados.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-4">
+<h2><span class="rotulo">MÓDULO 4</span> CI/CD</h2>
+<p class="intro">O que é CI/CD, pipelines de build, teste e deploy, testes no pipeline, variáveis e secrets, deploy automático e monitoramento do pipeline.</p>
+<p class="aulas-titulo">Artigos 19 a 24</p>
+<ul class="aulas">
+<li><span class="n">#19</span> O Que é CI/CD e Por Que Sua Empresa Precisa Disso</li>
+<li><span class="n">#20</span> Pipeline com GitHub Actions: Build, Test e Deploy Automático</li>
+<li><span class="n">#21</span> Testes Automatizados no Pipeline: Qualidade sem Atrito</li>
+<li><span class="n">#22</span> Variáveis de Ambiente e Secrets em Pipelines</li>
+<li><span class="n">#23</span> Deploy Automático para Servidores com GitHub Actions</li>
+<li><span class="n">#24</span> Notificações, Logs e Monitoramento do Pipeline</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q24">
+<span class="num">Q24</span>
+<div class="corpo">
+<p class="titulo">Integração, entrega e implantação contínuas</p>
+<p>Diferencie integração contínua, entrega contínua e implantação contínua. O que precisa ser verdade sobre os testes para que a implantação contínua seja segura?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q25">
+<span class="num">Q25</span>
+<div class="corpo">
+<p class="titulo">Secrets no pipeline</p>
+<p>Como o GitHub Actions protege os <em>secrets</em>, e por que um <em>pull request</em> vindo de um <em>fork</em> não recebe os <em>secrets</em> do repositório? Que erro comum ainda vaza um segredo?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q26">
+<span class="num">Q26</span>
+<div class="corpo">
+<p class="titulo">O pipeline como portão</p>
+<p>Num pipeline com as etapas <em>lint</em>, testes unitários, <em>build</em> da imagem, testes de integração, deploy em homologação e deploy em produção, em que ordem e com que dependências elas devem rodar? O que deve acontecer se os testes de integração falharem?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q27">
+<span class="num">Q27</span>
+<div class="corpo">
+<p class="titulo">Um deploy por SSH com rollback</p>
+<p>Escreva <code>deploy.sh</code>, que simule localmente a estratégia de <em>releases</em> com <em>symlink</em>: cria <code>releases/&lt;versão&gt;</code>, copia o código, troca o <em>symlink</em> <code>current</code> de forma atômica, roda uma verificação de saúde e, se ela falhar, volta o <em>symlink</em> para a versão anterior. Mantenha só as 3 últimas <em>releases</em>. Teste um deploy bom, um ruim e mais três bons.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q28">
+<span class="num">Q28</span>
+<div class="corpo">
+<p class="titulo">Testes com serviços no pipeline</p>
+<p>Escreva um <em>job</em> do GitHub Actions que rode os testes de integração contra um MySQL 8.4 de verdade, usando <code>services</code> com <em>healthcheck</em>, e passe as credenciais por variáveis de ambiente, com a senha vinda de um <em>secret</em>. Confira com Python que o serviço tem <em>healthcheck</em> e que nenhuma senha está escrita em texto no arquivo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-5">
+<h2><span class="rotulo">MÓDULO 5</span> Infraestrutura como código</h2>
+<p class="intro">Terraform (recursos na AWS, módulos e o state), Ansible e a combinação dos dois.</p>
+<p class="aulas-titulo">Artigos 25 a 30</p>
+<ul class="aulas">
+<li><span class="n">#25</span> Introdução ao Terraform: Infraestrutura que Você Pode Versionar</li>
+<li><span class="n">#26</span> Seus Primeiros Recursos na AWS com Terraform</li>
+<li><span class="n">#27</span> Módulos no Terraform: Reusabilidade e Organização</li>
+<li><span class="n">#28</span> State do Terraform: Entendendo o Arquivo Mais Crítico do Projeto</li>
+<li><span class="n">#29</span> Ansible: Configurando Servidores de Forma Declarativa</li>
+<li><span class="n">#30</span> Terraform + Ansible: Do Provisionamento à Configuração</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q29">
+<span class="num">Q29</span>
+<div class="corpo">
+<p class="titulo">Declarativo ou imperativo</p>
+<p>O Terraform é <strong>declarativo</strong>; um <em>script</em> Bash que chama a CLI da AWS é <strong>imperativo</strong>. Explique a diferença com o exemplo "quero 3 servidores", e o que acontece em cada caso quando já existem 2.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q30">
+<span class="num">Q30</span>
+<div class="corpo">
+<p class="titulo">O arquivo de state</p>
+<p>O que o <code>terraform.tfstate</code> guarda? Por que ele não deve ir para o Git, e por que um <em>backend</em> remoto com <em>lock</em> é obrigatório numa equipe?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q31">
+<span class="num">Q31</span>
+<div class="corpo">
+<p class="titulo">Ler o plano antes de aplicar</p>
+<p>Num <code>terraform plan</code>, o que significam os símbolos <code>+</code>, <code>-</code>, <code>~</code> e <code>-/+</code>? Por que um <code>-/+</code> num banco de dados deve parar tudo?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q32">
+<span class="num">Q32</span>
+<div class="corpo">
+<p class="titulo">Terraform e Ansible juntos</p>
+<p>Por que o curso combina Terraform e Ansible, em vez de usar só um deles? Qual é a fronteira entre os dois?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q33">
+<span class="num">Q33</span>
+<div class="corpo">
+<p class="titulo">Uma VPC e um servidor com Terraform</p>
+<p>Escreva o Terraform para criar, na AWS, uma VPC <code>10.0.0.0/16</code> com uma sub-rede pública, um <em>security group</em> que libere a porta 443 para a internet e a 22 só para o seu IP (recebido como variável), e uma instância <code>t3.micro</code> com Debian. Use variáveis, <em>tags</em> comuns e uma saída com o IP público.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q34">
+<span class="num">Q34</span>
+<div class="corpo">
+<p class="titulo">Uma política contra destruição no plano</p>
+<p>O <code>terraform show -json plano</code> gera o plano em JSON. Escreva um <em>script</em> Python que leia esse JSON e <strong>reprove</strong> o plano (código de saída 1) se ele destruir ou recriar qualquer recurso dos tipos <code>aws_db_instance</code> ou <code>aws_s3_bucket</code>, listando as ações de todos os recursos. Teste com um plano de exemplo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q35">
+<span class="num">Q35</span>
+<div class="corpo">
+<p class="titulo">Idempotência como no Ansible</p>
+<p>O módulo <code>lineinfile</code> do Ansible garante que uma linha exista num arquivo, e só altera o arquivo se precisar, informando <code>changed</code> ou <code>ok</code>. Escreva em Bash a função <code>garantir_linha ARQUIVO REGEX LINHA</code>, com o mesmo comportamento: se uma linha casar com a expressão regular, ela é substituída pela nova (se for diferente); senão, a linha é acrescentada. Rode-a duas vezes sobre um <code>sshd_config</code> de exemplo e mostre que a segunda não muda nada.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="modulo-6">
+<h2><span class="rotulo">MÓDULO 6</span> Observabilidade</h2>
+<p class="intro">Métricas, logs e traces; Grafana, dashboards e alertas; rastreamento distribuído com OpenTelemetry; alertas inteligentes e resposta a incidentes.</p>
+<p class="aulas-titulo">Artigos 31 a 34</p>
+<ul class="aulas">
+<li><span class="n">#31</span> Introdução ao Monitoramento: Métricas, Logs e Traces</li>
+<li><span class="n">#32</span> Grafana: Dashboards e Alertas que Fazem Sentido</li>
+<li><span class="n">#33</span> Rastreamento Distribuído com OpenTelemetry</li>
+<li><span class="n">#34</span> Alertas Inteligentes e Cultura de Resposta a Incidentes</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q36">
+<span class="num">Q36</span>
+<div class="corpo">
+<p class="titulo">Os três pilares</p>
+<p>Qual pergunta cada pilar da observabilidade responde melhor: métricas, <em>logs</em> e <em>traces</em>? Dê um exemplo de uso de cada um durante um incidente de lentidão no <em>checkout</em>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q37">
+<span class="num">Q37</span>
+<div class="corpo">
+<p class="titulo">Por que percentis, e não a média</p>
+<p>Por que um painel deve mostrar a latência p95 ou p99, e não a média? Dê um exemplo numérico.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q38">
+<span class="num">Q38</span>
+<div class="corpo">
+<p class="titulo">SLO e orçamento de erro</p>
+<p>O que são SLI, SLO e orçamento de erro? Se o SLO de disponibilidade do <em>checkout</em> é 99,9% por mês, quanto tempo de indisponibilidade o mês permite, e o que a equipe faz quando o orçamento acaba?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q39">
+<span class="num">Q39</span>
+<div class="corpo">
+<p class="titulo">Alertas que acordam alguém</p>
+<p>Por que alertar sobre "CPU acima de 80%" costuma ser um alerta ruim, e "taxa de erros do <em>checkout</em> consumindo o orçamento de erro 14 vezes mais rápido que o normal por 1 hora" é um bom? O que é fadiga de alertas?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q40">
+<span class="num">Q40</span>
+<div class="corpo">
+<p class="titulo">Percentis de latência</p>
+<p>Dado um conjunto de 20 latências (em ms) de um <em>endpoint</em>, calcule a média, a mediana, o p95 e o p99 com Python, e mostre como uma única requisição muito lenta afeta a média e o p99, mas não a mediana.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q41">
+<span class="num">Q41</span>
+<div class="corpo">
+<p class="titulo">Orçamento de erro e burn rate</p>
+<p>Escreva um <em>script</em> Python que, para um SLO de 99,9% num mês de 30 dias, calcule o orçamento de erro em minutos e em requisições (para 10 milhões de requisições no mês), e, dada a taxa de erros da última hora, a <em>burn rate</em> e em quantos dias o orçamento acabaria. Classifique em "página alguém" (burn rate ≥ 14,4), "abre ticket" (≥ 6) ou "normal".</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q42">
+<span class="num">Q42</span>
+<div class="corpo">
+<p class="titulo">Logs estruturados com correlação</p>
+<p>Configure o <code>logging</code> do Python para emitir uma linha JSON por evento, com data em ISO 8601 UTC, nível, mensagem, o nome do serviço e um <code>trace_id</code> que acompanha todos os <em>logs</em> de uma mesma requisição. Simule duas requisições, uma com erro, e mostre como filtrar os <em>logs</em> de uma delas.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-7">
+<h2><span class="rotulo">MÓDULO 7</span> AWS na prática</h2>
+<p class="intro">EC2, VPC e IAM; ECS e Lambda; RDS, ElastiCache e estratégias de dados; Route 53, CloudFront e ACM.</p>
+<p class="aulas-titulo">Artigos 35 a 38</p>
+<ul class="aulas">
+<li><span class="n">#35</span> AWS na Prática: EC2, VPC e IAM em Profundidade</li>
+<li><span class="n">#36</span> ECS e Lambda: Containers e Serverless na AWS</li>
+<li><span class="n">#37</span> RDS, ElastiCache e Estratégias de Dados na AWS</li>
+<li><span class="n">#38</span> Route53, CloudFront e ACM: Rede e Entrega de Conteúdo</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q43">
+<span class="num">Q43</span>
+<div class="corpo">
+<p class="titulo">Sub-rede pública e privada</p>
+<p>Numa VPC, o que torna uma sub-rede "pública" ou "privada"? Em qual delas ficam o <em>load balancer</em>, os servidores da aplicação e o banco RDS, e como os servidores privados baixam atualizações da internet?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q44">
+<span class="num">Q44</span>
+<div class="corpo">
+<p class="titulo">IAM e o menor privilégio</p>
+<p>Por que a aplicação na EC2 deve usar uma <strong>role</strong> do IAM, e não chaves de acesso (<code>AWS_ACCESS_KEY_ID</code>) gravadas no servidor? O que é o princípio do menor privilégio numa política?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q45">
+<span class="num">Q45</span>
+<div class="corpo">
+<p class="titulo">ECS ou Lambda</p>
+<p>Para cada parte da livraria, escolha entre ECS Fargate e Lambda: (a) a API principal, com tráfego constante; (b) o redimensionamento das capas enviadas; (c) um relatório que roda uma vez por noite e leva 40 minutos.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q46">
+<span class="num">Q46</span>
+<div class="corpo">
+<p class="titulo">CDN e cache</p>
+<p>O que o CloudFront faz por um site com usuários no Brasil todo e servidor em São Paulo? Por que as URLs de arquivos estáticos costumam ter um <em>hash</em> no nome (<code>app.3f9a2c.css</code>)?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q47">
+<span class="num">Q47</span>
+<div class="corpo">
+<p class="titulo">Planejando sub-redes</p>
+<p>Com o módulo <code>ipaddress</code> do Python, divida a VPC <code>10.0.0.0/16</code> em sub-redes <code>/20</code> e reserve as seis primeiras: pública, aplicação e dados, em duas zonas de disponibilidade. Mostre, para cada uma, o intervalo, o número de endereços utilizáveis na AWS (que reserva 5 por sub-rede) e verifique que não há sobreposição.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q48">
+<span class="num">Q48</span>
+<div class="corpo">
+<p class="titulo">Auditando uma política do IAM</p>
+<p>Escreva um <em>script</em> Python que analise uma política do IAM (JSON) e aponte: declarações com <code>"Action": "*"</code> ou serviço inteiro (<code>"s3:*"</code>), <code>"Resource": "*"</code> em ações de escrita, e ausência de condição em <code>iam:PassRole</code>. Teste com uma política ruim e uma boa.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-8">
+<h2><span class="rotulo">MÓDULO 8</span> Kubernetes</h2>
+<p class="intro">Orquestrando containers em escala, EKS e Kubernetes em produção: segurança, GitOps e deploys avançados.</p>
+<p class="aulas-titulo">Artigos 39 a 41</p>
+<ul class="aulas">
+<li><span class="n">#39</span> Introdução ao Kubernetes: Orquestrando Containers em Escala</li>
+<li><span class="n">#40</span> EKS: Kubernetes Gerenciado na AWS</li>
+<li><span class="n">#41</span> Kubernetes em Produção: Segurança, GitOps e Deploys Avançados</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q49">
+<span class="num">Q49</span>
+<div class="corpo">
+<p class="titulo">Pod, Deployment e Service</p>
+<p>Explique o papel de um Pod, de um Deployment e de um Service. Por que nunca se cria um Pod diretamente em produção?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q50">
+<span class="num">Q50</span>
+<div class="corpo">
+<p class="titulo">Liveness e readiness</p>
+<p>Qual a diferença entre a <em>liveness probe</em> e a <em>readiness probe</em>? Por que usar a mesma verificação, que testa o banco de dados, nas duas pode derrubar o sistema inteiro?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q51">
+<span class="num">Q51</span>
+<div class="corpo">
+<p class="titulo">requests e limits</p>
+<p>O que são <code>requests</code> e <code>limits</code> de CPU e memória num container? O que acontece quando um container passa do limite de memória, e quando passa do de CPU?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q52">
+<span class="num">Q52</span>
+<div class="corpo">
+<p class="titulo">GitOps</p>
+<p>O que é GitOps, e qual a diferença entre o pipeline "empurrar" (o CI roda <code>kubectl apply</code> no cluster) e o modelo "puxar" do Argo CD ou do Flux?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q53">
+<span class="num">Q53</span>
+<div class="corpo">
+<p class="titulo">Um Deployment pronto para produção</p>
+<p>Escreva os manifestos de um Deployment da API da livraria (3 réplicas, imagem com <em>tag</em> fixa, <code>requests</code> e <code>limits</code>, <em>readiness</em> e <em>liveness</em> em rotas diferentes, usuário sem privilégios e sistema de arquivos somente leitura) e do Service. Depois valide com Python: as probes usam rotas diferentes, todos os containers têm limite de memória e nenhuma imagem usa <code>latest</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q54">
+<span class="num">Q54</span>
+<div class="corpo">
+<p class="titulo">A conta do autoscaler</p>
+<p>O HPA (<em>Horizontal Pod Autoscaler</em>) calcula as réplicas desejadas com <code>desejadas = teto(atuais × métrica_atual / métrica_alvo)</code>, ignora variações dentro de uma tolerância de 10% e respeita os limites mínimo e máximo. Implemente o cálculo em Python e simule uma rampa de carga com alvo de 60% de CPU, mínimo de 2 e máximo de 10 réplicas.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="modulo-9">
+<h2><span class="rotulo">MÓDULO 9</span> Segurança, custos, resiliência e cultura</h2>
+<p class="intro">DevSecOps, compliance e auditoria, FinOps, chaos engineering, platform engineering e a cultura DevOps.</p>
+<p class="aulas-titulo">Artigos 42 a 47</p>
+<ul class="aulas">
+<li><span class="n">#42</span> DevSecOps: Integrando Segurança em Todo o Pipeline</li>
+<li><span class="n">#43</span> Compliance e Auditoria: LGPD, SOC2 e Evidências Automatizadas</li>
+<li><span class="n">#44</span> Performance e FinOps: Otimizando Custo e Velocidade na Cloud</li>
+<li><span class="n">#45</span> Resiliência e Chaos Engineering</li>
+<li><span class="n">#46</span> Platform Engineering: Construindo a Plataforma Interna de Desenvolvimento</li>
+<li><span class="n">#47</span> Cultura DevOps: Maturidade, Postmortems e Melhoria Contínua</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q55">
+<span class="num">Q55</span>
+<div class="corpo">
+<p class="titulo">Shift left</p>
+<p>O que significa "levar a segurança para a esquerda" num pipeline? Cite quatro verificações automáticas e em que etapa cada uma roda.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q56">
+<span class="num">Q56</span>
+<div class="corpo">
+<p class="titulo">LGPD na infraestrutura</p>
+<p>Que obrigações da LGPD afetam diretamente decisões de infraestrutura e de operação? Cite três exemplos práticos.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q57">
+<span class="num">Q57</span>
+<div class="corpo">
+<p class="titulo">Onde o dinheiro vaza</p>
+<p>Cite quatro fontes comuns de desperdício numa conta de nuvem e a correção de cada uma.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q58">
+<span class="num">Q58</span>
+<div class="corpo">
+<p class="titulo">Chaos engineering</p>
+<p>O que é chaos engineering, e por que ele começa com uma hipótese e um "raio de explosão" pequeno? Dê um experimento para a livraria.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q59">
+<span class="num">Q59</span>
+<div class="corpo">
+<p class="titulo">Postmortem sem culpados</p>
+<p>Por que um postmortem deve ser "sem culpados" (<em>blameless</em>)? Que seções ele precisa ter para gerar aprendizado, e não só um relato?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q60">
+<span class="num">Q60</span>
+<div class="corpo">
+<p class="titulo">Varredura de segredos</p>
+<p>Escreva um <em>script</em> Python que procure segredos em arquivos de texto com expressões regulares: chaves de acesso da AWS (<code>AKIA</code> seguido de 16 caracteres), chaves privadas PEM, <em>tokens</em> do GitHub (<code>ghp_</code>) e atribuições do tipo <code>senha = "..."</code> ou <code>password: ...</code>. Mostre arquivo e linha, mascarando o valor encontrado, e devolva código 1 se achar algo.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+<div class="questao" id="q61">
+<span class="num">Q61</span>
+<div class="corpo">
+<p class="titulo">Comparando preços de instâncias</p>
+<p>Escreva um <em>script</em> Python que compare o custo mensal de 4 servidores ligados o mês inteiro, em três modelos: sob demanda (US$ 0,0832 por hora cada), plano de economia de 1 ano (37% de desconto) e uma combinação de 2 reservados com 2 <em>spot</em> (70% de desconto, mas podem ser interrompidos). Calcule também o custo de um ambiente de homologação de 2 servidores sob demanda ligado só em horário comercial (10 h por dia, 22 dias por mês).</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-10">
+<h2><span class="rotulo">MÓDULO 10</span> Capstone: o sistema completo</h2>
+<p class="intro">Arquitetura, provisionamento, microsserviços, o pipeline completo e as operações em produção.</p>
+<p class="aulas-titulo">Artigos 48 a 52</p>
+<ul class="aulas">
+<li><span class="n">#48</span> Projeto Capstone: Arquitetura do Sistema Completo</li>
+<li><span class="n">#49</span> Capstone: Provisionando a Infraestrutura Completa</li>
+<li><span class="n">#50</span> Capstone: Implementando os Microsserviços</li>
+<li><span class="n">#51</span> Capstone: Pipeline Completo de CI/CD</li>
+<li><span class="n">#52</span> Capstone: Operações em Produção e Retrospectiva da Jornada</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q62">
+<span class="num">Q62</span>
+<div class="corpo">
+<p class="titulo">Microsserviços: quando vale a pena</p>
+<p>O capstone divide o sistema em microsserviços. Que problemas eles resolvem, que custos trazem, e por que muitas equipes deveriam começar com um monólito bem modularizado?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q63">
+<span class="num">Q63</span>
+<div class="corpo">
+<p class="titulo">Implantação gradual</p>
+<p>Explique os deploys <em>blue-green</em> e <em>canary</em>. Que métricas decidem se o <em>canary</em> avança ou volta?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q64">
+<span class="num">Q64</span>
+<div class="corpo">
+<p class="titulo">Decidindo um canary</p>
+<p>Escreva uma função Python que receba as contagens de requisições e erros e a latência p95 da versão estável e do <em>canary</em> num intervalo, e decida entre "avançar", "aguardar" (amostra pequena demais, menos de 500 requisições no <em>canary</em>) e "reverter" (taxa de erros do <em>canary</em> acima de 1,5 vez a da estável <strong>e</strong> acima de 0,5% em termos absolutos, ou p95 mais de 20% pior). Teste quatro cenários.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-11">
+<h2><span class="rotulo">MÓDULO 11</span> Outras nuvens e plataformas</h2>
+<p class="intro">Azure para quem conhece AWS, compute, storage e redes no Azure, AKS, Azure DevOps, GitLab CI/CD, GitLab self-hosted, Bitbucket e Gitea.</p>
+<p class="aulas-titulo">Artigos 53 a 60</p>
+<ul class="aulas">
+<li><span class="n">#53</span> Azure para Quem Já Conhece AWS</li>
+<li><span class="n">#54</span> Compute, Storage e Redes no Azure</li>
+<li><span class="n">#55</span> Azure Kubernetes Service (AKS)</li>
+<li><span class="n">#56</span> Azure DevOps: Pipelines e Repositórios</li>
+<li><span class="n">#57</span> GitLab CI/CD: A Alternativa Enterprise ao GitHub Actions</li>
+<li><span class="n">#58</span> GitLab Self-Hosted: Soberania Total sobre Código e Pipelines</li>
+<li><span class="n">#59</span> Bitbucket e o Ecossistema Atlassian</li>
+<li><span class="n">#60</span> Gitea: Self-Hosted Leve para Times Menores</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q65">
+<span class="num">Q65</span>
+<div class="corpo">
+<p class="titulo">AWS para Azure</p>
+<p>Para quem conhece a AWS, qual o equivalente no Azure de: VPC, EC2, S3, RDS para PostgreSQL, IAM <em>roles</em> para aplicações, EKS e CloudWatch? Que conceito do Azure não tem equivalente direto?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q66">
+<span class="num">Q66</span>
+<div class="corpo">
+<p class="titulo">GitLab CI e GitHub Actions</p>
+<p>Compare a estrutura de um <code>.gitlab-ci.yml</code> com a de um <em>workflow</em> do GitHub Actions. O que são <em>stages</em> e o que a palavra-chave <code>needs</code> muda?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q67">
+<span class="num">Q67</span>
+<div class="corpo">
+<p class="titulo">Hospedar a própria forja</p>
+<p>Quando faz sentido hospedar o próprio GitLab ou Gitea, em vez de usar o GitHub ou o GitLab.com? Que responsabilidades a equipe assume?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q68">
+<span class="num">Q68</span>
+<div class="corpo">
+<p class="titulo">Um pipeline do GitLab com needs</p>
+<p>Escreva um <code>.gitlab-ci.yml</code> com os <em>stages</em> <code>build</code>, <code>test</code> e <code>deploy</code>: um <em>job</em> de <em>build</em>, dois de teste (unitários e <em>lint</em>), em que o <em>lint</em> não depende do <em>build</em>, e um deploy manual só na <em>branch</em> <code>main</code>. Use Python para calcular a ordem real de execução a partir do <code>needs</code>.</p>
+</div>
+</div>
+<div class="linhas" style="--n:12"></div>
+</section>
+<section class="modulo" id="modulo-12">
+<h2><span class="rotulo">MÓDULO 12</span> IA em operações e extras</h2>
+<p class="intro">AIOps, pipelines e infraestrutura gerados com IA, detecção de anomalias em logs, geradores de senhas seguras e a instalação manual do MySQL.</p>
+<p class="aulas-titulo">Artigos 61 a 66</p>
+<ul class="aulas">
+<li><span class="n">#61</span> AIOps na Prática: O Que a IA Já Faz em Operações Hoje</li>
+<li><span class="n">#62</span> Gerando e Revisando Pipelines com IA</li>
+<li><span class="n">#63</span> Detecção de Anomalias e Análise Inteligente de Logs com IA</li>
+<li><span class="n">#64</span> Geração de Infraestrutura com IA</li>
+<li><span class="n">#65</span> Geradores de Senhas Seguras: Implementações em 5 Linguagens de Programação</li>
+<li><span class="n">#66</span> Instalação Manual do MySQL no Debian, Arch, Fedora e openSUSE</li>
+</ul>
+<h3>Perguntas conceituais</h3>
+<div class="questao" id="q69">
+<span class="num">Q69</span>
+<div class="corpo">
+<p class="titulo">Revisando o que a IA gerou</p>
+<p>Um assistente de IA gerou um <em>workflow</em> do GitHub Actions e um módulo Terraform para você. Que verificações são obrigatórias antes de aceitá-los, e por que "funcionou no primeiro teste" não basta?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q70">
+<span class="num">Q70</span>
+<div class="corpo">
+<p class="titulo">Anomalia não é incidente</p>
+<p>Um sistema de AIOps detecta uma "anomalia" no volume de <em>logs</em> de erro. Por que nem toda anomalia deve virar alerta, e o que diferencia a detecção por limiar fixo da detecção por desvio do padrão?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q71">
+<span class="num">Q71</span>
+<div class="corpo">
+<p class="titulo">Instalando um banco sem contêiner</p>
+<p>O artigo #66 instala o MySQL manualmente em quatro famílias de distribuições. Quais são os pacotes e os comandos de serviço no Debian e no Fedora, e que passo de segurança nenhuma instalação deve pular?</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<h3>Exercícios de código</h3>
+<div class="questao" id="q72">
+<span class="num">Q72</span>
+<div class="corpo">
+<p class="titulo">Detectando anomalias com z-score</p>
+<p>Dada a contagem de erros por minuto ao longo de uma hora, calcule, para cada minuto, o <em>z-score</em> em relação à média e ao desvio padrão dos 15 minutos <strong>anteriores</strong>, e sinalize os minutos com z acima de 3. Compare com a hora inteira como referência, e com uma versão robusta, baseada na mediana e no desvio absoluto mediano (MAD).</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+<div class="questao" id="q73">
+<span class="num">Q73</span>
+<div class="corpo">
+<p class="titulo">Um gerador de senhas no terminal</p>
+<p>O artigo #65 gera senhas seguras em cinco linguagens. Escreva em Bash <code>gerar_senha TAMANHO</code>, que use <code>/dev/urandom</code> e garanta pelo menos uma minúscula, uma maiúscula, um dígito e um símbolo, recusando tamanhos menores que 12. Gere 1000 senhas e confira (sem imprimi-las) que todas cumprem as regras e que não há repetidas.</p>
+</div>
+</div>
+<div class="linhas" style="--n:5"></div>
+</section>
+<section class="modulo" id="desafios">
+<h2><span class="rotulo">PARA IR ALÉM</span> Desafios integradores</h2>
+<p class="intro">Projetos maiores, que juntam vários módulos. Não há uma única resposta certa: o gabarito mostra um caminho.</p>
+<div class="questao desafio" id="d1">
+<span class="num">D1</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora de terminal em Bash</p>
+<p>Escreva uma calculadora de terminal em Bash com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada (<code>raiz 2</code>). Ela deve: (a) aceitar vírgula ou ponto como separador decimal; (b) guardar o último resultado em <code>ans</code>, utilizável na conta seguinte; (c) recusar divisão por zero, raiz de negativo, expoente fracionário, resultado infinito e texto que não é número com uma mensagem clara, <strong>sem encerrar o programa</strong>; (d) ter os comandos <code>hist</code> (histórico) e <code>sair</code>. Separe o núcleo (<code>calc_nucleo.sh</code>, só funções, sem leitura de teclado) da interface (<code>calc.sh</code>). Como o Bash só faz contas com inteiros, use o <code>awk</code> para as contas decimais.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+<div class="questao desafio" id="d2">
+<span class="num">D2</span>
+<div class="corpo">
+<p class="titulo">Da máquina vazia ao deploy automatizado</p>
+<p>Monte, de ponta a ponta, a entrega de uma aplicação web simples (a API de livros do caderno de PHP serve): o código no Git com <em>branches</em> protegidas; um pipeline que roda <em>lint</em>, testes e varredura de segredos, constrói a imagem e a publica num <em>registry</em> com a <em>tag</em> do <em>commit</em>; a infraestrutura de uma VM criada com Terraform e configurada com Ansible (Docker, usuário de deploy, <em>firewall</em>); o deploy automático com verificação de saúde e <em>rollback</em>; e um painel com latência, taxa de erros e um alerta baseado em SLO.</p>
+</div>
+</div>
+<p><em>Sua solução (arquitetura, decisões e código principal):</em></p>
+<div class="linhas" style="--n:14"></div>
+</section>
+<footer class="fim">
+<p><strong>Bom estudo e bons exercícios!</strong></p>
+<p>Estudar e realmente Aprender DevOps &amp; Cloud · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</footer>
+</body>
+</html>

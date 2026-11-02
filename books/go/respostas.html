@@ -1,0 +1,2311 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dominando Go em 1 Ano · Caderno de Respostas</title>
+<link rel="stylesheet" href="../caderno.css">
+</head>
+<body class="caderno respostas">
+<header class="capa">
+<p class="serie">DOMINANDO GO EM 1 ANO</p>
+<h1>Caderno de Respostas</h1>
+<p class="subtitulo">Gabarito comentado das 52 aulas, do #01 ao #52</p>
+<p class="subtitulo">Go 1.27 · 9 módulos · 122 questões · 6 desafios integradores</p>
+<p class="autoria">Autor Desconhecido · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</header>
+<aside class="nota">
+<p><strong>Consulte este gabarito só depois de tentar.</strong></p>
+<p>As respostas são comentadas para ensinar, não só para conferir. Nos exercícios de código existem outras soluções igualmente válidas: o que importa é que a sua compile, passe em <code>go test -race</code> e <code>go vet</code>, e resolva o problema proposto.</p>
+<p>Os programas com um quadro verde de <strong>Saída</strong> foram executados no Go 1.27 e a saída mostrada é a real.</p>
+</aside>
+<h2 class="sumario-titulo">Sumário</h2>
+<table class="sumario">
+<thead><tr><th>Módulo</th><th>Tema</th><th>Aulas</th><th>Questões</th></tr></thead>
+<tbody>
+<tr><td>MÓDULO 1</td><td>Fundamentos da Linguagem</td><td>#01–#08</td><td>Q1–Q17</td></tr>
+<tr><td>MÓDULO 2</td><td>Estruturas de Dados e Coleções</td><td>#09–#14</td><td>Q18–Q30</td></tr>
+<tr><td>MÓDULO 3</td><td>Pacotes, Módulos e Organização</td><td>#15–#18</td><td>Q31–Q42</td></tr>
+<tr><td>MÓDULO 4</td><td>Concorrência</td><td>#19–#25</td><td>Q43–Q57</td></tr>
+<tr><td>MÓDULO 5</td><td>I/O, HTTP e APIs</td><td>#26–#31</td><td>Q58–Q69</td></tr>
+<tr><td>MÓDULO 6</td><td>Banco de Dados</td><td>#32–#37</td><td>Q70–Q82</td></tr>
+<tr><td>MÓDULO 7</td><td>Ferramentas, CLI e Qualidade</td><td>#38–#43</td><td>Q83–Q94</td></tr>
+<tr><td>MÓDULO 8</td><td>Arquitetura e Padrões</td><td>#44–#48</td><td>Q95–Q108</td></tr>
+<tr><td>MÓDULO 9</td><td>Deploy, Cloud e Carreira</td><td>#49–#52</td><td>Q109–Q122</td></tr>
+<tr><td>DESAFIOS</td><td>Desafios integradores</td><td>todas</td><td>D1–D6</td></tr>
+</tbody>
+</table>
+<section class="modulo" id="modulo-1">
+<h2><span class="rotulo">MÓDULO 1</span> Fundamentos da Linguagem</h2>
+<p class="aulas-titulo">Artigos 01 a 08</p>
+<ul class="aulas">
+<li><span class="n">#01</span> Introdução ao Go: história, filosofia e os criadores da linguagem</li>
+<li><span class="n">#02</span> Instalação, configuração do ambiente e o comando <code>go</code></li>
+<li><span class="n">#03</span> Variáveis, tipos primitivos e declaração curta</li>
+<li><span class="n">#04</span> Operadores, expressões e conversão de tipo</li>
+<li><span class="n">#05</span> Estruturas de controle: if, for e switch</li>
+<li><span class="n">#06</span> Funções: declaração, múltiplos retornos e variádicas</li>
+<li><span class="n">#07</span> Ponteiros: conceito, uso e quando evitar</li>
+<li><span class="n">#08</span> Arrays e Slices: a espinha dorsal das coleções em Go</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q1">
+<span class="num">Q1</span>
+<div class="corpo">
+<p class="titulo">Criadores do Go</p>
+<p>Quem são os três criadores do Go e em que empresa trabalhavam quando projetaram a linguagem?</p>
+</div>
+</div>
+<p>Robert Griesemer (especialista em compiladores, trabalhou no V8 e na HotSpot, a máquina virtual do Java), Rob Pike (um dos autores do Plan 9 e do UTF-8, nos Bell Labs) e Ken Thompson (criador do Unix e da linguagem B, antecessora do C). Os três trabalhavam no Google quando iniciaram o projeto em setembro de 2007, enquanto esperavam uma compilação demorada em C++.</p>
+
+<div class="questao" id="q2">
+<span class="num">Q2</span>
+<div class="corpo">
+<p class="titulo">A promessa do Go 1 e a linha go do go.mod</p>
+<p>O que é a <strong>promessa de compatibilidade do Go 1</strong> (2012)? O que ela garante, o que fica de fora dela e qual é o papel da linha <code>go</code> do <code>go.mod</code> quando a linguagem muda o comportamento de algo, como aconteceu com a variável de laço no Go 1.22?</p>
+</div>
+</div>
+<p>Programas escritos para a especificação do Go 1 continuam compilando e rodando, sem mudança, em todas as versões 1.x. A promessa cobre a linguagem e a biblioteca padrão. Ficam de fora correções de segurança, bugs (código que dependia de um bug pode quebrar), comportamento não especificado (a ordem de iteração de um <code>map</code>, por exemplo) e pacotes fora da biblioteca padrão.</p>
+<p>Quando uma mudança de comportamento vale a pena, ela vem amarrada à linha <code>go</code> do <code>go.mod</code>: no Go 1.22 cada iteração do <code>for</code> passou a ter a sua própria variável, mas só para módulos que declaram <code>go 1.22</code> ou mais. Um módulo com <code>go 1.21</code>, compilado pelo mesmo toolchain novo, mantém a semântica antiga (o clássico <code>3 3 3</code> das closures em laço, em vez de <code>0 1 2</code>). Desde o Go 1.21 essa linha também é um requisito: um toolchain mais velho que ela se recusa a compilar o módulo, ou baixa a versão pedida.</p>
+<div class="questao" id="q3">
+<span class="num">Q3</span>
+<div class="corpo">
+<p class="titulo">var x int vs x := 0</p>
+<p>Qual é a diferença entre <code>var x int</code> e <code>x := 0</code> no Go? Em quais escopos cada forma é permitida?</p>
+</div>
+</div>
+<p>"var x int" é a forma explícita, funciona em qualquer escopo (pacote ou função). "x := 0" é a declaração curta — mais idiomática dentro de funções, proibida no escopo de pacote. Ambas inicializam x como inteiro, mas := infere o tipo do valor atribuído. A declaração curta exige que ao menos uma variável do lado esquerdo seja nova.</p>
+
+<div class="questao" id="q4">
+<span class="num">Q4</span>
+<div class="corpo">
+<p class="titulo">Valores zero</p>
+<p>Qual é o valor zero de cada tipo: <code>int</code>, <code>float64</code>, <code>string</code>, <code>bool</code>, <code>*int</code>, <code>[]int</code>, <code>map[string]int</code>?</p>
+</div>
+</div>
+<p>int → 0 | float64 → 0.0 | string → "" (string vazia) | bool → false | *int → nil | []int → nil (slice nil, len=0 cap=0) | map[string]int → nil (map nil, não usável para escrita). Toda variável Go tem valor zero garantido — nunca contém lixo de memória.</p>
+
+<div class="questao" id="q5">
+<span class="num">Q5</span>
+<div class="corpo">
+<p class="titulo">Divisão inteira 7/2</p>
+<p>O que acontece ao tentar dividir dois inteiros em Go: <code>7 / 2</code>? Como obter <code>3.5</code>?</p>
+</div>
+</div>
+<p>7 / 2 retorna 3 (divisão inteira — parte fracionária descartada). Para obter 3.5: converter ao menos um operando para float64 antes da operação: float64(7) / 2  ou  7.0 / 2  ou  float64(a) / float64(b) quando as variáveis são inteiras.</p>
+
+<div class="questao" id="q6">
+<span class="num">Q6</span>
+<div class="corpo">
+<p class="titulo">Erros que o compilador não deixa passar</p>
+<p>Por que <code>if x = 5 { }</code> não compila em Go, ao contrário de C? E por que o compilador também recusa uma variável local declarada e nunca usada, e um <code>import</code> que nada usa?</p>
+</div>
+</div>
+<p>Em Go a atribuição é um <strong>comando</strong>, não uma expressão: ela não produz valor, então não pode ser a condição de um <code>if</code>. O erro de C que atribuía e testava ao mesmo tempo, sem aviso, simplesmente não existe aqui.</p>
+<pre class="codigo"><code>package main
+
+import "os"
+
+func main() {
+	x := 1
+	if x = 5 {
+	}
+	y := 2
+}</code></pre>
+<pre class="saida"><code>q6/main.go:7:7: syntax error: cannot use assignment x = 5 as value</code></pre>
+<p>Corrigido o <code>if</code> (<code>x == 5</code>), aparecem os outros dois:</p>
+<pre class="saida"><code>q6/main.go:3:8: "os" imported and not used
+q6/main.go:9:2: declared and not used: y</code></pre>
+<p>Variável e <code>import</code> sem uso são erros, e não avisos, por decisão de projeto: costumam ser resto de código apagado ou sinal de bug (o valor calculado e esquecido), e cada <code>import</code> a mais pesa no tempo de compilação. Para descartar um valor de propósito, use o identificador vazio <code>_</code>.</p>
+<div class="questao" id="q7">
+<span class="num">Q7</span>
+<div class="corpo">
+<p class="titulo">fmt.Printf com tipo errado</p>
+<p>Por que <code>fmt.Printf("%d", "texto")</code> é detectado pelo <code>go vet</code> mas não impede a compilação?</p>
+</div>
+</div>
+<p>O compilador gera o executável porque Printf aceita ...interface{} — qualquer tipo é aceito sintaticamente. O go vet analisa chamadas de Printf e verifica se os verbos (%d, %s, etc.) correspondem aos tipos dos argumentos, reportando o erro estaticamente sem executar o programa.</p>
+
+<div class="questao" id="q8">
+<span class="num">Q8</span>
+<div class="corpo">
+<p class="titulo">Os três laços que o for substitui</p>
+<p>Go não tem <code>while</code> nem <code>do-while</code>. Usando só <code>for</code>, escreva: (a) a soma de 1 a 100 no estilo <code>while</code>; (b) um laço que lê números de uma lista até encontrar <code>0</code> e soma os anteriores, no estilo <code>do-while</code> (o corpo roda pelo menos uma vez); (c) a soma de (a) com <code>range</code> sobre um inteiro.</p>
+</div>
+</div>
+<pre class="codigo"><code>package main
+
+import "fmt"
+
+func main() {
+	// (a) estilo while
+	soma, n := 0, 1
+	for n &lt;= 100 {
+		soma += n
+		n++
+	}
+	fmt.Println("while:", soma)
+
+	// (b) estilo do-while: o corpo roda pelo menos uma vez
+	entradas := []int{7, 3, 0, 9}
+	total, i := 0, 0
+	for {
+		v := entradas[i]
+		i++
+		if v == 0 {
+			break
+		}
+		total += v
+	}
+	fmt.Println("do-while:", total, "lidos:", i)
+
+	// (c) range sobre inteiro (Go 1.22): i vai de 0 a 100
+	soma2 := 0
+	for i := range 101 {
+		soma2 += i
+	}
+	fmt.Println("range:", soma2)
+}</code></pre>
+<pre class="saida"><code>while: 5050
+do-while: 10 lidos: 3
+range: 5050</code></pre>
+<p>O <code>for</code> sem condição é o laço infinito; o <code>break</code> no meio dele faz o papel do <code>do-while</code>. O <code>range 101</code> (Go 1.22) vai de 0 a 100: o limite fica de fora, como em <code>for i := 0; i &lt; 101; i++</code>.</p>
+<div class="questao" id="q9">
+<span class="num">Q9</span>
+<div class="corpo">
+<p class="titulo">break vs continue</p>
+<p>Qual é a diferença entre <code>break</code> e <code>continue</code> dentro de um laço? Dê um exemplo de cada.</p>
+</div>
+</div>
+<p>break: encerra o laço imediatamente, execução continua após o fechamento do laço.</p>
+<p>continue: pula o restante da iteração atual e vai para a próxima.</p>
+<p>Exemplo break: encontrar primeiro número par e parar.</p>
+<p>Exemplo continue: processar apenas números ímpares, pulando os pares.</p>
+<p>Ambos aceitam labels para agir sobre laços externos em laços aninhados.</p>
+
+<div class="questao" id="q10">
+<span class="num">Q10</span>
+<div class="corpo">
+<p class="titulo">defer</p>
+<p>O que é <code>defer</code>? Em que ordem múltiplos <code>defer</code>s são executados? Dê um exemplo prático.</p>
+</div>
+</div>
+<p>defer agenda a execução de uma função para quando a função atual retornar, independentemente de como retorna (normal, erro ou panic). Múltiplos defers executam em ordem LIFO (último registrado, primeiro executado). Caso de uso clássico: defer arquivo.Close() logo após abrir um arquivo — garante fechamento mesmo se houver erro no processamento.</p>
+
+<h3>Exercícios de código — soluções</h3>
+<div class="questao" id="q11">
+<span class="num">Q11</span>
+<div class="corpo">
+<p class="titulo">Função maior(a, b, c int) int</p>
+<p>Complete o código abaixo para que a função retorne o maior dos três valores:</p>
+<pre class="codigo"><code>func maior(a, b, c int) int {
+    // escreva aqui
+
+
+
+}</code></pre>
+</div>
+</div>
+<pre class="codigo"><code>func maior(a, b, c int) int {
+    if a &gt;= b &amp;&amp; a &gt;= c { return a }
+    if b &gt;= a &amp;&amp; b &gt;= c { return b }
+    return c
+}
+// Alternativa idiomática com variável:
+func maior2(a, b, c int) int {
+    m := a
+    if b &gt; m { m = b }
+    if c &gt; m { m = c }
+    return m
+}</code></pre>
+
+<div class="questao" id="q12">
+<span class="num">Q12</span>
+<div class="corpo">
+<p class="titulo">Corrigir 4 erros de código</p>
+<p>Corrija o código abaixo (ele tem 4 erros):</p>
+<pre class="codigo"><code>package main
+
+func main() {
+    var x int = 10.5
+    y := x + "5"
+    fmt.Println(y)
+    x++
+    fmt.Println(x
+}</code></pre>
+</div>
+</div>
+<p>O compilador aponta todos (o parêntese que falta é o primeiro a aparecer, porque é erro de sintaxe):</p>
+<ul><li><code>fmt.Println(x</code>, na última linha: falta fechar o parêntese.</li><li><code>var x int = 10.5</code>: <code>cannot use 10.5 (untyped float constant) as int value</code>. Use <code>var x float64 = 10.5</code> ou <code>var x int = 10</code>.</li><li><code>y := x + "5"</code>: <code>mismatched types int and untyped string</code>. Go não converte sozinho: <code>x + 5</code> ou <code>strconv.Itoa(x) + "5"</code>.</li><li><code>fmt</code> não foi importado: <code>undefined: fmt</code>. Falta <code>import "fmt"</code>.</li></ul>
+<div class="questao" id="q13">
+<span class="num">Q13</span>
+<div class="corpo">
+<p class="titulo">Função variádica soma</p>
+<p>Escreva uma função variádica <code>soma(nums ...int) int</code> que retorna a soma de todos os argumentos.</p>
+</div>
+</div>
+<pre class="codigo"><code>func soma(nums ...int) int {
+    total := 0
+    for _, n := range nums {
+        total += n
+    }
+    return total
+}
+// Uso: soma(1, 2, 3) → 6
+// Uso com slice: s := []int{1,2,3}; soma(s...) → 6</code></pre>
+
+<div class="questao" id="q14">
+<span class="num">Q14</span>
+<div class="corpo">
+<p class="titulo">O que imprime — ponteiro</p>
+<p>O que imprime o código abaixo? Explique por quê.</p>
+<pre class="codigo"><code>x := 42
+p := &amp;x
+*p = 100
+fmt.Println(x)</code></pre>
+</div>
+</div>
+<p>Imprime: 100. Explicação: p recebe o endereço de x (&amp;x). *p = 100 acessa e modifica o valor no endereço apontado por p, que é a mesma posição de memória de x. Portanto x é alterado para 100. Esta é a passagem por referência via ponteiro em Go.</p>
+
+<div class="questao" id="q15">
+<span class="num">Q15</span>
+<div class="corpo">
+<p class="titulo">Array vs Slice</p>
+<p>Qual a diferença entre um array <code>[5]int</code> e um slice <code>[]int</code>? Por que slices são mais usados no dia a dia?</p>
+</div>
+</div>
+<p>Array [5]int: tamanho fixo em tempo de compilação, faz parte do tipo, passado por VALOR (cópia de todos os elementos). Slice []int: tamanho dinâmico, é uma visão sobre um array subjacente (ponteiro + len + cap), passado por valor do header (3 palavras) — eficiente. Slices são preferidos porque crescem com append, têm API rica e não impõem tamanho fixo.</p>
+
+<div class="questao" id="q16">
+<span class="num">Q16</span>
+<div class="corpo">
+<p class="titulo">Realocação do append</p>
+<p>O que acontece quando <code>append</code> precisa aumentar a capacidade de um slice? Explique o mecanismo de realocação.</p>
+</div>
+</div>
+<p>Quando append precisa adicionar um elemento além da capacidade atual, Go aloca um novo array com capacidade maior (tipicamente o dobro para slices pequenos), copia todos os elementos existentes para o novo array e retorna um novo slice header apontando para o novo array. O array antigo é coletado pelo GC se não há mais referências. Por isso append DEVE ter seu retorno atribuído.</p>
+
+<div class="questao" id="q17">
+<span class="num">Q17</span>
+<div class="corpo">
+<p class="titulo">Remover duplicatas preservando ordem</p>
+<p>Escreva uma função que receba um slice de strings e retorne um novo slice sem duplicatas, preservando a ordem.</p>
+</div>
+</div>
+<pre class="codigo"><code>func semDuplicatas(itens []string) []string {
+    visto := make(map[string]struct{}, len(itens))
+    resultado := make([]string, 0, len(itens))
+    for _, item := range itens {
+        if _, existe := visto[item]; !existe {
+            visto[item] = struct{}{}
+            resultado = append(resultado, item)
+        }
+    }
+    return resultado
+}</code></pre>
+
+</section>
+<section class="modulo" id="modulo-2">
+<h2><span class="rotulo">MÓDULO 2</span> Estruturas de Dados e Coleções</h2>
+<p class="aulas-titulo">Artigos 09 a 14</p>
+<ul class="aulas">
+<li><span class="n">#09</span> Maps: criação, iteração e boas práticas</li>
+<li><span class="n">#10</span> Structs: definição, inicialização e campos embutidos</li>
+<li><span class="n">#11</span> Métodos em Structs: receivers por valor e por ponteiro</li>
+<li><span class="n">#12</span> Interfaces: contratos implícitos e polimorfismo</li>
+<li><span class="n">#13</span> Composição vs herança: o jeito Go de reutilizar código</li>
+<li><span class="n">#14</span> O tipo <code>error</code> e tratamento idiomático de falhas</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q18">
+<span class="num">Q18</span>
+<div class="corpo">
+<p class="titulo">Ordem não garantida em maps</p>
+<p>Por que a ordem de iteração sobre um map em Go é não garantida? O que fazer quando a ordem importa?</p>
+</div>
+</div>
+<p>Maps em Go são implementados como hash tables. A ordem de iteração é intencionalmente randomizada a cada execução (o runtime embaralha propositalmente) para evitar que programadores dependam de um comportamento não especificado. Quando a ordem importa: extraia as chaves para um []string, ordene com sort.Strings(), depois itere pelo slice de chaves.</p>
+
+<div class="questao" id="q19">
+<span class="num">Q19</span>
+<div class="corpo">
+<p class="titulo">var m map vs make(map)</p>
+<p>Qual é a diferença entre declarar <code>var m map[string]int</code> e <code>m := make(map[string]int)</code>? O que acontece ao escrever em cada um?</p>
+</div>
+</div>
+<p>var m map[string]int declara m como nil — não inicializado. Leitura retorna valor zero (seguro), mas ESCRITA causa panic: "assignment to entry in nil map". make(map[string]int) cria e inicializa o map, pronto para leitura e escrita. Regra: sempre use make ou literal de map antes de escrever.</p>
+
+<div class="questao" id="q20">
+<span class="num">Q20</span>
+<div class="corpo">
+<p class="titulo">Comma ok em maps</p>
+<p>Explique o idioma 'comma ok' para maps: <code>v, ok := m["chave"]</code>. Quando ele é necessário?</p>
+</div>
+</div>
+<p>v, ok := m["chave"] — v recebe o valor (ou zero value se ausente), ok é bool indicando se a chave existe. Necessário quando 0/""/false é um valor legítimo armazenado no map e você precisa distingui-lo de chave ausente. Sem comma ok, ambos os casos retornariam o mesmo resultado.</p>
+
+<div class="questao" id="q21">
+<span class="num">Q21</span>
+<div class="corpo">
+<p class="titulo">Campos embutidos vs herança</p>
+<p>O que são campos embutidos (embedding) em structs? Como eles diferem de herança?</p>
+</div>
+</div>
+<p>Embedding em Go: um tipo é declarado como campo sem nome dentro de outro. Seus métodos e campos são promovidos — acessíveis diretamente no tipo externo. Diferença da herança: (1) não é hierárquico — sem polimorfismo automático por tipo; (2) o método promovido não é virtual — chama o método do tipo embutido, não do externo; (3) múltiplos embeddings são possíveis sem o problema do diamante; (4) é composição, não especialização.</p>
+
+<div class="questao" id="q22">
+<span class="num">Q22</span>
+<div class="corpo">
+<p class="titulo">Receiver por valor vs ponteiro</p>
+<p>Qual é a diferença entre um receiver por valor <code>(c Conta)</code> e por ponteiro <code>(c *Conta)</code>? Quando usar cada um?</p>
+</div>
+</div>
+<p>Valor (c Conta): o método recebe uma CÓPIA. Modificações não afetam o original. Use para tipos pequenos e métodos que apenas leem. Ponteiro (*Conta): o método recebe o endereço. Modificações afetam o original. Use quando o método modifica estado, quando a struct é grande (cópia cara) ou quando o tipo contém mutex. Regra de ouro: se algum método usa ponteiro, use ponteiro em todos os métodos do tipo.</p>
+
+<div class="questao" id="q23">
+<span class="num">Q23</span>
+<div class="corpo">
+<p class="titulo">Implementação implícita de interfaces</p>
+<p>Por que Go usa implementação implícita de interfaces? Que vantagem isso traz em relação ao <code>implements</code> explícito de Java?</p>
+</div>
+</div>
+<p>Em Go, um tipo implementa uma interface automaticamente se tiver todos os métodos requeridos — sem declaração explícita. Vantagem: desacopla completamente definidor da interface de implementador. Um tipo de pacote externo pode satisfazer sua interface local. Facilita mocking em testes. Reduz acoplamento. Permite que código existente implemente novas interfaces sem modificação.</p>
+
+<div class="questao" id="q24">
+<span class="num">Q24</span>
+<div class="corpo">
+<p class="titulo">Tipo error e erros customizados</p>
+<p>O que é o tipo <code>error</code>? Como criar erros customizados que carregam informações estruturadas?</p>
+</div>
+</div>
+<p>error é uma interface com um único método: Error() string. Qualquer tipo que implemente Error() string é um error. Para erros estruturados: declare uma struct com campos relevantes e implemente Error() string. Isso permite extrair informações específicas via errors.As(). Exemplo: type ErroHTTP struct { Codigo int; URL string }; func (e *ErroHTTP) Error() string { return fmt.Sprintf("HTTP %d: %s", e.Codigo, e.URL) }</p>
+
+<div class="questao" id="q25">
+<span class="num">Q25</span>
+<div class="corpo">
+<p class="titulo">errors.Is vs errors.As</p>
+<p>Qual a diferença entre <code>errors.Is</code> e <code>errors.As</code>? Dê um exemplo de uso de cada um.</p>
+</div>
+</div>
+<p>errors.Is(err, alvo): verifica se algum erro na cadeia de wrapping É igual ao alvo (comparação de identidade ou método Is). Use para erros sentinela: errors.Is(err, sql.ErrNoRows).</p>
+<p>errors.As(err, &amp;alvo): percorre a cadeia e preenche alvo com o primeiro erro do tipo correspondente. Use para extrair dados de erros customizados: var e *ErroHTTP; if errors.As(err, &amp;e) { fmt.Println(e.Codigo) }.</p>
+
+<div class="questao" id="q26">
+<span class="num">Q26</span>
+<div class="corpo">
+<p class="titulo">Wrapping com %w</p>
+<p>O que é wrapping de erro com <code>%w</code> no <code>fmt.Errorf</code>? Por que isso é importante para a rastreabilidade?</p>
+</div>
+</div>
+<p>fmt.Errorf("contexto: %w", err) cria um novo erro que ENVOLVE o original, preservando-o na cadeia. Isso permite: (1) adicionar contexto em cada camada sem perder a causa raiz; (2) usar errors.Is e errors.As para inspecionar o erro original através das camadas; (3) mensagens de erro descritivas como "carregarConfig: lerArquivo: open config.json: no such file or directory".</p>
+
+<div class="questao" id="q27">
+<span class="num">Q27</span>
+<div class="corpo">
+<p class="titulo">panic e recover</p>
+<p>Explique <code>panic</code> e <code>recover</code>. Em que situações seu uso é apropriado versus o retorno normal de <code>error</code>?</p>
+</div>
+</div>
+<p>panic: interrompe a execução da goroutine atual e começa a desenrolar a pilha. recover: captura um panic dentro de uma função defer, permitindo que o programa continue. Uso apropriado de panic: bugs de programação irrecuperáveis (invariante violada, uso incorreto de API interna), index out of bounds, nil pointer. Use return error para falhas esperadas e recuperáveis (arquivo não encontrado, timeout, validação). Regra: panic nos seus erros de programação, error para falhas do usuário/ambiente.</p>
+
+<h3>Exercícios de código — soluções</h3>
+<div class="questao" id="q28">
+<span class="num">Q28</span>
+<div class="corpo">
+<p class="titulo">Tipo Pilha genérica</p>
+<p>Implemente um tipo <code>Pilha</code> genérica (stack) usando slice, com os métodos <code>Push</code>, <code>Pop</code> e <code>Tamanho</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>type Pilha[T any] struct {
+    itens []T
+}
+
+func (p *Pilha[T]) Push(item T) {
+    p.itens = append(p.itens, item)
+}
+
+func (p *Pilha[T]) Pop() (T, bool) {
+    var zero T
+    if len(p.itens) == 0 { return zero, false }
+    n := len(p.itens) - 1
+    item := p.itens[n]
+    p.itens = p.itens[:n]
+    return item, true
+}
+
+func (p *Pilha[T]) Tamanho() int { return len(p.itens) }</code></pre>
+
+<div class="questao" id="q29">
+<span class="num">Q29</span>
+<div class="corpo">
+<p class="titulo">Interface Forma + implementações</p>
+<p>Crie uma interface <code>Forma</code> com os métodos <code>Area() float64</code> e <code>Perimetro() float64</code>. Implemente-a para <code>Retangulo</code> e <code>Circulo</code>. Escreva uma função <code>descrever(f Forma)</code> que imprime área e perímetro.</p>
+</div>
+</div>
+<pre class="codigo"><code>type Forma interface {
+    Area() float64
+    Perimetro() float64
+}
+
+type Retangulo struct{ Largura, Altura float64 }
+func (r Retangulo) Area() float64      { return r.Largura * r.Altura }
+func (r Retangulo) Perimetro() float64 { return 2 * (r.Largura + r.Altura) }
+
+type Circulo struct{ Raio float64 }
+func (c Circulo) Area() float64      { return math.Pi * c.Raio * c.Raio }
+func (c Circulo) Perimetro() float64 { return 2 * math.Pi * c.Raio }
+
+func descrever(f Forma) {
+    fmt.Printf("Área: %.2f | Perímetro: %.2f\n", f.Area(), f.Perimetro())
+}</code></pre>
+
+<div class="questao" id="q30">
+<span class="num">Q30</span>
+<div class="corpo">
+<p class="titulo">interface{} com ponteiro nil</p>
+<p>O que imprime o código abaixo? Existe algum problema? Corrija se necessário.</p>
+<pre class="codigo"><code>var i interface{} = (*int)(nil)
+fmt.Println(i == nil)</code></pre>
+</div>
+</div>
+<p>Imprime: false. Problema: a interface i contém informação de TIPO (*int) mesmo que o valor seja nil. Uma interface é nil apenas quando AMBOS o tipo e o valor são nil. Aqui o tipo é *int, então i != nil. Correto: retornar nil diretamente (sem atribuir a uma variável tipada) quando a intenção é retornar interface nil.</p>
+
+</section>
+<section class="modulo" id="modulo-3">
+<h2><span class="rotulo">MÓDULO 3</span> Pacotes, Módulos e Organização</h2>
+<p class="aulas-titulo">Artigos 15 a 18</p>
+<ul class="aulas">
+<li><span class="n">#15</span> Pacotes: visibilidade, nomenclatura e organização de projeto</li>
+<li><span class="n">#16</span> Go Modules: go.mod, go.sum e gerenciamento de dependências</li>
+<li><span class="n">#17</span> A biblioteca padrão: um tour pelas principais ferramentas</li>
+<li><span class="n">#18</span> Testes em Go: testing, tabelas de casos e benchmarks</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q31">
+<span class="num">Q31</span>
+<div class="corpo">
+<p class="titulo">Visibilidade em Go</p>
+<p>Como Go controla visibilidade de identificadores? Qual a regra que determina se algo é exportado?</p>
+</div>
+</div>
+<p>Regra única: identificadores que começam com letra MAIÚSCULA são exportados (públicos, visíveis fora do pacote). Letras minúsculas são não-exportados (privados ao pacote). Aplica-se a funções, tipos, variáveis, constantes, campos de struct e métodos. Não existem modificadores como public/private/protected.</p>
+
+<div class="questao" id="q32">
+<span class="num">Q32</span>
+<div class="corpo">
+<p class="titulo">Diretório internal/</p>
+<p>Para que serve o diretório <code>internal/</code>? Quem pode importar pacotes dentro dele?</p>
+</div>
+</div>
+<p>Pacotes dentro de internal/ só podem ser importados por código dentro da árvore de diretórios pai do diretório internal/. Código fora dessa árvore recebe erro de compilação ao tentar importar. Serve para criar APIs internas que não devem ser usadas externamente, sem precisar tornar tudo não-exportado.</p>
+
+<div class="questao" id="q33">
+<span class="num">Q33</span>
+<div class="corpo">
+<p class="titulo">go.mod vs go.sum</p>
+<p>Qual a diferença entre <code>go.mod</code> e <code>go.sum</code>? Por que ambos devem ser commitados no repositório?</p>
+</div>
+</div>
+<p>go.mod: manifesto do módulo — declara nome do módulo, versão mínima do Go e dependências diretas/indiretas com versões. go.sum: registra hashes criptográficos do conteúdo esperado de cada dependência. Ambos devem ser commitados: go.mod para reprodutibilidade de builds, go.sum para segurança (detecta se o conteúdo de uma dependência foi alterado maliciosamente).</p>
+
+<div class="questao" id="q34">
+<span class="num">Q34</span>
+<div class="corpo">
+<p class="titulo">go mod tidy</p>
+<p>O que faz <code>go mod tidy</code>? Quando deve ser executado?</p>
+</div>
+</div>
+<p>Analisa todo o código do módulo, REMOVE do go.mod dependências que não são importadas por nenhum arquivo .go, ADICIONA dependências que estão sendo importadas mas não declaradas, e atualiza o go.sum. Deve ser executado antes de todo commit e sempre que adicionar ou remover imports.</p>
+
+<div class="questao" id="q35">
+<span class="num">Q35</span>
+<div class="corpo">
+<p class="titulo">Minimum Version Selection</p>
+<p>Explique o Minimum Version Selection (MVS) do Go. Por que ele é preferível a 'pegar a versão mais recente'?</p>
+</div>
+</div>
+<p>MVS seleciona a versão MÍNIMA que satisfaz todos os requisitos — não a mais recente. Vantagem: builds são determinísticos e conservadores. Atualizar uma dependência nunca atualiza automaticamente outras. O comportamento é previsível. Com "pegar a mais recente", uma atualização de qualquer dependência pode puxar novas versões transitivas e quebrar builds silenciosamente.</p>
+
+<div class="questao" id="q36">
+<span class="num">Q36</span>
+<div class="corpo">
+<p class="titulo">5 pacotes da biblioteca padrão</p>
+<p>Cite 5 pacotes da biblioteca padrão e suas responsabilidades principais.</p>
+</div>
+</div>
+<p>fmt: formatação e I/O (Printf, Println, Errorf, Scanf).</p>
+<p>net/http: servidor e cliente HTTP completos.</p>
+<p>encoding/json: serialização e deserialização JSON.</p>
+<p>sync: primitivas de sincronização (Mutex, WaitGroup, Once, Map).</p>
+<p>time: tipos e funções de tempo, duração, formatação e parsing.</p>
+<p>Bônus: os/exec (subprocessos), crypto/sha256 (criptografia), path/filepath (caminhos portáveis).</p>
+
+<div class="questao" id="q37">
+<span class="num">Q37</span>
+<div class="corpo">
+<p class="titulo">json.Marshal vs json.NewEncoder</p>
+<p>Qual a diferença entre <code>json.Marshal</code> e <code>json.NewEncoder</code>? Quando usar cada um?</p>
+</div>
+</div>
+<p>Marshal: serializa para []byte em memória. Adequado para valores pequenos onde o resultado inteiro é necessário de uma vez.</p>
+<p>NewEncoder(w).Encode(v): escreve diretamente em um io.Writer (arquivo, conexão, ResponseWriter) sem buffer intermediário. Mais eficiente para streams e grandes volumes. Preferir Encoder em handlers HTTP e I/O de arquivo.</p>
+
+<div class="questao" id="q38">
+<span class="num">Q38</span>
+<div class="corpo">
+<p class="titulo">time.After vs time.NewTimer</p>
+<p>O que é <code>time.After</code> e como ele difere de <code>time.NewTimer</code>? Qual o problema de usar <code>time.After</code> dentro de loops?</p>
+</div>
+</div>
+<p><code>time.After(d)</code> cria um <code>Timer</code> e devolve só o canal dele, sem dar acesso ao timer para pará-lo. Até o Go 1.22, um timer que não disparou nem foi parado ficava vivo até o prazo vencer, e um <code>select</code> com <code>time.After(time.Minute)</code> dentro de um laço rápido acumulava milhares deles na memória.</p>
+<p>Desde o <strong>Go 1.23</strong> (em módulos com <code>go 1.23</code> ou mais no <code>go.mod</code>), timers sem referência são coletados mesmo sem <code>Stop()</code>, e esse vazamento acabou. <code>time.NewTimer</code> continua sendo a escolha quando você precisa <strong>cancelar</strong> (<code>Stop()</code>) ou <strong>reaproveitar</strong> (<code>Reset()</code>) o mesmo timer, como num prazo de inatividade que reinicia a cada mensagem.</p>
+<div class="questao" id="q39">
+<span class="num">Q39</span>
+<div class="corpo">
+<p class="titulo">Table-driven tests</p>
+<p>Como funciona o padrão de tabela de casos em testes Go (<code>table-driven tests</code>)? Quais são suas vantagens?</p>
+</div>
+</div>
+<p>Define-se uma slice de structs com entradas e saídas esperadas. Um único for itera sobre todos os casos, chamando t.Run(caso.nome, func) para criar subtestes nomeados. Vantagens: (1) fácil adicionar casos sem duplicar código; (2) cada caso falha independentemente; (3) casos podem ser rodados individualmente com -run; (4) o código de teste é DRY e legível.</p>
+
+<div class="questao" id="q40">
+<span class="num">Q40</span>
+<div class="corpo">
+<p class="titulo">t.Helper()</p>
+<p>O que faz <code>t.Helper()</code> em uma função de teste auxiliar? Por que é importante?</p>
+</div>
+</div>
+<p>Marca a função como helper de teste. Quando essa função reporta uma falha (t.Error, t.Fatal), a linha apontada no erro é a do CHAMADOR da função helper, não a linha dentro do helper. Sem t.Helper(), todas as falhas apontariam para dentro da função auxiliar, dificultando identificar qual test case falhou.</p>
+
+<h3>Exercícios de código — soluções</h3>
+<div class="questao" id="q41">
+<span class="num">Q41</span>
+<div class="corpo">
+<p class="titulo">Tabela de casos para Palindromo</p>
+<p>Escreva um teste de tabela de casos para a função <code>Palindromo(s string) bool</code> cobrindo pelo menos 6 casos, incluindo strings com espaços, maiúsculas e caracteres especiais.</p>
+</div>
+</div>
+<pre class="codigo"><code>func Palindromo(s string) bool {
+	var r []rune
+	for _, c := range strings.ToLower(s) {
+		if unicode.IsLetter(c) || unicode.IsDigit(c) {
+			r = append(r, c)
+		}
+	}
+	for i, j := 0, len(r)-1; i &lt; j; i, j = i+1, j-1 {
+		if r[i] != r[j] {
+			return false
+		}
+	}
+	return true
+}</code></pre>
+<pre class="codigo"><code>func TestPalindromo(t *testing.T) {
+	casos := []struct {
+		entrada  string
+		esperado bool
+	}{
+		{"arara", true},
+		{"Go", false},
+		{"", true},
+		{"Socorram-me, subi no ônibus em Marrocos", false}, // ô × o: acento conta
+		{"A base do teto desaba", true},
+		{"Ame a ema!", true},
+		{"12321", true},
+		{"Roma me tem amor.", true},
+	}
+	for _, tc := range casos {
+		t.Run(tc.entrada, func(t *testing.T) {
+			if got := Palindromo(tc.entrada); got != tc.esperado {
+				t.Errorf("Palindromo(%q) = %v, esperado %v", tc.entrada, got, tc.esperado)
+			}
+		})
+	}
+}</code></pre>
+<p>Normalizar antes de comparar (minúsculas, só letras e dígitos) é o que faz frases com espaço e pontuação funcionarem. Trabalhar com <code>[]rune</code>, e não com bytes, mantém as letras acentuadas inteiras. O caso do "ônibus" mostra a decisão que sobra: com acento contando, a frase famosa não é palíndromo; para ignorar acentos, remova-os antes (por exemplo com <code>golang.org/x/text/unicode/norm</code>).</p>
+<div class="questao" id="q42">
+<span class="num">Q42</span>
+<div class="corpo">
+<p class="titulo">Benchmarks para contagem de palavras</p>
+<p>Escreva uma função de benchmark para medir a performance de duas implementações de contagem de palavras: uma usando <code>strings.Split</code> e outra usando <code>strings.Fields</code>.</p>
+</div>
+</div>
+<pre class="codigo"><code>var texto = "o rato roeu a roupa do rei de roma"
+
+func BenchmarkContarComSplit(b *testing.B) {
+	for b.Loop() {
+		_ = len(strings.Split(texto, " "))
+	}
+}
+
+func BenchmarkContarComFields(b *testing.B) {
+	for b.Loop() {
+		_ = len(strings.Fields(texto))
+	}
+}</code></pre>
+<p><code>for b.Loop()</code> (Go 1.24) substitui o antigo <code>for i := 0; i &lt; b.N; i++</code>: o que vem antes do laço já fica fora da medição, sem precisar de <code>b.ResetTimer()</code>, e o compilador não consegue eliminar a chamada medida. Nesta frase, com um espaço entre cada palavra, os dois empatam (cerca de 130 ns e uma alocação cada, numa máquina de 16 núcleos); a diferença real é de comportamento: <code>Fields</code> trata vários espaços, tabs e quebras de linha como um separador só, e <code>Split</code> devolve strings vazias entre espaços repetidos.</p>
+</section>
+<section class="modulo" id="modulo-4">
+<h2><span class="rotulo">MÓDULO 4</span> Concorrência</h2>
+<p class="aulas-titulo">Artigos 19 a 25</p>
+<ul class="aulas">
+<li><span class="n">#19</span> Goroutines: concorrência leve e o modelo de execução do Go</li>
+<li><span class="n">#20</span> Channels: comunicação entre goroutines</li>
+<li><span class="n">#21</span> Select, timeouts e cancelamento de operações</li>
+<li><span class="n">#22</span> sync.WaitGroup e sync.Mutex: coordenando goroutines</li>
+<li><span class="n">#23</span> O pacote context: propagação de cancelamento e prazos</li>
+<li><span class="n">#24</span> Padrões de concorrência: fan-out, fan-in e pipelines</li>
+<li><span class="n">#25</span> Armadilhas da concorrência: race conditions e como detectá-las</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q43">
+<span class="num">Q43</span>
+<div class="corpo">
+<p class="titulo">O que é goroutine</p>
+<p>O que é uma goroutine? Em que ela difere de uma thread do sistema operacional em termos de uso de memória?</p>
+</div>
+</div>
+<p>Goroutine é uma função executada de forma concorrente, gerenciada pelo runtime Go (não pelo SO). Começa com apenas 2 KB de stack (cresce dinamicamente até GB se necessário). Uma thread do SO ocupa 1–8 MB fixos. Isso permite ter dezenas de milhares de goroutines simultâneas sem exaurir memória. Criar uma goroutine também é bem mais barato que criar uma thread, porque não envolve o sistema operacional.</p>
+
+<div class="questao" id="q44">
+<span class="num">Q44</span>
+<div class="corpo">
+<p class="titulo">Scheduler M:N</p>
+<p>O que é o scheduler M:N do Go? Como ele mapeia goroutines para threads do SO?</p>
+</div>
+</div>
+<p>M goroutines são mapeadas em N threads do SO (onde N = GOMAXPROCS, padrão = número de CPUs). O scheduler Go distribui goroutines entre as threads, alternando-as em pontos de I/O, syscalls, chamadas de função e periodicamente. Isso permite paralelismo real em múltiplos núcleos e concorrência eficiente em I/O sem bloquear threads do SO.</p>
+
+<div class="questao" id="q45">
+<span class="num">Q45</span>
+<div class="corpo">
+<p class="titulo">Channel com buffer vs sem buffer</p>
+<p>Qual é a diferença entre um channel com buffer e sem buffer? Quando cada um deve ser usado?</p>
+</div>
+</div>
+<p>Sem buffer (make(chan T)): cada envio bloqueia até haver receptor, e vice-versa. Garante sincronização precisa (rendezvous). Com buffer (make(chan T, n)): aceita até n valores sem bloquear o emissor. Bloqueia apenas quando buffer cheio (emissor) ou vazio (receptor). Use sem buffer quando sincronização importa; com buffer para desacoplar levemente produtor e consumidor ou absorver picos.</p>
+
+<div class="questao" id="q46">
+<span class="num">Q46</span>
+<div class="corpo">
+<p class="titulo">Done channel e close</p>
+<p>O que é o padrão 'done channel'? Como <code>close(done)</code> difere de enviar um valor para <code>done</code>?</p>
+</div>
+</div>
+<p>done channel carrega o sinal de encerramento para goroutines. close(done) fecha o canal — TODAS as goroutines aguardando &lt;-done desbloqueiam simultaneamente (broadcast). Enviar um valor acordaria apenas UM receptor. Por isso close é usado para sinalizar múltiplas goroutines de uma vez. Tipo struct{} ocupa zero bytes — o canal serve apenas como sinal, sem transportar dados.</p>
+
+<div class="questao" id="q47">
+<span class="num">Q47</span>
+<div class="corpo">
+<p class="titulo">Padrão de pipeline</p>
+<p>Explique o padrão de pipeline com channels. Quais são os papéis de produtor, estágio e consumidor?</p>
+</div>
+</div>
+<p>Pipeline é uma cadeia de estágios conectados por channels. Cada estágio: (1) recebe valores de um channel de entrada, (2) processa/transforma, (3) envia para um channel de saída. Cada estágio roda em sua própria goroutine. O fechamento do channel upstream sinaliza término downstream. Permite processamento concorrente com backpressure natural.</p>
+
+<div class="questao" id="q48">
+<span class="num">Q48</span>
+<div class="corpo">
+<p class="titulo">Fan-out e fan-in</p>
+<p>O que é fan-out? O que é fan-in? Como esses padrões são implementados com goroutines e channels?</p>
+</div>
+</div>
+<p>Fan-out: distribuir trabalho de um channel para múltiplos workers que leem do mesmo channel. Cada worker processa itens em paralelo. Fan-in: combinar múltiplos channels de saída em um único channel. Uma goroutine por channel de entrada copia valores para o channel unificado, controlado por WaitGroup. A combinação fan-out → processamento → fan-in é o padrão de processamento paralelo mais comum.</p>
+
+<div class="questao" id="q49">
+<span class="num">Q49</span>
+<div class="corpo">
+<p class="titulo">Mutex vs RWMutex</p>
+<p>Qual a diferença entre <code>sync.Mutex</code> e <code>sync.RWMutex</code>? Em que cenário <code>RWMutex</code> oferece vantagem?</p>
+</div>
+</div>
+<p>Mutex: uma goroutine de cada vez — tanto para leitura quanto escrita. RWMutex: múltiplas goroutines podem ler simultaneamente (RLock/RUnlock), mas escrita é exclusiva (Lock/Unlock). Vantagem do RWMutex: quando leituras são muito mais frequentes que escritas (ex: cache), múltiplos readers concorrentes melhoram throughput significativamente.</p>
+
+<div class="questao" id="q50">
+<span class="num">Q50</span>
+<div class="corpo">
+<p class="titulo">Race condition e detector</p>
+<p>O que é uma race condition? Como o detector de races do Go (<code>-race</code>) funciona?</p>
+</div>
+</div>
+<p>Race condition: o resultado do programa depende da ordem de execução de goroutines, que não é garantida. O detector (-race) instrumenta o binário para registrar TODOS os acessos à memória com timestamps e goroutine IDs. Se detecta dois acessos concorrentes ao mesmo endereço onde ao menos um é escrita e sem sincronização entre eles, reporta a race com stack traces de ambas as goroutines.</p>
+
+<div class="questao" id="q51">
+<span class="num">Q51</span>
+<div class="corpo">
+<p class="titulo">sync.Once thread-safety</p>
+<p>Por que <code>sync.Once</code> é thread-safe? Como ele garante que a função seja executada exatamente uma vez?</p>
+</div>
+</div>
+<p>Once usa internamente um Mutex e um flag de estado. Quando Do(f) é chamado: verifica atomicamente se f já foi executada. Se não, executa f sob o lock e marca como executada. Se sim, retorna imediatamente sem executar. Todas as goroutines que chamam Do enquanto f está executando aguardam o lock. Após f completar, todas retornam sem executar novamente.</p>
+
+<div class="questao" id="q52">
+<span class="num">Q52</span>
+<div class="corpo">
+<p class="titulo">Pacote context</p>
+<p>Qual é o propósito do pacote <code>context</code>? Explique a árvore de contextos e como o cancelamento se propaga.</p>
+</div>
+</div>
+<p>Context propaga cancelamento, deadline e valores pela árvore de chamadas. Forma uma árvore: cancelar um pai cancela automaticamente todos os filhos. context.WithCancel: cancelamento manual via função cancel(). context.WithTimeout: cancela automaticamente após duração. context.WithDeadline: cancela em instante absoluto. Todo código que pode bloquear (DB, HTTP, goroutines) deve aceitar ctx e verificar ctx.Done().</p>
+
+<div class="questao" id="q53">
+<span class="num">Q53</span>
+<div class="corpo">
+<p class="titulo">Goroutine leaks</p>
+<p>O que é uma goroutine leak? Cite 3 causas comuns e como evitá-las.</p>
+</div>
+</div>
+<p>Causas comuns: (1) channel sem receptor — goroutine envia para channel que nunca será lido; (2) channel nunca fechado — goroutine fica em for range ch infinitamente; (3) loop sem saída — sem verificação de ctx.Done(). Prevenção: sempre ter condição de saída via ctx.Done() ou close(done). Detecção: goleak (<code>go.uber.org/goleak</code>) em testes, runtime.NumGoroutine() em métricas.</p>
+
+<div class="questao" id="q54">
+<span class="num">Q54</span>
+<div class="corpo">
+<p class="titulo">Variável de loop em closures</p>
+<p>O que é o problema da variável de loop capturada em closures? Como ele foi corrigido no Go 1.22?</p>
+</div>
+</div>
+<p>Antes do Go 1.22: o closure capturava a VARIÁVEL do loop por referência (não o valor). Todas as goroutines liam o mesmo i, que ao final do loop valia o último valor. Solução: i := i dentro do loop criava nova variável local a cada iteração. No Go 1.22: cada iteração cria automaticamente nova variável, desde que o <code>go.mod</code> declare <code>go 1.22</code> ou mais; com uma linha <code>go</code> anterior, o comportamento antigo continua.</p>
+
+<h3>Exercícios de código — soluções</h3>
+<div class="questao" id="q55">
+<span class="num">Q55</span>
+<div class="corpo">
+<p class="titulo">Busca concorrente de URLs</p>
+<p>Implemente uma função <code>buscarConcorrente(urls []string) []Resultado</code> que faz requisições HTTP para todas as URLs simultaneamente e coleta os resultados. Use WaitGroup e channel.</p>
+</div>
+</div>
+<pre class="codigo"><code>type Resultado struct {
+	URL    string
+	Status int
+	Erro   error
+}
+
+func buscarConcorrente(urls []string) []Resultado {
+	resultados := make(chan Resultado, len(urls))
+	var wg sync.WaitGroup
+	cliente := &amp;http.Client{Timeout: 10 * time.Second}
+
+	for _, url := range urls { // desde o Go 1.22, cada iteração tem o seu url
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			resp, err := cliente.Get(url)
+			if err != nil {
+				resultados &lt;- Resultado{URL: url, Erro: err}
+				return
+			}
+			resp.Body.Close()
+			resultados &lt;- Resultado{URL: url, Status: resp.StatusCode}
+		}()
+	}
+	go func() { wg.Wait(); close(resultados) }()
+	var lista []Resultado
+	for r := range resultados {
+		lista = append(lista, r)
+	}
+	return lista
+}</code></pre>
+<p>O canal tem buffer do tamanho da lista, então nenhuma goroutine fica presa esperando leitor. A goroutine extra fecha o canal depois do <code>wg.Wait()</code>, e é isso que encerra o <code>for range</code>. O antigo <code>url := url</code> dentro do laço não é mais necessário desde o Go 1.22.</p>
+<div class="questao" id="q56">
+<span class="num">Q56</span>
+<div class="corpo">
+<p class="titulo">Corrigir race condition</p>
+<p>O código abaixo tem uma race condition. Identifique-a e corrija usando sync/atomic ou Mutex.</p>
+<pre class="codigo"><code>var contador int
+
+for i := 0; i &lt; 1000; i++ {
+    go func() { contador++ }()
+}
+time.Sleep(time.Second)
+fmt.Println(contador)</code></pre>
+</div>
+</div>
+<pre class="codigo"><code>package main
+
+import (
+	"fmt"
+	"sync"
+	"sync/atomic"
+)
+
+func main() {
+	// Solução 1: sync/atomic
+	var contador atomic.Int64
+	var wg sync.WaitGroup
+	for range 1000 {
+		wg.Go(func() { contador.Add(1) }) // WaitGroup.Go: Go 1.25
+	}
+	wg.Wait() // espera de verdade, em vez de torcer com time.Sleep
+	fmt.Println("atomic:", contador.Load())
+
+	// Solução 2: Mutex
+	var mu sync.Mutex
+	contador2 := 0
+	for range 1000 {
+		wg.Go(func() {
+			mu.Lock()
+			contador2++
+			mu.Unlock()
+		})
+	}
+	wg.Wait()
+	fmt.Println("mutex:", contador2)
+}</code></pre>
+<pre class="saida"><code>atomic: 1000
+mutex: 1000</code></pre>
+<p>A race está em <code>contador++</code>: ler, somar e gravar são três passos, e duas goroutines podem ler o mesmo valor antes de qualquer uma gravar. O <code>time.Sleep</code> do enunciado é o segundo erro: ele não garante que as goroutines terminaram, só torce por isso. <code>go run -race</code> aponta o problema na versão original.</p>
+<div class="questao" id="q57">
+<span class="num">Q57</span>
+<div class="corpo">
+<p class="titulo">Semáforo com channel com buffer</p>
+<p>Implemente um semáforo usando channel com buffer que limita o número de goroutines simultâneas a N.</p>
+</div>
+</div>
+<pre class="codigo"><code>type Semaforo chan struct{}
+
+func NovoSemaforo(limite int) Semaforo {
+    return make(Semaforo, limite)
+}
+
+func (s Semaforo) Adquirir(ctx context.Context) error {
+    select {
+    case s &lt;- struct{}{}: return nil
+    case &lt;-ctx.Done(): return ctx.Err()
+    }
+}
+
+func (s Semaforo) Liberar() { &lt;-s }
+
+// Uso: sem.Adquirir(ctx) antes, defer sem.Liberar() depois.</code></pre>
+
+</section>
+<section class="modulo" id="modulo-5">
+<h2><span class="rotulo">MÓDULO 5</span> I/O, HTTP e APIs</h2>
+<p class="aulas-titulo">Artigos 26 a 31</p>
+<ul class="aulas">
+<li><span class="n">#26</span> Leitura e escrita de arquivos com os pacotes os e bufio</li>
+<li><span class="n">#27</span> Trabalhando com JSON: encode, decode e tags de struct</li>
+<li><span class="n">#28</span> Criando um servidor HTTP com net/http</li>
+<li><span class="n">#29</span> Roteamento avançado com Gorilla Mux ou Chi</li>
+<li><span class="n">#30</span> Consumindo APIs externas com http.Client</li>
+<li><span class="n">#31</span> Middlewares: logging, autenticação e CORS</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q58">
+<span class="num">Q58</span>
+<div class="corpo">
+<p class="titulo">os.ReadFile vs bufio.Scanner</p>
+<p>Qual a diferença entre <code>os.ReadFile</code> e <code>bufio.Scanner</code> para ler um arquivo? Quando usar cada abordagem?</p>
+</div>
+</div>
+<p>os.ReadFile: lê o arquivo INTEIRO para []byte em memória. Simples e adequado para arquivos pequenos (configs, templates). bufio.Scanner: lê incrementalmente, linha por linha ou por tokens, usando buffer interno. Adequado para arquivos grandes (logs, CSV de GBs) onde carregar tudo em memória seria problemático. Scanner também lê de qualquer io.Reader (stdin, conexões de rede).</p>
+
+<div class="questao" id="q59">
+<span class="num">Q59</span>
+<div class="corpo">
+<p class="titulo">bufio.Writer e Flush</p>
+<p>Por que <code>bufio.Writer</code> melhora a performance de escrita? O que acontece se <code>Flush()</code> não for chamado?</p>
+</div>
+</div>
+<p>bufio.Writer agrupa múltiplas escritas pequenas em um buffer em memória, fazendo uma única syscall quando o buffer enche ou quando Flush() é chamado. Reduz drasticamente o número de syscalls. Se Flush() não for chamado: os dados no buffer são PERDIDOS silenciosamente — o arquivo ficará incompleto. Sempre use defer writer.Flush() ou verifique o erro de Flush().</p>
+
+<div class="questao" id="q60">
+<span class="num">Q60</span>
+<div class="corpo">
+<p class="titulo">Tags JSON de struct</p>
+<p>Explique as tags de struct JSON: <code>json:"-"</code>, <code>json:"nome,omitempty"</code> e <code>json:",string"</code>. O que cada uma faz?</p>
+</div>
+</div>
+<p>json:"-": o campo é SEMPRE omitido na serialização e ignorado na deserialização. Útil para senhas e dados internos.</p>
+<p>json:"nome,omitempty": usa "nome" como chave JSON; omite o campo se for o valor zero do tipo (0, "", false, nil, slice/map vazio).</p>
+<p>json:",string": serializa o valor como string JSON (ex: 42 vira "42"). Útil para interoperabilidade com sistemas que esperam números como strings.</p>
+
+<div class="questao" id="q61">
+<span class="num">Q61</span>
+<div class="corpo">
+<p class="titulo">Marshal vs MarshalIndent vs RawMessage</p>
+<p>Qual a diferença entre <code>json.Marshal</code> e <code>json.MarshalIndent</code>? Quando <code>json.RawMessage</code> é útil?</p>
+</div>
+</div>
+<p>Marshal: JSON compacto em uma linha.</p>
+<p>MarshalIndent(v, "", "  "): JSON formatado com indentação, legível por humanos. Útil para arquivos de config e logs de debug.</p>
+<p>json.RawMessage: armazena JSON bruto sem interpretar. Permite deserializar parte do JSON em momento posterior baseado em um campo discriminador (ex: campo "tipo" determina como deserializar "payload").</p>
+
+<div class="questao" id="q62">
+<span class="num">Q62</span>
+<div class="corpo">
+<p class="titulo">Perigo do http.DefaultClient</p>
+<p>Por que nunca usar <code>http.DefaultClient</code> em produção? O que pode acontecer sem timeout configurado?</p>
+</div>
+</div>
+<p>http.DefaultClient não tem Timeout configurado. Uma requisição para um servidor que nunca responde bloqueia a goroutine indefinidamente. Em servidores web, isso significa que todas as goroutines podem eventualmente ficar bloqueadas aguardando respostas, esgotando o pool e derrubando o serviço. Sempre crie &amp;http.Client{Timeout: N} explicitamente.</p>
+
+<div class="questao" id="q63">
+<span class="num">Q63</span>
+<div class="corpo">
+<p class="titulo">Melhorias no roteador Go 1.22</p>
+<p>Como o Go 1.22 melhorou o roteador <code>net/http</code>? Dê exemplos de padrões de rota que agora são suportados.</p>
+</div>
+</div>
+<p>Go 1.22 adicionou ao ServeMux: (1) Método HTTP no padrão: "GET /usuarios/{id}" — rota só aceita GET; (2) Parâmetros de caminho: {id} extraído via r.PathValue("id"); (3) Coringa {path...} para subárvores. Antes: apenas prefixos sem método, sem parâmetros. Isso elimina a necessidade de roteadores externos para casos simples.</p>
+
+<div class="questao" id="q64">
+<span class="num">Q64</span>
+<div class="corpo">
+<p class="titulo">Middleware em Go</p>
+<p>O que é um middleware em Go? Qual é sua assinatura padrão e como middlewares são encadeados?</p>
+</div>
+</div>
+<p>Um middleware é uma função que recebe http.Handler e retorna http.Handler, envolvendo o handler original. Assinatura: func(http.Handler) http.Handler. Encadeamento: aplicar da direita para esquerda (interno para externo) ou usar uma função de encadeamento. Cada middleware executa código antes, chama o próximo (prox.ServeHTTP(w, r)), e pode executar código depois.</p>
+
+<div class="questao" id="q65">
+<span class="num">Q65</span>
+<div class="corpo">
+<p class="titulo">net/http/httptest</p>
+<p>Para que serve o pacote <code>net/http/httptest</code>? Como ele facilita testes de handlers HTTP?</p>
+</div>
+</div>
+<p>httptest.NewRequest(method, url, body) cria *http.Request para testes sem HTTP real.</p>
+<p>httptest.NewRecorder() cria ResponseRecorder que implementa ResponseWriter e captura status, headers e body escritos pelo handler.</p>
+<p>Permite testar handlers unitariamente sem iniciar servidor, sem porta, sem goroutines extras. Testes são rápidos, determinísticos e não dependem de infraestrutura.</p>
+
+<div class="questao" id="q66">
+<span class="num">Q66</span>
+<div class="corpo">
+<p class="titulo">Graceful shutdown</p>
+<p>O que é graceful shutdown de um servidor HTTP? Por que é importante e como é implementado?</p>
+</div>
+</div>
+<p>Importância: ao receber SIGTERM/SIGINT (Ctrl+C, deploy), não interromper requisições em andamento abruptamente. Implementação: (1) iniciar servidor em goroutine; (2) bloquear main em canal de sinal (signal.Notify); (3) ao receber sinal, chamar server.Shutdown(ctx) com timeout; (4) Shutdown fecha os listeners (para de aceitar conexões novas), espera as requisições em andamento terminarem ou o prazo do contexto vencer, e só então retorna.</p>
+
+<div class="questao" id="q67">
+<span class="num">Q67</span>
+<div class="corpo">
+<p class="titulo">Retry com backoff exponencial e jitter</p>
+<p>Explique o padrão de retry com backoff exponencial e jitter. Por que o jitter é necessário?</p>
+</div>
+</div>
+<p>Backoff exponencial: espera cresce a cada tentativa (100ms, 200ms, 400ms...) — reduz carga no serviço com falha. Sem jitter: todos os clientes tentam de novo ao mesmo tempo após timeout, causando "thundering herd" — pico de carga sincronizado que pode derrubar novamente o serviço que se recuperou. Jitter: adiciona aleatoriedade à espera (espera ± 10%) — dispersa as tentativas no tempo.</p>
+
+<h3>Exercícios de código — soluções</h3>
+<div class="questao" id="q68">
+<span class="num">Q68</span>
+<div class="corpo">
+<p class="titulo">Rate limiting por IP</p>
+<p>Escreva um middleware de rate limiting simples que limita cada IP a 10 requisições por minuto, retornando HTTP 429 quando o limite é excedido.</p>
+</div>
+</div>
+<pre class="codigo"><code>type rateLimiter struct {
+	mu       sync.Mutex
+	contagem map[string][]time.Time
+	limite   int
+	janela   time.Duration
+}
+
+func novoRateLimiter(limite int, janela time.Duration) *rateLimiter {
+	return &amp;rateLimiter{contagem: make(map[string][]time.Time), limite: limite, janela: janela}
+}
+
+func (r *rateLimiter) permitir(ip string) bool {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	agora := time.Now()
+	validos := r.contagem[ip][:0]
+	for _, t := range r.contagem[ip] {
+		if agora.Sub(t) &lt; r.janela {
+			validos = append(validos, t)
+		}
+	}
+	if len(validos) &gt;= r.limite {
+		r.contagem[ip] = validos
+		return false
+	}
+	r.contagem[ip] = append(validos, agora)
+	return true
+}
+
+func middlewareRateLimit(lim *rateLimiter) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			ip, _, err := net.SplitHostPort(r.RemoteAddr) // RemoteAddr é "ip:porta"
+			if err != nil {
+				ip = r.RemoteAddr
+			}
+			if !lim.permitir(ip) {
+				http.Error(w, "Too Many Requests", http.StatusTooManyRequests)
+				return
+			}
+			next.ServeHTTP(w, r)
+		})
+	}
+}</code></pre>
+<p>Cuidado com <code>r.RemoteAddr</code>: ele vem como <code>"ip:porta"</code>, e cada conexão nova usa outra porta. Sem o <code>net.SplitHostPort</code>, o mesmo cliente nunca bate no limite. Atrás de um proxy, o IP real vem num cabeçalho (<code>X-Forwarded-For</code>), que só deve ser aceito se a requisição veio do proxy. Esta versão também nunca apaga IPs antigos do mapa: em produção, uma limpeza periódica (ou <code>golang.org/x/time/rate</code> com expiração) evita que a memória cresça sem fim.</p>
+<div class="questao" id="q69">
+<span class="num">Q69</span>
+<div class="corpo">
+<p class="titulo">Ler CSV para map</p>
+<p>Implemente uma função <code>lerCSVParaMap(caminho string) ([]map[string]string, error)</code> que lê um arquivo CSV e retorna cada linha como um mapa de nome-coluna → valor.</p>
+</div>
+</div>
+<pre class="codigo"><code>func lerCSVParaMap(caminho string) ([]map[string]string, error) {
+	f, err := os.Open(caminho)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	reader := csv.NewReader(f)
+	cabecalho, err := reader.Read()
+	if err != nil {
+		return nil, fmt.Errorf("cabeçalho: %w", err)
+	}
+
+	var resultado []map[string]string
+	for {
+		linha, err := reader.Read()
+		if errors.Is(err, io.EOF) {
+			break
+		}
+		if err != nil {
+			return nil, err // linha malformada: falha, não some em silêncio
+		}
+		m := make(map[string]string, len(cabecalho))
+		for i, col := range cabecalho {
+			m[col] = linha[i]
+		}
+		resultado = append(resultado, m)
+	}
+	return resultado, nil
+}</code></pre>
+<p>O laço só termina sozinho em <code>io.EOF</code>. Qualquer outro erro, como uma linha com campos a menos (<code>record on line 3: wrong number of fields</code>), é devolvido: tratar todo erro como fim de arquivo faria a função devolver metade dos dados sem avisar ninguém.</p>
+</section>
+<section class="modulo" id="modulo-6">
+<h2><span class="rotulo">MÓDULO 6</span> Banco de Dados</h2>
+<p class="aulas-titulo">Artigos 32 a 37</p>
+<ul class="aulas">
+<li><span class="n">#32</span> Introdução ao database/sql e drivers em Go</li>
+<li><span class="n">#33</span> Go com MySQL e MariaDB: conexão, queries e transações</li>
+<li><span class="n">#34</span> Go com SQLite: banco de dados embutido para aplicações leves</li>
+<li><span class="n">#35</span> Go com PostgreSQL: recursos avançados e o driver pgx</li>
+<li><span class="n">#36</span> Go com MongoDB: operações CRUD com o driver oficial</li>
+<li><span class="n">#37</span> GORM: ORM para Go, migrações e relacionamentos</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q70">
+<span class="num">Q70</span>
+<div class="corpo">
+<p class="titulo">SQL injection e placeholders</p>
+<p>Por que nunca interpolar strings do usuário diretamente em queries SQL? Como placeholders (<code>?</code> ou <code>$1</code>) previnem SQL injection?</p>
+</div>
+</div>
+<p>Interpolar strings diretamente: "SELECT * FROM users WHERE name = '" + nome + "'" permite que nome = "'; DROP TABLE users; --" destrua o banco. Placeholders (?  no MySQL, $1 no PostgreSQL): o driver envia a query e os parâmetros SEPARADAMENTE ao banco. O banco trata os parâmetros como dados literais, nunca como SQL. Nenhum caractere do dado pode "escapar" para o SQL.</p>
+
+<div class="questao" id="q71">
+<span class="num">Q71</span>
+<div class="corpo">
+<p class="titulo">Pool de conexões do sql.DB</p>
+<p>O que é o pool de conexões do <code>sql.DB</code>? Quais são as configurações mais importantes e o que cada uma controla?</p>
+</div>
+</div>
+<p>sql.DB é um pool, não uma conexão. Configurações:</p>
+<p>SetMaxOpenConns(n): máximo de conexões simultâneas (padrão: ilimitado — SEMPRE configure).</p>
+<p>SetMaxIdleConns(n): conexões ociosas mantidas no pool (padrão: 2).</p>
+<p>SetConnMaxLifetime(d): tempo máximo de vida de uma conexão (útil quando o banco tem timeout).</p>
+<p>SetConnMaxIdleTime(d): tempo máximo ociosa antes de ser fechada.</p>
+<p>Valores típicos: 25 open, 10 idle, 5min lifetime, 2min idle time.</p>
+
+<div class="questao" id="q72">
+<span class="num">Q72</span>
+<div class="corpo">
+<p class="titulo">rows.Close() obrigatório</p>
+<p>Por que <code>rows.Close()</code> é obrigatório e deve usar <code>defer</code>? O que acontece se não for chamado?</p>
+</div>
+</div>
+<p>rows.Close() libera a conexão de volta ao pool. Enquanto rows não for fechado, a conexão fica ocupada. Em código de alta carga, esquecer Close() esgota o pool — todas as conexões ficam presas em cursores abertos, novas queries ficam bloqueadas aguardando conexão. defer rows.Close() logo após QueryContext() garante liberação mesmo em caso de erro.</p>
+
+<div class="questao" id="q73">
+<span class="num">Q73</span>
+<div class="corpo">
+<p class="titulo">QueryRowContext vs QueryContext</p>
+<p>Qual a diferença entre <code>QueryRowContext</code> e <code>QueryContext</code>? Quando usar cada um?</p>
+</div>
+</div>
+<p>QueryRowContext: espera exatamente 1 linha. Retorna *Row, o scan é feito diretamente. Se não encontrar, retorna sql.ErrNoRows. Se encontrar mais de uma, retorna apenas a primeira. Use para buscas por ID ou chave única.</p>
+<p>QueryContext: retorna *Rows para iteração. Use para queries que retornam 0 ou mais linhas. Requer rows.Next() / rows.Scan() / rows.Close() / rows.Err().</p>
+
+<div class="questao" id="q74">
+<span class="num">Q74</span>
+<div class="corpo">
+<p class="titulo">SQLite WAL mode</p>
+<p>Explique o <code>_journal_mode=WAL</code> do SQLite. Que vantagem ele oferece sobre o modo padrão?</p>
+</div>
+</div>
+<p>No modo padrão (DELETE journal), escritas bloqueiam completamente o banco — nenhuma leitura pode ocorrer. No modo WAL (Write-Ahead Logging), escritas são registradas em arquivo separado. Múltiplos leitores podem ler o banco enquanto uma escrita está em andamento (leitores veem estado anterior à escrita em curso). Melhora drasticamente o throughput em aplicações com mix de leitura e escrita.</p>
+
+<div class="questao" id="q75">
+<span class="num">Q75</span>
+<div class="corpo">
+<p class="titulo">MaxOpenConns(1) no SQLite</p>
+<p>Por que <code>SetMaxOpenConns(1)</code> é recomendado para SQLite? O que acontece com escritas concorrentes sem isso?</p>
+</div>
+</div>
+<p>SQLite só suporta um escritor por vez (file-level lock). Com múltiplas conexões, escritas concorrentes resultam em "database is locked" error. Com MaxOpenConns(1), todas as operações passam pela mesma conexão, serializando acessos automaticamente. Em modo WAL, leituras concorrentes são seguras, mas escritas ainda precisam ser serializadas.</p>
+
+<div class="questao" id="q76">
+<span class="num">Q76</span>
+<div class="corpo">
+<p class="titulo">lib/pq vs pgx</p>
+<p>Qual a diferença entre <code>lib/pq</code> e <code>pgx</code> como drivers PostgreSQL? Por que <code>pgx</code> é preferido para novos projetos?</p>
+</div>
+</div>
+<p>lib/pq: driver PostgreSQL clássico, compatível com database/sql, mas sem suporte a tipos nativos do PostgreSQL, sem pgxpool nativo, desenvolvimento desacelerado.</p>
+<p>pgx: driver nativo PostgreSQL com pgxpool (pool otimizado), parâmetros nomeados, tipos nativos (arrays, JSONB, UUID sem conversão), COPY protocol, Listen/Notify, CollectRows para scan automático em structs. Para novos projetos, pgx é sempre a melhor escolha.</p>
+
+<div class="questao" id="q77">
+<span class="num">Q77</span>
+<div class="corpo">
+<p class="titulo">Transações ACID</p>
+<p>Como transações ACID garantem consistência em operações que envolvem múltiplas tabelas? Dê um exemplo de transferência bancária.</p>
+</div>
+</div>
+<p>Atomicidade: todas as operações de uma transação acontecem ou nenhuma. Consistência: o banco passa de um estado válido a outro válido. Isolamento: transações concorrentes não interferem entre si. Durabilidade: uma vez commitada, persiste mesmo após falha.</p>
+<p>Transferência bancária: BEGIN → verifica saldo com FOR UPDATE (bloqueia a linha) → debita origem → credita destino → INSERT no histórico → COMMIT. Se qualquer passo falhar → ROLLBACK. Sem transação, uma falha entre débito e crédito deixaria dinheiro no ar.</p>
+
+<div class="questao" id="q78">
+<span class="num">Q78</span>
+<div class="corpo">
+<p class="titulo">bson.M vs bson.D</p>
+<p>O que é <code>bson.M</code> no MongoDB? Qual a diferença entre <code>bson.M</code> e <code>bson.D</code>?</p>
+</div>
+</div>
+<p>bson.M: map[string]any — não-ordenado, sintaxe mais limpa para filtros simples. Exemplo: bson.M{"ativo": true, "preco": bson.M{"$gte": 100}}.</p>
+<p>bson.D: []bson.E (slice de pares chave-valor) — ORDENADO, importante quando a ordem dos campos importa (ex: índices compostos, operadores de pipeline de aggregation). Preferir bson.D em pipelines de aggregation.</p>
+
+<div class="questao" id="q79">
+<span class="num">Q79</span>
+<div class="corpo">
+<p class="titulo">AutoMigrate no GORM</p>
+<p>O que é <code>AutoMigrate</code> no GORM? O que ele faz e o que ele NÃO faz (para não quebrar produção)?</p>
+</div>
+</div>
+<p>Faz: cria tabelas que não existem, adiciona colunas faltantes, cria índices declarados nas tags.</p>
+<p>NÃO faz: remove colunas (preserva dados), não altera tipos de colunas existentes, não renomeia colunas. É seguro para produção apenas para adições. Para mudanças destrutivas (remover colunas, renomear, alterar tipos), use golang-migrate com SQL explícito.</p>
+
+<div class="questao" id="q80">
+<span class="num">Q80</span>
+<div class="corpo">
+<p class="titulo">Soft delete no GORM</p>
+<p>O que é soft delete no GORM? Como o <code>gorm.Model</code> implementa isso? Como buscar registros deletados?</p>
+</div>
+</div>
+<p>gorm.Model inclui o campo DeletedAt gorm.DeletedAt (um sql.NullTime). Ao chamar db.Delete(&amp;modelo), GORM faz UPDATE setting deleted_at = NOW() em vez de DELETE. Queries normais adicionam automaticamente WHERE deleted_at IS NULL — registros deletados ficam invisíveis. Para ver: db.Unscoped().Find() ignora o filtro de soft delete. Para delete permanente: db.Unscoped().Delete().</p>
+
+<h3>Exercícios de código — soluções</h3>
+<div class="questao" id="q81">
+<span class="num">Q81</span>
+<div class="corpo">
+<p class="titulo">Função transferir com transação SQL</p>
+<p>Escreva uma função <code>transferir(ctx, db, origemID, destinoID int, centavos int64) error</code> usando transação SQL que garante atomicidade, verifica saldo e faz rollback em caso de falha.</p>
+</div>
+</div>
+<pre class="codigo"><code>var ErrSaldoInsuficiente = errors.New("saldo insuficiente")
+
+func transferir(ctx context.Context, db *sql.DB, origemID, destinoID int, centavos int64) error {
+	tx, err := db.BeginTx(ctx, nil)
+	if err != nil {
+		return fmt.Errorf("iniciar tx: %w", err)
+	}
+	defer tx.Rollback() // depois do Commit não faz nada; antes dele, desfaz tudo
+
+	var saldo int64
+	err = tx.QueryRowContext(ctx,
+		"SELECT saldo FROM contas WHERE id = $1 FOR UPDATE", origemID).Scan(&amp;saldo)
+	if err != nil {
+		return fmt.Errorf("verificar saldo: %w", err)
+	}
+	if saldo &lt; centavos {
+		return ErrSaldoInsuficiente
+	}
+	if _, err = tx.ExecContext(ctx,
+		"UPDATE contas SET saldo = saldo - $1 WHERE id = $2", centavos, origemID); err != nil {
+		return fmt.Errorf("debitar: %w", err)
+	}
+	if _, err = tx.ExecContext(ctx,
+		"UPDATE contas SET saldo = saldo + $1 WHERE id = $2", centavos, destinoID); err != nil {
+		return fmt.Errorf("creditar: %w", err)
+	}
+	return tx.Commit()
+}</code></pre>
+<p>Dois detalhes que derrubam a versão ingênua. O <code>defer tx.Rollback()</code> logo depois do <code>BeginTx</code> cobre <strong>todos</strong> os caminhos de saída, inclusive o "saldo insuficiente", que não passa por nenhuma variável <code>err</code>. Depois do <code>Commit</code>, o rollback não faz nada. Sem isso, a transação ficaria aberta segurando o <code>FOR UPDATE</code> sobre a conta. E dinheiro vai em <strong>centavos inteiros</strong>: <code>float64</code> não representa 0,10 exatamente, e os centavos perdidos aparecem na soma.</p>
+<div class="questao" id="q82">
+<span class="num">Q82</span>
+<div class="corpo">
+<p class="titulo">Repositório em memória thread-safe</p>
+<p>Escreva um repositório em memória que implementa uma interface <code>UsuarioRepository</code> com os métodos <code>Criar</code>, <code>BuscarPorID</code>, <code>Listar</code> e <code>Deletar</code>. Esse repositório deve ser thread-safe.</p>
+</div>
+</div>
+<pre class="codigo"><code>type Usuario struct {
+	ID   int64
+	Nome string
+}
+
+var ErrNaoEncontrado = errors.New("usuário não encontrado")
+
+type RepositorioMemoria struct {
+	mu      sync.RWMutex
+	dados   map[int64]Usuario
+	proximo int64
+}
+
+func NovoRepositorioMemoria() *RepositorioMemoria {
+	return &amp;RepositorioMemoria{dados: make(map[int64]Usuario)} // escrever num map nil é panic
+}
+
+func (r *RepositorioMemoria) Criar(ctx context.Context, u Usuario) (Usuario, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	r.proximo++
+	u.ID = r.proximo
+	r.dados[u.ID] = u
+	return u, nil
+}
+
+func (r *RepositorioMemoria) BuscarPorID(ctx context.Context, id int64) (Usuario, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+	u, ok := r.dados[id]
+	if !ok {
+		return Usuario{}, ErrNaoEncontrado
+	}
+	return u, nil
+}
+
+func (r *RepositorioMemoria) Listar(ctx context.Context) ([]Usuario, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+	lista := make([]Usuario, 0, len(r.dados))
+	for _, u := range r.dados {
+		lista = append(lista, u)
+	}
+	return lista, nil
+}
+
+func (r *RepositorioMemoria) Deletar(ctx context.Context, id int64) error {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	if _, ok := r.dados[id]; !ok {
+		return ErrNaoEncontrado
+	}
+	delete(r.dados, id)
+	return nil
+}</code></pre>
+<p>O construtor existe por um motivo: o valor zero de <code>RepositorioMemoria</code> tem o map <code>nil</code>, e a primeira escrita daria <em>panic</em>. O <code>RWMutex</code> deixa várias leituras simultâneas e serializa as escritas.</p>
+</section>
+<section class="modulo" id="modulo-7">
+<h2><span class="rotulo">MÓDULO 7</span> Ferramentas, CLI e Qualidade</h2>
+<p class="aulas-titulo">Artigos 38 a 43</p>
+<ul class="aulas">
+<li><span class="n">#38</span> Criando ferramentas de linha de comando com flag e Cobra</li>
+<li><span class="n">#39</span> Logging estruturado com slog e Zerolog</li>
+<li><span class="n">#40</span> Variáveis de ambiente e configuração com Viper</li>
+<li><span class="n">#41</span> Linting, formatação e análise estática: gofmt, golangci-lint</li>
+<li><span class="n">#42</span> Documentação com godoc e boas práticas de comentário</li>
+<li><span class="n">#43</span> Profiling e otimização de performance em Go</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q83">
+<span class="num">Q83</span>
+<div class="corpo">
+<p class="titulo">flag vs Cobra</p>
+<p>Qual a diferença entre o pacote <code>flag</code> da biblioteca padrão e o Cobra? Em que situações cada um é adequado?</p>
+</div>
+</div>
+<p>flag: biblioteca padrão, zero dependências, adequado para ferramentas simples com um único conjunto de opções (sem subcomandos). Cobra: biblioteca externa, adequado para CLIs profissionais com subcomandos aninhados (git commit, docker run), flags persistentes (disponíveis em todos os subcomandos), help automático formatado, completions de shell e integração com Viper.</p>
+
+<div class="questao" id="q84">
+<span class="num">Q84</span>
+<div class="corpo">
+<p class="titulo">Viper e precedência de configuração</p>
+<p>O que é a flag <code>--config</code> no Viper e como ela interage com variáveis de ambiente? Qual é a ordem de precedência?</p>
+</div>
+</div>
+<p>--config aponta para arquivo YAML/JSON/TOML com valores padrão. Variáveis de ambiente sobrescrevem o arquivo (AutomaticEnv + SetEnvKeyReplacer). Flags da CLI sobrescrevem variáveis de ambiente (BindPFlag). Precedência do maior para menor: Set explícito &gt; flag CLI &gt; variável de ambiente &gt; arquivo de config &gt; SetDefault. Isso permite configurar padrões no arquivo e sobrescrever por ambiente sem recompilar.</p>
+
+<div class="questao" id="q85">
+<span class="num">Q85</span>
+<div class="corpo">
+<p class="titulo">slog vs log padrão</p>
+<p>Qual a diferença entre <code>log/slog</code> e o pacote <code>log</code> padrão? Por que logging estruturado é preferível em produção?</p>
+</div>
+</div>
+<p>log padrão: produz strings livres ("2024/03/15 10:30:00 erro ao conectar"). Difícil de parsear automaticamente, sem campos estruturados.</p>
+<p>log/slog: produz pares chave-valor estruturados em JSON ou texto. Sistemas como Elasticsearch, Datadog e CloudWatch indexam campos automaticamente — permite filtrar "todos os erros do usuário X" ou "requisições com duração &gt; 1s" sem regex.</p>
+
+<div class="questao" id="q86">
+<span class="num">Q86</span>
+<div class="corpo">
+<p class="titulo">slog.With para contexto de requisição</p>
+<p>O que faz <code>slog.With</code>? Como ele é usado para adicionar contexto a todos os logs de uma requisição?</p>
+</div>
+</div>
+<p>slog.With(campos...) retorna um novo logger filho que inclui os campos fornecidos em TODOS os logs subsequentes. Uso: no início de um handler HTTP, criar logger := slog.Default().With("request_id", reqID, "metodo", r.Method). Todos os logs desse handler automaticamente carregam esses campos, facilitando rastrear todos os eventos de uma requisição específica.</p>
+
+<div class="questao" id="q87">
+<span class="num">Q87</span>
+<div class="corpo">
+<p class="titulo">Encadeamento de métodos no Zerolog</p>
+<p>Por que o Zerolog usa encadeamento de métodos (<code>logger.Info().Str(...).Msg(...)</code>)? Que vantagem de performance isso oferece?</p>
+</div>
+</div>
+<p>O encadeamento escreve cada campo direto num buffer reaproveitado, com o tipo já conhecido (Str, Int), sem converter nada para interface{} e sem alocar. Se o nível está desabilitado (Debug com nível Info), logger.Debug() devolve um evento nil, e cada método da cadeia vê o nil e retorna na hora: o custo cai a poucos nanossegundos e zero alocações. Numa API variádica com interface{}, os argumentos já foram convertidos (e muitas vezes alocados) antes de a função descobrir que o nível está desligado.</p>
+
+<div class="questao" id="q88">
+<span class="num">Q88</span>
+<div class="corpo">
+<p class="titulo">Linters principais do golangci-lint</p>
+<p>Quais são os linters mais importantes do <code>golangci-lint</code>? O que cada um detecta?</p>
+</div>
+</div>
+<p>errcheck: detecta erros retornados por funções que são ignorados silenciosamente.</p>
+<p>bodyclose: detecta resp.Body não fechado em clientes HTTP (goroutine/connection leak).</p>
+<p>staticcheck: análise estática avançada — código morto, APIs depreciadas, bugs sutis.</p>
+<p>gosec: vulnerabilidades de segurança — credenciais hardcoded, SQL injection, criptografia fraca.</p>
+<p>prealloc: sugere pré-alocação de slices quando o tamanho é conhecido antecipadamente.</p>
+<p>errorlint: garante uso de errors.Is/As em vez de comparação direta de erros.</p>
+
+<div class="questao" id="q89">
+<span class="num">Q89</span>
+<div class="corpo">
+<p class="titulo">go vet — 3 problemas detectados</p>
+<p>O que é <code>go vet</code>? Cite 3 problemas que ele detecta que o compilador não detecta.</p>
+</div>
+</div>
+<p>1. Printf com verbo errado: fmt.Printf("%d", "texto") — tipo incompatível com o verbo.</p>
+<p>2. Mutex copiado: passagem por valor de sync.Mutex — copia o estado do lock.</p>
+<p>3. Unreachable code: código após return/panic que nunca executa.</p>
+<p>Bônus: structtag — tag de struct mal formada; loopclosure — variável de loop capturada em closure (antes do Go 1.22); copylocks — o mesmo problema do item 2, em qualquer cópia de valor que contenha um lock.</p>
+
+<div class="questao" id="q90">
+<span class="num">Q90</span>
+<div class="corpo">
+<p class="titulo">Regras do godoc</p>
+<p>Quais são as regras do <code>godoc</code> para comentários de documentação? Qual é a convenção para funções, tipos e erros?</p>
+</div>
+</div>
+<p>O comentário deve estar IMEDIATAMENTE antes da declaração (sem linha em branco). Deve começar com o nome do identificador.</p>
+<p>Funções: "NomeFuncao faz X. Retorna Y se Z."</p>
+<p>Tipos: "NomeTipo representa/é um..."</p>
+<p>Erros sentinela: "ErrX é retornado quando..."</p>
+<p>Pacote: "Package nome fornece/implementa..."</p>
+<p>Use frases completas, na terceira pessoa do presente ("Abrir abre o arquivo...", não "Abra o arquivo"). Exemplos executáveis em funções Example* servem como documentação testável.</p>
+
+<div class="questao" id="q91">
+<span class="num">Q91</span>
+<div class="corpo">
+<p class="titulo">go tool pprof</p>
+<p>O que é <code>go tool pprof</code>? Quais tipos de perfis ele suporta e como cada um é coletado?</p>
+</div>
+</div>
+<p>CPU: amostras do call stack durante execução. Coletado com -cpuprofile ou via HTTP /debug/pprof/profile.</p>
+<p>Heap: alocações de memória. /debug/pprof/heap — flags -alloc_objects, -inuse_space.</p>
+<p>Goroutines: stack traces de todas as goroutines. /debug/pprof/goroutine — útil para detectar leaks.</p>
+<p>Mutex contention: onde locks estão sendo disputados. /debug/pprof/mutex.</p>
+<p>Block: onde goroutines estão bloqueadas. /debug/pprof/block.</p>
+<p>Interface: go tool pprof -http=:8090 arquivo.prof — abre flamegraph interativo no browser.</p>
+
+<div class="questao" id="q92">
+<span class="num">Q92</span>
+<div class="corpo">
+<p class="titulo">Escape analysis e -gcflags=-m</p>
+<p>O que é escape analysis? Como a flag <code>-gcflags="-m"</code> ajuda a identificar alocações no heap?</p>
+</div>
+</div>
+<p>Escape analysis determina se uma variável pode ficar na stack (alocação gratuita, coletada automaticamente no retorno da função) ou precisa ir para o heap (alocação via GC, pressiona o garbage collector). go build -gcflags="-m" imprime decisões: "does not escape" (stack), "escapes to heap" (heap). Reduzir heap escapes reduz pressão no GC e melhora latência.</p>
+
+<h3>Exercícios de código — soluções</h3>
+<div class="questao" id="q93">
+<span class="num">Q93</span>
+<div class="corpo">
+<p class="titulo">Cobra: usuario criar</p>
+<p>Usando Cobra, crie a estrutura de um comando <code>app usuario criar --nome "João" --email joao@x.com --papel admin</code> com validação dos campos obrigatórios.</p>
+</div>
+</div>
+<pre class="codigo"><code>var (
+    criarNome  string
+    criarEmail string
+    criarPapel string
+)
+
+var criarCmd = &amp;cobra.Command{
+    Use:   "criar",
+    Short: "Cria novo usuário",
+    RunE: func(cmd *cobra.Command, args []string) error {
+        papeis := map[string]bool{"usuario": true, "admin": true, "moderador": true}
+        if !papeis[criarPapel] {
+            return fmt.Errorf("papel inválido: %s", criarPapel)
+        }
+        fmt.Printf("Criando: %s &lt;%s&gt; papel=%s\n",
+            criarNome, criarEmail, criarPapel)
+        return nil
+    },
+}
+
+func init() {
+    usuarioCmd.AddCommand(criarCmd)
+    criarCmd.Flags().StringVarP(&amp;criarNome,  "nome",  "n", "", "Nome (obrigatório)")
+    criarCmd.Flags().StringVarP(&amp;criarEmail, "email", "e", "", "Email (obrigatório)")
+    criarCmd.Flags().StringVar(&amp;criarPapel,  "papel", "usuario", "Papel")
+    criarCmd.MarkFlagRequired("nome")
+    criarCmd.MarkFlagRequired("email")
+}</code></pre>
+
+<div class="questao" id="q94">
+<span class="num">Q94</span>
+<div class="corpo">
+<p class="titulo">Benchmarks comparativos</p>
+<p>Crie um benchmark que compara duas versões de uma função que conta ocorrências de uma substring: uma usando <code>strings.Count</code> e outra usando um loop manual. Use <code>b.ResetTimer()</code> corretamente.</p>
+</div>
+</div>
+<pre class="codigo"><code>import (
+	"strings"
+	"testing"
+)
+
+var haystack = strings.Repeat("go go golang ", 1000)
+var needle = "golang"
+
+func contarManual(s, sub string) int {
+	n := 0
+	for j := 0; j &lt;= len(s)-len(sub); j++ {
+		if s[j:j+len(sub)] == sub {
+			n++
+		}
+	}
+	return n
+}
+
+func TestMesmoResultado(t *testing.T) {
+	if a, b := strings.Count(haystack, needle), contarManual(haystack, needle); a != b {
+		t.Fatal(a, b)
+	}
+}
+
+func BenchmarkStringsCount(b *testing.B) {
+	for b.Loop() { // Go 1.24: o tempo de preparação fora do laço já não conta
+		strings.Count(haystack, needle)
+	}
+}
+
+func BenchmarkLoopManual(b *testing.B) {
+	for b.Loop() {
+		contarManual(haystack, needle)
+	}
+}</code></pre>
+<pre class="saida"><code>BenchmarkStringsCount-16    	   34438	     34780 ns/op	       0 B/op	       0 allocs/op
+BenchmarkLoopManual-16      	   23295	     51515 ns/op	       0 B/op	       0 allocs/op</code></pre>
+<p>O teste antes dos benchmarks garante que as duas versões contam a mesma coisa: comparar a velocidade de funções com resultados diferentes não diz nada. Com <code>for b.Loop()</code> (Go 1.24), a preparação antes do laço já não entra na medida, e o <code>b.ResetTimer()</code> fica desnecessário. Rode com <code>-count=10</code> e compare com <code>benchstat</code> antes de concluir qualquer coisa.</p>
+</section>
+<section class="modulo" id="modulo-8">
+<h2><span class="rotulo">MÓDULO 8</span> Arquitetura e Padrões</h2>
+<p class="aulas-titulo">Artigos 44 a 48</p>
+<ul class="aulas">
+<li><span class="n">#44</span> Clean Architecture em Go: camadas e dependências</li>
+<li><span class="n">#45</span> Domain-Driven Design aplicado a projetos Go</li>
+<li><span class="n">#46</span> Injeção de dependência sem frameworks</li>
+<li><span class="n">#47</span> Design Patterns em Go: Repository, Factory e Strategy</li>
+<li><span class="n">#48</span> APIs RESTful completas: projeto do zero ao deploy</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q95">
+<span class="num">Q95</span>
+<div class="corpo">
+<p class="titulo">Princípio central da Clean Architecture</p>
+<p>Qual é o princípio central da Clean Architecture? Como as dependências devem apontar entre as camadas?</p>
+</div>
+</div>
+<p>As dependências de código só podem apontar para dentro — em direção ao domínio. Camadas externas (frameworks, banco, HTTP) conhecem camadas internas, mas o inverso nunca. O domínio não importa nada externo ao projeto. Isso permite substituir o banco (Postgres → MongoDB), o framework HTTP ou a camada de cache sem alterar nenhuma linha da lógica de negócio.</p>
+
+<div class="questao" id="q96">
+<span class="num">Q96</span>
+<div class="corpo">
+<p class="titulo">Entidade vs Value Object no DDD</p>
+<p>Qual a diferença entre uma Entidade e um Value Object no DDD? Dê exemplos de cada um em um sistema de e-commerce.</p>
+</div>
+</div>
+<p>Entidade: tem identidade única e persiste ao longo do tempo. Dois objetos com o mesmo ID são a mesma entidade, mesmo com atributos diferentes. Exemplos: Cliente (ID 42 é sempre o mesmo cliente), Pedido (ID 1001).</p>
+<p>Value Object: descrito pelos seus atributos, sem identidade. Dois VO com mesmos valores são equivalentes. São imutáveis — "mudanças" criam novo objeto. Exemplos: Dinheiro (R$100), Endereço (Rua X, nº 10), CPF.</p>
+
+<div class="questao" id="q97">
+<span class="num">Q97</span>
+<div class="corpo">
+<p class="titulo">Aggregate Root no DDD</p>
+<p>O que é um Aggregate Root no DDD? Por que todas as modificações do agregado devem passar por ele?</p>
+</div>
+</div>
+<p>O Aggregate Root é a única porta de entrada para modificar um agregado (cluster de entidades e VOs que formam uma unidade de consistência). Toda modificação passa pelo root, que aplica regras de negócio e garante invariantes. Exemplo: Pedido é o root — itens só podem ser adicionados/removidos via pedido.AdicionarItem(), que verifica se o status permite modificação.</p>
+
+<div class="questao" id="q98">
+<span class="num">Q98</span>
+<div class="corpo">
+<p class="titulo">Bounded Contexts</p>
+<p>O que são Bounded Contexts no DDD? Por que o mesmo conceito (ex: 'Cliente') pode ter modelos diferentes em contextos diferentes?</p>
+</div>
+</div>
+<p>Um BC é uma fronteira explícita onde um modelo de domínio tem significado coerente. O mesmo termo pode ter definições diferentes em contextos diferentes. Exemplo: 'Cliente' em Vendas tem histórico de compras e crédito disponível. 'Cliente' em Suporte tem tickets abertos e nível de serviço. 'Cliente' em Cobrança tem débitos pendentes. Forçar um único modelo para todos os contextos cria structs gigantes e cheias de nil.</p>
+
+<div class="questao" id="q99">
+<span class="num">Q99</span>
+<div class="corpo">
+<p class="titulo">Eventos de domínio vs infraestrutura</p>
+<p>O que são eventos de domínio? Como eles diferem de eventos de infraestrutura?</p>
+</div>
+</div>
+<p>Eventos de domínio: representam algo que aconteceu no negócio (ClienteCriado, PedidoConfirmado, EstoqueReduzido). São definidos no domínio, sem referências a tecnologia. São coletados pelo aggregate root e publicados após persistência bem-sucedida.</p>
+<p>Eventos de infraestrutura: representam eventos técnicos (MensagemRecebidaDoKafka, CacheInvalidado). Definidos na camada de infraestrutura.</p>
+
+<div class="questao" id="q100">
+<span class="num">Q100</span>
+<div class="corpo">
+<p class="titulo">Injeção de dependência em Go</p>
+<p>O que é injeção de dependência? Por que Go prefere a abordagem manual em vez de frameworks de DI?</p>
+</div>
+</div>
+<p>DI é fornecer as dependências de um componente de fora em vez de criá-las internamente. Em Go: cada componente recebe dependências pelo construtor (func NovoServico(repo Repo, logger *slog.Logger) *Servico). Preferência por DI manual: o grafo de dependências é explícito no código, erros são detectados em compile time, sem reflection em runtime, mais fácil de debugar.</p>
+
+<div class="questao" id="q101">
+<span class="num">Q101</span>
+<div class="corpo">
+<p class="titulo">Opções funcionais</p>
+<p>O que é o padrão de opções funcionais? Que problema ele resolve em relação a construtores com muitos parâmetros?</p>
+</div>
+</div>
+<p>Resolve o problema de construtores com muitos parâmetros opcionais sem proliferar sobrecargas ou structs Config separadas. Cada opção é uma função func(*Tipo). O construtor aplica as opções em loop. Vantagens: valores padrão centralizados, chamada limpa (NovoServidor(handler, ComPorta(9090), ComTLS())), fácil adicionar novas opções sem quebrar código existente.</p>
+
+<div class="questao" id="q102">
+<span class="num">Q102</span>
+<div class="corpo">
+<p class="titulo">Composition Root</p>
+<p>O que é a Composition Root? Por que toda instanciação de dependências deve acontecer lá?</p>
+</div>
+</div>
+<p>É o único lugar na aplicação onde todas as dependências são instanciadas e conectadas — tipicamente o main.go ou uma função de inicialização. Fora da Composition Root, todo código recebe dependências injetadas, nunca as cria. Vantagens: visibilidade total do grafo de dependências em um lugar, facilidade de trocar implementações, testes isolados usando mocks.</p>
+
+<div class="questao" id="q103">
+<span class="num">Q103</span>
+<div class="corpo">
+<p class="titulo">Repository vs DAO</p>
+<p>Qual é a diferença entre o padrão Repository e um DAO (Data Access Object)?</p>
+</div>
+</div>
+<p>Repository: abstrai a coleção de objetos de domínio. A interface fala a linguagem do domínio (BuscarPorID, ListarAtivos). O chamador não sabe se os dados vêm de PostgreSQL, MongoDB ou memória.</p>
+<p>DAO (Data Access Object): abstrai operações de banco de dados de baixo nível. Mais focado em tabelas e queries. O Repository é uma camada de abstração mais alta que pode usar um DAO internamente.</p>
+
+<div class="questao" id="q104">
+<span class="num">Q104</span>
+<div class="corpo">
+<p class="titulo">Padrão Decorator em Go</p>
+<p>Explique o padrão Decorator em Go. Como ele é usado para adicionar cache e logging a um repositório sem modificar sua implementação?</p>
+</div>
+</div>
+<pre class="codigo"><code>type Produto struct {
+	ID   int64
+	Nome string
+}
+type RepositorioProduto interface {
+	BuscarPorID(ctx context.Context, id int64) (*Produto, error)
+}
+type Cache interface {
+	Get(ctx context.Context, chave string) (string, bool)
+	Set(ctx context.Context, chave, valor string, ttl time.Duration)
+}
+
+type repoComCache struct {
+	repo  RepositorioProduto
+	cache Cache
+}
+
+func (r *repoComCache) BuscarPorID(ctx context.Context, id int64) (*Produto, error) {
+	chave := fmt.Sprintf("produto:%d", id)
+	if val, ok := r.cache.Get(ctx, chave); ok {
+		var p Produto
+		if err := json.Unmarshal([]byte(val), &amp;p); err == nil {
+			return &amp;p, nil
+		}
+		// entrada corrompida no cache: cai para o repositório
+	}
+	p, err := r.repo.BuscarPorID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	if dados, err := json.Marshal(p); err == nil {
+		r.cache.Set(ctx, chave, string(dados), time.Hour)
+	}
+	return p, nil
+}</code></pre>
+<p>O decorator implementa a mesma interface do repositório que envolve, e o resto do sistema não percebe a troca: <code>repo = &amp;repoComCache{repo: novoPostgres(db), cache: redis}</code> no main. Uma entrada corrompida no cache não pode virar um produto vazio: se o <code>Unmarshal</code> falhar, a busca segue para o repositório.</p>
+<div class="questao" id="q105">
+<span class="num">Q105</span>
+<div class="corpo">
+<p class="titulo">Strategy em Go</p>
+<p>O que é o padrão Strategy? Como Go o implementa de forma mais simples que linguagens com herança?</p>
+</div>
+</div>
+<p>Em linguagens com herança: Strategy é implementado com classe base abstrata e subclasses concretas. Em Go: estratégias são funções com mesma assinatura (type Estrategia func(dados []Item) []Item) ou interfaces com um método. Passadas como parâmetro: serv.Listar(ctx, filtro, ordenarPorPreco). Mais simples que herança: sem boilerplate de classes, funções anônimas criadas inline, closures capturam contexto.</p>
+
+<div class="questao" id="q106">
+<span class="num">Q106</span>
+<div class="corpo">
+<p class="titulo">Observer idiomático em Go</p>
+<p>Como o padrão Observer é implementado de forma idiomática em Go? Qual a vantagem de usar goroutines para notificação assíncrona?</p>
+</div>
+</div>
+<pre class="codigo"><code>type Bus struct {
+	mu       sync.RWMutex
+	handlers map[string][]func(any)
+}
+
+func NovoBus() *Bus { return &amp;Bus{handlers: make(map[string][]func(any))} }
+
+func (b *Bus) Registrar(evento string, h func(any)) {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	b.handlers[evento] = append(b.handlers[evento], h)
+}
+
+func (b *Bus) Publicar(evento string, dado any) {
+	b.mu.RLock()
+	hs := slices.Clone(b.handlers[evento]) // cópia: o lock não fica preso durante os handlers
+	b.mu.RUnlock()
+	for _, h := range hs {
+		go h(dado) // assíncrono: não bloqueia o publicador
+	}
+}</code></pre>
+<p>A cópia da lista de handlers antes de soltar o lock deixa um handler registrar outro sem travar o bus. Cada observer roda na sua goroutine e não atrasa o publicador nem os outros; em troca, a ordem de execução não é garantida e o erro de um handler precisa ser tratado dentro dele.</p>
+<h3>Exercícios de código — soluções</h3>
+<div class="questao" id="q107">
+<span class="num">Q107</span>
+<div class="corpo">
+<p class="titulo">Clean Architecture para blog — estrutura</p>
+<p>Projete as camadas de uma aplicação de blog seguindo Clean Architecture. Desenhe (ou descreva em texto) quais pacotes existem, suas responsabilidades e como as dependências fluem entre eles.</p>
+</div>
+</div>
+<pre class="codigo"><code>blog/
+├── cmd/api/main.go         ← Composition Root (instancia tudo)
+├── internal/
+│   ├── domain/             ← Entidades: Post, Autor, Comentario
+│   │   └── post.go         ← Regras: NomePost não pode ser vazio, etc.
+│   ├── repository/         ← Interfaces: PostRepository, AutorRepository
+│   │   └── post.go
+│   ├── usecase/            ← Casos de uso: PublicarPost, ListarPosts
+│   │   └── post/
+│   ├── handler/            ← Adaptadores HTTP: PostHandler
+│   │   └── post.go
+│   └── infra/postgres/     ← Implementações concretas dos repos
+│       └── post_repo.go
+// Dependências: handler → usecase → repository (interface) ← infra
+// O domínio não importa nada externo.</code></pre>
+
+<div class="questao" id="q108">
+<span class="num">Q108</span>
+<div class="corpo">
+<p class="titulo">Value Object Email</p>
+<p>Implemente um Value Object <code>Email</code> em Go que valide o formato, seja imutável e implemente igualdade por valor.</p>
+</div>
+</div>
+<pre class="codigo"><code>type Email struct{ valor string }
+
+var emailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
+
+func NovoEmail(s string) (Email, error) {
+    s = strings.ToLower(strings.TrimSpace(s))
+    if !emailRegex.MatchString(s) {
+        return Email{}, fmt.Errorf("email inválido: %s", s)
+    }
+    return Email{valor: s}, nil
+}
+
+func (e Email) String() string   { return e.valor }
+func (e Email) Dominio() string  { return strings.Split(e.valor, "@")[1] }
+func (e Email) IgualA(o Email) bool { return e.valor == o.valor }
+
+// Value Object: imutável (sem setters), igualdade por valor,
+// validação na construção, campos privados.</code></pre>
+
+</section>
+<section class="modulo" id="modulo-9">
+<h2><span class="rotulo">MÓDULO 9</span> Deploy, Cloud e Carreira</h2>
+<p class="aulas-titulo">Artigos 49 a 52</p>
+<ul class="aulas">
+<li><span class="n">#49</span> Compilação cruzada, binários estáticos e Docker com Go</li>
+<li><span class="n">#50</span> Go na nuvem: deploy no Railway, Fly.io e Google Cloud Run</li>
+<li><span class="n">#51</span> gRPC e Protocol Buffers: comunicação eficiente entre serviços</li>
+<li><span class="n">#52</span> O ecossistema Go: comunidade, carreira e próximos passos</li>
+</ul>
+<h3>Perguntas conceituais — respostas</h3>
+<div class="questao" id="q109">
+<span class="num">Q109</span>
+<div class="corpo">
+<p class="titulo">Flags -w, -s e -trimpath</p>
+<p>O que fazem as flags <code>-w</code> e <code>-s</code> no <code>go build</code>? Por que <code>-trimpath</code> é importante para builds reproduzíveis?</p>
+</div>
+</div>
+<p>-w: remove as informações de depuração DWARF. -s: remove a tabela de símbolos e, desde o Go 1.22, implica -w (por isso -ldflags="-s" já basta). O binário fica menor sem mudar o comportamento, mas depurar um core dump fica mais difícil.</p>
+<p>-trimpath: remove caminhos absolutos do sistema de build dos stack traces (privacidade — não vaza /home/usuario/projetos/...) e garante builds reproduzíveis (mesmo binário de qualquer máquina).</p>
+
+<div class="questao" id="q110">
+<span class="num">Q110</span>
+<div class="corpo">
+<p class="titulo">Compilação cruzada</p>
+<p>Como funciona a compilação cruzada no Go? Quais variáveis de ambiente controlam o sistema e arquitetura alvo?</p>
+</div>
+</div>
+<p>GOOS define o sistema operacional alvo: linux, darwin, windows, freebsd, wasm.</p>
+<p>GOARCH define a arquitetura: amd64, arm64, arm, 386, wasm.</p>
+<p>Exemplo: GOOS=linux GOARCH=arm64 go build -o app-linux-arm64 ./cmd/api</p>
+<p>Go não precisa de cross-compiler externo — todo o toolchain é incluído na instalação. A compilação cruzada funciona de qualquer plataforma para qualquer plataforma suportada.</p>
+
+<div class="questao" id="q111">
+<span class="num">Q111</span>
+<div class="corpo">
+<p class="titulo">CGO_ENABLED=0</p>
+<p>O que é <code>CGO_ENABLED=0</code>? Em que situações é necessário? Qual o impacto em drivers de banco de dados?</p>
+</div>
+</div>
+<p>Por padrão, Go pode vincular código C para operações como DNS e autenticação do sistema. CGO_ENABLED=0 desabilita CGo completamente, produzindo binário 100% estático sem dependência de libc. Necessário para imagens Docker scratch/distroless e ambientes sem libc compatível. Impacto: drivers que usam CGo (mattn/go-sqlite3) não compilam — use alternativas puras em Go (modernc.org/sqlite).</p>
+
+<div class="questao" id="q112">
+<span class="num">Q112</span>
+<div class="corpo">
+<p class="titulo">Build multistage e distroless</p>
+<p>O que é um build multistage no Docker? Qual a vantagem de usar <code>distroless</code> como imagem final?</p>
+</div>
+</div>
+<p>Multistage: estágio builder usa golang:alpine (centenas de MB com compilador). O binário compilado é copiado para a imagem final mínima. Isso evita que o compilador, código fonte e dependências de build sejam incluídos na imagem de produção.</p>
+<p>distroless: imagem do Google sem shell, sem gerenciador de pacotes, sem utilitários Unix — apenas certificados CA, timezone e usuário nonroot. A imagem final fica com poucos MB além do binário, contra centenas de MB da imagem com o compilador. Superfície de ataque mínima.</p>
+
+<div class="questao" id="q113">
+<span class="num">Q113</span>
+<div class="corpo">
+<p class="titulo">Pacote embed</p>
+<p>Como o pacote <code>embed</code> funciona? O que as diretivas <code>//go:embed</code> permitem incluir no binário?</p>
+</div>
+</div>
+<p>A diretiva //go:embed arquivos incluem arquivos no binário em tempo de compilação. Tipos: embed.FS para múltiplos arquivos/diretórios, []byte para um único arquivo, string para conteúdo textual. Permite: migrations SQL embutidas, frontend web no binário, templates, arquivos de configuração padrão. Deploy = único arquivo — sem dependência de paths externos.</p>
+
+<div class="questao" id="q114">
+<span class="num">Q114</span>
+<div class="corpo">
+<p class="titulo">Railway vs Fly.io vs Cloud Run</p>
+<p>Quais são as diferenças fundamentais entre Railway, Fly.io e Google Cloud Run? Quando cada um é mais adequado?</p>
+</div>
+</div>
+<p>Railway: zero configuração, deploy por push/GitHub, banco incluído. Ideal para prototipagem e projetos pessoais.</p>
+<p>Fly.io: VMs reais (Firecracker), controle fino, multi-região com latência mínima, volumes persistentes. Ideal para APIs globais com baixa latência.</p>
+<p>Cloud Run: serverless containerizado, escala para zero (paga zero quando sem tráfego), integração GCP. Ideal para cargas variáveis e aplicações corporativas. Escalar para zero cobra um preço: a primeira requisição depois da pausa espera o container subir (cold start).</p>
+
+<div class="questao" id="q115">
+<span class="num">Q115</span>
+<div class="corpo">
+<p class="titulo">Protocol Buffers e serialização binária</p>
+<p>O que são Protocol Buffers? Por que gRPC usa serialização binária em vez de JSON?</p>
+</div>
+</div>
+<p>Protocol Buffers: formato de serialização binária — cada campo é encoded com seu número de campo e tipo. Vantagens sobre JSON: 3–10x mais compacto (sem chaves em texto, sem aspas), 5–10x mais rápido para serialize/deserialize, schema tipado com validação de tipos em compile time, retrocompatível (campos novos são ignorados por versões antigas).</p>
+
+<div class="questao" id="q116">
+<span class="num">Q116</span>
+<div class="corpo">
+<p class="titulo">4 tipos de RPC no gRPC</p>
+<p>Quais são os 4 tipos de RPC no gRPC? Dê um exemplo de caso de uso para cada um.</p>
+</div>
+</div>
+<p>1. Unário: cliente envia 1 requisição, servidor responde com 1 resposta. Caso de uso: CRUD, autenticação.</p>
+<p>2. Server streaming: cliente envia 1 req, servidor envia stream de respostas. Caso de uso: download de dados grandes, updates em tempo real.</p>
+<p>3. Client streaming: cliente envia stream de requests, servidor responde 1 vez. Caso de uso: upload de dados, agregação.</p>
+<p>4. Bidirecional: ambos enviam streams simultaneamente. Caso de uso: chat, jogos multiplayer, colaboração em tempo real.</p>
+
+<div class="questao" id="q117">
+<span class="num">Q117</span>
+<div class="corpo">
+<p class="titulo">Interceptors no gRPC</p>
+<p>O que são interceptors no gRPC? Como eles se comparam a middlewares HTTP?</p>
+</div>
+</div>
+<p>Interceptors são equivalentes a middlewares HTTP mas para gRPC. Dois tipos: UnaryServerInterceptor (para RPCs unários) e StreamServerInterceptor (para streaming). Assinatura: func(ctx, req, info, handler) (resp, error). Encadeados com grpc.ChainUnaryInterceptor. Casos de uso: logging (tempo + código), autenticação JWT (extrair claims do metadata), recuperação de pânico, métricas, tracing.</p>
+
+<div class="questao" id="q118">
+<span class="num">Q118</span>
+<div class="corpo">
+<p class="titulo">grpc-gateway</p>
+<p>O que é <code>grpc-gateway</code>? Que problema ele resolve para equipes que precisam suportar tanto REST quanto gRPC?</p>
+</div>
+</div>
+<p>Gera automaticamente um proxy HTTP/REST a partir de anotações no arquivo .proto (opções google.api.http). O mesmo binário Go expõe tanto a API gRPC (porta 50051) quanto REST (porta 8080). Clientes REST fazem GET /api/v1/produtos/42, o gateway traduz para gRPC BuscarProduto({id:42}). Elimina duplicação de código — uma implementação serve dois protocolos.</p>
+
+<div class="questao" id="q119">
+<span class="num">Q119</span>
+<div class="corpo">
+<p class="titulo">5 projetos famosos escritos em Go</p>
+<p>Cite 5 ferramentas ou projetos famosos escritos em Go e explique por que Go foi escolhido para cada um.</p>
+</div>
+</div>
+<p>Docker: Go escolhido para binário estático distribuível, CGO=0, performance de startup.</p>
+<p>Kubernetes: Go para concorrência massiva de controllers, build reproduzível, tipagem forte.</p>
+<p>Terraform: Go para CLI distribuível sem runtime, cross-compilation, desempenho.</p>
+<p>Prometheus: Go para coleta de métricas de alta frequência, servidor HTTP built-in.</p>
+<p>GitHub CLI (gh): Go para binário único distribuível em todas as plataformas sem instalação.</p>
+
+<div class="questao" id="q120">
+<span class="num">Q120</span>
+<div class="corpo">
+<p class="titulo">Iteradores com iter.Seq</p>
+<p>O que são os <strong>iteradores</strong> (<em>range-over-func</em>, Go 1.23)? Escreva <code>Pares(n int) iter.Seq[int]</code>, que produz os pares menores que <code>n</code>, use-a num <code>for range</code> e explique o que acontece com o iterador quando o corpo do laço dá <code>break</code>.</p>
+</div>
+</div>
+<p>Um iterador é uma função que recebe outra, <code>yield</code>, e a chama uma vez para cada valor. O <code>for range</code> transforma o corpo do laço nessa função <code>yield</code>: quando o corpo dá <code>break</code> (ou <code>return</code>), <code>yield</code> devolve <code>false</code>, e o iterador <strong>precisa parar</strong>.</p>
+<pre class="codigo"><code>package main
+
+import (
+	"fmt"
+	"iter"
+)
+
+// Pares produz 0, 2, 4, ... menores que n.
+func Pares(n int) iter.Seq[int] {
+	return func(yield func(int) bool) {
+		for i := 0; i &lt; n; i += 2 {
+			if !yield(i) { // false: o laço do chamador deu break
+				fmt.Println("  (parou em", i, ")")
+				return
+			}
+		}
+	}
+}
+
+func main() {
+	for p := range Pares(10) {
+		fmt.Print(p, " ")
+	}
+	fmt.Println()
+	for p := range Pares(10) {
+		if p == 4 {
+			break
+		}
+		fmt.Print(p, " ")
+	}
+	fmt.Println()
+}</code></pre>
+<pre class="saida"><code>0 2 4 6 8 
+0 2   (parou em 4 )</code></pre>
+<p>Um iterador que ignora o <code>false</code> e chama <code>yield</code> de novo não passa em silêncio: o runtime derruba o programa com <code>panic: runtime error: range function continued iteration after function for loop body returned false</code>.</p>
+<h3>Exercícios de código — soluções</h3>
+<div class="questao" id="q121">
+<span class="num">Q121</span>
+<div class="corpo">
+<p class="titulo">Dockerfile multistage completo</p>
+<p>Escreva um Dockerfile multistage para uma API Go que: (1) compila com CGO_ENABLED=0, (2) usa distroless como imagem final, (3) embute versão e commit via ldflags, (4) roda como usuário não-root.</p>
+</div>
+</div>
+<pre class="codigo"><code># syntax=docker/dockerfile:1
+FROM golang:1.27-alpine AS builder
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN --mount=type=cache,target=/go/pkg/mod go mod download
+COPY . .
+
+ARG VERSAO=dev
+ARG COMMIT=unknown
+
+RUN --mount=type=cache,target=/root/.cache/go-build \
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
+    go build \
+        -ldflags="-s -X main.Versao=${VERSAO} -X main.Commit=${COMMIT}" \
+        -trimpath \
+        -o /app/api \
+        ./cmd/api
+
+FROM gcr.io/distroless/static-debian13
+COPY --from=builder /app/api /api
+USER nonroot:nonroot
+EXPOSE 8080
+ENTRYPOINT ["/api"]
+
+# Resultado: imagem de poucos MB além do binário, sem shell, sem root, binário estático.</code></pre>
+
+<div class="questao" id="q122">
+<span class="num">Q122</span>
+<div class="corpo">
+<p class="titulo">Definição Proto3 — ProdutoService</p>
+<p>Defina em Proto3 um serviço <code>ProdutoService</code> com os métodos: <code>CriarProduto</code>, <code>BuscarProduto</code> (por ID), <code>ListarProdutos</code> (com paginação) e <code>AssistirEstoque</code> (streaming server-side que envia alertas quando estoque cai abaixo de um limite).</p>
+</div>
+</div>
+<pre class="codigo"><code>syntax = "proto3";
+package produto.v1;
+option go_package = "gen/produto/v1;produtov1";
+import "google/protobuf/timestamp.proto";
+
+message Produto {
+    int64  id       = 1;
+    string nome     = 2;
+    double preco    = 3;
+    int32  estoque  = 4;
+}
+message CriarProdutoRequest  { string nome = 1; double preco = 2; int32 estoque = 3; }
+message CriarProdutoResponse { Produto produto = 1; }
+message BuscarProdutoRequest  { int64 id = 1; }
+message BuscarProdutoResponse { Produto produto = 1; }
+message ListarProdutosRequest  { int32 pagina = 1; int32 limite = 2; }
+message ListarProdutosResponse { repeated Produto produtos = 1; int64 total = 2; }
+message AlertaEstoqueRequest   { int64 produto_id = 1; int32 limite_minimo = 2; }
+message AlertaEstoque {
+    int64  produto_id    = 1;
+    string nome_produto  = 2;
+    int32  estoque_atual = 3;
+    google.protobuf.Timestamp ocorrido_em = 4;
+}
+service ProdutoService {
+    rpc CriarProduto    (CriarProdutoRequest)    returns (CriarProdutoResponse);
+    rpc BuscarProduto   (BuscarProdutoRequest)   returns (BuscarProdutoResponse);
+    rpc ListarProdutos  (ListarProdutosRequest)  returns (ListarProdutosResponse);
+    rpc AssistirEstoque (AlertaEstoqueRequest)   returns (stream AlertaEstoque);
+}</code></pre>
+
+</section>
+<section class="modulo" id="desafios">
+<h2><span class="rotulo">PARA IR ALÉM</span> Desafios integradores</h2>
+<p class="intro">Projetos maiores, que juntam vários módulos. Não há uma única resposta certa: o gabarito mostra um caminho.</p>
+<div class="questao desafio" id="d1">
+<span class="num">D1</span>
+<div class="corpo">
+<p class="titulo">API REST de Tarefas Completa</p>
+<p>Construa uma API REST completa para gerenciamento de tarefas com: (a) Autenticação JWT com middleware; (b) CRUD de tarefas com PostgreSQL e pgx; (c) Paginação e filtros por status e prioridade; (d) Logging estruturado com slog; (e) Testes de integração usando banco SQLite em memória; (f) Dockerfile multistage. Descreva a estrutura de pacotes e as principais interfaces.</p>
+</div>
+</div>
+<p><em>Este desafio não tem gabarito: é um projeto aberto. Use as respostas dos módulos que ele cita como ponto de partida.</em></p>
+<div class="questao desafio" id="d2">
+<span class="num">D2</span>
+<div class="corpo">
+<p class="titulo">Worker Pool Configurável</p>
+<p>Implemente um worker pool em Go que: (a) Receba tarefas via channel; (b) Processe com N workers configurável; (c) Respeite cancelamento via context; (d) Colete resultados e erros separadamente; (e) Exponha métricas (tarefas processadas, em fila, com erro); (f) Encerre graciosamente esperando workers terminarem. Escreva os testes de concorrência com -race.</p>
+</div>
+</div>
+<p><em>Este desafio não tem gabarito: é um projeto aberto. Use as respostas dos módulos que ele cita como ponto de partida.</em></p>
+<div class="questao desafio" id="d3">
+<span class="num">D3</span>
+<div class="corpo">
+<p class="titulo">Sistema de Cache com TTL</p>
+<p>Projete e implemente um cache em memória thread-safe com: (a) Operações Get, Set, Delete; (b) TTL configurável por chave; (c) Eviction automática de entradas expiradas; (d) Limite máximo de entradas com política LRU; (e) Interface que permita substituição por Redis ou Memcached; (f) Benchmarks comparando com sync.Map.</p>
+</div>
+</div>
+<p><em>Este desafio não tem gabarito: é um projeto aberto. Use as respostas dos módulos que ele cita como ponto de partida.</em></p>
+<div class="questao desafio" id="d4">
+<span class="num">D4</span>
+<div class="corpo">
+<p class="titulo">CLI de Deploy</p>
+<p>Crie uma ferramenta CLI usando Cobra que: (a) Tenha subcomandos <code>build</code>, <code>push</code> e <code>deploy</code>; (b) Leia configuração de arquivo YAML com Viper; (c) Execute compilação cruzada para múltiplos alvos; (d) Construa e empurre imagens Docker; (e) Faça deploy via API HTTP com retry e backoff; (f) Tenha output colorido e progress bars; (g) Gere completions para bash e zsh.</p>
+</div>
+</div>
+<p><em>Este desafio não tem gabarito: é um projeto aberto. Use as respostas dos módulos que ele cita como ponto de partida.</em></p>
+<div class="questao desafio" id="d5">
+<span class="num">D5</span>
+<div class="corpo">
+<p class="titulo">Microserviço gRPC com Streaming</p>
+<p>Implemente um microserviço de monitoramento de preços que: (a) Exponha um serviço gRPC com streaming bidirecional; (b) Clientes subscrevem a alertas de produtos específicos; (c) Quando o preço muda, o servidor notifica todos os subscribers; (d) Use context para cancelamento e timeouts; (e) Implemente interceptors de autenticação e logging; (f) Exponha também uma interface REST via grpc-gateway.</p>
+</div>
+</div>
+<p><em>Este desafio não tem gabarito: é um projeto aberto. Use as respostas dos módulos que ele cita como ponto de partida.</em></p>
+<div class="questao desafio" id="d6">
+<span class="num">D6</span>
+<div class="corpo">
+<p class="titulo">Uma calculadora, duas interfaces</p>
+<p>Escreva uma calculadora com sete operações: soma, subtração, multiplicação, divisão, potência (expoente inteiro), porcentagem (<code>15 % 200</code> é 15% de 200) e raiz quadrada. Ela deve: (a) fazer as contas com <code>math/big</code>, para que <code>0,1 + 0,2</code> dê exatamente <code>0,3</code>, aceitando vírgula ou ponto e mostrando até 16 dígitos significativos; (b) guardar o último resultado em <code>ans</code>, que pode ser usado na conta seguinte; (c) devolver um <code>error</code> claro para divisão por zero, raiz de negativo, expoente fracionário e texto que não é número, <strong>sem encerrar o programa</strong>. Escreva o núcleo num pacote que não sabe nada de entrada e saída, e reaproveite-o em dois programas: um de <strong>terminal</strong> (com os comandos <code>hist</code> e <code>sair</code>) e uma interface <strong>gráfica no navegador</strong>, servida com <code>net/http</code>, com teclado na tela, visor e histórico.</p>
+</div>
+</div>
+<p><em><strong>Caminho da solução</strong></em></p>
+<ul><li><strong>Núcleo</strong>: o pacote <code>calc</code> guarda <code>ans</code> como <code>*big.Rat</code>, uma fração exata. Soma, subtração, multiplicação, divisão, porcentagem e potência inteira nunca arredondam; o arredondamento só acontece na raiz (que é irracional) e na hora de mostrar o número.</li><li><strong>Erros</strong>: cada falha é um <code>error</code>, com variáveis sentinela (<code>ErrDivisaoPorZero</code>, <code>ErrRaizNegativa</code>) que os testes podem comparar com <code>errors.Is</code>. Nenhuma interface precisa de <code>recover</code>.</li><li><strong>Interfaces</strong>: o terminal lê linha a linha com <code>bufio.Scanner</code>; a versão web recebe o mesmo texto por um formulário e devolve a página montada com <code>html/template</code>, que escapa tudo o que o usuário digitou. Os botões só escrevem no visor; a conta é sempre do núcleo.</li></ul>
+<p>Estrutura do módulo:</p>
+<pre class="codigo"><code>calculadora/
+├── go.mod
+├── calc/calc.go          ← o núcleo
+└── cmd/
+    ├── terminal/main.go
+    └── web/main.go</code></pre>
+<p><code>calc/calc.go</code>:</p>
+<pre class="codigo"><code>// Package calc é o núcleo da calculadora: não sabe nada de terminal nem de navegador.
+package calc
+
+import (
+	"errors"
+	"fmt"
+	"math/big"
+	"strings"
+)
+
+var (
+	ErrDivisaoPorZero = errors.New("divisão por zero")
+	ErrRaizNegativa   = errors.New("raiz de número negativo")
+	ErrExpoente       = errors.New("o expoente precisa ser inteiro, de -999 a 999")
+)
+
+// Calculadora guarda o último resultado (ans) como fração exata.
+type Calculadora struct {
+	ans *big.Rat
+}
+
+func Nova() *Calculadora { return &amp;Calculadora{ans: new(big.Rat)} }
+
+// Avaliar resolve "12,5 + 3", "2 ^ 10", "15 % 200" ou "raiz 2"; "ans" é o último resultado.
+func (c *Calculadora) Avaliar(linha string) (*big.Rat, error) {
+	t := strings.Fields(linha)
+	var r *big.Rat
+	var err error
+	switch {
+	case len(t) == 2 &amp;&amp; t[0] == "raiz":
+		var a *big.Rat
+		if a, err = c.numero(t[1]); err == nil {
+			r, err = raiz(a)
+		}
+	case len(t) == 3:
+		var a, b *big.Rat
+		if a, err = c.numero(t[0]); err != nil {
+			break
+		}
+		if b, err = c.numero(t[2]); err != nil {
+			break
+		}
+		r, err = calcular(t[1], a, b)
+	default:
+		err = errors.New("use: número operação número, ou raiz número")
+	}
+	if err != nil {
+		return nil, err
+	}
+	c.ans = r
+	return r, nil
+}
+
+func calcular(op string, a, b *big.Rat) (*big.Rat, error) {
+	r := new(big.Rat)
+	switch op {
+	case "+":
+		return r.Add(a, b), nil
+	case "-":
+		return r.Sub(a, b), nil
+	case "*":
+		return r.Mul(a, b), nil
+	case "/":
+		if b.Sign() == 0 {
+			return nil, ErrDivisaoPorZero
+		}
+		return r.Quo(a, b), nil
+	case "%": // "15 % 200" = 15% de 200
+		return r.Quo(r.Mul(a, b), big.NewRat(100, 1)), nil
+	case "^":
+		if !b.IsInt() || b.Num().CmpAbs(big.NewInt(999)) &gt; 0 {
+			return nil, ErrExpoente
+		}
+		e := b.Num().Int64()
+		if a.Sign() == 0 &amp;&amp; e &lt; 0 {
+			return nil, ErrDivisaoPorZero
+		}
+		num := new(big.Int).Exp(a.Num(), big.NewInt(abs(e)), nil)
+		den := new(big.Int).Exp(a.Denom(), big.NewInt(abs(e)), nil)
+		if e &lt; 0 {
+			num, den = den, num
+		}
+		return r.SetFrac(num, den), nil
+	}
+	return nil, fmt.Errorf("operação desconhecida: %s", op)
+}
+
+func raiz(a *big.Rat) (*big.Rat, error) {
+	if a.Sign() &lt; 0 {
+		return nil, ErrRaizNegativa
+	}
+	f := new(big.Float).SetPrec(200).SetRat(a)
+	r, _ := new(big.Float).SetPrec(200).Sqrt(f).Rat(nil) // a raiz é irracional: aqui entra o arredondamento
+	return r, nil
+}
+
+func (c *Calculadora) numero(s string) (*big.Rat, error) {
+	if s == "ans" {
+		return new(big.Rat).Set(c.ans), nil
+	}
+	r, ok := new(big.Rat).SetString(strings.Replace(s, ",", ".", 1))
+	if !ok {
+		return nil, fmt.Errorf("não é um número: %s", s)
+	}
+	return r, nil
+}
+
+func abs(n int64) int64 {
+	if n &lt; 0 {
+		return -n
+	}
+	return n
+}
+
+// Formatar mostra até 16 dígitos significativos, com vírgula decimal.
+func Formatar(r *big.Rat) string {
+	s := new(big.Float).SetPrec(256).SetRat(r).Text('g', 16)
+	return strings.Replace(s, ".", ",", 1)
+}</code></pre>
+<p><code>cmd/terminal/main.go</code>:</p>
+<pre class="codigo"><code>package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+
+	"calculadora/calc"
+)
+
+func main() {
+	c := calc.Nova()
+	var historico []string
+	fmt.Println("Calculadora: + - * / ^ % raiz  |  ans, hist, sair")
+	entrada := bufio.NewScanner(os.Stdin)
+	for fmt.Print("&gt; "); entrada.Scan(); fmt.Print("&gt; ") {
+		linha := strings.TrimSpace(entrada.Text())
+		switch linha {
+		case "":
+			continue
+		case "sair":
+			return
+		case "hist":
+			for _, h := range historico {
+				fmt.Println(h)
+			}
+			continue
+		}
+		r, err := c.Avaliar(linha)
+		if err != nil {
+			fmt.Println("erro:", err) // a conta errada não derruba o programa
+			continue
+		}
+		conta := linha + " = " + calc.Formatar(r)
+		historico = append(historico, conta)
+		fmt.Println(conta)
+	}
+}</code></pre>
+<p>Com a entrada redirecionada, o terminal não ecoa o que foi digitado e cada resultado aparece logo depois do <code>&gt;</code>:</p>
+<pre class="codigo"><code>printf '0,1 + 0,2\n10 / 3\nans * 3\n1 / 0\n2 ^ 100\nraiz 2\nans * ans\n15 %% 200\n2 ^ 0,5\nraiz -4\nabc + 1\nhist\nsair\n' | go run ./cmd/terminal</code></pre>
+<pre class="saida"><code>Calculadora: + - * / ^ % raiz  |  ans, hist, sair
+&gt; 0,1 + 0,2 = 0,3
+&gt; 10 / 3 = 3,333333333333333
+&gt; ans * 3 = 10
+&gt; erro: divisão por zero
+&gt; 2 ^ 100 = 1,267650600228229e+30
+&gt; raiz 2 = 1,414213562373095
+&gt; ans * ans = 2
+&gt; 15 % 200 = 30
+&gt; erro: o expoente precisa ser inteiro, de -999 a 999
+&gt; erro: raiz de número negativo
+&gt; erro: não é um número: abc
+&gt; 0,1 + 0,2 = 0,3
+10 / 3 = 3,333333333333333
+ans * 3 = 10
+2 ^ 100 = 1,267650600228229e+30
+raiz 2 = 1,414213562373095
+ans * ans = 2
+15 % 200 = 30
+&gt;</code></pre>
+<p>Repare em <code>10 / 3</code> seguido de <code>ans * 3</code>: o resultado é <code>10</code> exato, porque <code>ans</code> guardou a fração 10/3, e não a dízima cortada. Uma calculadora que guarda <code>float64</code> ou um decimal de 16 dígitos mostraria <code>9,999999999999999</code>.</p>
+<p><code>cmd/web/main.go</code>, a versão gráfica. Rode com <code>go run ./cmd/web</code> e abra <code>http://localhost:8080</code>:</p>
+<pre class="codigo"><code>package main
+
+import (
+	"html/template"
+	"log"
+	"net/http"
+	"sync"
+	"time"
+
+	"calculadora/calc"
+)
+
+var pagina = template.Must(template.New("").Parse(`&lt;!doctype html&gt;
+&lt;html lang="pt-BR"&gt;&lt;meta charset="utf-8"&gt;&lt;title&gt;Calculadora&lt;/title&gt;
+&lt;style&gt;
+ body { font-family: system-ui, sans-serif; width: 340px; margin: 16px; }
+ input[name=conta] { width: 100%; box-sizing: border-box; font-size: 20px; text-align: right; padding: 6px; }
+ .teclas { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 8px 0; }
+ .teclas button { height: 44px; font-size: 16px; }
+ .igual { width: 100%; height: 36px; }
+ .erro { color: firebrick; min-height: 1.2em; margin: 4px 0; }
+ ol { border: 1px solid #ccc; padding: 6px 6px 6px 28px; min-height: 100px; }
+&lt;/style&gt;
+&lt;form method="post"&gt;
+ &lt;input name="conta" value="{{.Visor}}" placeholder="12,5 + 3   ou   raiz 2" autofocus&gt;
+ &lt;p class="erro"&gt;{{.Erro}}&lt;/p&gt;
+ &lt;div class="teclas"&gt;
+ {{range .Teclas}}&lt;button type="button" data-t="{{.}}"&gt;{{.}}&lt;/button&gt;{{end}}
+ &lt;/div&gt;
+ &lt;button class="igual"&gt;=&lt;/button&gt;
+&lt;/form&gt;
+&lt;ol reversed&gt;{{range .Historico}}&lt;li&gt;{{.}}&lt;/li&gt;{{end}}&lt;/ol&gt;
+&lt;script&gt;
+ // os botões só escrevem no visor; quem entende a conta é o servidor
+ const visor = document.querySelector("input[name=conta]");
+ const espaco = t =&gt; ["+","-","*","/","^","%"].includes(t) ? " " + t + " " : t === "raiz" ? "raiz " : t;
+ document.querySelectorAll("[data-t]").forEach(b =&gt; b.onclick = () =&gt; {
+   visor.value = b.dataset.t === "C" ? "" : visor.value + espaco(b.dataset.t);
+   visor.focus();
+ });
+&lt;/script&gt;
+&lt;/html&gt;`))
+
+type estado struct {
+	Visor, Erro string
+	Teclas      []string
+	Historico   []string
+}
+
+// servidor guarda a sessão de uma única pessoa: é uma calculadora local, não um site
+type servidor struct {
+	mu        sync.Mutex
+	c         *calc.Calculadora
+	historico []string
+}
+
+var teclas = []string{"7", "8", "9", "/", "C", "4", "5", "6", "*", "raiz",
+	"1", "2", "3", "-", "^", "0", ",", "ans", "+", "%"}
+
+func (s *servidor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	e := estado{Teclas: teclas}
+	if r.Method == http.MethodPost {
+		conta := r.FormValue("conta")
+		if res, err := s.c.Avaliar(conta); err != nil {
+			e.Visor, e.Erro = conta, "erro: "+err.Error() // o servidor continua no ar
+		} else {
+			e.Visor = calc.Formatar(res) // a próxima conta continua dele
+			s.historico = append([]string{conta + " = " + e.Visor}, s.historico...)
+		}
+	}
+	e.Historico = s.historico
+	if err := pagina.Execute(w, e); err != nil {
+		log.Println("template:", err)
+	}
+}
+
+func main() {
+	srv := &amp;http.Server{
+		Addr:              "localhost:8080", // só nesta máquina
+		Handler:           &amp;servidor{c: calc.Nova()},
+		ReadHeaderTimeout: 5 * time.Second,
+	}
+	log.Println("abra http://localhost:8080")
+	log.Fatal(srv.ListenAndServe())
+}</code></pre>
+<figure class="captura"><img src="img/calculadora-web.png" alt="Página da calculadora no navegador com o visor mostrando 1 / 0, a mensagem de erro divisão por zero, o teclado de 21 botões e o histórico de quatro contas" width="372" height="470"><figcaption>A página depois de <code>10 / 3</code>, <code>3,333333333333333 * 3</code>, <code>2 ^ 100</code>, <code>raiz 2</code> e uma tentativa de <code>1 / 0</code>. Aqui o visor recebe o resultado já formatado, e por isso a segunda conta dá <code>9,999999999999999</code>: para continuar com a fração exata, digite <code>ans * 3</code>.</figcaption></figure>
+
+</section>
+<footer class="fim">
+<p><strong>Fim do gabarito.</strong></p>
+<p>Dominando Go em 1 Ano · <a href="https://theknowledgeisle.com/">theknowledgeisle.com</a></p>
+</footer>
+</body>
+</html>
